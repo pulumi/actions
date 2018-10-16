@@ -12,8 +12,8 @@ To get started with Pulumi's GitHub Actions, check out our documentation: [https
 
 To see some examples of this in action, see the following links:
 
-* Our introductory blog post
-* Dockerized Ruby on Rails, in Kubernetes, with hosted Cloud SQL
-* Short 90 second video from GitHub Universe Keynote
-* Short 90 second video on GitOps and Pull Request workflows
-* Longer 7 minute video exploring the ins and outs of Pulumi GitHub Actions in practice
+* [Our introductory blog post](https://blog.pulumi.com/continuous-delivery-to-any-cloud-using-github-actions-and-pulumi)
+* [Dockerized Ruby on Rails, in Kubernetes, with hosted Cloud SQL](https://github.com/pulumi/actions-example-gke-rails)
+* [Short 90 second video from GitHub Universe Keynote](https://www.youtube.com/watch?time_continue=56&v=59SxB2uY9E0)
+* [Short 90 second video on GitOps and Pull Request workflows](https://www.youtube.com/watch?v=MKbDVDBuKUA)
+* [Longer 7 minute video exploring the ins and outs of Pulumi GitHub Actions in practice](https://www.youtube.com/watch?time_continue=1&v=1Et2TkuxqJg)
