@@ -1,6 +1,6 @@
 # Pulumi GitHub Actions
 
-Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, using nothing but your favorite language
+Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, using just your favorite language
 and GitHub. This includes previewing, validating, and collaborating on proposed deployments in the context of Pull
 Requests, and triggering deployments or promotions between different environments by merging or directly committing code.
 
