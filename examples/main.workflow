@@ -4,7 +4,7 @@ workflow "Update" {
 }
 
 action "Pulumi Deploy (Current Stack)" {
-    uses = "docker://pulumi/actions@v0.16.0"
+    uses = "docker://pulumi/actions"
     args = [ "up" ]
     env = {
         "PULUMI_CI" = "up"
@@ -20,7 +20,7 @@ workflow "Preview" {
 }
 
 action "Pulumi Preview (Merged Stack)" {
-    uses = "docker://pulumi/actions@v0.16.0"
+    uses = "docker://pulumi/actions"
     args = [ "preview" ]
     env = {
         "PULUMI_CI" = "pr"
