@@ -48,10 +48,10 @@ if [ ! -z "$PULUMI_CI" ]; then
             PULUMI_STACK_NAME=$(cat $ROOT/.pulumi/ci.json | jq -r ".\"$BRANCH\"")
         else
             # If there's no stack mapping file, we are on master, and there's a single stack, use it.
-            PULUMI_STACK_NAME=$(pulumi stack ls | awk 'FNR == 2 {print $1}')
+            PULUMI_STACK_NAME=$(pulumi stack ls | awk 'FNR == 2 {print $1}' | sed 's/\*//g')
         fi
 
-        if [ ! -z "$PULUI_STACK_NAME" ]; && [ "$PULUMI_STACK_NAME" != "null" ]; then
+        if [ ! -z "$PULUMI_STACK_NAME" ] && [ "$PULUMI_STACK_NAME" != "null" ]; then
             pulumi stack select $PULUMI_STACK_NAME
         else
             echo -e "No stack configured for branch '$BRANCH'"

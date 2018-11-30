@@ -15,7 +15,7 @@ RUN apt-get update -y
 RUN apt-get install -y ca-certificates curl software-properties-common gnupg jq git
 
 # Install the Pulumi SDK, including the CLI and language runtimes.
-RUN curl -fsSL https://get.pulumi.com/ | bash -s -- --version 0.16.0 && \
+RUN curl -fsSL https://get.pulumi.com/ | bash -s -- --version 0.16.6 && \
     mv ~/.pulumi/bin/* /usr/bin
 
 # Install the necessary runtimes to support Pulumi languages.
