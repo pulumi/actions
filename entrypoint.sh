@@ -51,7 +51,7 @@ if [ ! -z "$PULUMI_CI" ]; then
             PULUMI_STACK_NAME=$(pulumi stack ls | awk 'FNR == 2 {print $1}')
         fi
 
-        if [ ! -z "$PULUI_STACK_NAME" ]; && [ "$PULUMI_STACK_NAME" != "null" ]; then
+        if [ ! -z "$PULUI_STACK_NAME" ] && [ "$PULUMI_STACK_NAME" != "null" ]; then
             pulumi stack select $PULUMI_STACK_NAME
         else
             echo -e "No stack configured for branch '$BRANCH'"
