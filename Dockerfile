@@ -31,6 +31,10 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -  && 
     apt-get update -y && \
     apt-get install -y docker-ce
 
+# Install AWS IAM Authenticator, so AWS services like EKS can be used.
+RUN curl -Lso /usr/bin/aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator && \
+    chmod +x /usr/bin/aws-iam-authenticator
+
 # Install all the cloud CLIs, so we are prepared to deploy to them.
 #     - AWS
 RUN pip install awscli --upgrade
