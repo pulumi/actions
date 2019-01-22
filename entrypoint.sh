@@ -102,7 +102,7 @@ $OUTPUT
 \`\`\`"
         PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
         echo "Commenting on PR $COMMENTS_URL"
-        curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL"
+        curl -s -S -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL"
     fi
 fi
 
