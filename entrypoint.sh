@@ -83,4 +83,27 @@ if [ -e package.json ] && [ ! -d node_modules ]; then
 fi
 
 # Now just pass along all arguments to the Pulumi CLI.
-pulumi "$@"
+OUTPUT=$(sh -c "pulumi --non-interactive $*" 2>&1)
+EXIT_CODE=$?
+
+echo "#### :tropical_drink: \`pulumi ${@:2}\`"
+echo "$OUTPUT"
+
+# If the GitHub action stems from a Pull Request event, we may optionally leave a comment if the
+# COMMENT_ON_PR is set.
+COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
+if [ ! -z $COMMENTS_URL ] && [ ! -z $COMMENT_ON_PR ]; then
+    if [ -z $GITHUB_TOKEN ]; then
+        echo "ERROR: COMMENT_ON_PR was set, but GITHUB_TOKEN is not set."
+    else
+        COMMENT="#### :tropical_drink: \`pulumi ${@:2}\`
+\`\`\`
+$OUTPUT
+\`\`\`"
+        PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
+        echo "Commenting on PR $COMMENTS_URL"
+        curl -s -S -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL"
+    fi
+fi
+
+exit $EXIT_CODE
