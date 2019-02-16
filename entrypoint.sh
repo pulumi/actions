@@ -77,6 +77,13 @@ if [ ! -z "$GOOGLE_CREDENTIALS" ]; then
     gcloud auth activate-service-account --key-file=$GCLOUD_KEYFILE
 fi
 
+# Add pulumi config vars
+for varname in ${!PULUMI_CONFIG*}
+do
+    echo setting ${varname/PULUMI_CONFIG_/}=${!varname}
+    pulumi config set ${varname/PULUMI_CONFIG_/} ${!varname}
+done
+
 # Next, lazily install packages if required.
 if [ -e package.json ] && [ ! -d node_modules ]; then
     npm install
