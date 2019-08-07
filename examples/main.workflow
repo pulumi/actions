@@ -1,13 +1,13 @@
-workflow "Update" {
+workflow "Update " {
     on = "push"
-    resolves = [ "Pulumi Deploy (Current Stack)" ]
+    resolves = ["Pulumi Deploy (Current Stack)"]
 }
 
 action "Pulumi Deploy (Current Stack)" {
     uses = "docker://pulumi/actions"
-    args = [ "up" ]
+    args = ["up"]
     env = {
-        "PULUMI_CI" = "up"
+        PULUMI_CI = "up"
     }
     secrets = [
         "PULUMI_ACCESS_TOKEN"
@@ -21,9 +21,9 @@ workflow "Preview" {
 
 action "Pulumi Preview (Merged Stack)" {
     uses = "docker://pulumi/actions"
-    args = [ "preview" ]
+    args = ["preview"]
     env = {
-        "PULUMI_CI" = "pr"
+        PULUMI_CI = "pr"
     }
     secrets = [
         "PULUMI_ACCESS_TOKEN"
