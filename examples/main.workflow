@@ -1,4 +1,4 @@
-workflow "Update " {
+workflow "Update" {
     on = "push"
     resolves = ["Pulumi Deploy (Current Stack)"]
 }

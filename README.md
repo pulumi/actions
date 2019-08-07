@@ -4,8 +4,9 @@ Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, 
 and GitHub. This includes previewing, validating, and collaborating on proposed deployments in the context of Pull
 Requests, and triggering deployments or promotions between different environments by merging or directly committing code.
 
-**Note**: This repository no longer contains the code responsible for creating the `pulumi/actions`
-Docker container. You'll now find that code at [github.com/pulumi/pulumi](https://github.com/pulumi/pulumi/tree/master/dist/actions).
+**Note**: This repository contains samples and additional documentation for using Pulumi's [Github Actions Docker container](https://hub.docker.com/r/pulumi/actions).
+If you're looking for the code that builds that container, [you'll find it
+here](https://github.com/pulumi/pulumi/tree/master/dist/actions).
 
 ## Getting Started
 
