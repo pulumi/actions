@@ -4,9 +4,13 @@ Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, 
 and GitHub. This includes previewing, validating, and collaborating on proposed deployments in the context of Pull
 Requests, and triggering deployments or promotions between different environments by merging or directly committing code.
 
+**Note**: This repository contains samples and additional documentation for using Pulumi's [Github Actions Docker container](https://hub.docker.com/r/pulumi/actions).
+If you're looking for the code that builds that container, [you'll find it
+here](https://github.com/pulumi/pulumi/tree/master/dist/actions).
+
 ## Getting Started
 
-To get started with Pulumi's GitHub Actions, check out our documentation: [https://pulumi.io/github](https://pulumi.io/github)
+To get started with Pulumi's GitHub Actions, [check out our documentation](https://www.pulumi.com/docs/console/continuous-delivery/github-actions/).
 
 ## Demos and Examples
 
@@ -49,7 +53,7 @@ action "Pulumi Deploy (Current Stack)" {
     uses = "docker://pulumi/actions"
     args = [ "up" ]
     env = {
-        "PULUMI_CI" = "up"
+        PULUMI_CI = "up"
     }
     secrets = [
         "PULUMI_ACCESS_TOKEN",
@@ -80,7 +84,7 @@ action "Pulumi Deploy (Current Stack)" {
     uses = "docker://pulumi/actions"
     args = [ "up" ]
     env = {
-        "PULUMI_CI" = "up"
+        PULUMI_CI = "up"
     }
     secrets = [
         "PULUMI_ACCESS_TOKEN",
@@ -114,7 +118,7 @@ action "Pulumi Deploy (Current Stack)" {
     uses = "docker://pulumi/actions"
     args = [ "up" ]
     env = {
-        "PULUMI_CI" = "up"
+        PULUMI_CI = "up"
     }
     secrets = [
         "PULUMI_ACCESS_TOKEN",
