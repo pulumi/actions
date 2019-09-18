@@ -43,24 +43,26 @@ to the relevant AWS documentation for doing this.
 As soon as you have an AWS user in hand, you'll set the environment variables `AWS_ACCESS_KEY_ID` and
 `AWS_SECRET_ACCESS_KEY` using GitHub Secrets, and then consume them in your action:
 
-```
-workflow "Update" {
-    on = "push"
-    resolves = [ "Pulumi Deploy (Current Stack)" ]
-}
-
-action "Pulumi Deploy (Current Stack)" {
-    uses = "docker://pulumi/actions"
-    args = [ "up" ]
-    env = {
-        PULUMI_CI = "up"
-    }
-    secrets = [
-        "PULUMI_ACCESS_TOKEN",
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY"
-    ]
-}
+```yaml
+name: Pulumi
+on:
+  push:
+    branches:
+      - master
+jobs:
+  up:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: docker://pulumi/actions
+        with:
+          args: up
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PULUMI_CI: up
 ```
 
 Failure to configure this correctly will lead to an error message.
@@ -74,26 +76,28 @@ pointers to the relevant Azure documentation for doing this.
 As soon as you have a service principal in hand, you'll set the environment variables `ARM_SUBSCRIPTION_ID`,
 `ARM_CLIENT_ID`, `ARM_CLIENT_SECRET`, and `ARM_TENANT_ID` using GitHub Secrets, and consume them in your action:
 
-```
-workflow "Update" {
-    on = "push"
-    resolves = [ "Pulumi Deploy (Current Stack)" ]
-}
-
-action "Pulumi Deploy (Current Stack)" {
-    uses = "docker://pulumi/actions"
-    args = [ "up" ]
-    env = {
-        PULUMI_CI = "up"
-    }
-    secrets = [
-        "PULUMI_ACCESS_TOKEN",
-        "ARM_SUBSCRIPTION_ID",
-        "ARM_CLIENT_ID",
-        "ARM_CLIENT_SECRET",
-        "ARM_TENANT_ID"
-    ]
-}
+```yaml
+name: Pulumi
+on:
+  push:
+    branches:
+      - master
+jobs:
+  up:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: docker://pulumi/actions
+        with:
+          args: up
+        env:
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PULUMI_CI: up
 ```
 
 Failure to configure this correctly will lead to the error message `Error building AzureRM Client: Azure CLI
@@ -108,23 +112,25 @@ to the relevant GCP documentation for doing this.
 As soon as you have credentials in hand, you'll set the environment variable `GOOGLE_CREDENTIALS` to contain the
 credentials JSON using GitHub Secrets, and then consume it in your action:
 
-```
-workflow "Update" {
-    on = "push"
-    resolves = [ "Pulumi Deploy (Current Stack)" ]
-}
-
-action "Pulumi Deploy (Current Stack)" {
-    uses = "docker://pulumi/actions"
-    args = [ "up" ]
-    env = {
-        PULUMI_CI = "up"
-    }
-    secrets = [
-        "PULUMI_ACCESS_TOKEN",
-        "GOOGLE_CREDENTIALS"
-    ]
-}
+```yaml
+name: Pulumi
+on:
+  push:
+    branches:
+      - master
+jobs:
+  up:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: docker://pulumi/actions
+        with:
+          args: up
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PULUMI_CI: up
 ```
 
 Failure to configure this correctly will lead to an error message.
