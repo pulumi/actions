@@ -71,6 +71,7 @@ async function installer(version?: string) {
 (async () => {
   try {
     const env = {
+      ...process.env,
       PULUMI_SKIP_CONFIRMATIONS: 'true',
       PULUMI_ACCESS_TOKEN: core.getInput('token', { required: true }),
     };

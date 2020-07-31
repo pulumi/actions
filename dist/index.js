@@ -2089,10 +2089,7 @@ function installer(version) {
 }
 (() => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
-        const env = {
-            PULUMI_SKIP_CONFIRMATIONS: 'true',
-            PULUMI_ACCESS_TOKEN: core.getInput('token', { required: true }),
-        };
+        const env = Object.assign(Object.assign({}, process.env), { PULUMI_SKIP_CONFIRMATIONS: 'true', PULUMI_ACCESS_TOKEN: core.getInput('token', { required: true }) });
         const cmd = core.getInput('cmd', { required: true });
         const args = ['--non-interactive', ...cmd.split(' ')];
         core.debug(`arguments: ${JSON.stringify(args, null, 2)}`);
