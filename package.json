@@ -1,0 +1,44 @@
+{
+  "name": "@pulumi/github-action",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:cobraz/actions",
+  "license": "Apache-2.0",
+  "scripts": {
+    "clean": "rimraf coverage build tmp",
+    "build": "tsc -p tsconfig.release.json",
+    "postbuild": "ncc build build/src/main.js -o dist",
+    "build:watch": "tsc -w -p tsconfig.release.json",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "jest --coverage src/**/*",
+    "test:watch": "jest --watch",
+    "codecov": "codecov"
+  },
+  "devDependencies": {
+    "@types/faker": "^4.1.12",
+    "@types/flat": "^5.0.1",
+    "@types/jest": "~26.0.3",
+    "@types/node": "~12.12.47",
+    "@typescript-eslint/eslint-plugin": "~3.5.0",
+    "@typescript-eslint/parser": "~3.5.0",
+    "@zeit/ncc": "^0.22.3",
+    "eslint": "~7.4.0",
+    "eslint-config-prettier": "~6.11.0",
+    "eslint-plugin-jest": "~23.18.0",
+    "faker": "^4.1.0",
+    "jest": "~26.1.0",
+    "nock": "^13.0.2",
+    "prettier": "^2.0.5",
+    "rimraf": "~3.0.2",
+    "ts-jest": "~26.1.1",
+    "ts-loader": "^7.0.5",
+    "tsutils": "~3.17.0",
+    "typescript": "~3.9.6",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@actions/tool-cache": "^1.6.0"
+  }
+}
