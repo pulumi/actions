@@ -6,7 +6,7 @@ Requests, and triggering deployments or promotions between different environment
 
 **Note**: This repository contains samples and additional documentation for using Pulumi's [Github Actions Docker container](https://hub.docker.com/r/pulumi/actions).
 If you're looking for the code that builds that container, [you'll find it
-here](https://github.com/pulumi/pulumi/tree/master/dist/actions).
+here](https://github.com/pulumi/pulumi/tree/master/docker/actions).
 
 ## Getting Started
 
