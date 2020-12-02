@@ -4,35 +4,80 @@ Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, 
 and GitHub. This includes previewing, validating, and collaborating on proposed deployments in the context of Pull
 Requests, and triggering deployments or promotions between different environments by merging or directly committing code.
 
-**Note**: This repository contains samples and additional documentation for using Pulumi's [Github Actions Docker container](https://hub.docker.com/r/pulumi/actions).
-If you're looking for the code that builds that container, [you'll find it
+**Note**: This repository contains samples and additional documentation for using Pulumi's [Github Action](https://github.com/marketplace/actions/install-pulumi-cli).
+Currently, this is a Docker container based action. If you're looking for the code that builds that container, [you'll find it
 here](https://github.com/pulumi/pulumi/tree/master/docker/actions).
 
 ## Getting Started
 
-To get started with Pulumi's GitHub Actions, [check out our documentation](https://www.pulumi.com/docs/console/continuous-delivery/github-actions/).
+```yaml
+name: Pulumi
+on:
+  push:
+    branches:
+      - master
+jobs:
+  up:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: pulumi/action-pulumi@v1
+        with:
+          command: up
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+```
 
-## Demos and Examples
+This will check out the existing directory and run `pulumi up`. The full list of configuration values can be found below.
 
-To see some examples of this in action, see the following links:
+## Configuring pulumi-action
 
-* [Our introductory blog post](https://blog.pulumi.com/continuous-delivery-to-any-cloud-using-github-actions-and-pulumi)
-* [Dockerized Ruby on Rails, in Kubernetes, with hosted Cloud SQL](https://github.com/pulumi/actions-example-gke-rails)
-* [Short 90 second video from GitHub Universe Keynote](https://www.youtube.com/watch?v=59SxB2uY9E0)
-* [Short 90 second video on GitOps and Pull Request workflows](https://www.youtube.com/watch?v=MKbDVDBuKUA)
-* [Longer 7 minute video exploring the ins and outs of Pulumi GitHub Actions in practice](https://www.youtube.com/watch?v=1Et2TkuxqJg)
+The pulumi-action can be configured in 2 ways:
 
-## Cloud Providers
+* Command Arg
+* Environment Variables
 
-Below are some quick tips on using Pulumi's GitHub Actions support with your cloud provider. This typically
-entails configuring a service principal for unattended access, storing the resulting credentials using
+### Command Arg
+
+This argument is a required argument. This is the command to pass to the Pulumi CLI. It can include the values `preview`,
+`up`, `destroy` etc. This command is the equivalent of running `pulumi <command>` if your terminal.
+
+### Environment Variables
+
+There are a number of Environment Variables that can be set to interact with the action:
+
+* By default, Pulumi will try to connect to the [Pulumi SaaS](https://app.pulumi.com/). For this to happen, the GitHub Action needs
+to be passed a `PULUMI_ACCESS_TOKEN`.
+
+* If you want to specify an [alternative Pulumi backend](https://www.pulumi.com/docs/intro/concepts/state/#to-a-self-managed-backend) then
+you can do so with the `PULUMI_BACKEND_URL` env var.
+  
+* If you want to specify a specific stack for Pulumi to use then you can set `PULUMI_STACK_NAME`, othewise Pulumi will try and use
+
+* If the Pulumi project is not in the current repo root then set `PULUMI_ROOT` to specify a directory path to the project.
+
+* If your action is running as part of a pull request workflow then you can tell Pulumi to take the ref of the target 
+  branch i.e. a PR to master will use the master branch as the target for a preview, then you can set `IS_PR_WORKFLOW = true`. 
+
+* If you would like the action to write back to the PR then you can do so by setting:
+  `COMMENT_ON_PR = 1` on the action. This will also require `GITHUB_TOKEN` to be set as an environment variable
+
+## Referencing Sensitive Values
+
+We suggest that any sensitive environment variables be referenced using using
 [GitHub Secrets](https://developer.github.com/actions/creating-workflows/storing-secrets/), and consuming
 them using [the `secrets` attribute](
 https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#actions-attributes)
 on your workflow's action.
 
+## Sample Interactions with a number of Cloud Providers
+
+Below are some quick tips on using Pulumi's GitHub Actions support with your cloud provider.
+
 > If your cloud of choice isn't listed, that doesn't necessarily mean Pulumi doesn't support it; please see
-> [Pulumi's QuickStart page](https://pulumi.io/quickstart) for more complete documentation.
+> [Pulumi's Cloud Providers page](https://www.pulumi.com/docs/intro/cloud-providers/) for more documentation on the individual
+> providers available.
 
 ### Amazon Web Services (AWS)
 
@@ -55,14 +100,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: docker://pulumi/actions
+      - uses: pulumi/action-pulumi@v1
         with:
           args: up
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          PULUMI_CI: up
 ```
 
 Failure to configure this correctly will lead to an error message.
@@ -88,7 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: docker://pulumi/actions
+      - uses: pulumi/action-pulumi@v1
         with:
           args: up
         env:
@@ -97,7 +141,6 @@ jobs:
           ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          PULUMI_CI: up
 ```
 
 Failure to configure this correctly will lead to the error message `Error building AzureRM Client: Azure CLI
@@ -124,13 +167,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: docker://pulumi/actions
+      - uses: pulumi/action-pulumi@v1
         with:
           args: up
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          PULUMI_CI: up
 ```
 
 Failure to configure this correctly will lead to an error message.
