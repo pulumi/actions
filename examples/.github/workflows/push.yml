@@ -9,11 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-      - uses: docker://pulumi/actions
+      - uses: pulumi/actions@v1
         with:
           args: up
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          PULUMI_CI: up
+          IS_PR_WORKFLOW: true
