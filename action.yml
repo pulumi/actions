@@ -1,0 +1,15 @@
+name: 'Pulumi Action'
+description: 'A Github Action that allows you to interact with Pulumi as part of CI / CD pipelines'
+author: 'Pulumi Corporation'
+inputs:
+  command:
+    description: 'The Pulumi command to run as part of the container'
+    required: true
+branding:
+  icon: 'terminal'
+  color: 'purple'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.command }}
