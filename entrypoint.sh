@@ -28,7 +28,7 @@ if [ ! -z "$GITHUB_WORKFLOW" ]; then
     # For PR events, we want to take the ref of the target branch, not the current. This ensures, for
     # instance, that a PR for a topic branch merging into `master` will use the `master` branch as the
     # target for a preview. Note that for push events, we of course want to use the actual branch.
-    if [ ! -z  "$IS_PR_WORKFLOW"]; then
+    if [ ! -z  "$IS_PR_WORKFLOW" ]; then
         # Not all PR events warrant running a preview. Many of them pertain to changes in assignments and
         # ownership, but we only want to run the preview if the action is "opened", "edited", or "synchronize".
         PR_ACTION=$(jq -r ".action" < $GITHUB_EVENT_PATH)
