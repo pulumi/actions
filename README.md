@@ -21,8 +21,8 @@ jobs:
     name: Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: pulumi/action-pulumi@v1
+      - uses: actions/checkout@v2
+      - uses: pulumi/actions@v1
         with:
           command: up
         env:
@@ -58,10 +58,10 @@ you can do so with the `PULUMI_BACKEND_URL` env var.
 * If the Pulumi project is not in the current repo root then set `PULUMI_ROOT` to specify a directory path to the project.
 
 * If your action is running as part of a pull request workflow then you can tell Pulumi to take the ref of the target 
-  branch i.e. a PR to master will use the master branch as the target for a preview, then you can set `IS_PR_WORKFLOW = true`. 
+  branch i.e. a PR to master will use the master branch as the target for a preview, then you can set `IS_PR_WORKFLOW: true`. 
 
 * If you would like the action to write back to the PR then you can do so by setting:
-  `COMMENT_ON_PR = 1` on the action. This will also require `GITHUB_TOKEN` to be set as an environment variable
+  `COMMENT_ON_PR: 1` on the action. This will also require `GITHUB_TOKEN` to be set as an environment variable
 
 ## Referencing Sensitive Values
 
@@ -70,6 +70,51 @@ We suggest that any sensitive environment variables be referenced using using
 them using [the `secrets` attribute](
 https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#actions-attributes)
 on your workflow's action.
+
+## Example workflows
+
+### Master Builds
+
+```yaml
+name: Pulumi
+on:
+  push:
+    branches:
+      - master
+jobs:
+  up:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: pulumi/actions@v0.0.2
+        with:
+          command: up
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+```
+
+### Pull Request Builds
+
+```yaml
+name: Pulumi
+on:
+  - pull_request
+jobs:
+  preview:
+    name: Preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pulumi/actions@v0.0.2
+        with:
+          command: preview
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IS_PR_WORKFLOW: true
+          COMMENT_ON_PR: 1
+```
 
 ## Sample Interactions with a number of Cloud Providers
 
@@ -99,10 +144,10 @@ jobs:
     name: Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: pulumi/action-pulumi@v1
+      - uses: actions/checkout@v2
+      - uses: pulumi/actions@v1
         with:
-          args: up
+          command: up
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -131,10 +176,10 @@ jobs:
     name: Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: pulumi/action-pulumi@v1
+      - uses: actions/checkout@v2
+      - uses: pulumi/actions@v1
         with:
-          args: up
+          command: up
         env:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -166,10 +211,10 @@ jobs:
     name: Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: pulumi/action-pulumi@v1
+      - uses: actions/checkout@v2
+      - uses: pulumi/actions@v1
         with:
-          args: up
+          command: up
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
