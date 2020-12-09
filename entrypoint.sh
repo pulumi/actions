@@ -101,7 +101,11 @@ fi
 # Similarly, run yarn install as applicable for the same reasons.
 if [ -e package.json ]; then
     if [ -f yarn.lock ] || [ ! -z $USE_YARN ]; then
-        yarn install
+        if [ ! -z "$USE_YARN_WORKSPACE" ]; then
+            yarn workspace "$USE_YARN_WORKSPACE" install
+        else
+            yarn install
+        fi    
     else
         # Set npm auth token if one is provided.
         if [ ! -z "$NPM_AUTH_TOKEN" ]; then
