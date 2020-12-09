@@ -101,8 +101,8 @@ fi
 # Similarly, run yarn install as applicable for the same reasons.
 if [ -e package.json ]; then
     if [ -f yarn.lock ] || [ ! -z $USE_YARN ]; then
-        if [ ! -z "$USE_YARN_WORKSPACE" ]; then
-            yarn workspace "$USE_YARN_WORKSPACE" install
+        if [ ! -z "$YARN_WORKSPACE" ]; then
+            yarn workspace "$YARN_WORKSPACE" install
         else
             yarn install
         fi    
