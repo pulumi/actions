@@ -63,7 +63,7 @@ you can do so with the `PULUMI_BACKEND_URL` env var.
 * If you would like the action to write back to the PR then you can do so by setting:
   `COMMENT_ON_PR: 1` on the action. This will also require `GITHUB_TOKEN` to be set as an environment variable
 
-* If you would like to use a specific yarn workspace set `USE_YARN_WORKSPACE`.
+* If you would like to use a specific yarn workspace set `YARN_WORKSPACE`.
 
 ## Referencing Sensitive Values
 
