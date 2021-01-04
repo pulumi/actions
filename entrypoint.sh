@@ -3,6 +3,21 @@
 
 set -e
 
+# For Google, we need to authenticate with a service principal for certain authentication operations.
+if [ ! -z "$GOOGLE_CREDENTIALS" ]; then
+    export GOOGLE_APPLICATION_CREDENTIALS="$(mktemp).json"
+    # Check if GOOGLE_CREDENTIALS is base64 encoded
+    if [[ $GOOGLE_CREDENTIALS =~ ^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$ ]]; then
+        echo "$GOOGLE_CREDENTIALS"|base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        # unset for other gcloud commands using this variable.
+        unset GOOGLE_CREDENTIALS
+    else
+        echo "$GOOGLE_CREDENTIALS" > $GOOGLE_APPLICATION_CREDENTIALS
+    fi
+    gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+    gcloud --quiet auth configure-docker $GOOGLE_DOCKER_HOSTNAME_LIST
+fi
+
 # The default backend URL is the Pulumi Managed Service.
 # To use one of the alternate supported backends, set the
 # PULUMI_BACKEND_URL env var according to:
@@ -73,21 +88,6 @@ if [ ! -z "$GITHUB_WORKFLOW" ]; then
             exit 0
         fi
     fi
-fi
-
-# For Google, we need to authenticate with a service principal for certain authentication operations.
-if [ ! -z "$GOOGLE_CREDENTIALS" ]; then
-    export GOOGLE_APPLICATION_CREDENTIALS="$(mktemp).json"
-    # Check if GOOGLE_CREDENTIALS is base64 encoded
-    if [[ $GOOGLE_CREDENTIALS =~ ^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$ ]]; then
-        echo "$GOOGLE_CREDENTIALS"|base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
-        # unset for other gcloud commands using this variable.
-        unset GOOGLE_CREDENTIALS
-    else
-        echo "$GOOGLE_CREDENTIALS" > $GOOGLE_APPLICATION_CREDENTIALS
-    fi
-    gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-    gcloud --quiet auth configure-docker $GOOGLE_DOCKER_HOSTNAME_LIST
 fi
 
 # Next, run npm install. We always call this, as
