@@ -130,12 +130,21 @@ if [ -e requirements.txt ]; then
         $PULUMI_VENV/bin/python -m pip install --upgrade pip setuptools wheel
         $PULUMI_VENV/bin/python -m pip install -r requirements.txt
     fi
+elif [ -e Pipfile.lock ]; then
+    pipenv install
+    PULUMI_PREFIX="pipenv run"
 fi
 
 # Now just pass along all arguments to the Pulumi CLI, sending the output to a file for
 # later use. Note that we exit immediately on failure (under set -e), so we `tee` stdout, but
 # allow errors to be surfaced in the Actions log.
+# If there is a PULUMI_PREFIX then we can just prepend it to the pulumi command
 PULUMI_COMMAND="pulumi $*"
+if [ ! -z "$PULUMI_PREFIX" ]
+then
+    PULUMI_COMMAND="$PULUMI_PREFIX pulumi $*"
+fi
+
 OUTPUT_FILE=$(mktemp)
 echo "#### :tropical_drink: \`$PULUMI_COMMAND\`"
 bash -c "$PULUMI_COMMAND" | tee $OUTPUT_FILE
