@@ -9,7 +9,7 @@ inputs:
         description: 'Pulumi command to run, eg. up'
         required: true
     stack-name:
-        description: 'Pulumi Access Token'
+        description: 'Which stack you want to apply to, eg. dev'
         required: true
 runs:
     using: 'node12'
