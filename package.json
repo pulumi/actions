@@ -6,7 +6,9 @@
   "license": "Apache-2.0",
   "scripts": {
     "clean": "rimraf coverage build tmp dist",
-    "build": "ncc build src/main.ts -o dist --source-map --license LICENSE",
+    "prebuild": "yarn run clean",
+    "build": "tsc",
+    "postbuild": "ncc build build/src/main.js -o dist --source-map",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage src/**/*",
     "test:watch": "jest --watch"
@@ -30,6 +32,8 @@
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4",
+    "@pulumi/pulumi": "^2.18.0",
     "runtypes": "^5.0.1"
   }
 }
