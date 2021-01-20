@@ -7,7 +7,6 @@
   "scripts": {
     "clean": "rimraf coverage build tmp dist",
     "build": "ncc build src/main.ts -o dist --source-map --license LICENSE",
-    "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage src/**/*",
     "test:watch": "jest --watch"
@@ -28,5 +27,9 @@
     "rimraf": "~3.0.2",
     "ts-jest": "~26.4.4",
     "typescript": "~4.1.3"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "runtypes": "^5.0.1"
   }
 }
