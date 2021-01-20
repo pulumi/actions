@@ -5,12 +5,15 @@ branding:
   icon: upload-cloud
   color: purple
 inputs:
-    command:
-        description: 'Pulumi command to run, eg. up'
-        required: true
-    stack-name:
-        description: 'Which stack you want to apply to, eg. dev'
-        required: true
+  command:
+    description: 'Pulumi command to run, eg. up'
+    required: true
+  stack-name:
+    description: 'Which stack you want to apply to, eg. dev'
+    required: true
+  cwd:
+    description: 'Location of your Pulumi files. Defaults to ./'
+    required: false
 runs:
-    using: 'node12'
-    main: 'dist/index.js'
+  using: 'node12'
+  main: 'dist/index.js'
