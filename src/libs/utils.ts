@@ -2,7 +2,7 @@ export function invariant(
   condition: any,
   message?: string,
 ): asserts condition {
-  if (condition) {
+  if (!condition) {
     throw new Error(message);
   }
 }
