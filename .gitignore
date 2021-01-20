@@ -1,22 +1,29 @@
-.idea
-.code
-**/vendor/
-.pulumi
-**/bin/
-**/obj/
-Pulumi.*.yaml
-**/node_modules/
+# Logs
+logs
+*.log
+npm-debug.log*
 
-**/command-output/
+# Dependencies
+node_modules/
 
+# Coverage
+coverage
+
+# Transpiled files
+build/
+
+# VS Code
+.vscode
+!.vscode/tasks.js
+
+# JetBrains IDEs
 .idea/
-*.iml
 
-yarn.lock
-**/pulumiManifest.go
+# Optional npm cache directory
+.npm
 
-ci-scripts
-**/schema.go
-**/version.txt
-**/nuget
-**/dist
+# Optional eslint cache
+.eslintcache
+
+# Misc
+.DS_Store
