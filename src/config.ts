@@ -5,6 +5,7 @@ export const command = rt.Union(
   rt.Literal('up'),
   rt.Literal('refresh'),
   rt.Literal('destroy'),
+  rt.Literal('preview'),
 );
 
 export const config = rt.Record({
