@@ -5,15 +5,12 @@ branding:
   icon: upload-cloud
   color: purple
 inputs:
-    cmd:
+    command:
         description: 'Pulumi command to run, eg. up'
         required: true
-    token:
+    stack-name:
         description: 'Pulumi Access Token'
         required: true
-    backendUrl:
-        description: 'The default backend URL is the Pulumi Managed Service. Set this var accordingly.'
-        required: false
 runs:
     using: 'node12'
     main: 'dist/index.js'
