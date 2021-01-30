@@ -1,4 +1,3 @@
-// import { promises as fs } from 'fs';
 import { makeConfig, Commands } from './config';
 import * as pulumiCli from './libs/pulumi-cli';
 import { invariant } from './libs/utils';
@@ -15,11 +14,6 @@ const main = async () => {
   core.debug('Pulumi CLI is available');
 
   const workDir = resolve(environmentVariables.GITHUB_WORKSPACE, config.cwd);
-
-  // invariant(
-  //   await fs.access(workDir),
-  //   `Could not access working directory: ${workDir}`,
-  // );
 
   const stack = await LocalWorkspace.selectStack({
     stackName: config.stackName,
@@ -56,9 +50,9 @@ const main = async () => {
     await main();
   } catch (err) {
     if (err.message.stderr) {
-      core.setFailed(`eod: ${err.message.stderr}`);
+      core.setFailed(err.message.stderr);
     } else {
-      core.setFailed(`eod: ${err.message}`);
+      core.setFailed(err.message);
     }
   }
 })();
