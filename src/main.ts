@@ -32,6 +32,7 @@ const main = async () => {
     stackName: config.stackName,
     workDir: config.cwd,
   });
+
   core.debug(JSON.stringify(stack, null, 2));
   core.debug(`startGrouping: ${config.stackName}`);
   core.startGroup(config.stackName);
@@ -65,11 +66,11 @@ const main = async () => {
 (async () => {
   try {
     await main();
-  } catch (e) {
-    if (e.message.stderr) {
-      core.setFailed(e.message.stderr);
+  } catch (err) {
+    if (err.message.stderr) {
+      core.setFailed(`eod: ${err.message.stderr}`);
     } else {
-      core.setFailed(e.message);
+      core.setFailed(`eod: ${err.message}`);
     }
   }
 })();
