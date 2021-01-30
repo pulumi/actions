@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf coverage build tmp dist",
     "prebuild": "yarn run clean",
-    "build": "ncc build src/main.ts -o dist --source-map",
+    "build": "ncc build src/main.ts -e typescript -o dist --source-map",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage src/**/*",
     "test:watch": "jest --watch"
@@ -29,11 +29,10 @@
     "ts-jest": "~26.4.4"
   },
   "dependencies": {
+    "typescript": "~4.1.3",
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@pulumi/pulumi": "^2.18.0",
-    "envalid": "^6.0.2",
-    "runtypes": "^5.0.1",
-    "typescript": "~4.1.3"
+    "runtypes": "^5.0.1"
   }
 }
