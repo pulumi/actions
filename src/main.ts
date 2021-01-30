@@ -16,7 +16,7 @@ const main = async () => {
   const res = await exec('ls -l');
   console.log(res);
 
-  const res2 = await exec('ls -l ${config.cwd}');
+  const res2 = await exec(`ls -l ${config.cwd}`);
   console.log(res2);
 
   invariant(
