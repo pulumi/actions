@@ -4,6 +4,7 @@ import * as pulumiCli from './libs/pulumi-cli';
 import { invariant } from './libs/utils';
 import { LocalWorkspace } from '@pulumi/pulumi/x/automation';
 import * as core from '@actions/core';
+import { exec } from './libs/exec';
 
 const main = async () => {
   const config = await makeConfig();
@@ -11,6 +12,12 @@ const main = async () => {
 
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
+
+  const res = await exec('ls -l');
+  console.log(res);
+
+  const res2 = await exec('ls -l ${config.cwd}');
+  console.log(res2);
 
   invariant(
     await fs.access(config.cwd),
