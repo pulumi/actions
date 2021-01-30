@@ -66,6 +66,10 @@ const main = async () => {
   try {
     await main();
   } catch (e) {
-    core.setFailed(e.message);
+    if (e.message.stderr) {
+      core.setFailed(e.message.stderr);
+    } else {
+      core.setFailed(e.message);
+    }
   }
 })();
