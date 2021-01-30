@@ -10,7 +10,7 @@ import { environmentVariables } from './libs/envs';
 
 const main = async () => {
   const config = await makeConfig();
-  core.debug('Configuration is loaded.');
+  core.debug('Configuration is loaded');
 
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
@@ -62,9 +62,10 @@ const main = async () => {
   core.endGroup();
 };
 
-try {
-  main().then(console.log);
-} catch (e) {
-  console.log(e);
-  core.error(e.message);
-}
+(async () => {
+  try {
+    await main();
+  } catch (e) {
+    core.setFailed(e.message);
+  }
+})();
