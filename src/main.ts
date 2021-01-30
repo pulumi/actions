@@ -4,10 +4,12 @@ import { invariant } from './libs/utils';
 import { LocalWorkspace } from '@pulumi/pulumi/x/automation';
 import * as core from '@actions/core';
 
-(async () => {
+const main = async () => {
   const config = await makeConfig();
+  core.debug('Configuration is loaded.');
 
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
+  core.debug('Pulumi CLI is available');
 
   const stack = await LocalWorkspace.selectStack({
     stackName: config.stackName,
@@ -40,4 +42,6 @@ import * as core from '@actions/core';
   console.log(`Done running action ${config.command}`, config);
 
   core.endGroup();
-})();
+};
+
+main().then(console.log).catch(console.error);
