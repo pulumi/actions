@@ -27,6 +27,8 @@ import * as core from '@actions/core';
     async preview() {
       const preview = await stack.up();
       onOutput(preview.stdout);
+      onOutput(preview.stderr);
+      console.log(preview.outputs);
       return preview;
     },
   };
