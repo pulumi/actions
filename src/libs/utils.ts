@@ -4,7 +4,8 @@ export function invariant(
   message?: string,
 ): asserts condition {
   if (!condition) {
-    core.error(message);
-    throw new Error(message);
+    core.setFailed(message);
+    process.exit();
+    // throw new Error();
   }
 }
