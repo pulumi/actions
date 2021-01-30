@@ -5,6 +5,7 @@ import { invariant } from './libs/utils';
 import { LocalWorkspace } from '@pulumi/pulumi/x/automation';
 import * as core from '@actions/core';
 import { exec } from './libs/exec';
+import { resolve } from 'path';
 
 const main = async () => {
   const config = await makeConfig();
@@ -13,21 +14,24 @@ const main = async () => {
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
 
+  const workDir = resolve(__dirname, config.cwd);
+
   const res = await exec('ls -l');
   console.log(res);
 
-  const res2 = await exec(`ls -l ${config.cwd}`);
+  const res2 = await exec(`ls -l ${workDir}`);
   console.log(res2);
 
   invariant(
-    await fs.access(config.cwd),
-    `Could not access working directory: ${config.cwd}`,
+    await fs.access(workDir),
+    `Could not access working directory: ${workDir}`,
   );
 
   const stack = await LocalWorkspace.selectStack({
     stackName: config.stackName,
     workDir: config.cwd,
   });
+  console.log(stack);
   console.log('startGrouping', config.stackName);
   core.startGroup(config.stackName);
   console.log('startGrouping: E', config.stackName);
