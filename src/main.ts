@@ -6,6 +6,7 @@ import { LocalWorkspace } from '@pulumi/pulumi/x/automation';
 import * as core from '@actions/core';
 import { exec } from './libs/exec';
 import { resolve } from 'path';
+import { environmentVariables } from './libs/envs';
 
 const main = async () => {
   const config = await makeConfig();
@@ -14,7 +15,7 @@ const main = async () => {
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
 
-  const workDir = resolve(__dirname, config.cwd);
+  const workDir = resolve(environmentVariables.GITHUB_WORKSPACE, config.cwd);
 
   const res = await exec('ls -l');
   console.log(res);
