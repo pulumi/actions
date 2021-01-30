@@ -65,5 +65,6 @@ const main = async () => {
 try {
   main().then(console.log);
 } catch (e) {
+  console.log(e);
   core.error(e.message);
 }
