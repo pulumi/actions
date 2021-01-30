@@ -18,10 +18,10 @@ const main = async () => {
   const workDir = resolve(environmentVariables.GITHUB_WORKSPACE, config.cwd);
 
   const res = await exec('ls -l');
-  console.log(res);
+  core.debug(res.stdout);
 
   const res2 = await exec(`ls -l ${workDir}`);
-  console.log(res2);
+  core.debug(res2.stdout);
 
   // invariant(
   //   await fs.access(workDir),
@@ -32,13 +32,13 @@ const main = async () => {
     stackName: config.stackName,
     workDir: config.cwd,
   });
-  console.log(stack);
-  console.log('startGrouping', config.stackName);
+  core.debug(JSON.stringify(stack, null, 2));
+  core.debug(`startGrouping: ${config.stackName}`);
   core.startGroup(config.stackName);
-  console.log('startGrouping: E', config.stackName);
+  core.debug(`end startGroup: ${config.stackName}`);
 
   const onOutput = (msg: string) => {
-    console.log(msg);
+    core.debug(msg);
     core.info(msg);
   };
 
@@ -50,14 +50,14 @@ const main = async () => {
       const preview = await stack.up();
       onOutput(preview.stdout);
       onOutput(preview.stderr);
-      console.log(preview.outputs);
+      core.debug(JSON.stringify(preview.outputs, null, 2));
       return preview;
     },
   };
 
-  console.log(`Running action ${config.command}`, config);
+  core.debug(`Running action ${config.command}`);
   await actions[config.command]();
-  console.log(`Done running action ${config.command}`, config);
+  core.debug(`Done running action ${config.command}`);
 
   core.endGroup();
 };
