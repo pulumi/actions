@@ -19,13 +19,13 @@ import * as core from '@actions/core';
   const onOutput = (msg: string) => {
     console.log(msg);
     core.info(msg);
-  }
+  };
 
   const actions: Record<Commands, () => Promise<unknown>> = {
-    up() { return stack.up({ onOutput }) },
-    refresh() { return stack.refresh({ onOutput }) },
-    destroy() { return stack.destroy({ onOutput }) },
-    async preview() {
+    up: () => stack.up({ onOutput }),
+    refresh: () => stack.refresh({ onOutput }),
+    destroy: () => stack.destroy({ onOutput }),
+    preview: async () => {
       const preview = await stack.up();
       onOutput(preview.stdout);
       onOutput(preview.stderr);
