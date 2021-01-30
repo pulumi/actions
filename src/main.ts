@@ -17,6 +17,7 @@ import * as core from '@actions/core';
   core.startGroup(config.stackName);
 
   const onOutput = (msg: string) => {
+    console.log(msg);
     core.info(msg);
   }
 
