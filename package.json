@@ -7,8 +7,7 @@
   "scripts": {
     "clean": "rimraf coverage build tmp dist",
     "prebuild": "yarn run clean",
-    "build": "tsc",
-    "postbuild": "ncc build build/src/main.js -o dist --source-map",
+    "build": "ncc build src/main.ts -e typescript -o dist --source-map",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage src/**/*",
     "test:watch": "jest --watch"
