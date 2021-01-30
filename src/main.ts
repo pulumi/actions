@@ -13,8 +13,9 @@ import * as core from '@actions/core';
     stackName: config.stackName,
     workDir: config.cwd,
   });
-
+  console.log('startGrouping', config.stackName);
   core.startGroup(config.stackName);
+  console.log('startGrouping: E', config.stackName);
 
   const onOutput = (msg: string) => {
     console.log(msg);
@@ -34,7 +35,9 @@ import * as core from '@actions/core';
     },
   };
 
+  console.log(`Running action ${config.command}`, config);
   await actions[config.command]();
+  console.log(`Done running action ${config.command}`, config);
 
   core.endGroup();
 })();
