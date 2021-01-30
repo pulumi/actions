@@ -63,7 +63,7 @@ const main = async () => {
 };
 
 try {
-  main();
+  main().then(console.log);
 } catch (e) {
   core.error(e.message);
 }
