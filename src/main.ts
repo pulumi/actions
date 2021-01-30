@@ -12,7 +12,10 @@ const main = async () => {
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
 
-  invariant(await fs.access(config.cwd), `Could not access working directory`);
+  invariant(
+    await fs.access(config.cwd),
+    `Could not access working directory: ${config.cwd}`,
+  );
 
   const stack = await LocalWorkspace.selectStack({
     stackName: config.stackName,
