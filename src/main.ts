@@ -62,4 +62,8 @@ const main = async () => {
   core.endGroup();
 };
 
-main().then(console.log).catch(console.error);
+try {
+  main();
+} catch (e) {
+  core.error(e.message);
+}
