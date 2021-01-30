@@ -1,3 +1,4 @@
+import { promises as fs } from 'fs';
 import { makeConfig, Commands } from './config';
 import * as pulumiCli from './libs/pulumi-cli';
 import { invariant } from './libs/utils';
@@ -10,6 +11,8 @@ const main = async () => {
 
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
+
+  invariant(await fs.access(config.cwd), 'Could not access working directory');
 
   const stack = await LocalWorkspace.selectStack({
     stackName: config.stackName,
