@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs';
+// import { promises as fs } from 'fs';
 import { makeConfig, Commands } from './config';
 import * as pulumiCli from './libs/pulumi-cli';
 import { invariant } from './libs/utils';
@@ -23,10 +23,10 @@ const main = async () => {
   const res2 = await exec(`ls -l ${workDir}`);
   console.log(res2);
 
-  invariant(
-    await fs.access(workDir),
-    `Could not access working directory: ${workDir}`,
-  );
+  // invariant(
+  //   await fs.access(workDir),
+  //   `Could not access working directory: ${workDir}`,
+  // );
 
   const stack = await LocalWorkspace.selectStack({
     stackName: config.stackName,
