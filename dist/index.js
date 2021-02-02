@@ -44100,178 +44100,6 @@ exports.isIterable = isIterable;
 
 /***/ }),
 
-/***/ 2068:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-/* module decorator */ module = __nccwpck_require__.nmd(module);
-
-
-const wrapAnsi16 = (fn, offset) => (...args) => {
-	const code = fn(...args);
-	return `\u001B[${code + offset}m`;
-};
-
-const wrapAnsi256 = (fn, offset) => (...args) => {
-	const code = fn(...args);
-	return `\u001B[${38 + offset};5;${code}m`;
-};
-
-const wrapAnsi16m = (fn, offset) => (...args) => {
-	const rgb = fn(...args);
-	return `\u001B[${38 + offset};2;${rgb[0]};${rgb[1]};${rgb[2]}m`;
-};
-
-const ansi2ansi = n => n;
-const rgb2rgb = (r, g, b) => [r, g, b];
-
-const setLazyProperty = (object, property, get) => {
-	Object.defineProperty(object, property, {
-		get: () => {
-			const value = get();
-
-			Object.defineProperty(object, property, {
-				value,
-				enumerable: true,
-				configurable: true
-			});
-
-			return value;
-		},
-		enumerable: true,
-		configurable: true
-	});
-};
-
-/** @type {typeof import('color-convert')} */
-let colorConvert;
-const makeDynamicStyles = (wrap, targetSpace, identity, isBackground) => {
-	if (colorConvert === undefined) {
-		colorConvert = __nccwpck_require__(6931);
-	}
-
-	const offset = isBackground ? 10 : 0;
-	const styles = {};
-
-	for (const [sourceSpace, suite] of Object.entries(colorConvert)) {
-		const name = sourceSpace === 'ansi16' ? 'ansi' : sourceSpace;
-		if (sourceSpace === targetSpace) {
-			styles[name] = wrap(identity, offset);
-		} else if (typeof suite === 'object') {
-			styles[name] = wrap(suite[targetSpace], offset);
-		}
-	}
-
-	return styles;
-};
-
-function assembleStyles() {
-	const codes = new Map();
-	const styles = {
-		modifier: {
-			reset: [0, 0],
-			// 21 isn't widely supported and 22 does the same thing
-			bold: [1, 22],
-			dim: [2, 22],
-			italic: [3, 23],
-			underline: [4, 24],
-			inverse: [7, 27],
-			hidden: [8, 28],
-			strikethrough: [9, 29]
-		},
-		color: {
-			black: [30, 39],
-			red: [31, 39],
-			green: [32, 39],
-			yellow: [33, 39],
-			blue: [34, 39],
-			magenta: [35, 39],
-			cyan: [36, 39],
-			white: [37, 39],
-
-			// Bright color
-			blackBright: [90, 39],
-			redBright: [91, 39],
-			greenBright: [92, 39],
-			yellowBright: [93, 39],
-			blueBright: [94, 39],
-			magentaBright: [95, 39],
-			cyanBright: [96, 39],
-			whiteBright: [97, 39]
-		},
-		bgColor: {
-			bgBlack: [40, 49],
-			bgRed: [41, 49],
-			bgGreen: [42, 49],
-			bgYellow: [43, 49],
-			bgBlue: [44, 49],
-			bgMagenta: [45, 49],
-			bgCyan: [46, 49],
-			bgWhite: [47, 49],
-
-			// Bright color
-			bgBlackBright: [100, 49],
-			bgRedBright: [101, 49],
-			bgGreenBright: [102, 49],
-			bgYellowBright: [103, 49],
-			bgBlueBright: [104, 49],
-			bgMagentaBright: [105, 49],
-			bgCyanBright: [106, 49],
-			bgWhiteBright: [107, 49]
-		}
-	};
-
-	// Alias bright black as gray (and grey)
-	styles.color.gray = styles.color.blackBright;
-	styles.bgColor.bgGray = styles.bgColor.bgBlackBright;
-	styles.color.grey = styles.color.blackBright;
-	styles.bgColor.bgGrey = styles.bgColor.bgBlackBright;
-
-	for (const [groupName, group] of Object.entries(styles)) {
-		for (const [styleName, style] of Object.entries(group)) {
-			styles[styleName] = {
-				open: `\u001B[${style[0]}m`,
-				close: `\u001B[${style[1]}m`
-			};
-
-			group[styleName] = styles[styleName];
-
-			codes.set(style[0], style[1]);
-		}
-
-		Object.defineProperty(styles, groupName, {
-			value: group,
-			enumerable: false
-		});
-	}
-
-	Object.defineProperty(styles, 'codes', {
-		value: codes,
-		enumerable: false
-	});
-
-	styles.color.close = '\u001B[39m';
-	styles.bgColor.close = '\u001B[49m';
-
-	setLazyProperty(styles.color, 'ansi', () => makeDynamicStyles(wrapAnsi16, 'ansi16', ansi2ansi, false));
-	setLazyProperty(styles.color, 'ansi256', () => makeDynamicStyles(wrapAnsi256, 'ansi256', ansi2ansi, false));
-	setLazyProperty(styles.color, 'ansi16m', () => makeDynamicStyles(wrapAnsi16m, 'rgb', rgb2rgb, false));
-	setLazyProperty(styles.bgColor, 'ansi', () => makeDynamicStyles(wrapAnsi16, 'ansi16', ansi2ansi, true));
-	setLazyProperty(styles.bgColor, 'ansi256', () => makeDynamicStyles(wrapAnsi256, 'ansi256', ansi2ansi, true));
-	setLazyProperty(styles.bgColor, 'ansi16m', () => makeDynamicStyles(wrapAnsi16m, 'rgb', rgb2rgb, true));
-
-	return styles;
-}
-
-// Make the export immutable
-Object.defineProperty(module, 'exports', {
-	enumerable: true,
-	get: assembleStyles
-});
-
-
-/***/ }),
-
 /***/ 7943:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -44807,1204 +44635,6 @@ if ($defineProperty) {
 
 /***/ }),
 
-/***/ 330:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-/* MIT license */
-/* eslint-disable no-mixed-operators */
-const cssKeywords = __nccwpck_require__(8510);
-
-// NOTE: conversions should only return primitive values (i.e. arrays, or
-//       values that give correct `typeof` results).
-//       do not use box values types (i.e. Number(), String(), etc.)
-
-const reverseKeywords = {};
-for (const key of Object.keys(cssKeywords)) {
-	reverseKeywords[cssKeywords[key]] = key;
-}
-
-const convert = {
-	rgb: {channels: 3, labels: 'rgb'},
-	hsl: {channels: 3, labels: 'hsl'},
-	hsv: {channels: 3, labels: 'hsv'},
-	hwb: {channels: 3, labels: 'hwb'},
-	cmyk: {channels: 4, labels: 'cmyk'},
-	xyz: {channels: 3, labels: 'xyz'},
-	lab: {channels: 3, labels: 'lab'},
-	lch: {channels: 3, labels: 'lch'},
-	hex: {channels: 1, labels: ['hex']},
-	keyword: {channels: 1, labels: ['keyword']},
-	ansi16: {channels: 1, labels: ['ansi16']},
-	ansi256: {channels: 1, labels: ['ansi256']},
-	hcg: {channels: 3, labels: ['h', 'c', 'g']},
-	apple: {channels: 3, labels: ['r16', 'g16', 'b16']},
-	gray: {channels: 1, labels: ['gray']}
-};
-
-module.exports = convert;
-
-// Hide .channels and .labels properties
-for (const model of Object.keys(convert)) {
-	if (!('channels' in convert[model])) {
-		throw new Error('missing channels property: ' + model);
-	}
-
-	if (!('labels' in convert[model])) {
-		throw new Error('missing channel labels property: ' + model);
-	}
-
-	if (convert[model].labels.length !== convert[model].channels) {
-		throw new Error('channel and label counts mismatch: ' + model);
-	}
-
-	const {channels, labels} = convert[model];
-	delete convert[model].channels;
-	delete convert[model].labels;
-	Object.defineProperty(convert[model], 'channels', {value: channels});
-	Object.defineProperty(convert[model], 'labels', {value: labels});
-}
-
-convert.rgb.hsl = function (rgb) {
-	const r = rgb[0] / 255;
-	const g = rgb[1] / 255;
-	const b = rgb[2] / 255;
-	const min = Math.min(r, g, b);
-	const max = Math.max(r, g, b);
-	const delta = max - min;
-	let h;
-	let s;
-
-	if (max === min) {
-		h = 0;
-	} else if (r === max) {
-		h = (g - b) / delta;
-	} else if (g === max) {
-		h = 2 + (b - r) / delta;
-	} else if (b === max) {
-		h = 4 + (r - g) / delta;
-	}
-
-	h = Math.min(h * 60, 360);
-
-	if (h < 0) {
-		h += 360;
-	}
-
-	const l = (min + max) / 2;
-
-	if (max === min) {
-		s = 0;
-	} else if (l <= 0.5) {
-		s = delta / (max + min);
-	} else {
-		s = delta / (2 - max - min);
-	}
-
-	return [h, s * 100, l * 100];
-};
-
-convert.rgb.hsv = function (rgb) {
-	let rdif;
-	let gdif;
-	let bdif;
-	let h;
-	let s;
-
-	const r = rgb[0] / 255;
-	const g = rgb[1] / 255;
-	const b = rgb[2] / 255;
-	const v = Math.max(r, g, b);
-	const diff = v - Math.min(r, g, b);
-	const diffc = function (c) {
-		return (v - c) / 6 / diff + 1 / 2;
-	};
-
-	if (diff === 0) {
-		h = 0;
-		s = 0;
-	} else {
-		s = diff / v;
-		rdif = diffc(r);
-		gdif = diffc(g);
-		bdif = diffc(b);
-
-		if (r === v) {
-			h = bdif - gdif;
-		} else if (g === v) {
-			h = (1 / 3) + rdif - bdif;
-		} else if (b === v) {
-			h = (2 / 3) + gdif - rdif;
-		}
-
-		if (h < 0) {
-			h += 1;
-		} else if (h > 1) {
-			h -= 1;
-		}
-	}
-
-	return [
-		h * 360,
-		s * 100,
-		v * 100
-	];
-};
-
-convert.rgb.hwb = function (rgb) {
-	const r = rgb[0];
-	const g = rgb[1];
-	let b = rgb[2];
-	const h = convert.rgb.hsl(rgb)[0];
-	const w = 1 / 255 * Math.min(r, Math.min(g, b));
-
-	b = 1 - 1 / 255 * Math.max(r, Math.max(g, b));
-
-	return [h, w * 100, b * 100];
-};
-
-convert.rgb.cmyk = function (rgb) {
-	const r = rgb[0] / 255;
-	const g = rgb[1] / 255;
-	const b = rgb[2] / 255;
-
-	const k = Math.min(1 - r, 1 - g, 1 - b);
-	const c = (1 - r - k) / (1 - k) || 0;
-	const m = (1 - g - k) / (1 - k) || 0;
-	const y = (1 - b - k) / (1 - k) || 0;
-
-	return [c * 100, m * 100, y * 100, k * 100];
-};
-
-function comparativeDistance(x, y) {
-	/*
-		See https://en.m.wikipedia.org/wiki/Euclidean_distance#Squared_Euclidean_distance
-	*/
-	return (
-		((x[0] - y[0]) ** 2) +
-		((x[1] - y[1]) ** 2) +
-		((x[2] - y[2]) ** 2)
-	);
-}
-
-convert.rgb.keyword = function (rgb) {
-	const reversed = reverseKeywords[rgb];
-	if (reversed) {
-		return reversed;
-	}
-
-	let currentClosestDistance = Infinity;
-	let currentClosestKeyword;
-
-	for (const keyword of Object.keys(cssKeywords)) {
-		const value = cssKeywords[keyword];
-
-		// Compute comparative distance
-		const distance = comparativeDistance(rgb, value);
-
-		// Check if its less, if so set as closest
-		if (distance < currentClosestDistance) {
-			currentClosestDistance = distance;
-			currentClosestKeyword = keyword;
-		}
-	}
-
-	return currentClosestKeyword;
-};
-
-convert.keyword.rgb = function (keyword) {
-	return cssKeywords[keyword];
-};
-
-convert.rgb.xyz = function (rgb) {
-	let r = rgb[0] / 255;
-	let g = rgb[1] / 255;
-	let b = rgb[2] / 255;
-
-	// Assume sRGB
-	r = r > 0.04045 ? (((r + 0.055) / 1.055) ** 2.4) : (r / 12.92);
-	g = g > 0.04045 ? (((g + 0.055) / 1.055) ** 2.4) : (g / 12.92);
-	b = b > 0.04045 ? (((b + 0.055) / 1.055) ** 2.4) : (b / 12.92);
-
-	const x = (r * 0.4124) + (g * 0.3576) + (b * 0.1805);
-	const y = (r * 0.2126) + (g * 0.7152) + (b * 0.0722);
-	const z = (r * 0.0193) + (g * 0.1192) + (b * 0.9505);
-
-	return [x * 100, y * 100, z * 100];
-};
-
-convert.rgb.lab = function (rgb) {
-	const xyz = convert.rgb.xyz(rgb);
-	let x = xyz[0];
-	let y = xyz[1];
-	let z = xyz[2];
-
-	x /= 95.047;
-	y /= 100;
-	z /= 108.883;
-
-	x = x > 0.008856 ? (x ** (1 / 3)) : (7.787 * x) + (16 / 116);
-	y = y > 0.008856 ? (y ** (1 / 3)) : (7.787 * y) + (16 / 116);
-	z = z > 0.008856 ? (z ** (1 / 3)) : (7.787 * z) + (16 / 116);
-
-	const l = (116 * y) - 16;
-	const a = 500 * (x - y);
-	const b = 200 * (y - z);
-
-	return [l, a, b];
-};
-
-convert.hsl.rgb = function (hsl) {
-	const h = hsl[0] / 360;
-	const s = hsl[1] / 100;
-	const l = hsl[2] / 100;
-	let t2;
-	let t3;
-	let val;
-
-	if (s === 0) {
-		val = l * 255;
-		return [val, val, val];
-	}
-
-	if (l < 0.5) {
-		t2 = l * (1 + s);
-	} else {
-		t2 = l + s - l * s;
-	}
-
-	const t1 = 2 * l - t2;
-
-	const rgb = [0, 0, 0];
-	for (let i = 0; i < 3; i++) {
-		t3 = h + 1 / 3 * -(i - 1);
-		if (t3 < 0) {
-			t3++;
-		}
-
-		if (t3 > 1) {
-			t3--;
-		}
-
-		if (6 * t3 < 1) {
-			val = t1 + (t2 - t1) * 6 * t3;
-		} else if (2 * t3 < 1) {
-			val = t2;
-		} else if (3 * t3 < 2) {
-			val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
-		} else {
-			val = t1;
-		}
-
-		rgb[i] = val * 255;
-	}
-
-	return rgb;
-};
-
-convert.hsl.hsv = function (hsl) {
-	const h = hsl[0];
-	let s = hsl[1] / 100;
-	let l = hsl[2] / 100;
-	let smin = s;
-	const lmin = Math.max(l, 0.01);
-
-	l *= 2;
-	s *= (l <= 1) ? l : 2 - l;
-	smin *= lmin <= 1 ? lmin : 2 - lmin;
-	const v = (l + s) / 2;
-	const sv = l === 0 ? (2 * smin) / (lmin + smin) : (2 * s) / (l + s);
-
-	return [h, sv * 100, v * 100];
-};
-
-convert.hsv.rgb = function (hsv) {
-	const h = hsv[0] / 60;
-	const s = hsv[1] / 100;
-	let v = hsv[2] / 100;
-	const hi = Math.floor(h) % 6;
-
-	const f = h - Math.floor(h);
-	const p = 255 * v * (1 - s);
-	const q = 255 * v * (1 - (s * f));
-	const t = 255 * v * (1 - (s * (1 - f)));
-	v *= 255;
-
-	switch (hi) {
-		case 0:
-			return [v, t, p];
-		case 1:
-			return [q, v, p];
-		case 2:
-			return [p, v, t];
-		case 3:
-			return [p, q, v];
-		case 4:
-			return [t, p, v];
-		case 5:
-			return [v, p, q];
-	}
-};
-
-convert.hsv.hsl = function (hsv) {
-	const h = hsv[0];
-	const s = hsv[1] / 100;
-	const v = hsv[2] / 100;
-	const vmin = Math.max(v, 0.01);
-	let sl;
-	let l;
-
-	l = (2 - s) * v;
-	const lmin = (2 - s) * vmin;
-	sl = s * vmin;
-	sl /= (lmin <= 1) ? lmin : 2 - lmin;
-	sl = sl || 0;
-	l /= 2;
-
-	return [h, sl * 100, l * 100];
-};
-
-// http://dev.w3.org/csswg/css-color/#hwb-to-rgb
-convert.hwb.rgb = function (hwb) {
-	const h = hwb[0] / 360;
-	let wh = hwb[1] / 100;
-	let bl = hwb[2] / 100;
-	const ratio = wh + bl;
-	let f;
-
-	// Wh + bl cant be > 1
-	if (ratio > 1) {
-		wh /= ratio;
-		bl /= ratio;
-	}
-
-	const i = Math.floor(6 * h);
-	const v = 1 - bl;
-	f = 6 * h - i;
-
-	if ((i & 0x01) !== 0) {
-		f = 1 - f;
-	}
-
-	const n = wh + f * (v - wh); // Linear interpolation
-
-	let r;
-	let g;
-	let b;
-	/* eslint-disable max-statements-per-line,no-multi-spaces */
-	switch (i) {
-		default:
-		case 6:
-		case 0: r = v;  g = n;  b = wh; break;
-		case 1: r = n;  g = v;  b = wh; break;
-		case 2: r = wh; g = v;  b = n; break;
-		case 3: r = wh; g = n;  b = v; break;
-		case 4: r = n;  g = wh; b = v; break;
-		case 5: r = v;  g = wh; b = n; break;
-	}
-	/* eslint-enable max-statements-per-line,no-multi-spaces */
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.cmyk.rgb = function (cmyk) {
-	const c = cmyk[0] / 100;
-	const m = cmyk[1] / 100;
-	const y = cmyk[2] / 100;
-	const k = cmyk[3] / 100;
-
-	const r = 1 - Math.min(1, c * (1 - k) + k);
-	const g = 1 - Math.min(1, m * (1 - k) + k);
-	const b = 1 - Math.min(1, y * (1 - k) + k);
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.xyz.rgb = function (xyz) {
-	const x = xyz[0] / 100;
-	const y = xyz[1] / 100;
-	const z = xyz[2] / 100;
-	let r;
-	let g;
-	let b;
-
-	r = (x * 3.2406) + (y * -1.5372) + (z * -0.4986);
-	g = (x * -0.9689) + (y * 1.8758) + (z * 0.0415);
-	b = (x * 0.0557) + (y * -0.2040) + (z * 1.0570);
-
-	// Assume sRGB
-	r = r > 0.0031308
-		? ((1.055 * (r ** (1.0 / 2.4))) - 0.055)
-		: r * 12.92;
-
-	g = g > 0.0031308
-		? ((1.055 * (g ** (1.0 / 2.4))) - 0.055)
-		: g * 12.92;
-
-	b = b > 0.0031308
-		? ((1.055 * (b ** (1.0 / 2.4))) - 0.055)
-		: b * 12.92;
-
-	r = Math.min(Math.max(0, r), 1);
-	g = Math.min(Math.max(0, g), 1);
-	b = Math.min(Math.max(0, b), 1);
-
-	return [r * 255, g * 255, b * 255];
-};
-
-convert.xyz.lab = function (xyz) {
-	let x = xyz[0];
-	let y = xyz[1];
-	let z = xyz[2];
-
-	x /= 95.047;
-	y /= 100;
-	z /= 108.883;
-
-	x = x > 0.008856 ? (x ** (1 / 3)) : (7.787 * x) + (16 / 116);
-	y = y > 0.008856 ? (y ** (1 / 3)) : (7.787 * y) + (16 / 116);
-	z = z > 0.008856 ? (z ** (1 / 3)) : (7.787 * z) + (16 / 116);
-
-	const l = (116 * y) - 16;
-	const a = 500 * (x - y);
-	const b = 200 * (y - z);
-
-	return [l, a, b];
-};
-
-convert.lab.xyz = function (lab) {
-	const l = lab[0];
-	const a = lab[1];
-	const b = lab[2];
-	let x;
-	let y;
-	let z;
-
-	y = (l + 16) / 116;
-	x = a / 500 + y;
-	z = y - b / 200;
-
-	const y2 = y ** 3;
-	const x2 = x ** 3;
-	const z2 = z ** 3;
-	y = y2 > 0.008856 ? y2 : (y - 16 / 116) / 7.787;
-	x = x2 > 0.008856 ? x2 : (x - 16 / 116) / 7.787;
-	z = z2 > 0.008856 ? z2 : (z - 16 / 116) / 7.787;
-
-	x *= 95.047;
-	y *= 100;
-	z *= 108.883;
-
-	return [x, y, z];
-};
-
-convert.lab.lch = function (lab) {
-	const l = lab[0];
-	const a = lab[1];
-	const b = lab[2];
-	let h;
-
-	const hr = Math.atan2(b, a);
-	h = hr * 360 / 2 / Math.PI;
-
-	if (h < 0) {
-		h += 360;
-	}
-
-	const c = Math.sqrt(a * a + b * b);
-
-	return [l, c, h];
-};
-
-convert.lch.lab = function (lch) {
-	const l = lch[0];
-	const c = lch[1];
-	const h = lch[2];
-
-	const hr = h / 360 * 2 * Math.PI;
-	const a = c * Math.cos(hr);
-	const b = c * Math.sin(hr);
-
-	return [l, a, b];
-};
-
-convert.rgb.ansi16 = function (args, saturation = null) {
-	const [r, g, b] = args;
-	let value = saturation === null ? convert.rgb.hsv(args)[2] : saturation; // Hsv -> ansi16 optimization
-
-	value = Math.round(value / 50);
-
-	if (value === 0) {
-		return 30;
-	}
-
-	let ansi = 30
-		+ ((Math.round(b / 255) << 2)
-		| (Math.round(g / 255) << 1)
-		| Math.round(r / 255));
-
-	if (value === 2) {
-		ansi += 60;
-	}
-
-	return ansi;
-};
-
-convert.hsv.ansi16 = function (args) {
-	// Optimization here; we already know the value and don't need to get
-	// it converted for us.
-	return convert.rgb.ansi16(convert.hsv.rgb(args), args[2]);
-};
-
-convert.rgb.ansi256 = function (args) {
-	const r = args[0];
-	const g = args[1];
-	const b = args[2];
-
-	// We use the extended greyscale palette here, with the exception of
-	// black and white. normal palette only has 4 greyscale shades.
-	if (r === g && g === b) {
-		if (r < 8) {
-			return 16;
-		}
-
-		if (r > 248) {
-			return 231;
-		}
-
-		return Math.round(((r - 8) / 247) * 24) + 232;
-	}
-
-	const ansi = 16
-		+ (36 * Math.round(r / 255 * 5))
-		+ (6 * Math.round(g / 255 * 5))
-		+ Math.round(b / 255 * 5);
-
-	return ansi;
-};
-
-convert.ansi16.rgb = function (args) {
-	let color = args % 10;
-
-	// Handle greyscale
-	if (color === 0 || color === 7) {
-		if (args > 50) {
-			color += 3.5;
-		}
-
-		color = color / 10.5 * 255;
-
-		return [color, color, color];
-	}
-
-	const mult = (~~(args > 50) + 1) * 0.5;
-	const r = ((color & 1) * mult) * 255;
-	const g = (((color >> 1) & 1) * mult) * 255;
-	const b = (((color >> 2) & 1) * mult) * 255;
-
-	return [r, g, b];
-};
-
-convert.ansi256.rgb = function (args) {
-	// Handle greyscale
-	if (args >= 232) {
-		const c = (args - 232) * 10 + 8;
-		return [c, c, c];
-	}
-
-	args -= 16;
-
-	let rem;
-	const r = Math.floor(args / 36) / 5 * 255;
-	const g = Math.floor((rem = args % 36) / 6) / 5 * 255;
-	const b = (rem % 6) / 5 * 255;
-
-	return [r, g, b];
-};
-
-convert.rgb.hex = function (args) {
-	const integer = ((Math.round(args[0]) & 0xFF) << 16)
-		+ ((Math.round(args[1]) & 0xFF) << 8)
-		+ (Math.round(args[2]) & 0xFF);
-
-	const string = integer.toString(16).toUpperCase();
-	return '000000'.substring(string.length) + string;
-};
-
-convert.hex.rgb = function (args) {
-	const match = args.toString(16).match(/[a-f0-9]{6}|[a-f0-9]{3}/i);
-	if (!match) {
-		return [0, 0, 0];
-	}
-
-	let colorString = match[0];
-
-	if (match[0].length === 3) {
-		colorString = colorString.split('').map(char => {
-			return char + char;
-		}).join('');
-	}
-
-	const integer = parseInt(colorString, 16);
-	const r = (integer >> 16) & 0xFF;
-	const g = (integer >> 8) & 0xFF;
-	const b = integer & 0xFF;
-
-	return [r, g, b];
-};
-
-convert.rgb.hcg = function (rgb) {
-	const r = rgb[0] / 255;
-	const g = rgb[1] / 255;
-	const b = rgb[2] / 255;
-	const max = Math.max(Math.max(r, g), b);
-	const min = Math.min(Math.min(r, g), b);
-	const chroma = (max - min);
-	let grayscale;
-	let hue;
-
-	if (chroma < 1) {
-		grayscale = min / (1 - chroma);
-	} else {
-		grayscale = 0;
-	}
-
-	if (chroma <= 0) {
-		hue = 0;
-	} else
-	if (max === r) {
-		hue = ((g - b) / chroma) % 6;
-	} else
-	if (max === g) {
-		hue = 2 + (b - r) / chroma;
-	} else {
-		hue = 4 + (r - g) / chroma;
-	}
-
-	hue /= 6;
-	hue %= 1;
-
-	return [hue * 360, chroma * 100, grayscale * 100];
-};
-
-convert.hsl.hcg = function (hsl) {
-	const s = hsl[1] / 100;
-	const l = hsl[2] / 100;
-
-	const c = l < 0.5 ? (2.0 * s * l) : (2.0 * s * (1.0 - l));
-
-	let f = 0;
-	if (c < 1.0) {
-		f = (l - 0.5 * c) / (1.0 - c);
-	}
-
-	return [hsl[0], c * 100, f * 100];
-};
-
-convert.hsv.hcg = function (hsv) {
-	const s = hsv[1] / 100;
-	const v = hsv[2] / 100;
-
-	const c = s * v;
-	let f = 0;
-
-	if (c < 1.0) {
-		f = (v - c) / (1 - c);
-	}
-
-	return [hsv[0], c * 100, f * 100];
-};
-
-convert.hcg.rgb = function (hcg) {
-	const h = hcg[0] / 360;
-	const c = hcg[1] / 100;
-	const g = hcg[2] / 100;
-
-	if (c === 0.0) {
-		return [g * 255, g * 255, g * 255];
-	}
-
-	const pure = [0, 0, 0];
-	const hi = (h % 1) * 6;
-	const v = hi % 1;
-	const w = 1 - v;
-	let mg = 0;
-
-	/* eslint-disable max-statements-per-line */
-	switch (Math.floor(hi)) {
-		case 0:
-			pure[0] = 1; pure[1] = v; pure[2] = 0; break;
-		case 1:
-			pure[0] = w; pure[1] = 1; pure[2] = 0; break;
-		case 2:
-			pure[0] = 0; pure[1] = 1; pure[2] = v; break;
-		case 3:
-			pure[0] = 0; pure[1] = w; pure[2] = 1; break;
-		case 4:
-			pure[0] = v; pure[1] = 0; pure[2] = 1; break;
-		default:
-			pure[0] = 1; pure[1] = 0; pure[2] = w;
-	}
-	/* eslint-enable max-statements-per-line */
-
-	mg = (1.0 - c) * g;
-
-	return [
-		(c * pure[0] + mg) * 255,
-		(c * pure[1] + mg) * 255,
-		(c * pure[2] + mg) * 255
-	];
-};
-
-convert.hcg.hsv = function (hcg) {
-	const c = hcg[1] / 100;
-	const g = hcg[2] / 100;
-
-	const v = c + g * (1.0 - c);
-	let f = 0;
-
-	if (v > 0.0) {
-		f = c / v;
-	}
-
-	return [hcg[0], f * 100, v * 100];
-};
-
-convert.hcg.hsl = function (hcg) {
-	const c = hcg[1] / 100;
-	const g = hcg[2] / 100;
-
-	const l = g * (1.0 - c) + 0.5 * c;
-	let s = 0;
-
-	if (l > 0.0 && l < 0.5) {
-		s = c / (2 * l);
-	} else
-	if (l >= 0.5 && l < 1.0) {
-		s = c / (2 * (1 - l));
-	}
-
-	return [hcg[0], s * 100, l * 100];
-};
-
-convert.hcg.hwb = function (hcg) {
-	const c = hcg[1] / 100;
-	const g = hcg[2] / 100;
-	const v = c + g * (1.0 - c);
-	return [hcg[0], (v - c) * 100, (1 - v) * 100];
-};
-
-convert.hwb.hcg = function (hwb) {
-	const w = hwb[1] / 100;
-	const b = hwb[2] / 100;
-	const v = 1 - b;
-	const c = v - w;
-	let g = 0;
-
-	if (c < 1) {
-		g = (v - c) / (1 - c);
-	}
-
-	return [hwb[0], c * 100, g * 100];
-};
-
-convert.apple.rgb = function (apple) {
-	return [(apple[0] / 65535) * 255, (apple[1] / 65535) * 255, (apple[2] / 65535) * 255];
-};
-
-convert.rgb.apple = function (rgb) {
-	return [(rgb[0] / 255) * 65535, (rgb[1] / 255) * 65535, (rgb[2] / 255) * 65535];
-};
-
-convert.gray.rgb = function (args) {
-	return [args[0] / 100 * 255, args[0] / 100 * 255, args[0] / 100 * 255];
-};
-
-convert.gray.hsl = function (args) {
-	return [0, 0, args[0]];
-};
-
-convert.gray.hsv = convert.gray.hsl;
-
-convert.gray.hwb = function (gray) {
-	return [0, 100, gray[0]];
-};
-
-convert.gray.cmyk = function (gray) {
-	return [0, 0, 0, gray[0]];
-};
-
-convert.gray.lab = function (gray) {
-	return [gray[0], 0, 0];
-};
-
-convert.gray.hex = function (gray) {
-	const val = Math.round(gray[0] / 100 * 255) & 0xFF;
-	const integer = (val << 16) + (val << 8) + val;
-
-	const string = integer.toString(16).toUpperCase();
-	return '000000'.substring(string.length) + string;
-};
-
-convert.rgb.gray = function (rgb) {
-	const val = (rgb[0] + rgb[1] + rgb[2]) / 3;
-	return [val / 255 * 100];
-};
-
-
-/***/ }),
-
-/***/ 6931:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-const conversions = __nccwpck_require__(330);
-const route = __nccwpck_require__(880);
-
-const convert = {};
-
-const models = Object.keys(conversions);
-
-function wrapRaw(fn) {
-	const wrappedFn = function (...args) {
-		const arg0 = args[0];
-		if (arg0 === undefined || arg0 === null) {
-			return arg0;
-		}
-
-		if (arg0.length > 1) {
-			args = arg0;
-		}
-
-		return fn(args);
-	};
-
-	// Preserve .conversion property if there is one
-	if ('conversion' in fn) {
-		wrappedFn.conversion = fn.conversion;
-	}
-
-	return wrappedFn;
-}
-
-function wrapRounded(fn) {
-	const wrappedFn = function (...args) {
-		const arg0 = args[0];
-
-		if (arg0 === undefined || arg0 === null) {
-			return arg0;
-		}
-
-		if (arg0.length > 1) {
-			args = arg0;
-		}
-
-		const result = fn(args);
-
-		// We're assuming the result is an array here.
-		// see notice in conversions.js; don't use box types
-		// in conversion functions.
-		if (typeof result === 'object') {
-			for (let len = result.length, i = 0; i < len; i++) {
-				result[i] = Math.round(result[i]);
-			}
-		}
-
-		return result;
-	};
-
-	// Preserve .conversion property if there is one
-	if ('conversion' in fn) {
-		wrappedFn.conversion = fn.conversion;
-	}
-
-	return wrappedFn;
-}
-
-models.forEach(fromModel => {
-	convert[fromModel] = {};
-
-	Object.defineProperty(convert[fromModel], 'channels', {value: conversions[fromModel].channels});
-	Object.defineProperty(convert[fromModel], 'labels', {value: conversions[fromModel].labels});
-
-	const routes = route(fromModel);
-	const routeModels = Object.keys(routes);
-
-	routeModels.forEach(toModel => {
-		const fn = routes[toModel];
-
-		convert[fromModel][toModel] = wrapRounded(fn);
-		convert[fromModel][toModel].raw = wrapRaw(fn);
-	});
-});
-
-module.exports = convert;
-
-
-/***/ }),
-
-/***/ 880:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-const conversions = __nccwpck_require__(330);
-
-/*
-	This function routes a model to all other models.
-
-	all functions that are routed have a property `.conversion` attached
-	to the returned synthetic function. This property is an array
-	of strings, each with the steps in between the 'from' and 'to'
-	color models (inclusive).
-
-	conversions that are not possible simply are not included.
-*/
-
-function buildGraph() {
-	const graph = {};
-	// https://jsperf.com/object-keys-vs-for-in-with-closure/3
-	const models = Object.keys(conversions);
-
-	for (let len = models.length, i = 0; i < len; i++) {
-		graph[models[i]] = {
-			// http://jsperf.com/1-vs-infinity
-			// micro-opt, but this is simple.
-			distance: -1,
-			parent: null
-		};
-	}
-
-	return graph;
-}
-
-// https://en.wikipedia.org/wiki/Breadth-first_search
-function deriveBFS(fromModel) {
-	const graph = buildGraph();
-	const queue = [fromModel]; // Unshift -> queue -> pop
-
-	graph[fromModel].distance = 0;
-
-	while (queue.length) {
-		const current = queue.pop();
-		const adjacents = Object.keys(conversions[current]);
-
-		for (let len = adjacents.length, i = 0; i < len; i++) {
-			const adjacent = adjacents[i];
-			const node = graph[adjacent];
-
-			if (node.distance === -1) {
-				node.distance = graph[current].distance + 1;
-				node.parent = current;
-				queue.unshift(adjacent);
-			}
-		}
-	}
-
-	return graph;
-}
-
-function link(from, to) {
-	return function (args) {
-		return to(from(args));
-	};
-}
-
-function wrapConversion(toModel, graph) {
-	const path = [graph[toModel].parent, toModel];
-	let fn = conversions[graph[toModel].parent][toModel];
-
-	let cur = graph[toModel].parent;
-	while (graph[cur].parent) {
-		path.unshift(graph[cur].parent);
-		fn = link(conversions[graph[cur].parent][cur], fn);
-		cur = graph[cur].parent;
-	}
-
-	fn.conversion = path;
-	return fn;
-}
-
-module.exports = function (fromModel) {
-	const graph = deriveBFS(fromModel);
-	const conversion = {};
-
-	const models = Object.keys(graph);
-	for (let len = models.length, i = 0; i < len; i++) {
-		const toModel = models[i];
-		const node = graph[toModel];
-
-		if (node.parent === null) {
-			// No possible conversion, or this node is the source model.
-			continue;
-		}
-
-		conversion[toModel] = wrapConversion(toModel, graph);
-	}
-
-	return conversion;
-};
-
-
-
-/***/ }),
-
-/***/ 8510:
-/***/ ((module) => {
-
-"use strict";
-
-
-module.exports = {
-	"aliceblue": [240, 248, 255],
-	"antiquewhite": [250, 235, 215],
-	"aqua": [0, 255, 255],
-	"aquamarine": [127, 255, 212],
-	"azure": [240, 255, 255],
-	"beige": [245, 245, 220],
-	"bisque": [255, 228, 196],
-	"black": [0, 0, 0],
-	"blanchedalmond": [255, 235, 205],
-	"blue": [0, 0, 255],
-	"blueviolet": [138, 43, 226],
-	"brown": [165, 42, 42],
-	"burlywood": [222, 184, 135],
-	"cadetblue": [95, 158, 160],
-	"chartreuse": [127, 255, 0],
-	"chocolate": [210, 105, 30],
-	"coral": [255, 127, 80],
-	"cornflowerblue": [100, 149, 237],
-	"cornsilk": [255, 248, 220],
-	"crimson": [220, 20, 60],
-	"cyan": [0, 255, 255],
-	"darkblue": [0, 0, 139],
-	"darkcyan": [0, 139, 139],
-	"darkgoldenrod": [184, 134, 11],
-	"darkgray": [169, 169, 169],
-	"darkgreen": [0, 100, 0],
-	"darkgrey": [169, 169, 169],
-	"darkkhaki": [189, 183, 107],
-	"darkmagenta": [139, 0, 139],
-	"darkolivegreen": [85, 107, 47],
-	"darkorange": [255, 140, 0],
-	"darkorchid": [153, 50, 204],
-	"darkred": [139, 0, 0],
-	"darksalmon": [233, 150, 122],
-	"darkseagreen": [143, 188, 143],
-	"darkslateblue": [72, 61, 139],
-	"darkslategray": [47, 79, 79],
-	"darkslategrey": [47, 79, 79],
-	"darkturquoise": [0, 206, 209],
-	"darkviolet": [148, 0, 211],
-	"deeppink": [255, 20, 147],
-	"deepskyblue": [0, 191, 255],
-	"dimgray": [105, 105, 105],
-	"dimgrey": [105, 105, 105],
-	"dodgerblue": [30, 144, 255],
-	"firebrick": [178, 34, 34],
-	"floralwhite": [255, 250, 240],
-	"forestgreen": [34, 139, 34],
-	"fuchsia": [255, 0, 255],
-	"gainsboro": [220, 220, 220],
-	"ghostwhite": [248, 248, 255],
-	"gold": [255, 215, 0],
-	"goldenrod": [218, 165, 32],
-	"gray": [128, 128, 128],
-	"green": [0, 128, 0],
-	"greenyellow": [173, 255, 47],
-	"grey": [128, 128, 128],
-	"honeydew": [240, 255, 240],
-	"hotpink": [255, 105, 180],
-	"indianred": [205, 92, 92],
-	"indigo": [75, 0, 130],
-	"ivory": [255, 255, 240],
-	"khaki": [240, 230, 140],
-	"lavender": [230, 230, 250],
-	"lavenderblush": [255, 240, 245],
-	"lawngreen": [124, 252, 0],
-	"lemonchiffon": [255, 250, 205],
-	"lightblue": [173, 216, 230],
-	"lightcoral": [240, 128, 128],
-	"lightcyan": [224, 255, 255],
-	"lightgoldenrodyellow": [250, 250, 210],
-	"lightgray": [211, 211, 211],
-	"lightgreen": [144, 238, 144],
-	"lightgrey": [211, 211, 211],
-	"lightpink": [255, 182, 193],
-	"lightsalmon": [255, 160, 122],
-	"lightseagreen": [32, 178, 170],
-	"lightskyblue": [135, 206, 250],
-	"lightslategray": [119, 136, 153],
-	"lightslategrey": [119, 136, 153],
-	"lightsteelblue": [176, 196, 222],
-	"lightyellow": [255, 255, 224],
-	"lime": [0, 255, 0],
-	"limegreen": [50, 205, 50],
-	"linen": [250, 240, 230],
-	"magenta": [255, 0, 255],
-	"maroon": [128, 0, 0],
-	"mediumaquamarine": [102, 205, 170],
-	"mediumblue": [0, 0, 205],
-	"mediumorchid": [186, 85, 211],
-	"mediumpurple": [147, 112, 219],
-	"mediumseagreen": [60, 179, 113],
-	"mediumslateblue": [123, 104, 238],
-	"mediumspringgreen": [0, 250, 154],
-	"mediumturquoise": [72, 209, 204],
-	"mediumvioletred": [199, 21, 133],
-	"midnightblue": [25, 25, 112],
-	"mintcream": [245, 255, 250],
-	"mistyrose": [255, 228, 225],
-	"moccasin": [255, 228, 181],
-	"navajowhite": [255, 222, 173],
-	"navy": [0, 0, 128],
-	"oldlace": [253, 245, 230],
-	"olive": [128, 128, 0],
-	"olivedrab": [107, 142, 35],
-	"orange": [255, 165, 0],
-	"orangered": [255, 69, 0],
-	"orchid": [218, 112, 214],
-	"palegoldenrod": [238, 232, 170],
-	"palegreen": [152, 251, 152],
-	"paleturquoise": [175, 238, 238],
-	"palevioletred": [219, 112, 147],
-	"papayawhip": [255, 239, 213],
-	"peachpuff": [255, 218, 185],
-	"peru": [205, 133, 63],
-	"pink": [255, 192, 203],
-	"plum": [221, 160, 221],
-	"powderblue": [176, 224, 230],
-	"purple": [128, 0, 128],
-	"rebeccapurple": [102, 51, 153],
-	"red": [255, 0, 0],
-	"rosybrown": [188, 143, 143],
-	"royalblue": [65, 105, 225],
-	"saddlebrown": [139, 69, 19],
-	"salmon": [250, 128, 114],
-	"sandybrown": [244, 164, 96],
-	"seagreen": [46, 139, 87],
-	"seashell": [255, 245, 238],
-	"sienna": [160, 82, 45],
-	"silver": [192, 192, 192],
-	"skyblue": [135, 206, 235],
-	"slateblue": [106, 90, 205],
-	"slategray": [112, 128, 144],
-	"slategrey": [112, 128, 144],
-	"snow": [255, 250, 250],
-	"springgreen": [0, 255, 127],
-	"steelblue": [70, 130, 180],
-	"tan": [210, 180, 140],
-	"teal": [0, 128, 128],
-	"thistle": [216, 191, 216],
-	"tomato": [255, 99, 71],
-	"turquoise": [64, 224, 208],
-	"violet": [238, 130, 238],
-	"wheat": [245, 222, 179],
-	"white": [255, 255, 255],
-	"whitesmoke": [245, 245, 245],
-	"yellow": [255, 255, 0],
-	"yellowgreen": [154, 205, 50]
-};
-
-
-/***/ }),
-
 /***/ 6891:
 /***/ ((module) => {
 
@@ -46149,993 +44779,608 @@ function dezalgo (cb) {
 
 /***/ }),
 
-/***/ 2437:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ 4682:
+/***/ ((__unused_webpack_module, exports) => {
 
-/* @flow */
-/*::
+"use strict";
+var __webpack_unused_export__;
 
-type DotenvParseOptions = {
-  debug?: boolean
-}
 
-// keys and values from src
-type DotenvParseOutput = { [string]: string }
+__webpack_unused_export__ = ({ value: true });
 
-type DotenvConfigOptions = {
-  path?: string, // path to .env file
-  encoding?: string, // encoding of .env file
-  debug?: string // turn on logging for debugging purposes
-}
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
 
-type DotenvConfigOutput = {
-  parsed?: DotenvParseOutput,
-  error?: Error
-}
-
-*/
-
-const fs = __nccwpck_require__(5747)
-const path = __nccwpck_require__(5622)
-
-function log (message /*: string */) {
-  console.log(`[dotenv][DEBUG] ${message}`)
-}
-
-const NEWLINE = '\n'
-const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
-const RE_NEWLINES = /\\n/g
-const NEWLINES_MATCH = /\n|\r|\r\n/
-
-// Parses src into an Object
-function parse (src /*: string | Buffer */, options /*: ?DotenvParseOptions */) /*: DotenvParseOutput */ {
-  const debug = Boolean(options && options.debug)
-  const obj = {}
-
-  // convert Buffers before splitting into lines and processing
-  src.toString().split(NEWLINES_MATCH).forEach(function (line, idx) {
-    // matching "KEY' and 'VAL' in 'KEY=VAL'
-    const keyValueArr = line.match(RE_INI_KEY_VAL)
-    // matched?
-    if (keyValueArr != null) {
-      const key = keyValueArr[1]
-      // default undefined or missing values to empty string
-      let val = (keyValueArr[2] || '')
-      const end = val.length - 1
-      const isDoubleQuoted = val[0] === '"' && val[end] === '"'
-      const isSingleQuoted = val[0] === "'" && val[end] === "'"
-
-      // if single or double quoted, remove quotes
-      if (isSingleQuoted || isDoubleQuoted) {
-        val = val.substring(1, end)
-
-        // if double quoted, expand newlines
-        if (isDoubleQuoted) {
-          val = val.replace(RE_NEWLINES, NEWLINE)
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
         }
-      } else {
-        // remove surrounding whitespace
-        val = val.trim()
       }
-
-      obj[key] = val
-    } else if (debug) {
-      log(`did not match key and value when parsing line ${idx + 1}: ${line}`)
     }
-  })
 
-  return obj
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
 }
 
-// Populates process.env from .env file
-function config (options /*: ?DotenvConfigOptions */) /*: DotenvConfigOutput */ {
-  let dotenvPath = path.resolve(process.cwd(), '.env')
-  let encoding /*: string */ = 'utf8'
-  let debug = false
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
 
-  if (options) {
-    if (options.path != null) {
-      dotenvPath = options.path
-    }
-    if (options.encoding != null) {
-      encoding = options.encoding
-    }
-    if (options.debug != null) {
-      debug = true
-    }
-  }
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
 
   try {
-    // specifying an encoding returns a string instead of a buffer
-    const parsed = parse(fs.readFileSync(dotenvPath, { encoding }), { debug })
-
-    Object.keys(parsed).forEach(function (key) {
-      if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
-        process.env[key] = parsed[key]
-      } else if (debug) {
-        log(`"${key}" is already defined in \`process.env\` and will not be overwritten`)
-      }
-    })
-
-    return { parsed }
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
   } catch (e) {
-    return { error: e }
+    return false;
   }
 }
 
-module.exports.config = config
-module.exports.parse = parse
+function _construct(Parent, args, Class) {
+  if (_isNativeReflectConstruct()) {
+    _construct = Reflect.construct;
+  } else {
+    _construct = function _construct(Parent, args, Class) {
+      var a = [null];
+      a.push.apply(a, args);
+      var Constructor = Function.bind.apply(Parent, a);
+      var instance = new Constructor();
+      if (Class) _setPrototypeOf(instance, Class.prototype);
+      return instance;
+    };
+  }
 
-
-/***/ }),
-
-/***/ 5262:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const ansiStyles = __nccwpck_require__(2068);
-const {stdout: stdoutColor, stderr: stderrColor} = __nccwpck_require__(9318);
-const {
-	stringReplaceAll,
-	stringEncaseCRLFWithFirstIndex
-} = __nccwpck_require__(5219);
-
-// `supportsColor.level` → `ansiStyles.color[name]` mapping
-const levelMapping = [
-	'ansi',
-	'ansi',
-	'ansi256',
-	'ansi16m'
-];
-
-const styles = Object.create(null);
-
-const applyOptions = (object, options = {}) => {
-	if (options.level > 3 || options.level < 0) {
-		throw new Error('The `level` option should be an integer from 0 to 3');
-	}
-
-	// Detect level if not set manually
-	const colorLevel = stdoutColor ? stdoutColor.level : 0;
-	object.level = options.level === undefined ? colorLevel : options.level;
-};
-
-class ChalkClass {
-	constructor(options) {
-		return chalkFactory(options);
-	}
+  return _construct.apply(null, arguments);
 }
 
-const chalkFactory = options => {
-	const chalk = {};
-	applyOptions(chalk, options);
-
-	chalk.template = (...arguments_) => chalkTag(chalk.template, ...arguments_);
-
-	Object.setPrototypeOf(chalk, Chalk.prototype);
-	Object.setPrototypeOf(chalk.template, chalk);
-
-	chalk.template.constructor = () => {
-		throw new Error('`chalk.constructor()` is deprecated. Use `new chalk.Instance()` instead.');
-	};
-
-	chalk.template.Instance = ChalkClass;
-
-	return chalk.template;
-};
-
-function Chalk(options) {
-	return chalkFactory(options);
+function _isNativeFunction(fn) {
+  return Function.toString.call(fn).indexOf("[native code]") !== -1;
 }
 
-for (const [styleName, style] of Object.entries(ansiStyles)) {
-	styles[styleName] = {
-		get() {
-			const builder = createBuilder(this, createStyler(style.open, style.close, this._styler), this._isEmpty);
-			Object.defineProperty(this, styleName, {value: builder});
-			return builder;
-		}
-	};
-}
+function _wrapNativeSuper(Class) {
+  var _cache = typeof Map === "function" ? new Map() : undefined;
 
-styles.visible = {
-	get() {
-		const builder = createBuilder(this, this._styler, true);
-		Object.defineProperty(this, 'visible', {value: builder});
-		return builder;
-	}
-};
+  _wrapNativeSuper = function _wrapNativeSuper(Class) {
+    if (Class === null || !_isNativeFunction(Class)) return Class;
 
-const usedModels = ['rgb', 'hex', 'keyword', 'hsl', 'hsv', 'hwb', 'ansi', 'ansi256'];
-
-for (const model of usedModels) {
-	styles[model] = {
-		get() {
-			const {level} = this;
-			return function (...arguments_) {
-				const styler = createStyler(ansiStyles.color[levelMapping[level]][model](...arguments_), ansiStyles.color.close, this._styler);
-				return createBuilder(this, styler, this._isEmpty);
-			};
-		}
-	};
-}
-
-for (const model of usedModels) {
-	const bgModel = 'bg' + model[0].toUpperCase() + model.slice(1);
-	styles[bgModel] = {
-		get() {
-			const {level} = this;
-			return function (...arguments_) {
-				const styler = createStyler(ansiStyles.bgColor[levelMapping[level]][model](...arguments_), ansiStyles.bgColor.close, this._styler);
-				return createBuilder(this, styler, this._isEmpty);
-			};
-		}
-	};
-}
-
-const proto = Object.defineProperties(() => {}, {
-	...styles,
-	level: {
-		enumerable: true,
-		get() {
-			return this._generator.level;
-		},
-		set(level) {
-			this._generator.level = level;
-		}
-	}
-});
-
-const createStyler = (open, close, parent) => {
-	let openAll;
-	let closeAll;
-	if (parent === undefined) {
-		openAll = open;
-		closeAll = close;
-	} else {
-		openAll = parent.openAll + open;
-		closeAll = close + parent.closeAll;
-	}
-
-	return {
-		open,
-		close,
-		openAll,
-		closeAll,
-		parent
-	};
-};
-
-const createBuilder = (self, _styler, _isEmpty) => {
-	const builder = (...arguments_) => {
-		// Single argument is hot path, implicit coercion is faster than anything
-		// eslint-disable-next-line no-implicit-coercion
-		return applyStyle(builder, (arguments_.length === 1) ? ('' + arguments_[0]) : arguments_.join(' '));
-	};
-
-	// `__proto__` is used because we must return a function, but there is
-	// no way to create a function with a different prototype
-	builder.__proto__ = proto; // eslint-disable-line no-proto
-
-	builder._generator = self;
-	builder._styler = _styler;
-	builder._isEmpty = _isEmpty;
-
-	return builder;
-};
-
-const applyStyle = (self, string) => {
-	if (self.level <= 0 || !string) {
-		return self._isEmpty ? '' : string;
-	}
-
-	let styler = self._styler;
-
-	if (styler === undefined) {
-		return string;
-	}
-
-	const {openAll, closeAll} = styler;
-	if (string.indexOf('\u001B') !== -1) {
-		while (styler !== undefined) {
-			// Replace any instances already present with a re-opening code
-			// otherwise only the part of the string until said closing code
-			// will be colored, and the rest will simply be 'plain'.
-			string = stringReplaceAll(string, styler.close, styler.open);
-
-			styler = styler.parent;
-		}
-	}
-
-	// We can move both next actions out of loop, because remaining actions in loop won't have
-	// any/visible effect on parts we add here. Close the styling before a linebreak and reopen
-	// after next line to fix a bleed issue on macOS: https://github.com/chalk/chalk/pull/92
-	const lfIndex = string.indexOf('\n');
-	if (lfIndex !== -1) {
-		string = stringEncaseCRLFWithFirstIndex(string, closeAll, openAll, lfIndex);
-	}
-
-	return openAll + string + closeAll;
-};
-
-let template;
-const chalkTag = (chalk, ...strings) => {
-	const [firstString] = strings;
-
-	if (!Array.isArray(firstString)) {
-		// If chalk() was called by itself or with a string,
-		// return the string itself as a string.
-		return strings.join(' ');
-	}
-
-	const arguments_ = strings.slice(1);
-	const parts = [firstString.raw[0]];
-
-	for (let i = 1; i < firstString.length; i++) {
-		parts.push(
-			String(arguments_[i - 1]).replace(/[{}\\]/g, '\\$&'),
-			String(firstString.raw[i])
-		);
-	}
-
-	if (template === undefined) {
-		template = __nccwpck_require__(6516);
-	}
-
-	return template(chalk, parts.join(''));
-};
-
-Object.defineProperties(Chalk.prototype, styles);
-
-const chalk = Chalk(); // eslint-disable-line new-cap
-chalk.supportsColor = stdoutColor;
-chalk.stderr = Chalk({level: stderrColor ? stderrColor.level : 0}); // eslint-disable-line new-cap
-chalk.stderr.supportsColor = stderrColor;
-
-// For TypeScript
-chalk.Level = {
-	None: 0,
-	Basic: 1,
-	Ansi256: 2,
-	TrueColor: 3,
-	0: 'None',
-	1: 'Basic',
-	2: 'Ansi256',
-	3: 'TrueColor'
-};
-
-module.exports = chalk;
-
-
-/***/ }),
-
-/***/ 6516:
-/***/ ((module) => {
-
-"use strict";
-
-const TEMPLATE_REGEX = /(?:\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.))|(?:\{(~)?(\w+(?:\([^)]*\))?(?:\.\w+(?:\([^)]*\))?)*)(?:[ \t]|(?=\r?\n)))|(\})|((?:.|[\r\n\f])+?)/gi;
-const STYLE_REGEX = /(?:^|\.)(\w+)(?:\(([^)]*)\))?/g;
-const STRING_REGEX = /^(['"])((?:\\.|(?!\1)[^\\])*)\1$/;
-const ESCAPE_REGEX = /\\(u(?:[a-f\d]{4}|\{[a-f\d]{1,6}\})|x[a-f\d]{2}|.)|([^\\])/gi;
-
-const ESCAPES = new Map([
-	['n', '\n'],
-	['r', '\r'],
-	['t', '\t'],
-	['b', '\b'],
-	['f', '\f'],
-	['v', '\v'],
-	['0', '\0'],
-	['\\', '\\'],
-	['e', '\u001B'],
-	['a', '\u0007']
-]);
-
-function unescape(c) {
-	const u = c[0] === 'u';
-	const bracket = c[1] === '{';
-
-	if ((u && !bracket && c.length === 5) || (c[0] === 'x' && c.length === 3)) {
-		return String.fromCharCode(parseInt(c.slice(1), 16));
-	}
-
-	if (u && bracket) {
-		return String.fromCodePoint(parseInt(c.slice(2, -1), 16));
-	}
-
-	return ESCAPES.get(c) || c;
-}
-
-function parseArguments(name, arguments_) {
-	const results = [];
-	const chunks = arguments_.trim().split(/\s*,\s*/g);
-	let matches;
-
-	for (const chunk of chunks) {
-		const number = Number(chunk);
-		if (!Number.isNaN(number)) {
-			results.push(number);
-		} else if ((matches = chunk.match(STRING_REGEX))) {
-			results.push(matches[2].replace(ESCAPE_REGEX, (m, escape, character) => escape ? unescape(escape) : character));
-		} else {
-			throw new Error(`Invalid Chalk template style argument: ${chunk} (in style '${name}')`);
-		}
-	}
-
-	return results;
-}
-
-function parseStyle(style) {
-	STYLE_REGEX.lastIndex = 0;
-
-	const results = [];
-	let matches;
-
-	while ((matches = STYLE_REGEX.exec(style)) !== null) {
-		const name = matches[1];
-
-		if (matches[2]) {
-			const args = parseArguments(name, matches[2]);
-			results.push([name].concat(args));
-		} else {
-			results.push([name]);
-		}
-	}
-
-	return results;
-}
-
-function buildStyle(chalk, styles) {
-	const enabled = {};
-
-	for (const layer of styles) {
-		for (const style of layer.styles) {
-			enabled[style[0]] = layer.inverse ? null : style.slice(1);
-		}
-	}
-
-	let current = chalk;
-	for (const [styleName, styles] of Object.entries(enabled)) {
-		if (!Array.isArray(styles)) {
-			continue;
-		}
-
-		if (!(styleName in current)) {
-			throw new Error(`Unknown Chalk style: ${styleName}`);
-		}
-
-		current = styles.length > 0 ? current[styleName](...styles) : current[styleName];
-	}
-
-	return current;
-}
-
-module.exports = (chalk, temporary) => {
-	const styles = [];
-	const chunks = [];
-	let chunk = [];
-
-	// eslint-disable-next-line max-params
-	temporary.replace(TEMPLATE_REGEX, (m, escapeCharacter, inverse, style, close, character) => {
-		if (escapeCharacter) {
-			chunk.push(unescape(escapeCharacter));
-		} else if (style) {
-			const string = chunk.join('');
-			chunk = [];
-			chunks.push(styles.length === 0 ? string : buildStyle(chalk, styles)(string));
-			styles.push({inverse, styles: parseStyle(style)});
-		} else if (close) {
-			if (styles.length === 0) {
-				throw new Error('Found extraneous } in Chalk template literal');
-			}
-
-			chunks.push(buildStyle(chalk, styles)(chunk.join('')));
-			chunk = [];
-			styles.pop();
-		} else {
-			chunk.push(character);
-		}
-	});
-
-	chunks.push(chunk.join(''));
-
-	if (styles.length > 0) {
-		const errMsg = `Chalk template literal is missing ${styles.length} closing bracket${styles.length === 1 ? '' : 's'} (\`}\`)`;
-		throw new Error(errMsg);
-	}
-
-	return chunks.join('');
-};
-
-
-/***/ }),
-
-/***/ 5219:
-/***/ ((module) => {
-
-"use strict";
-
-
-const stringReplaceAll = (string, substring, replacer) => {
-	let index = string.indexOf(substring);
-	if (index === -1) {
-		return string;
-	}
-
-	const substringLength = substring.length;
-	let endIndex = 0;
-	let returnValue = '';
-	do {
-		returnValue += string.substr(endIndex, index - endIndex) + substring + replacer;
-		endIndex = index + substringLength;
-		index = string.indexOf(substring, endIndex);
-	} while (index !== -1);
-
-	returnValue += string.substr(endIndex);
-	return returnValue;
-};
-
-const stringEncaseCRLFWithFirstIndex = (string, prefix, postfix, index) => {
-	let endIndex = 0;
-	let returnValue = '';
-	do {
-		const gotCR = string[index - 1] === '\r';
-		returnValue += string.substr(endIndex, (gotCR ? index - 1 : index) - endIndex) + prefix + (gotCR ? '\r\n' : '\n') + postfix;
-		endIndex = index + 1;
-		index = string.indexOf('\n', endIndex);
-	} while (index !== -1);
-
-	returnValue += string.substr(endIndex);
-	return returnValue;
-};
-
-module.exports = {
-	stringReplaceAll,
-	stringEncaseCRLFWithFirstIndex
-};
-
-
-/***/ }),
-
-/***/ 2848:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-const envalid = __nccwpck_require__(4045)
-const { extend } = __nccwpck_require__(4969)
-const fs = __nccwpck_require__(5747)
-const dotenv = __nccwpck_require__(2437)
-
-// Extend an env var object with the values parsed from a ".env"
-// file, whose path is given by the second argument.
-function extendWithDotEnv(inputEnv, dotEnvPath = '.env') {
-    let dotEnvBuffer = null
-    try {
-        dotEnvBuffer = fs.readFileSync(dotEnvPath)
-    } catch (err) {
-        if (err.code === 'ENOENT') return inputEnv
-        throw err
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
     }
-    const parsed = dotenv.parse(dotEnvBuffer)
-    return extend(parsed, inputEnv)
+
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+
+      _cache.set(Class, Wrapper);
+    }
+
+    function Wrapper() {
+      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+    }
+
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    return _setPrototypeOf(Wrapper, Class);
+  };
+
+  return _wrapNativeSuper(Class);
 }
 
-const originalCleanEnv = envalid.cleanEnv
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
 
-envalid.cleanEnv = function cleanEnv(inputEnv, specs = {}, options = {}) {
-    const env =
-        options.dotEnvPath !== null ? extendWithDotEnv(inputEnv, options.dotEnvPath) : inputEnv
-    return originalCleanEnv(env, specs, options)
+  return self;
 }
 
-module.exports = envalid
+// Surprisingly involved error subclassing
+// See https://stackoverflow.com/questions/41102060/typescript-extending-error-class
+var EnvError = /*#__PURE__*/function (_TypeError) {
+  _inheritsLoose(EnvError, _TypeError);
+
+  function EnvError(message) {
+    var _this;
+
+    _this = _TypeError.call(this, message) || this;
+    Object.setPrototypeOf(_assertThisInitialized(_this), (this instanceof EnvError ? this.constructor : void 0).prototype);
+    Error.captureStackTrace(_assertThisInitialized(_this), EnvError);
+    _this.name = _this.constructor.name;
+    return _this;
+  }
+
+  return EnvError;
+}( /*#__PURE__*/_wrapNativeSuper(TypeError));
+var EnvMissingError = /*#__PURE__*/function (_ReferenceError) {
+  _inheritsLoose(EnvMissingError, _ReferenceError);
+
+  function EnvMissingError(message) {
+    var _this2;
+
+    _this2 = _ReferenceError.call(this, message) || this;
+    Object.setPrototypeOf(_assertThisInitialized(_this2), (this instanceof EnvMissingError ? this.constructor : void 0).prototype);
+    Error.captureStackTrace(_assertThisInitialized(_this2), EnvMissingError);
+    _this2.name = _this2.constructor.name;
+    return _this2;
+  }
+
+  return EnvMissingError;
+}( /*#__PURE__*/_wrapNativeSuper(ReferenceError));
+
+var _process, _process$versions;
+
+var isNode = !!(typeof process === 'object' && ((_process = process) == null ? void 0 : (_process$versions = _process.versions) == null ? void 0 : _process$versions.node));
+
+var colorWith = function colorWith(colorCode) {
+  return function (str) {
+    return isNode ? "\x1B[" + colorCode + "m" + str + "\x1B[0m" : str;
+  };
+};
+
+var colors = {
+  blue: /*#__PURE__*/colorWith('34'),
+  white: /*#__PURE__*/colorWith('37'),
+  yellow: /*#__PURE__*/colorWith('33')
+};
+var RULE = /*#__PURE__*/colors.white('================================');
+
+var defaultReporter = function defaultReporter(_ref) {
+  var _ref$errors = _ref.errors,
+      errors = _ref$errors === void 0 ? {} : _ref$errors;
+  if (!Object.keys(errors).length) return;
+  var missingVarsOutput = [];
+  var invalidVarsOutput = [];
+
+  for (var _i = 0, _Object$entries = Object.entries(errors); _i < _Object$entries.length; _i++) {
+    var _Object$entries$_i = _Object$entries[_i],
+        k = _Object$entries$_i[0],
+        err = _Object$entries$_i[1];
+
+    if (err instanceof EnvMissingError) {
+      missingVarsOutput.push("    " + colors.blue(k) + ": " + (err.message || '(required)'));
+    } else invalidVarsOutput.push("    " + colors.blue(k) + ": " + ((err == null ? void 0 : err.message) || '(invalid format)'));
+  } // Prepend "header" output for each section of the output:
 
 
-/***/ }),
+  if (invalidVarsOutput.length) {
+    invalidVarsOutput.unshift(" " + colors.yellow('Invalid') + " environment variables:");
+  }
 
-/***/ 4045:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+  if (missingVarsOutput.length) {
+    missingVarsOutput.unshift(" " + colors.yellow('Missing') + " environment variables:");
+  }
 
-const {
-    EnvError,
-    EnvMissingError,
-    makeValidator,
-    bool,
-    num,
-    str,
-    json,
-    url,
-    email,
-    host,
-    port
-} = __nccwpck_require__(4563)
-const { extend } = __nccwpck_require__(4969)
+  var output = [RULE, invalidVarsOutput.sort().join('\n'), missingVarsOutput.sort().join('\n'), colors.yellow('\n Exiting with error code 1'), RULE].filter(function (x) {
+    return !!x;
+  }).join('\n');
+  console.error(output);
 
-const testOnlySymbol = Symbol('envalid - test only')
+  if (isNode) {
+    process.exit(1);
+  } else {
+    throw new TypeError('Environment validation failed');
+  }
+};
 
+var testOnlySymbol = /*#__PURE__*/Symbol('envalid - test only');
 /**
  * Validate a single env var, given a spec object
  *
  * @throws EnvError - If validation is unsuccessful
  * @return - The cleaned value
  */
-function validateVar({ spec = {}, name, rawValue }) {
-    if (typeof spec._parse !== 'function') {
-        throw new EnvError(`Invalid spec for "${name}"`)
-    }
-    const value = spec._parse(rawValue)
 
-    if (spec.choices) {
-        if (!Array.isArray(spec.choices)) {
-            throw new TypeError(`"choices" must be an array (in spec for "${name}")`)
-        } else if (!spec.choices.includes(value)) {
-            throw new EnvError(`Value "${value}" not in choices [${spec.choices}]`)
-        }
-    }
-    if (value == null) throw new EnvError(`Invalid value for env var "${name}"`)
-    return value
-}
+function validateVar(_ref) {
+  var spec = _ref.spec,
+      name = _ref.name,
+      rawValue = _ref.rawValue;
 
-// Format a string error message for when a required env var is missing
+  if (typeof spec._parse !== 'function') {
+    throw new EnvError("Invalid spec for \"" + name + "\"");
+  }
+
+  var value = spec._parse(rawValue);
+
+  if (spec.choices) {
+    if (!Array.isArray(spec.choices)) {
+      throw new TypeError("\"choices\" must be an array (in spec for \"" + name + "\")");
+    } else if (!spec.choices.includes(value)) {
+      throw new EnvError("Value \"" + value + "\" not in choices [" + spec.choices + "]");
+    }
+  }
+
+  if (value == null) throw new EnvError("Invalid value for env var \"" + name + "\"");
+  return value;
+} // Format a string error message for when a required env var is missing
+
+
 function formatSpecDescription(spec) {
-    const egText = spec.example ? ` (eg. "${spec.example}")` : ''
-    const docsText = spec.docs ? `. See ${spec.docs}` : ''
-    return `${spec.desc}${egText}${docsText}` || ''
+  var egText = spec.example ? " (eg. \"" + spec.example + "\")" : '';
+  var docsText = spec.docs ? ". See " + spec.docs : '';
+  return "" + spec.desc + egText + docsText;
 }
 
-function cleanEnv(env, specs = {}, options = {}) {
-    let output = {}
-    let defaultNodeEnv = ''
-    const errors = {}
-    const varKeys = Object.keys(specs)
+var readRawEnvValue = function readRawEnvValue(env, k) {
+  return env[k];
+};
 
-    // If validation for NODE_ENV isn't specified, use the default validation:
-    if (!varKeys.includes('NODE_ENV')) {
-        defaultNodeEnv = validateVar({
-            name: 'NODE_ENV',
-            spec: str({ choices: ['development', 'test', 'production'] }),
-            rawValue: env.NODE_ENV || 'production'
-        })
-    }
+var isTestOnlySymbol = function isTestOnlySymbol(value) {
+  return value === testOnlySymbol;
+};
+/**
+ * Perform the central validation/sanitization logic on the full environment object
+ */
 
-    for (const k of varKeys) {
-        const spec = specs[k]
-        const usingDevDefault = env.NODE_ENV !== 'production' && spec.hasOwnProperty('devDefault')
-        const devDefault = usingDevDefault ? spec.devDefault : undefined
-        let rawValue = env[k]
 
-        if (rawValue === undefined) {
-            rawValue = devDefault === undefined ? spec.default : devDefault
+function getSanitizedEnv(environment, specs, options) {
+  var _options2;
+
+  if (options === void 0) {
+    options = {};
+  }
+
+  var cleanedEnv = {};
+  var errors = {};
+  var varKeys = Object.keys(specs);
+  var rawNodeEnv = readRawEnvValue(environment, 'NODE_ENV');
+
+  for (var _i = 0, _varKeys = varKeys; _i < _varKeys.length; _i++) {
+    var _readRawEnvValue;
+
+    var k = _varKeys[_i];
+    var spec = specs[k]; // Use devDefault values only if NODE_ENV was explicitly set, and isn't 'production'
+
+    var usingDevDefault = rawNodeEnv && rawNodeEnv !== 'production' && spec.hasOwnProperty('devDefault');
+    var devDefaultValue = usingDevDefault ? spec.devDefault : undefined;
+    var rawValue = (_readRawEnvValue = readRawEnvValue(environment, k)) != null ? _readRawEnvValue : devDefaultValue === undefined ? spec["default"] : devDefaultValue; // Default values can be anything falsy (including an explicitly set undefined), without
+    // triggering validation errors:
+
+    var usingFalsyDefault = spec.hasOwnProperty('default') && spec["default"] === rawValue || usingDevDefault && devDefaultValue === rawValue;
+
+    try {
+      if (isTestOnlySymbol(rawValue)) {
+        throw new EnvMissingError(formatSpecDescription(spec));
+      }
+
+      if (rawValue === undefined) {
+        if (!usingFalsyDefault) {
+          throw new EnvMissingError(formatSpecDescription(spec));
         }
+      } else {
+        cleanedEnv[k] = validateVar({
+          name: k,
+          spec: spec,
+          rawValue: rawValue
+        });
+      }
+    } catch (err) {
+      var _options;
 
-        // Default values can be anything falsy (including an explicitly set undefined), without
-        // triggering validation errors:
-        const usingFalsyDefault =
-            (spec.hasOwnProperty('default') && spec.default === rawValue) ||
-            (usingDevDefault && devDefault === rawValue)
-
-        try {
-            if (rawValue === testOnlySymbol) {
-                throw new EnvMissingError(formatSpecDescription(spec))
-            }
-
-            if (rawValue === undefined) {
-                if (!usingFalsyDefault) {
-                    throw new EnvMissingError(formatSpecDescription(spec))
-                }
-
-                output[k] = undefined
-            } else {
-                output[k] = validateVar({ name: k, spec, rawValue })
-            }
-        } catch (err) {
-            if (options.reporter === null) throw err
-            errors[k] = err
-        }
+      if (((_options = options) == null ? void 0 : _options.reporter) === null) throw err;
+      errors[k] = err;
     }
+  }
 
-    // If we need to run Object.assign() on output, we must do it before the
-    // defineProperties() call, otherwise the properties would be lost
-    output = options.strict ? output : extend(env, output)
-
-    // Provide is{Prod/Dev/Test} properties for more readable NODE_ENV checks
-    // Node that isDev and isProd are just aliases to isDevelopment and isProduction
-    const computedNodeEnv = defaultNodeEnv || output.NODE_ENV
-    Object.defineProperties(output, {
-        isDevelopment: { value: computedNodeEnv === 'development' },
-        isDev: { value: computedNodeEnv === 'development' },
-        isProduction: { value: computedNodeEnv === 'production' },
-        isProd: { value: computedNodeEnv === 'production' },
-        isTest: { value: computedNodeEnv === 'test' }
-    })
-
-    if (options.transformer) {
-        output = options.transformer(output)
-    }
-
-    const reporter = options.reporter || __nccwpck_require__(957)
-    reporter({ errors, env: output })
-
-    if (options.strict) output = __nccwpck_require__(7875)(output, env)
-
-    return Object.freeze(output)
+  var reporter = ((_options2 = options) == null ? void 0 : _options2.reporter) || defaultReporter;
+  reporter({
+    errors: errors,
+    env: cleanedEnv
+  });
+  return cleanedEnv;
 }
 
+var strictProxyMiddleware = function strictProxyMiddleware(envObj, rawEnv) {
+  var inspectables = ['length', 'inspect', 'hasOwnProperty', Symbol.toStringTag, Symbol.iterator, // For jest
+  'asymmetricMatch', 'nodeType', // For libs that use `then` checks to see if objects are Promises (see #74):
+  'then', // For usage with TypeScript esModuleInterop flag
+  '__esModule'];
+  var inspectSymbolStrings = ['Symbol(util.inspect.custom)', 'Symbol(nodejs.util.inspect.custom)'];
+  return new Proxy(envObj, {
+    get: function get(target, name) {
+      // These checks are needed because calling console.log on a
+      // proxy that throws crashes the entire process. This permits access on
+      // the necessary properties for `console.log(envObj)`, `envObj.length`,
+      // `envObj.hasOwnProperty('string')` to work.
+      if (inspectables.includes(name) || inspectSymbolStrings.includes(name.toString())) {
+        // @ts-expect-error TS doesn't like symbol types as indexers
+        return target[name];
+      }
+
+      var varExists = target.hasOwnProperty(name);
+
+      if (!varExists) {
+        if (typeof rawEnv === 'object' && (rawEnv == null ? void 0 : rawEnv.hasOwnProperty == null ? void 0 : rawEnv.hasOwnProperty(name))) {
+          throw new ReferenceError("[envalid] Env var " + name + " was accessed but not validated. This var is set in the environment; please add an envalid validator for it.");
+        }
+
+        throw new ReferenceError("[envalid] Env var not found: " + name);
+      }
+
+      return target[name];
+    },
+    set: function set(_target, name) {
+      throw new TypeError("[envalid] Attempt to mutate environment value: " + name);
+    }
+  });
+};
+var accessorMiddleware = function accessorMiddleware(envObj, rawEnv) {
+  // Attach is{Prod/Dev/Test} properties for more readable NODE_ENV checks
+  // Note that isDev and isProd are just aliases to isDevelopment and isProduction
+  // @ts-ignore attempt to read NODE_ENV even if it's not in the spec
+  var computedNodeEnv = envObj.NODE_ENV || rawEnv.NODE_ENV; // If NODE_ENV is not set, assume production
+
+  var isProd = !computedNodeEnv || computedNodeEnv === 'production';
+  Object.defineProperties(envObj, {
+    isDevelopment: {
+      value: computedNodeEnv === 'development'
+    },
+    isDev: {
+      value: computedNodeEnv === 'development'
+    },
+    isProduction: {
+      value: isProd
+    },
+    isProd: {
+      value: isProd
+    },
+    isTest: {
+      value: computedNodeEnv === 'test'
+    }
+  });
+  return envObj;
+};
+var applyDefaultMiddleware = function applyDefaultMiddleware(cleanedEnv, rawEnv) {
+  // Note: Ideally we would declare the default middlewares in an array and apply them in series with
+  // a generic pipe() function. However, a generically typed variadic pipe() appears to not be possible
+  // in TypeScript as of 4.x, so we just manually apply them below. See
+  // https://github.com/microsoft/TypeScript/pull/39094#issuecomment-647042984
+  return strictProxyMiddleware(accessorMiddleware(cleanedEnv, rawEnv), rawEnv);
+};
+
+/**
+ * Returns a sanitized, immutable environment object. _Only_ the env vars
+ * specified in the `validators` parameter will be accessible on the returned
+ * object.
+ * @param environment An object containing your env vars (eg. process.env).
+ * @param specs An object that specifies the format of required vars.
+ * @param options An object that specifies options for cleanEnv.
+ */
+
+function cleanEnv(environment, specs, options) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  var cleaned = getSanitizedEnv(environment, specs, options);
+  return Object.freeze(applyDefaultMiddleware(cleaned, environment));
+}
+/**
+ * Returns a sanitized, immutable environment object, and passes it through a custom
+ * applyMiddleware function before being frozen. Most users won't need the flexibility of custom
+ * middleware; prefer cleanEnv() unless you're sure you need it
+ *
+ * @param environment An object containing your env vars (eg. process.env).
+ * @param specs An object that specifies the format of required vars.
+ * @param applyMiddleware A function that applies transformations to the cleaned env object
+ * @param options An object that specifies options for cleanEnv.
+ */
+
+function customCleanEnv(environment, specs, applyMiddleware, options) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  var cleaned = getSanitizedEnv(environment, specs, options);
+  return Object.freeze(applyMiddleware(cleaned, environment));
+}
 /**
  * Utility function for providing default values only when NODE_ENV=test
  *
  * For more context, see https://github.com/af/envalid/issues/32
  */
-const testOnly = defaultValueForTests => {
-    return process.env.NODE_ENV === 'test' ? defaultValueForTests : testOnlySymbol
+
+var testOnly = function testOnly(defaultValueForTests) {
+  return  testOnlySymbol; // T is not strictly correct, but prevents type errors during usage
+};
+
+var isFQDN = function isFQDN(input) {
+  if (!input.length) return false;
+  var parts = input.split('.');
+
+  for (var part, i = 0; i < parts.length; i++) {
+    part = parts[i];
+    if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) return false;
+    if (/[\uff01-\uff5e]/.test(part)) return false; // disallow full-width chars
+
+    if (part[0] === '-' || part[part.length - 1] === '-') return false;
+  }
+
+  return true;
+}; // "best effort" regex-based IP address check
+// If you want a more exhaustive check, create your own custom validator, perhaps wrapping this
+// implementation (the source of the ipv4 regex below): https://github.com/validatorjs/validator.js/blob/master/src/lib/isIP.js
+
+
+var ipv4Regex = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
+var ipv6Regex = /([a-f0-9]+:+)+[a-f0-9]+/;
+
+var isIP = function isIP(input) {
+  if (!input.length) return false;
+  return ipv4Regex.test(input) || ipv6Regex.test(input);
+};
+
+var EMAIL_REGEX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/; // intentionally non-exhaustive
+
+var makeValidator = function makeValidator(parseFn) {
+  return function (spec) {
+    return _extends({}, spec, {
+      _parse: parseFn
+    });
+  };
+}; // The reason for the function wrapper is to enable the <T extends boolean = boolean> type parameter
+// that enables better type inference. For more context, check out the following PR:
+// https://github.com/af/envalid/pull/118
+
+function bool(spec) {
+  return makeValidator(function (input) {
+    switch (input) {
+      case true:
+      case 'true':
+      case 't':
+      case '1':
+        return true;
+
+      case false:
+      case 'false':
+      case 'f':
+      case '0':
+        return false;
+
+      default:
+        throw new EnvError("Invalid bool input: \"" + input + "\"");
+    }
+  })(spec);
+}
+function num(spec) {
+  return makeValidator(function (input) {
+    var coerced = +input;
+    if (Number.isNaN(coerced)) throw new EnvError("Invalid number input: \"" + input + "\"");
+    return coerced;
+  })(spec);
+}
+function str(spec) {
+  return makeValidator(function (input) {
+    if (typeof input === 'string') return input;
+    throw new EnvError("Not a string: \"" + input + "\"");
+  })(spec);
+}
+function email(spec) {
+  return makeValidator(function (x) {
+    if (EMAIL_REGEX.test(x)) return x;
+    throw new EnvError("Invalid email address: \"" + x + "\"");
+  })(spec);
+}
+function host(spec) {
+  return makeValidator(function (input) {
+    if (!isFQDN(input) && !isIP(input)) {
+      throw new EnvError("Invalid host (domain or ip): \"" + input + "\"");
+    }
+
+    return input;
+  })(spec);
+}
+function port(spec) {
+  return makeValidator(function (input) {
+    var coerced = +input;
+
+    if (Number.isNaN(coerced) || "" + coerced !== "" + input || coerced % 1 !== 0 || coerced < 1 || coerced > 65535) {
+      throw new EnvError("Invalid port input: \"" + input + "\"");
+    }
+
+    return coerced;
+  })(spec);
+}
+function url(spec) {
+  return makeValidator(function (x) {
+    try {
+      new URL(x);
+      return x;
+    } catch (e) {
+      throw new EnvError("Invalid url: \"" + x + "\"");
+    }
+  })(spec);
+} // It's recommended that you provide an explicit type parameter for json validation
+// if you're using TypeScript. Otherwise the output will be typed as `any`. For example:
+//
+// cleanEnv({
+//   MY_VAR: json<{ foo: number }>({ default: { foo: 123 } }),
+// })
+
+function json(spec) {
+  return makeValidator(function (x) {
+    try {
+      return JSON.parse(x);
+    } catch (e) {
+      throw new EnvError("Invalid json: \"" + x + "\"");
+    }
+  })(spec);
 }
 
-module.exports = {
-    // core API
-    cleanEnv,
-    makeValidator,
-    // error subclasses
-    EnvError,
-    EnvMissingError,
-    // utility function(s)
-    testOnly,
-    // built-in validators
-    bool,
-    num,
-    str,
-    json,
-    host,
-    port,
-    url,
-    email
-}
+__webpack_unused_export__ = EnvError;
+__webpack_unused_export__ = EnvMissingError;
+__webpack_unused_export__ = accessorMiddleware;
+__webpack_unused_export__ = applyDefaultMiddleware;
+__webpack_unused_export__ = bool;
+exports.cleanEnv = cleanEnv;
+__webpack_unused_export__ = customCleanEnv;
+__webpack_unused_export__ = email;
+__webpack_unused_export__ = host;
+__webpack_unused_export__ = json;
+__webpack_unused_export__ = makeValidator;
+__webpack_unused_export__ = num;
+__webpack_unused_export__ = port;
+exports.str = str;
+__webpack_unused_export__ = strictProxyMiddleware;
+__webpack_unused_export__ = testOnly;
+__webpack_unused_export__ = url;
+//# sourceMappingURL=envalid.cjs.development.js.map
 
 
 /***/ }),
 
-/***/ 957:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-/* eslint-disable no-console */
-const { EnvMissingError } = __nccwpck_require__(4563)
-const chalk = __nccwpck_require__(5262)
-const RULE = chalk.grey('================================')
-
-module.exports = function defaultReporter({ errors = {}, env = {} }) {
-    const errorKeys = Object.keys(errors)
-    if (!errorKeys.length) return
-
-    const missingVarsOutput = []
-    const invalidVarsOutput = []
-    for (const k of errorKeys) {
-        const err = errors[k]
-        if (err instanceof EnvMissingError) {
-            missingVarsOutput.push(`    ${chalk.blue(k)}: ${errors[k].message || '(required)'}`)
-        } else invalidVarsOutput.push(`    ${chalk.blue(k)}: ${errors[k].message}`)
-    }
-
-    // Prepend "header" output for each section of the output:
-    if (invalidVarsOutput.length) {
-        invalidVarsOutput.unshift(` ${chalk.yellow('Invalid')} environment variables:`)
-    }
-    if (missingVarsOutput.length) {
-        missingVarsOutput.unshift(` ${chalk.yellow('Missing')} environment variables:`)
-    }
-
-    const output = [
-        RULE,
-        invalidVarsOutput.join('\n'),
-        missingVarsOutput.join('\n'),
-        chalk.yellow('\n Exiting with error code 1'),
-        RULE
-    ]
-        .filter(x => !!x)
-        .join('\n')
-
-    console.error(output)
-    process.exit(1)
-}
-
-
-/***/ }),
-
-/***/ 7875:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-const meant = __nccwpck_require__(6808)
-
-/**
- * Suggest similar env var(s) if possible; for use when an invalid var is accessed.
- */
-const didYouMean = (scmd, commands) => {
-    const bestSimilarity = meant(scmd, commands)
-    const suggestion = bestSimilarity.join(', ')
-
-    if (bestSimilarity.length > 0) {
-        throw new ReferenceError(`[envalid] Env var ${scmd} not found, did you mean ${suggestion}?`)
-    }
-}
-
-const inspectables = [
-    'length',
-    'inspect',
-    'hasOwnProperty',
-    Symbol.toStringTag,
-    Symbol.iterator,
-
-    // For libs that use `then` checks to see if objects are Promises (see #74):
-    'then',
-    // For usage with TypeScript esModuleInterop flag
-    '__esModule'
-]
-const inspectSymbolStrings = ['Symbol(util.inspect.custom)', 'Symbol(nodejs.util.inspect.custom)']
-
-/**
- * Wrap the environment object with a Proxy that throws when:
- * a) trying to mutate an env var
- * b) trying to access an invalid (unset) env var
- *
- * @return {Object} - Proxied environment object with get/set traps
- */
-module.exports = (envObj, originalEnv) =>
-    new Proxy(envObj, {
-        get(target, name) {
-            // These checks are needed because calling console.log on a
-            // proxy that throws crashes the entire process. This whitelists
-            // the necessary properties for `console.log(envObj)`, `envObj.length`,
-            // `envObj.hasOwnProperty('string')` to work.
-            if (inspectables.includes(name) || inspectSymbolStrings.includes(name.toString())) {
-                return envObj[name]
-            }
-
-            const varExists = envObj.hasOwnProperty(name)
-            if (!varExists) {
-                if (originalEnv.hasOwnProperty(name)) {
-                    throw new ReferenceError(
-                        `[envalid] Env var ${name} was accessed but not validated. This var is set in the environment; please add an envalid validator for it.`
-                    )
-                }
-
-                didYouMean(name, Object.keys(envObj))
-                throw new ReferenceError(`[envalid] Env var not found: ${name}`)
-            }
-
-            return envObj[name]
-        },
-
-        set(target, name) {
-            throw new TypeError(`[envalid] Attempt to mutate environment value: ${name}`)
-        }
-    })
-
-
-/***/ }),
-
-/***/ 4969:
+/***/ 7855:
 /***/ ((__unused_webpack_module, exports) => {
 
-const extend = (x = {}, y = {}) => Object.assign({}, x, y)
-exports.extend = extend
+"use strict";
+var __webpack_unused_export__;
+function e(){return(e=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var r=arguments[t];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(e[n]=r[n])}return e}).apply(this,arguments)}function t(e,t){e.prototype=Object.create(t.prototype),e.prototype.constructor=e,e.__proto__=t}function r(e){return(r=Object.setPrototypeOf?Object.getPrototypeOf:function(e){return e.__proto__||Object.getPrototypeOf(e)})(e)}function n(e,t){return(n=Object.setPrototypeOf||function(e,t){return e.__proto__=t,e})(e,t)}function o(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],(function(){}))),!0}catch(e){return!1}}function i(e,t,r){return(i=o()?Reflect.construct:function(e,t,r){var o=[null];o.push.apply(o,t);var i=new(Function.bind.apply(e,o));return r&&n(i,r.prototype),i}).apply(null,arguments)}function u(e){var t="function"==typeof Map?new Map:void 0;return(u=function(e){if(null===e||-1===Function.toString.call(e).indexOf("[native code]"))return e;if("function"!=typeof e)throw new TypeError("Super expression must either be null or a function");if(void 0!==t){if(t.has(e))return t.get(e);t.set(e,o)}function o(){return i(e,arguments,r(this).constructor)}return o.prototype=Object.create(e.prototype,{constructor:{value:o,enumerable:!1,writable:!0,configurable:!0}}),n(o,e)})(e)}function c(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}__webpack_unused_export__ = ({value:!0});var a,s,f=function(e){function r(t){var n;return n=e.call(this,t)||this,Object.setPrototypeOf(c(n),(this instanceof r?this.constructor:void 0).prototype),Error.captureStackTrace(c(n),r),n.name=n.constructor.name,n}return t(r,e),r}(u(TypeError)),l=function(e){function r(t){var n;return n=e.call(this,t)||this,Object.setPrototypeOf(c(n),(this instanceof r?this.constructor:void 0).prototype),Error.captureStackTrace(c(n),r),n.name=n.constructor.name,n}return t(r,e),r}(u(ReferenceError)),p=!("object"!=typeof process||!(null==(a=process)||null==(s=a.versions)?void 0:s.node)),v=function(e){return function(t){return p?"["+e+"m"+t+"[0m":t}},d={blue:v("34"),white:v("37"),yellow:v("33")},h=d.white("================================"),w=function(e){var t=e.errors,r=void 0===t?{}:t;if(Object.keys(r).length){for(var n=[],o=[],i=0,u=Object.entries(r);i<u.length;i++){var c=u[i],a=c[0],s=c[1];s instanceof l?n.push("    "+d.blue(a)+": "+(s.message||"(required)")):o.push("    "+d.blue(a)+": "+((null==s?void 0:s.message)||"(invalid format)"))}o.length&&o.unshift(" "+d.yellow("Invalid")+" environment variables:"),n.length&&n.unshift(" "+d.yellow("Missing")+" environment variables:");var f=[h,o.sort().join("\n"),n.sort().join("\n"),d.yellow("\n Exiting with error code 1"),h].filter((function(e){return!!e})).join("\n");if(console.error(f),!p)throw new TypeError("Environment validation failed");process.exit(1)}},y=Symbol("envalid - test only");function m(e){var t=e.spec,r=e.name,n=e.rawValue;if("function"!=typeof t._parse)throw new f('Invalid spec for "'+r+'"');var o=t._parse(n);if(t.choices){if(!Array.isArray(t.choices))throw new TypeError('"choices" must be an array (in spec for "'+r+'")');if(!t.choices.includes(o))throw new f('Value "'+o+'" not in choices ['+t.choices+"]")}if(null==o)throw new f('Invalid value for env var "'+r+'"');return o}function b(e){return e.desc+(e.example?' (eg. "'+e.example+'")':"")+(e.docs?". See "+e.docs:"")}var O=function(e,t){return e[t]};function g(e,t,r){var n;void 0===r&&(r={});for(var o={},i={},u=Object.keys(t),c=O(e,"NODE_ENV"),a=0,s=u;a<s.length;a++){var f,p=s[a],v=t[p],d=c&&"production"!==c&&v.hasOwnProperty("devDefault"),h=d?v.devDefault:void 0,g=null!=(f=O(e,p))?f:void 0===h?v.default:h,x=v.hasOwnProperty("default")&&v.default===g||d&&h===g;try{if(g===y)throw new l(b(v));if(void 0===g){if(!x)throw new l(b(v))}else o[p]=m({name:p,spec:v,rawValue:g})}catch(e){var E;if(null===(null==(E=r)?void 0:E.reporter))throw e;i[p]=e}}return((null==(n=r)?void 0:n.reporter)||w)({errors:i,env:o}),o}var x=function(e,t){var r=["length","inspect","hasOwnProperty",Symbol.toStringTag,Symbol.iterator,"asymmetricMatch","nodeType","then","__esModule"],n=["Symbol(util.inspect.custom)","Symbol(nodejs.util.inspect.custom)"];return new Proxy(e,{get:function(e,o){if(r.includes(o)||n.includes(o.toString()))return e[o];if(!e.hasOwnProperty(o)){if("object"==typeof t&&(null==t||null==t.hasOwnProperty?void 0:t.hasOwnProperty(o)))throw new ReferenceError("[envalid] Env var "+o+" was accessed but not validated. This var is set in the environment; please add an envalid validator for it.");throw new ReferenceError("[envalid] Env var not found: "+o)}return e[o]},set:function(e,t){throw new TypeError("[envalid] Attempt to mutate environment value: "+t)}})},E=function(e,t){var r=e.NODE_ENV||t.NODE_ENV,n=!r||"production"===r;return Object.defineProperties(e,{isDevelopment:{value:"development"===r},isDev:{value:"development"===r},isProduction:{value:n},isProd:{value:n},isTest:{value:"test"===r}}),e},j=function(e,t){return x(E(e,t),t)},_=/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/,P=/([a-f0-9]+:+)+[a-f0-9]+/,N=/^[^@\s]+@[^@\s]+\.[^@\s]+$/,S=function(t){return function(r){return e({},r,{_parse:t})}};__webpack_unused_export__=f,__webpack_unused_export__=l,__webpack_unused_export__=E,__webpack_unused_export__=j,__webpack_unused_export__=function(e){return S((function(e){switch(e){case!0:case"true":case"t":case"1":return!0;case!1:case"false":case"f":case"0":return!1;default:throw new f('Invalid bool input: "'+e+'"')}}))(e)},exports.cleanEnv=function(e,t,r){void 0===r&&(r={});var n=g(e,t,r);return Object.freeze(j(n,e))},__webpack_unused_export__=function(e,t,r,n){void 0===n&&(n={});var o=g(e,t,n);return Object.freeze(r(o,e))},__webpack_unused_export__=function(e){return S((function(e){if(N.test(e))return e;throw new f('Invalid email address: "'+e+'"')}))(e)},__webpack_unused_export__=function(e){return S((function(e){if(!function(e){if(!e.length)return!1;for(var t,r=e.split("."),n=0;n<r.length;n++){if(!/^[a-z\u00a1-\uffff0-9-]+$/i.test(t=r[n]))return!1;if(/[\uff01-\uff5e]/.test(t))return!1;if("-"===t[0]||"-"===t[t.length-1])return!1}return!0}(e)&&!function(e){return!!e.length&&(_.test(e)||P.test(e))}(e))throw new f('Invalid host (domain or ip): "'+e+'"');return e}))(e)},__webpack_unused_export__=function(e){return S((function(e){try{return JSON.parse(e)}catch(t){throw new f('Invalid json: "'+e+'"')}}))(e)},__webpack_unused_export__=S,__webpack_unused_export__=function(e){return S((function(e){var t=+e;if(Number.isNaN(t))throw new f('Invalid number input: "'+e+'"');return t}))(e)},__webpack_unused_export__=function(e){return S((function(e){var t=+e;if(Number.isNaN(t)||""+t!=""+e||t%1!=0||t<1||t>65535)throw new f('Invalid port input: "'+e+'"');return t}))(e)},exports.str=function(e){return S((function(e){if("string"==typeof e)return e;throw new f('Not a string: "'+e+'"')}))(e)},__webpack_unused_export__=x,__webpack_unused_export__=function(e){return y},__webpack_unused_export__=function(e){return S((function(e){try{return new URL(e),e}catch(t){throw new f('Invalid url: "'+e+'"')}}))(e)};
+//# sourceMappingURL=envalid.cjs.production.min.js.map
 
 
 /***/ }),
 
-/***/ 4563:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ 2322:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const isFQDN = __nccwpck_require__(5627)
-const isIP = __nccwpck_require__(8253)
-const EMAIL_REGEX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/ // intentionally non-exhaustive
+"use strict";
 
-class EnvError extends TypeError {
-    constructor(...args) {
-        super(...args)
-        Error.captureStackTrace(this, EnvError)
-        this.name = 'EnvError'
-    }
+
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = __nccwpck_require__(7855)
+} else {
+  module.exports = __nccwpck_require__(4682)
 }
-exports.EnvError = EnvError
-
-class EnvMissingError extends ReferenceError {
-    constructor(...args) {
-        super(...args)
-        Error.captureStackTrace(this, EnvMissingError)
-        this.name = 'EnvMissingError'
-    }
-}
-exports.EnvMissingError = EnvMissingError
-
-function makeValidator(parseFn, type = 'unknown') {
-    return function(spec = {}) {
-        spec.type = type
-        spec._parse = parseFn
-        return spec
-    }
-}
-exports.makeValidator = makeValidator
-
-exports.bool = makeValidator(input => {
-    switch (input) {
-        case true:
-        case 'true':
-        case 't':
-        case '1':
-            return true
-        case false:
-        case 'false':
-        case 'f':
-        case '0':
-            return false
-        default:
-            return null
-    }
-}, 'bool')
-
-exports.num = makeValidator(input => {
-    const coerced = +input
-    if (Number.isNaN(coerced)) throw new EnvError(`Invalid number input: "${input}"`)
-    return coerced
-}, 'num')
-
-exports.str = makeValidator(input => {
-    if (typeof input === 'string') return input
-    throw new EnvError(`Not a string: "${input}"`)
-}, 'str')
-
-exports.email = makeValidator(x => {
-    if (EMAIL_REGEX.test(x)) return x
-    throw new EnvError(`Invalid email address: "${x}"`)
-}, 'email')
-
-exports.host = makeValidator(input => {
-    if (!isFQDN(input, { require_tld: false }) && !isIP(input)) {
-        throw new EnvError(`Invalid host (domain or ip): "${input}"`)
-    }
-    return input
-}, 'host')
-
-exports.port = makeValidator(input => {
-    const coerced = +input
-    if (
-        Number.isNaN(coerced) ||
-        `${coerced}` !== `${input}` ||
-        coerced % 1 !== 0 ||
-        coerced < 1 ||
-        coerced > 65535
-    ) {
-        throw new EnvError(`Invalid port input: "${input}"`)
-    }
-    return coerced
-}, 'port')
-
-exports.url = makeValidator(x => {
-    const url = __nccwpck_require__(8835)
-    let isValid = false
-
-    if (url.URL) {
-        try {
-            new url.URL(x)
-            isValid = true
-        } catch (e) {
-            isValid = false
-        }
-    } else {
-        const parsed = url.parse(x)
-        isValid = !!(parsed.protocol && parsed.host && parsed.slashes)
-    }
-
-    if (isValid) return x
-    throw new EnvError(`Invalid url: "${x}"`)
-}, 'url')
-
-exports.json = makeValidator(x => {
-    try {
-        return JSON.parse(x)
-    } catch (e) {
-        throw new EnvError(`Invalid json: "${x}"`)
-    }
-}, 'json')
 
 
 /***/ }),
@@ -52880,22 +51125,6 @@ function patch (fs) {
 
 /***/ }),
 
-/***/ 1621:
-/***/ ((module) => {
-
-"use strict";
-
-
-module.exports = (flag, argv = process.argv) => {
-	const prefix = flag.startsWith('-') ? '' : (flag.length === 1 ? '-' : '--');
-	const position = argv.indexOf(prefix + flag);
-	const terminatorPosition = argv.indexOf('--');
-	return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
-};
-
-
-/***/ }),
-
 /***/ 587:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -53767,62 +51996,6 @@ parseJson.noExceptions = (txt, reviver) => {
     return JSON.parse(stripBOM(txt), reviver)
   } catch (e) {}
 }
-
-
-/***/ }),
-
-/***/ 6808:
-/***/ ((module) => {
-
-function levenshteinD (s1, s2) {
-  var d = []
-  var i = 0
-
-  for (i = 0; i <= s1.length; i++) d[i] = [i]
-  for (i = 0; i <= s2.length; i++) d[0][i] = i
-
-  s2.split('').forEach(function (c2, j) {
-    s1.split('').forEach(function (c1, i) {
-      if (c1 === c2) {
-        d[i + 1][j + 1] = d[i][j]
-        return
-      }
-      d[i + 1][j + 1] = Math.min(
-        d[i][j + 1] + 1,
-        d[i + 1][j] + 1,
-        d[i][j] + 1
-      )
-    })
-  })
-
-  return d[s1.length][s2.length]
-}
-
-function meant (scmd, commands) {
-  var d = []
-  var bestSimilarity = []
-
-  commands.forEach(function (cmd, i) {
-    var item = {}
-    item[levenshteinD(scmd, cmd)] = i
-    d.push(item)
-  })
-
-  d.sort(function (a, b) {
-    return Number(Object.keys(a)[0]) - Number(Object.keys(b)[0])
-  })
-
-  d.forEach(function (item) {
-    var key = Number(Object.keys(item)[0])
-    if (scmd.length / 2 >= key) {
-      bestSimilarity.push(commands[item[key]])
-    }
-  })
-
-  return bestSimilarity
-}
-
-module.exports = meant
 
 
 /***/ }),
@@ -60660,153 +58833,6 @@ module.exports = function (source) {
 
 /***/ }),
 
-/***/ 9318:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const os = __nccwpck_require__(2087);
-const tty = __nccwpck_require__(3867);
-const hasFlag = __nccwpck_require__(1621);
-
-const {env} = process;
-
-let forceColor;
-if (hasFlag('no-color') ||
-	hasFlag('no-colors') ||
-	hasFlag('color=false') ||
-	hasFlag('color=never')) {
-	forceColor = 0;
-} else if (hasFlag('color') ||
-	hasFlag('colors') ||
-	hasFlag('color=true') ||
-	hasFlag('color=always')) {
-	forceColor = 1;
-}
-
-if ('FORCE_COLOR' in env) {
-	if (env.FORCE_COLOR === 'true') {
-		forceColor = 1;
-	} else if (env.FORCE_COLOR === 'false') {
-		forceColor = 0;
-	} else {
-		forceColor = env.FORCE_COLOR.length === 0 ? 1 : Math.min(parseInt(env.FORCE_COLOR, 10), 3);
-	}
-}
-
-function translateLevel(level) {
-	if (level === 0) {
-		return false;
-	}
-
-	return {
-		level,
-		hasBasic: true,
-		has256: level >= 2,
-		has16m: level >= 3
-	};
-}
-
-function supportsColor(haveStream, streamIsTTY) {
-	if (forceColor === 0) {
-		return 0;
-	}
-
-	if (hasFlag('color=16m') ||
-		hasFlag('color=full') ||
-		hasFlag('color=truecolor')) {
-		return 3;
-	}
-
-	if (hasFlag('color=256')) {
-		return 2;
-	}
-
-	if (haveStream && !streamIsTTY && forceColor === undefined) {
-		return 0;
-	}
-
-	const min = forceColor || 0;
-
-	if (env.TERM === 'dumb') {
-		return min;
-	}
-
-	if (process.platform === 'win32') {
-		// Windows 10 build 10586 is the first Windows release that supports 256 colors.
-		// Windows 10 build 14931 is the first release that supports 16m/TrueColor.
-		const osRelease = os.release().split('.');
-		if (
-			Number(osRelease[0]) >= 10 &&
-			Number(osRelease[2]) >= 10586
-		) {
-			return Number(osRelease[2]) >= 14931 ? 3 : 2;
-		}
-
-		return 1;
-	}
-
-	if ('CI' in env) {
-		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
-			return 1;
-		}
-
-		return min;
-	}
-
-	if ('TEAMCITY_VERSION' in env) {
-		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-	}
-
-	if ('GITHUB_ACTIONS' in env) {
-		return 1;
-	}
-
-	if (env.COLORTERM === 'truecolor') {
-		return 3;
-	}
-
-	if ('TERM_PROGRAM' in env) {
-		const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
-
-		switch (env.TERM_PROGRAM) {
-			case 'iTerm.app':
-				return version >= 3 ? 3 : 2;
-			case 'Apple_Terminal':
-				return 2;
-			// No default
-		}
-	}
-
-	if (/-256(color)?$/i.test(env.TERM)) {
-		return 2;
-	}
-
-	if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-		return 1;
-	}
-
-	if ('COLORTERM' in env) {
-		return 1;
-	}
-
-	return min;
-}
-
-function getSupportLevel(stream) {
-	const level = supportsColor(stream, stream && stream.isTTY);
-	return translateLevel(level);
-}
-
-module.exports = {
-	supportsColor: getSupportLevel,
-	stdout: translateLevel(supportsColor(true, tty.isatty(1))),
-	stderr: translateLevel(supportsColor(true, tty.isatty(2)))
-};
-
-
-/***/ }),
-
 /***/ 4351:
 /***/ ((module) => {
 
@@ -61467,297 +59493,6 @@ module.exports = function(argument) {
 
 /***/ }),
 
-/***/ 5627:
-/***/ ((module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.default = isFQDN;
-
-var _assertString = _interopRequireDefault(__nccwpck_require__(1420));
-
-var _merge = _interopRequireDefault(__nccwpck_require__(9956));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var default_fqdn_options = {
-  require_tld: true,
-  allow_underscores: false,
-  allow_trailing_dot: false,
-  allow_numeric_tld: false
-};
-
-function isFQDN(str, options) {
-  (0, _assertString.default)(str);
-  options = (0, _merge.default)(options, default_fqdn_options);
-  /* Remove the optional trailing dot before checking validity */
-
-  if (options.allow_trailing_dot && str[str.length - 1] === '.') {
-    str = str.substring(0, str.length - 1);
-  }
-
-  var parts = str.split('.');
-  var tld = parts[parts.length - 1];
-
-  if (options.require_tld) {
-    // disallow fqdns without tld
-    if (parts.length < 2) {
-      return false;
-    }
-
-    if (!/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
-      return false;
-    } // disallow spaces && special characers
-
-
-    if (/[\s\u2002-\u200B\u202F\u205F\u3000\uFEFF\uDB40\uDC20\u00A9\uFFFD]/.test(tld)) {
-      return false;
-    }
-  } // reject numeric TLDs
-
-
-  if (!options.allow_numeric_tld && /^\d+$/.test(tld)) {
-    return false;
-  }
-
-  return parts.every(function (part) {
-    if (part.length > 63) {
-      return false;
-    }
-
-    if (!/^[a-z_\u00a1-\uffff0-9-]+$/i.test(part)) {
-      return false;
-    } // disallow full-width chars
-
-
-    if (/[\uff01-\uff5e]/.test(part)) {
-      return false;
-    } // disallow parts starting or ending with hyphen
-
-
-    if (/^-|-$/.test(part)) {
-      return false;
-    }
-
-    if (!options.allow_underscores && /_/.test(part)) {
-      return false;
-    }
-
-    return true;
-  });
-}
-
-module.exports = exports.default;
-module.exports.default = exports.default;
-
-/***/ }),
-
-/***/ 8253:
-/***/ ((module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.default = isIP;
-
-var _assertString = _interopRequireDefault(__nccwpck_require__(1420));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
-11.3.  Examples
-
-   The following addresses
-
-             fe80::1234 (on the 1st link of the node)
-             ff02::5678 (on the 5th link of the node)
-             ff08::9abc (on the 10th organization of the node)
-
-   would be represented as follows:
-
-             fe80::1234%1
-             ff02::5678%5
-             ff08::9abc%10
-
-   (Here we assume a natural translation from a zone index to the
-   <zone_id> part, where the Nth zone of any scope is translated into
-   "N".)
-
-   If we use interface names as <zone_id>, those addresses could also be
-   represented as follows:
-
-            fe80::1234%ne0
-            ff02::5678%pvc1.3
-            ff08::9abc%interface10
-
-   where the interface "ne0" belongs to the 1st link, "pvc1.3" belongs
-   to the 5th link, and "interface10" belongs to the 10th organization.
- * * */
-var ipv4Maybe = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
-var ipv6Block = /^[0-9A-F]{1,4}$/i;
-
-function isIP(str) {
-  var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-  (0, _assertString.default)(str);
-  version = String(version);
-
-  if (!version) {
-    return isIP(str, 4) || isIP(str, 6);
-  } else if (version === '4') {
-    if (!ipv4Maybe.test(str)) {
-      return false;
-    }
-
-    var parts = str.split('.').sort(function (a, b) {
-      return a - b;
-    });
-    return parts[3] <= 255;
-  } else if (version === '6') {
-    var addressAndZone = [str]; // ipv6 addresses could have scoped architecture
-    // according to https://tools.ietf.org/html/rfc4007#section-11
-
-    if (str.includes('%')) {
-      addressAndZone = str.split('%');
-
-      if (addressAndZone.length !== 2) {
-        // it must be just two parts
-        return false;
-      }
-
-      if (!addressAndZone[0].includes(':')) {
-        // the first part must be the address
-        return false;
-      }
-
-      if (addressAndZone[1] === '') {
-        // the second part must not be empty
-        return false;
-      }
-    }
-
-    var blocks = addressAndZone[0].split(':');
-    var foundOmissionBlock = false; // marker to indicate ::
-    // At least some OS accept the last 32 bits of an IPv6 address
-    // (i.e. 2 of the blocks) in IPv4 notation, and RFC 3493 says
-    // that '::ffff:a.b.c.d' is valid for IPv4-mapped IPv6 addresses,
-    // and '::a.b.c.d' is deprecated, but also valid.
-
-    var foundIPv4TransitionBlock = isIP(blocks[blocks.length - 1], 4);
-    var expectedNumberOfBlocks = foundIPv4TransitionBlock ? 7 : 8;
-
-    if (blocks.length > expectedNumberOfBlocks) {
-      return false;
-    } // initial or final ::
-
-
-    if (str === '::') {
-      return true;
-    } else if (str.substr(0, 2) === '::') {
-      blocks.shift();
-      blocks.shift();
-      foundOmissionBlock = true;
-    } else if (str.substr(str.length - 2) === '::') {
-      blocks.pop();
-      blocks.pop();
-      foundOmissionBlock = true;
-    }
-
-    for (var i = 0; i < blocks.length; ++i) {
-      // test for a :: which can not be at the string start/end
-      // since those cases have been handled above
-      if (blocks[i] === '' && i > 0 && i < blocks.length - 1) {
-        if (foundOmissionBlock) {
-          return false; // multiple :: in address
-        }
-
-        foundOmissionBlock = true;
-      } else if (foundIPv4TransitionBlock && i === blocks.length - 1) {// it has been checked before that the last
-        // block is a valid IPv4 address
-      } else if (!ipv6Block.test(blocks[i])) {
-        return false;
-      }
-    }
-
-    if (foundOmissionBlock) {
-      return blocks.length >= 1;
-    }
-
-    return blocks.length === expectedNumberOfBlocks;
-  }
-
-  return false;
-}
-
-module.exports = exports.default;
-module.exports.default = exports.default;
-
-/***/ }),
-
-/***/ 1420:
-/***/ ((module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.default = assertString;
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function assertString(input) {
-  var isString = typeof input === 'string' || input instanceof String;
-
-  if (!isString) {
-    var invalidType = _typeof(input);
-
-    if (input === null) invalidType = 'null';else if (invalidType === 'object') invalidType = input.constructor.name;
-    throw new TypeError("Expected a string but received a ".concat(invalidType));
-  }
-}
-
-module.exports = exports.default;
-module.exports.default = exports.default;
-
-/***/ }),
-
-/***/ 9956:
-/***/ ((module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.default = merge;
-
-function merge() {
-  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var defaults = arguments.length > 1 ? arguments[1] : undefined;
-
-  for (var key in defaults) {
-    if (typeof obj[key] === 'undefined') {
-      obj[key] = defaults[key];
-    }
-  }
-
-  return obj;
-}
-
-module.exports = exports.default;
-module.exports.default = exports.default;
-
-/***/ }),
-
 /***/ 2940:
 /***/ ((module) => {
 
@@ -61883,13 +59618,13 @@ function invariant(condition, message) {
 var automation = __nccwpck_require__(5883);
 // EXTERNAL MODULE: external "path"
 var external_path_ = __nccwpck_require__(5622);
-// EXTERNAL MODULE: ./node_modules/envalid/src/envalid.js
-var envalid = __nccwpck_require__(2848);
+// EXTERNAL MODULE: ./node_modules/envalid/dist/index.js
+var dist = __nccwpck_require__(2322);
 // CONCATENATED MODULE: ./src/libs/envs.ts
 
-const environmentVariables = envalid.cleanEnv(process.env, {
-    GITHUB_WORKSPACE: envalid.str(),
-}, { strict: true });
+const environmentVariables = dist.cleanEnv(process.env, {
+    GITHUB_WORKSPACE: dist.str(),
+});
 
 // CONCATENATED MODULE: ./src/main.ts
 
@@ -62124,19 +59859,11 @@ module.exports = require("tls");;
 
 /***/ }),
 
-/***/ 3867:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("tty");;
-
-/***/ }),
-
 /***/ 5034:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("typescript");;
+module.exports = {};;
 
 /***/ }),
 
