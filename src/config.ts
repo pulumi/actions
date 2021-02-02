@@ -8,6 +8,8 @@ export const command = rt.Union(
   rt.Literal('preview'),
 );
 
+export type Commands = rt.Static<typeof command>;
+
 export const config = rt.Record({
   command: command,
   stackName: rt.String,
