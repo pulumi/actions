@@ -1,5 +1,7 @@
 # Pulumi GitHub Actions
 
+**We are refactoring Pulumi's Github Actions to be written in Typescript, to make it faster and more versatile than ever. `master` is subject to active development. This README describes the Docker-based Github Action step. Please check [#40](https://github.com/pulumi/actions/issues/40) for more information.**
+
 Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, using just your favorite language
 and GitHub. This includes previewing, validating, and collaborating on proposed deployments in the context of Pull
 Requests, and triggering deployments or promotions between different environments by merging or directly committing code.
@@ -35,8 +37,8 @@ This will check out the existing directory and run `pulumi up`. The full list of
 
 The pulumi-action can be configured in 2 ways:
 
-* Command Arg
-* Environment Variables
+- Command Arg
+- Environment Variables
 
 ### Command Arg
 
@@ -47,30 +49,28 @@ This argument is a required argument. This is the command to pass to the Pulumi 
 
 There are a number of Environment Variables that can be set to interact with the action:
 
-* By default, Pulumi will try to connect to the [Pulumi SaaS](https://app.pulumi.com/). For this to happen, the GitHub Action needs
-to be passed a `PULUMI_ACCESS_TOKEN`.
+- By default, Pulumi will try to connect to the [Pulumi SaaS](https://app.pulumi.com/). For this to happen, the GitHub Action needs
+  to be passed a `PULUMI_ACCESS_TOKEN`.
 
-* If you want to specify an [alternative Pulumi backend](https://www.pulumi.com/docs/intro/concepts/state/#to-a-self-managed-backend) then
-you can do so with the `PULUMI_BACKEND_URL` env var.
-  
-* If you want to specify a specific stack for Pulumi to use then you can set `PULUMI_STACK_NAME`, othewise Pulumi will try and use
+- If you want to specify an [alternative Pulumi backend](https://www.pulumi.com/docs/intro/concepts/state/#to-a-self-managed-backend) then
+  you can do so with the `PULUMI_BACKEND_URL` env var.
+- If you want to specify a specific stack for Pulumi to use then you can set `PULUMI_STACK_NAME`, othewise Pulumi will try and use
 
-* If the Pulumi project is not in the current repo root then set `PULUMI_ROOT` to specify a directory path to the project.
+- If the Pulumi project is not in the current repo root then set `PULUMI_ROOT` to specify a directory path to the project.
 
-* If your action is running as part of a pull request workflow then you can tell Pulumi to take the ref of the target 
-  branch i.e. a PR to master will use the master branch as the target for a preview, then you can set `IS_PR_WORKFLOW: true`. 
+- If your action is running as part of a pull request workflow then you can tell Pulumi to take the ref of the target
+  branch i.e. a PR to master will use the master branch as the target for a preview, then you can set `IS_PR_WORKFLOW: true`.
 
-* If you would like the action to write back to the PR then you can do so by setting:
+- If you would like the action to write back to the PR then you can do so by setting:
   `COMMENT_ON_PR: 1` on the action. This will also require `GITHUB_TOKEN` to be set as an environment variable
 
-* If you would like to use a specific yarn workspace set `YARN_WORKSPACE`.
+- If you would like to use a specific yarn workspace set `YARN_WORKSPACE`.
 
 ## Referencing Sensitive Values
 
 We suggest that any sensitive environment variables be referenced using using
 [GitHub Secrets](https://developer.github.com/actions/creating-workflows/storing-secrets/), and consuming
-them using [the `secrets` attribute](
-https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#actions-attributes)
+them using [the `secrets` attribute](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#actions-attributes)
 on your workflow's action.
 
 ## Example workflows
@@ -190,8 +190,7 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 ```
 
-Failure to configure this correctly will lead to the error message `Error building AzureRM Client: Azure CLI
-Authorization Profile was not found. Please ensure the Azure CLI is installed and then log-in with 'az login'`.
+Failure to configure this correctly will lead to the error message `Error building AzureRM Client: Azure CLI Authorization Profile was not found. Please ensure the Azure CLI is installed and then log-in with 'az login'`.
 
 ### Google Cloud Platform
 
