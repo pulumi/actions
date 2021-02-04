@@ -5,6 +5,8 @@ import { LocalWorkspace } from '@pulumi/pulumi/x/automation';
 import * as core from '@actions/core';
 import { resolve } from 'path';
 import { environmentVariables } from './libs/envs';
+import * as github from '@actions/github';
+import { addPullRequestMessage } from './libs/pr';
 
 const main = async () => {
   const config = await makeConfig();
@@ -28,20 +30,33 @@ const main = async () => {
     core.info(msg);
   };
 
-  const actions: Record<Commands, () => Promise<unknown>> = {
-    up: () => stack.up({ onOutput }),
-    refresh: () => stack.refresh({ onOutput }),
-    destroy: () => stack.destroy({ onOutput }),
+  const actions: Record<Commands, () => Promise<string>> = {
+    up: () => stack.up({ onOutput }).then((r) => r.stdout),
+    refresh: () => stack.refresh({ onOutput }).then((r) => r.stdout),
+    destroy: () => stack.destroy({ onOutput }).then((r) => r.stdout),
     preview: async () => {
       const preview = await stack.preview();
       preview.stdout && onOutput(preview.stdout);
       preview.stderr && onOutput(preview.stderr);
+      return preview.stdout;
     },
   };
 
   core.debug(`Running action ${config.command}`);
-  await actions[config.command]();
+  const output = await actions[config.command]();
   core.debug(`Done running action ${config.command}`);
+
+  if (config.commentOnPr) {
+    core.debug(`Commenting on pull request`);
+    invariant(config.githubToken, 'github-token is missing.');
+    addPullRequestMessage(
+      `#### :tropical_drink: \`${config.command}\`
+\`\`\`
+${output}
+\`\`\``,
+      config.githubToken,
+    );
+  }
 
   core.endGroup();
 };
