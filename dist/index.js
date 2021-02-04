@@ -64900,6 +64900,7 @@ const config = lib.Record({
     command: command,
     stackName: lib.String,
     workDir: lib.String,
+    cloudUrl: lib.String.Or(lib.Undefined),
     githubToken: lib.String.Or(lib.Undefined),
     commentOnPr: lib.Boolean,
 });
@@ -64909,6 +64910,7 @@ function makeConfig() {
             command: (0,core.getInput)('command', { required: true }),
             stackName: (0,core.getInput)('stack-name', { required: true }),
             workDir: (0,core.getInput)('work-dir') || './',
+            cloudUrl: (0,core.getInput)('cloud-url'),
             githubToken: (0,core.getInput)('github-token'),
             commentOnPr: (0,core.getInput)('comment-on-pr') ? true : false,
         });
@@ -64952,6 +64954,11 @@ function isAvailable() {
         return (res.stderr != '' && !res.success) ? false : res.success;
     });
 }
+function run(...args) {
+    return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
+        yield exec_exec(`pulumi`, args, true);
+    });
+}
 
 // CONCATENATED MODULE: ./src/libs/utils.ts
 
@@ -64973,6 +64980,9 @@ var dist = __nccwpck_require__(2322);
 
 const environmentVariables = dist.cleanEnv(process.env, {
     GITHUB_WORKSPACE: dist.str(),
+    PULUMI_ACCESS_TOKEN: dist.str({
+        default: ''
+    })
 });
 
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
@@ -65005,6 +65015,14 @@ const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
     core.debug('Configuration is loaded');
     invariant(isAvailable(), 'Pulumi CLI is not available.');
     core.debug('Pulumi CLI is available');
+    if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
+        core.debug(`Logging into to Pulumi`);
+        yield run('login');
+    }
+    else if (config.cloudUrl) {
+        core.debug(`Logging into to ${config.cloudUrl}`);
+        yield run('login', config.cloudUrl);
+    }
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
     core.debug(`Working directory resolved at ${workDir}`);
     const stack = yield automation.LocalWorkspace.selectStack({

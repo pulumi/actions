@@ -14,6 +14,7 @@ export const config = rt.Record({
   command: command,
   stackName: rt.String,
   workDir: rt.String,
+  cloudUrl: rt.String.Or(rt.Undefined),
   githubToken: rt.String.Or(rt.Undefined),
   commentOnPr: rt.Boolean,
 });
@@ -24,7 +25,8 @@ export async function makeConfig(): Promise<Config> {
   return config.check({
     command: getInput('command', { required: true }),
     stackName: getInput('stack-name', { required: true }),
-    workDir: getInput('work-dir') || './',
+    workDir: getInput('work-dir') || './',
+    cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
     commentOnPr: getInput('comment-on-pr') ? true : false,
   });

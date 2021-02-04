@@ -14,7 +14,18 @@ const main = async () => {
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
 
-  const workDir = resolve(environmentVariables.GITHUB_WORKSPACE, config.workDir);
+  if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
+    core.debug(`Logging into to Pulumi`);
+    await pulumiCli.run('login');
+  } else if (config.cloudUrl) {
+    core.debug(`Logging into to ${config.cloudUrl}`);
+    await pulumiCli.run('login', config.cloudUrl);
+  }
+
+  const workDir = resolve(
+    environmentVariables.GITHUB_WORKSPACE,
+    config.workDir,
+  );
   core.debug(`Working directory resolved at ${workDir}`);
 
   const stack = await LocalWorkspace.selectStack({
