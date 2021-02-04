@@ -14,6 +14,7 @@ export const config = rt.Record({
   command: command,
   stackName: rt.String,
   workDir: rt.String,
+  cloudUrl: rt.String.Or(rt.Undefined),
 });
 
 export type Config = rt.Static<typeof config>;
@@ -22,6 +23,7 @@ export async function makeConfig(): Promise<Config> {
   return config.check({
     command: getInput('command', { required: true }),
     stackName: getInput('stack-name', { required: true }),
-    workDir: getInput('work-dir') || './',
+    workDir: getInput('work-dir') || './',
+    cloudUrl: getInput('cloud-url'),
   });
 }
