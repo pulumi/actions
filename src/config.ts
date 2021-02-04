@@ -13,7 +13,7 @@ export type Commands = rt.Static<typeof command>;
 export const config = rt.Record({
   command: command,
   stackName: rt.String,
-  cwd: rt.String,
+  workDir: rt.String,
 });
 
 export type Config = rt.Static<typeof config>;
@@ -22,6 +22,6 @@ export async function makeConfig(): Promise<Config> {
   return config.check({
     command: getInput('command', { required: true }),
     stackName: getInput('stack-name', { required: true }),
-    cwd: getInput('cwd') || './',
+    workDir: getInput('work-dir') || './',
   });
 }
