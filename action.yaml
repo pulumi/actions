@@ -14,6 +14,12 @@ inputs:
   cwd:
     description: 'Location of your Pulumi files. Defaults to ./'
     required: false
+  comment-on-pr:
+    description: 'If true, a comment will be created with results'
+    required: false
+  github-token:
+    description: 'Github Token (required to comment on pull requests)'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

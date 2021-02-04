@@ -15,7 +15,7 @@ export const config = rt.Record({
   stackName: rt.String,
   cwd: rt.String,
   githubToken: rt.String.Or(rt.Undefined),
-  commentOnPr: rt.String.Or(rt.Undefined),
+  commentOnPr: rt.Boolean,
 });
 
 export type Config = rt.Static<typeof config>;
@@ -26,6 +26,6 @@ export async function makeConfig(): Promise<Config> {
     stackName: getInput('stack-name', { required: true }),
     cwd: getInput('cwd') || './',
     githubToken: getInput('github-token'),
-    commentOnPr: getInput('comment-on-pr'),
+    commentOnPr: getInput('comment-on-pr') ? true : false,
   });
 }

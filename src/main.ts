@@ -5,7 +5,6 @@ import { LocalWorkspace } from '@pulumi/pulumi/x/automation';
 import * as core from '@actions/core';
 import { resolve } from 'path';
 import { environmentVariables } from './libs/envs';
-import * as github from '@actions/github';
 import { addPullRequestMessage } from './libs/pr';
 
 const main = async () => {
