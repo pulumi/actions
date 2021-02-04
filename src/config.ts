@@ -15,6 +15,8 @@ export const config = rt.Record({
   stackName: rt.String,
   workDir: rt.String,
   cloudUrl: rt.String.Or(rt.Undefined),
+  githubToken: rt.String.Or(rt.Undefined),
+  commentOnPr: rt.Boolean,
 });
 
 export type Config = rt.Static<typeof config>;
@@ -25,5 +27,7 @@ export async function makeConfig(): Promise<Config> {
     stackName: getInput('stack-name', { required: true }),
     workDir: getInput('work-dir') || './',
     cloudUrl: getInput('cloud-url'),
+    githubToken: getInput('github-token'),
+    commentOnPr: getInput('comment-on-pr') ? true : false,
   });
 }

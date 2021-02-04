@@ -32,6 +32,7 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
+    "@actions/github": "^4.0.0",
     "@pulumi/pulumi": "^2.18.0",
     "envalid": "^7.0.0",
     "runtypes": "^5.0.1",
