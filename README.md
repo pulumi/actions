@@ -1,6 +1,6 @@
 # Pulumi GitHub Actions
 
-**We are refactoring Pulumi's Github Actions to be written in Typescript, to make it faster and more versatile than ever. `master` is subject to active development. This README describes the Docker-based Github Action step.**
+**We are refactoring Pulumi's Github Actions to be written in Typescript, to make it faster and more versatile than ever. `master` is subject to active development. This README describes the Docker-based Github Action step. Please check [#40](https://github.com/pulumi/actions/issues/40) for more information.**
 
 Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, using just your favorite language
 and GitHub. This includes previewing, validating, and collaborating on proposed deployments in the context of Pull
