@@ -64899,7 +64899,7 @@ const command = lib.Union(lib.Literal('up'), lib.Literal('refresh'), lib.Literal
 const config = lib.Record({
     command: command,
     stackName: lib.String,
-    cwd: lib.String,
+    workDir: lib.String,
     githubToken: lib.String.Or(lib.Undefined),
     commentOnPr: lib.Boolean,
 });
@@ -64908,7 +64908,7 @@ function makeConfig() {
         return config.check({
             command: (0,core.getInput)('command', { required: true }),
             stackName: (0,core.getInput)('stack-name', { required: true }),
-            cwd: (0,core.getInput)('cwd') || './',
+            workDir: (0,core.getInput)('work-dir') || './',
             githubToken: (0,core.getInput)('github-token'),
             commentOnPr: (0,core.getInput)('comment-on-pr') ? true : false,
         });
@@ -65005,7 +65005,7 @@ const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
     core.debug('Configuration is loaded');
     invariant(isAvailable(), 'Pulumi CLI is not available.');
     core.debug('Pulumi CLI is available');
-    const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.cwd);
+    const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
     core.debug(`Working directory resolved at ${workDir}`);
     const stack = yield automation.LocalWorkspace.selectStack({
         stackName: config.stackName,

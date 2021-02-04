@@ -14,7 +14,7 @@ const main = async () => {
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
 
-  const workDir = resolve(environmentVariables.GITHUB_WORKSPACE, config.cwd);
+  const workDir = resolve(environmentVariables.GITHUB_WORKSPACE, config.workDir);
   core.debug(`Working directory resolved at ${workDir}`);
 
   const stack = await LocalWorkspace.selectStack({

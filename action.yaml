@@ -11,7 +11,7 @@ inputs:
   stack-name:
     description: 'Which stack you want to apply to, eg. dev'
     required: true
-  cwd:
+  work-dir:
     description: 'Location of your Pulumi files. Defaults to ./'
     required: false
   comment-on-pr:

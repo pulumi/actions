@@ -13,7 +13,7 @@ export type Commands = rt.Static<typeof command>;
 export const config = rt.Record({
   command: command,
   stackName: rt.String,
-  cwd: rt.String,
+  workDir: rt.String,
   githubToken: rt.String.Or(rt.Undefined),
   commentOnPr: rt.Boolean,
 });
@@ -24,7 +24,7 @@ export async function makeConfig(): Promise<Config> {
   return config.check({
     command: getInput('command', { required: true }),
     stackName: getInput('stack-name', { required: true }),
-    cwd: getInput('cwd') || './',
+    workDir: getInput('work-dir') || './',
     githubToken: getInput('github-token'),
     commentOnPr: getInput('comment-on-pr') ? true : false,
   });
