@@ -1,15 +1,25 @@
-name: 'Pulumi CLI Action'
-description: 'A Github Action that allows you to interact with Pulumi as part of CI / CD pipelines'
-author: 'Pulumi Corporation'
+name: Pulumi
+author: Pulumi
+description: Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, using just your favorite language and GitHub.
+branding:
+  icon: upload-cloud
+  color: purple
 inputs:
   command:
-    description: 'The Pulumi command to run as part of the container'
+    description: 'Pulumi command to run, eg. up'
     required: true
-branding:
-  icon: 'terminal'
-  color: 'purple'
+  stack-name:
+    description: 'Which stack you want to apply to, eg. dev'
+    required: true
+  work-dir:
+    description: 'Location of your Pulumi files. Defaults to ./'
+    required: false
+  comment-on-pr:
+    description: 'If true, a comment will be created with results'
+    required: false
+  github-token:
+    description: 'Github Token (required to comment on pull requests)'
+    required: false
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.command }}
+  using: 'node12'
+  main: 'dist/index.js'
