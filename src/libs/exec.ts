@@ -12,8 +12,8 @@ export const exec = async (
   args: string[] = [],
   silent?: boolean,
 ): Promise<ExecResult> => {
-  let stdout: string = '';
-  let stderr: string = '';
+  let stdout = '';
+  let stderr = '';
 
   const options: ExecOptions = {
     silent: silent,

@@ -1,11 +1,11 @@
-import { makeConfig, Commands } from './config';
-import * as pulumiCli from './libs/pulumi-cli';
-import { invariant } from './libs/utils';
-import { LocalWorkspace } from '@pulumi/pulumi/x/automation';
-import * as core from '@actions/core';
 import { resolve } from 'path';
+import * as core from '@actions/core';
+import { LocalWorkspace } from '@pulumi/pulumi/x/automation';
+import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { addPullRequestMessage } from './libs/pr';
+import * as pulumiCli from './libs/pulumi-cli';
+import { invariant } from './libs/utils';
 
 const main = async () => {
   const config = await makeConfig();
@@ -45,10 +45,10 @@ const main = async () => {
     refresh: () => stack.refresh({ onOutput }).then((r) => r.stdout),
     destroy: () => stack.destroy({ onOutput }).then((r) => r.stdout),
     preview: async () => {
-      const preview = await stack.preview();
-      preview.stdout && onOutput(preview.stdout);
-      preview.stderr && onOutput(preview.stderr);
-      return preview.stdout;
+      const { stdout, stderr } = await stack.preview();
+      onOutput(stdout);
+      onOutput(stderr);
+      return stdout;
     },
   };
 
