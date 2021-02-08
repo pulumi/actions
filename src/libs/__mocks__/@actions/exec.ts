@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/no-explicit-any: 0 */
 import { ExecOptions } from '@actions/exec';
 
 export const exec = jest.fn(
