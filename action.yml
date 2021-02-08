@@ -23,6 +23,10 @@ inputs:
     description: 'Github Token (required to comment on pull requests)'
     required: false
     default: ''
+  cloud-url:
+    description: 'A cloud URL to log in to'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'
