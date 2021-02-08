@@ -28,6 +28,6 @@ export async function makeConfig(): Promise<Config> {
     workDir: getInput('work-dir') || './',
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
-    commentOnPr: getInput('comment-on-pr') ? true : false,
+    commentOnPr: getInput('comment-on-pr') === "true" ? true : false,
   });
 }
