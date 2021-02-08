@@ -39,4 +39,4 @@ jobs:
           comment-on-pr: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           stack-name: dev
-          cwd: .github/test-stacks/golang
+          work-dir: .github/test-stacks/golang
