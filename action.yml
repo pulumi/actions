@@ -14,12 +14,15 @@ inputs:
   work-dir:
     description: 'Location of your Pulumi files. Defaults to ./'
     required: false
+    default: ./
   comment-on-pr:
     description: 'If true, a comment will be created with results'
     required: false
+    default: 'false'
   github-token:
     description: 'Github Token (required to comment on pull requests)'
     required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'
