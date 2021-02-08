@@ -16,6 +16,7 @@ jobs:
   test-workflow: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 4
       matrix:
         command: [up, refresh, destroy, preview]
       fail-fast: true
@@ -28,15 +29,14 @@ jobs:
         uses: pulumi/action-install-pulumi-cli@v1.0.1
         with:
           pulumi-version: 2.16.2
-      - run: pulumi login --local
-        working-directory: ./.github/test-stacks/golang
       - uses: ./
         if: always()
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
         with:
           command: ${{ matrix.command }}
+          cloud-url: file://~
           comment-on-pr: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
           stack-name: dev
-          cwd: ./.github/test-stacks/golang
+          cwd: .github/test-stacks/golang
