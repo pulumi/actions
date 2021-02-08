@@ -29,6 +29,12 @@ jobs:
         uses: pulumi/action-install-pulumi-cli@v1.0.1
         with:
           pulumi-version: 2.16.2
+      - run: |
+          pulumi login --local
+          pulumi stack init dev
+        working-directory: .github/test-stacks/golang
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
       - uses: ./
         if: always()
         env:
