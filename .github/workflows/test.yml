@@ -42,6 +42,5 @@ jobs:
         with:
           command: ${{ matrix.command }}
           cloud-url: file://~
-          comment-on-pr: false
           stack-name: dev
           work-dir: .github/test-stacks/golang
