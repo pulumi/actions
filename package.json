@@ -16,7 +16,7 @@
   "lint-staged": {
     "src/**/*.{yaml,yml}": "prettier --write",
     "src/**/*.{js,ts}": "eslint --cache --fix",
-    "{.eslintrc,.releaserc.json,.tsconfig.json}": "prettier --write",
+    "{.eslintrc}": "prettier --write",
     "*.md": "prettier --write"
   },
   "husky": {
