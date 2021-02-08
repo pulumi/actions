@@ -29,7 +29,7 @@ jobs:
         with:
           pulumi-version: 2.16.2
       - run: pulumi login --local
-        working-directory: golang/
+        working-directory: ./.github/test-stacks/golang
       - uses: ./
         if: always()
         env:
