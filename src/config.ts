@@ -31,6 +31,6 @@ export async function makeConfig(): Promise<Config> {
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
     commentOnPr: getInput('comment-on-pr') === 'true' ? true : false,
-    args: getInput('args', { required: true }) || args.join(' '),
+    args: getInput('args') || args.join(' '),
   });
 }
