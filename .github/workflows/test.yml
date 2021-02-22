@@ -1,0 +1,46 @@
+name: 'build-test'
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-test: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install
+      - run: yarn build
+      - run: yarn test
+  test-workflow: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        command: [up, refresh, destroy, preview]
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.13.1"
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        with:
+          pulumi-version: 2.16.2
+      - run: |
+          pulumi login --local
+          pulumi stack init dev
+        working-directory: .github/test-stacks/golang
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - uses: ./
+        if: always()
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          work-dir: .github/test-stacks/golang
