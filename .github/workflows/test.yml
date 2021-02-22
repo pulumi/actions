@@ -32,6 +32,7 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
       - uses: ./
         if: always()
+        id: pulumi
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
         with:
