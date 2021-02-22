@@ -7,10 +7,11 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		_, err := random.NewRandomPet(ctx, "my-user-name", &random.RandomPetArgs{})
+		p, err := random.NewRandomPet(ctx, "my-user-name", &random.RandomPetArgs{})
 		if err != nil {
 			return err
 		}
+		ctx.Export("pet-name", p)
 		return nil
 	})
 }
