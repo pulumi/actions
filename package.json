@@ -12,7 +12,7 @@
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage src/**/*",
     "test:watch": "jest --watch",
-    "postinstall": "husky install"
+    "postinstall": "husky install .github/husky"
   },
   "lint-staged": {
     "src/**/*.{yaml,yml}": "prettier --write",
