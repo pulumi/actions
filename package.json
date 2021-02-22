@@ -11,7 +11,8 @@
     "postbuild": "node scripts/replace-ts.js",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage src/**/*",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "postinstall": "husky install"
   },
   "lint-staged": {
     "src/**/*.{yaml,yml}": "prettier --write",
