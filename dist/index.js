@@ -64919,7 +64919,7 @@ function makeConfig() {
             cloudUrl: (0,core.getInput)('cloud-url'),
             githubToken: (0,core.getInput)('github-token'),
             commentOnPr: (0,core.getInput)('comment-on-pr') === 'true' ? true : false,
-            args: (0,core.getInput)('args', { required: true }) || args.join(' '),
+            args: (0,core.getInput)('args') || args.join(' '),
         });
     });
 }
