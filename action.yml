@@ -27,6 +27,9 @@ inputs:
     description: 'A cloud URL to log in to'
     required: false
     default: ''
+outputs:
+  output:
+    description: Output from running command
 runs:
   using: 'node12'
   main: 'dist/index.js'
