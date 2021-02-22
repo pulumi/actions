@@ -26,6 +26,7 @@ describe('config.ts', () => {
     const c = await makeConfig();
     expect(c).toBeTruthy();
     expect(c).toEqual({
+      args: '',
       command: 'up',
       stackName: 'dev',
       cloudUrl: 'file://~',
@@ -64,6 +65,7 @@ describe('config.ts', () => {
     const c = await makeConfig();
     expect(c).toBeTruthy();
     expect(c).toEqual({
+      args: '',
       command: 'up',
       stackName: 'dev',
       cloudUrl: 'file://~',

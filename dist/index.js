@@ -64907,16 +64907,19 @@ const config = lib.Record({
     cloudUrl: lib.String.Or(lib.Undefined),
     githubToken: lib.String.Or(lib.Undefined),
     commentOnPr: lib.Boolean,
+    args: lib.String.Or(lib.Undefined),
 });
 function makeConfig() {
     return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
+        const [command, ...args] = (0,core.getInput)('command', { required: true }).split(' ');
         return config.check({
-            command: (0,core.getInput)('command', { required: true }),
+            command,
             stackName: (0,core.getInput)('stack-name', { required: true }),
             workDir: (0,core.getInput)('work-dir') || './',
             cloudUrl: (0,core.getInput)('cloud-url'),
             githubToken: (0,core.getInput)('github-token'),
-            commentOnPr: (0,core.getInput)('comment-on-pr') === "true" ? true : false,
+            commentOnPr: (0,core.getInput)('comment-on-pr') === 'true' ? true : false,
+            args: (0,core.getInput)('args') || args.join(' '),
         });
     });
 }
