@@ -65049,6 +65049,14 @@ const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
     core.debug(`Running action ${config.command}`);
     const output = yield actions[config.command]();
     core.debug(`Done running action ${config.command}`);
+    core.setOutput('output', output);
+    const outputs = yield stack.outputs();
+    for (const [outKey, outExport] of Object.entries(outputs)) {
+        core.setOutput(outKey, outExport.value);
+        if (outExport.secret) {
+            core.setSecret(outExport.value);
+        }
+    }
     if (config.commentOnPr) {
         core.debug(`Commenting on pull request`);
         invariant(config.githubToken, 'github-token is missing.');
