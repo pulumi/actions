@@ -10,4 +10,4 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ github.token }}'
         with:
-          publish_latest_tag: true
+          publish_latest_tag: false
