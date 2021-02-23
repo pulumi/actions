@@ -56,6 +56,17 @@ const main = async () => {
   const output = await actions[config.command]();
   core.debug(`Done running action ${config.command}`);
 
+  core.setOutput('output', output);
+
+  const outputs = await stack.outputs();
+
+  for (const [outKey, outExport] of Object.entries(outputs)) {
+    core.setOutput(outKey, outExport.value);
+    if (outExport.secret) {
+      core.setSecret(outExport.value);
+    }
+  }
+
   if (config.commentOnPr) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
