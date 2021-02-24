@@ -1,0 +1,39 @@
+name: 'Sample Pulumi DotNet Application'
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  test-workflow:
+    runs-on: ${{ matrix.os }}
+    name: Testing Pulumi ${{ matrix.command }} on ${{ matrix.os }}
+    strategy:
+      matrix:
+        command: [ up, refresh, destroy, preview ]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1.0.1
+      - name: Create local stack
+        run: |
+          pulumi login --local
+          pulumi stack init dev
+        working-directory: .github/test-stacks/dotnet
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          work-dir: .github/test-stacks/dotnet
