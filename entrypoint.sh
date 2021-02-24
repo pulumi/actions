@@ -3,6 +3,8 @@
 
 set -e
 
+echo "This gitHub Action version has been deprecated - it has been replaced by pulumi/actions@v2"
+
 # For Google, we need to authenticate with a service principal for certain authentication operations.
 if [ ! -z "$GOOGLE_CREDENTIALS" ]; then
     export GOOGLE_APPLICATION_CREDENTIALS="$(mktemp).json"
