@@ -127,3 +127,97 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           work-dir: .github/test-stacks/golang
+  test-workflow-python: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        command: [ up, refresh, destroy, preview ]
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1.0.1
+      - run: |
+          pulumi login --local
+          pulumi stack init dev
+        working-directory: .github/test-stacks/golang
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - run: pip install -r requirements.txt
+        working-directory: .github/test-stacks/python
+      - uses: ./
+        if: always()
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          work-dir: .github/test-stacks/python
+  test-workflow-dotnet: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        command: [ up, refresh, destroy, preview ]
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup DotNet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1.0.1
+      - run: |
+          pulumi login --local
+          pulumi stack init dev
+        working-directory: .github/test-stacks/dotnet
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - uses: ./
+        if: always()
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          work-dir: .github/test-stacks/dotnet
+  test-workflow-nodejs: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        command: [ up, refresh, destroy, preview ]
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1.0.1
+      - run: |
+          pulumi login --local
+          pulumi stack init dev
+        working-directory: .github/test-stacks/nodejs
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - run: npm install
+        working-directory: .github/test-stacks/nodejs
+      - uses: ./
+        if: always()
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          work-dir: .github/test-stacks/nodejs
