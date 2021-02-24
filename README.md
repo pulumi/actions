@@ -1,8 +1,10 @@
 # Pulumi GitHub Actions
 
-Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, using just your favorite language
-and GitHub. This includes previewing, validating, and collaborating on proposed deployments in the context of Pull
-Requests, and triggering deployments or promotions between different environments by merging or directly committing code.
+Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice,
+using just your favorite language and GitHub. This includes previewing,
+validating, and collaborating on proposed deployments in the context of Pull
+Requests, and triggering deployments or promotions between different
+environments by merging or directly committing code.
 
 ## Getting Started
 
@@ -27,61 +29,70 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 ```
 
-This will check out the existing directory and run `pulumi preview`. It's important to note that the action requires the
-`pulumi` binary to be available. It will not install it for you. For further reference on installing the Pulumi binary
-as part of GitHub Actions, please use our (`action-install-pulumi-cli`)[https://github.com/pulumi/action-install-pulumi-cli] action.
+This will check out the existing directory and run `pulumi preview`. It's
+important to note that the action requires the `pulumi` binary to be available.
+It will not install it for you. For further reference on installing the Pulumi
+binary as part of GitHub Actions, please use our
+[`action-install-pulumi-cli`](https://github.com/pulumi/action-install-pulumi-cli)
+action.
 
 ## Configuration
 
 The action can be configured with the following arguments:
 
-* `command` (required) -  The command to pass to the Pulumi CLI. Accepted values are `up`, `refresh`, `destroy` and
-  `preview`. This command is the equivalent of running `pulumi <command>` if your terminal. Please note, you can pass command arguments
-  as part of this input parameter
-  
-* `args` - (optional) These are the arguments that we can pass as part of a command e.g `--skip-preview`.
-  
-* `stack-name` (required) - The name of the stack that Pulumi will be operating on
+- `command` (required) - The command to pass to the Pulumi CLI. Accepted values
+  are `up`, `refresh`, `destroy` and `preview`. This command is the equivalent
+  of running `pulumi <command>` if your terminal. Please note, you can pass
+  command arguments as part of this input parameter
+- `args` - (optional) These are the arguments that we can pass as part of a
+  command e.g `--skip-preview`.
+- `stack-name` (required) - The name of the stack that Pulumi will be operating
+  on
 
-* `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`.
+- `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`.
 
-* `cloud-url` - (optional) - the Pulumi backend to login to. This would be the equivalent of what would be passed to the
-  `pulumi login` command. The action will login to the appropriate backend on your behalf provided it is configured with
-  the correct access credentials for that backend.
-  
-* `comment-on-pr` - (optional) If `true`, then the action will add the results of the Pulumi action to the PR
+- `cloud-url` - (optional) - the Pulumi backend to login to. This would be the
+  equivalent of what would be passed to the `pulumi login` command. The action
+  will login to the appropriate backend on your behalf provided it is configured
+  with the correct access credentials for that backend.
+- `comment-on-pr` - (optional) If `true`, then the action will add the results
+  of the Pulumi action to the PR
 
-* `github-token` - (required if comment-on-pr) A GitHub token that has access levels to allow the Action to comment on a PR.
+- `github-token` - (required if comment-on-pr) A GitHub token that has access
+  levels to allow the Action to comment on a PR.
 
-By default, this action will try to authenticate Pulumi with the  [Pulumi SaaS](https://app.pulumi.com/). If you have not specified
-a `PULUMI_ACCESS_TOKEN` then you will need to specify an alternative backend via the `cloud-url` argument.
+By default, this action will try to authenticate Pulumi with the
+[Pulumi SaaS](https://app.pulumi.com/). If you have not specified a
+`PULUMI_ACCESS_TOKEN` then you will need to specify an alternative backend via
+the `cloud-url` argument.
 
 ### Command Arguments
 
 Commands aguments can be passed in 1 of 2 ways:
 
 ```yaml
-      - uses: pulumi/actions@v2
-        with:
-          command: up
-          stack-name: dev
-          args: --skip-preview --yes
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+- uses: pulumi/actions@v2
+  with:
+    command: up
+    stack-name: dev
+    args: --skip-preview --yes
+  env:
+    PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 ```
 
 ```yaml
-      - uses: pulumi/actions@v2
-        with:
-          command: up --skip-preview --yes
-          stack-name: dev
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+- uses: pulumi/actions@v2
+  with:
+    command: up --skip-preview --yes
+    stack-name: dev
+  env:
+    PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 ```
 
 ### Stack Outputs
 
-[Stack outputs](https://www.pulumi.com/docs/intro/concepts/stack/#outputs) are available when using this action. When creating a stack as follows:
+[Stack outputs](https://www.pulumi.com/docs/intro/concepts/stack/#outputs) are
+available when using this action. When creating a stack as follows:
 
 ```go
 package main
@@ -103,19 +114,19 @@ func main() {
 }
 ```
 
-We can see that `pet-name` is an output. To get the value of this output in the action, we would use code similar to the
-following:
+We can see that `pet-name` is an output. To get the value of this output in the
+action, we would use code similar to the following:
 
 ```yaml
-      - uses: pulumi/actions@v2
-        id: pulumi
-        env:
-          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-        with:
-          command: up --skip-preview
-          cloud-url: gs://my-bucket
-          stack-name: dev
-      - run: echo "My pet name is ${{ steps.pulumi.outputs.pet-name }}"
+- uses: pulumi/actions@v2
+  id: pulumi
+  env:
+    PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+  with:
+    command: up --skip-preview
+    cloud-url: gs://my-bucket
+    stack-name: dev
+- run: echo "My pet name is ${{ steps.pulumi.outputs.pet-name }}"
 ```
 
 the `pet-name` is available as a named output
@@ -126,16 +137,19 @@ Run echo "My pet name is pretty-finch"
 
 ## Referencing Sensitive Values
 
-We suggest that any sensitive environment variables be referenced using using
-[GitHub Secrets](https://developer.github.com/actions/creating-workflows/storing-secrets/), and consuming
-them using [the `secrets` attribute](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#actions-attributes)
+We suggest that any sensitive environment variables be referenced using
+[GitHub Secrets](https://developer.github.com/actions/creating-workflows/storing-secrets/),
+and consuming them using
+[the `secrets` attribute](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#actions-attributes)
 on your workflow's action.
 
 ## Example workflows
 
-The Pulumi GitHub action uses the Pulumi [Automation API](https://www.pulumi.com/blog/automation-api/) in order to coordinate the Pulumi operations.
-This means that there is no supporting functionality for npm or pip installs. This functionality should be deferred to the correct
-GitHub Marketplace actions that support it.
+The Pulumi GitHub action uses the Pulumi
+[Automation API](https://www.pulumi.com/blog/automation-api/) in order to
+coordinate the Pulumi operations. This means that there is no supporting
+functionality for npm or pip installs. This functionality should be deferred to
+the correct GitHub Marketplace actions that support it.
 
 ### Pulumi - NodeJS Runtime + Pulumi Managed Backend
 
@@ -211,7 +225,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: "1.15"
+          go-version: '1.15'
       - name: Install pulumi
         uses: pulumi/action-install-pulumi-cli@v1.0.1
       - run: go mod download
@@ -279,7 +293,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "us-west-2"
+          AWS_REGION: 'us-west-2'
 ```
 
 ### Pulumi - NodeJS Runtime + Google GCS Self Managed Backend
@@ -315,7 +329,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "us-west-2"
+          AWS_REGION: 'us-west-2'
 ```
 
 ### Pulumi - NodeJS Runtime + Azure Blob Self Managed Backend
