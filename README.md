@@ -16,7 +16,7 @@ on:
       - master
 jobs:
   up:
-    name: Update
+    name: Preview
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

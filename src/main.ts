@@ -42,6 +42,7 @@ const main = async () => {
 
   const actions: Record<Commands, () => Promise<string>> = {
     up: () => stack.up({ onOutput }).then((r) => r.stdout),
+    update: () => stack.up({ onOutput }).then((r) => r.stdout),
     refresh: () => stack.refresh({ onOutput }).then((r) => r.stdout),
     destroy: () => stack.destroy({ onOutput }).then((r) => r.stdout),
     preview: async () => {

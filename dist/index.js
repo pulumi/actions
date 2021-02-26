@@ -108124,7 +108124,7 @@ var lib = __nccwpck_require__(5568);
 
 
 
-const command = lib.Union(lib.Literal('up'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'));
+const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'));
 const config = lib.Record({
     command: command,
     stackName: lib.String,
@@ -108262,6 +108262,7 @@ const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
     };
     const actions = {
         up: () => stack.up({ onOutput }).then((r) => r.stdout),
+        update: () => stack.up({ onOutput }).then((r) => r.stdout),
         refresh: () => stack.refresh({ onOutput }).then((r) => r.stdout),
         destroy: () => stack.destroy({ onOutput }).then((r) => r.stdout),
         preview: () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
