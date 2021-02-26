@@ -3,9 +3,7 @@
 
 set -e
 
-echo "This GitHub Action version has been deprecated - please upgrade to pulumi/actions@v2"
-echo ""
-echo ""
+echo "::warning::A new version of the Pulumi Action is available. It’s faster and works better with the ecosystem of other Actions. Please upgrade to pulumi/actions@v2"
 
 # For Google, we need to authenticate with a service principal for certain authentication operations.
 if [ ! -z "$GOOGLE_CREDENTIALS" ]; then
