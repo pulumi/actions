@@ -98,7 +98,7 @@ action, we would use code similar to the following:
   env:
     PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
   with:
-    command: up --skip-preview
+    command: up
     cloud-url: gs://my-bucket
     stack-name: dev
 - run: echo "My pet name is ${{ steps.pulumi.outputs.pet-name }}"
