@@ -1,4 +1,4 @@
-name: Pulumi
+name: 'Pulumi CLI Action'
 author: Pulumi
 description: Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, using just your favorite language and GitHub.
 branding:

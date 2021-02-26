@@ -41,9 +41,9 @@ action.
 The action can be configured with the following arguments:
 
 - `command` (required) - The command to pass to the Pulumi CLI. Accepted values
-  are `up`, `refresh`, `destroy` and `preview`. This command is the equivalent
-  of running `pulumi <command>` if your terminal. Please note, you can pass
-  command arguments as part of this input parameter
+  are `up` (update), `refresh`, `destroy` and `preview`. This command is the
+  equivalent of running `pulumi <command>` if your terminal. Please note, you
+  can pass command arguments as part of this input parameter
 - `args` - (optional) These are the arguments that we can pass as part of a
   command e.g `--skip-preview`.
 - `stack-name` (required) - The name of the stack that Pulumi will be operating
@@ -135,7 +135,7 @@ the `pet-name` is available as a named output
 Run echo "My pet name is pretty-finch"
 ```
 
-## Referencing Sensitive Values
+### Referencing Sensitive Values
 
 We suggest that any sensitive environment variables be referenced using
 [GitHub Secrets](https://developer.github.com/actions/creating-workflows/storing-secrets/),
@@ -388,4 +388,39 @@ jobs:
           command: up
           stack-name: dev
           cloud-url: file://~
+```
+
+## Migrating from GitHub Action v1?
+
+Here are some pointers when migrating from v1 to v2 of our GitHub Action.
+
+- The following inputs have changed from environment variables to action inputs:
+
+  - `PULUMI_ROOT` is now `work-dir`
+  - `PULUMI_BACKEND_URL` is now `cloud-url`
+  - `COMMENT_ON_PR` is now `comment-on-pr`
+  - `GITHUB_TOKEN` is now `github-token`
+
+- `IS_PR_WORKFLOW` is no longer a viable input. The action is able to understand
+  if the workflow is a pull_request due to action type
+
+- The action now runs natively, so the action workflow needs to have the correct
+  environment configured. There are
+  [sample workflows available](https://github.com/pulumi/actions/tree/master/.github/workflows).
+  For examples, if you are running a NodeJS (for example) app then you need to
+  ensure that your action has NodeJS available to it:
+
+```yaml
+- uses: actions/setup-node@v1
+with:
+  node-version: 14.x
+```
+
+- The action will no longer run
+  `npm ci | npm install | pip3 install | pipenv install`. Please ensure that you
+  are installing your dependencies before Pulumi commands are executed, e.g.:
+
+```
+- run: pip install -r requirements
+  working-directory: infra
 ```
