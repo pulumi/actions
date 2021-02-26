@@ -3,6 +3,7 @@ import * as rt from 'runtypes';
 
 export const command = rt.Union(
   rt.Literal('up'),
+  rt.Literal('update'),
   rt.Literal('refresh'),
   rt.Literal('destroy'),
   rt.Literal('preview'),
