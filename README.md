@@ -44,8 +44,6 @@ The action can be configured with the following arguments:
   are `up` (update), `refresh`, `destroy` and `preview`. This command is the
   equivalent of running `pulumi <command>` if your terminal. Please note, you
   can pass command arguments as part of this input parameter
-- `args` - (optional) These are the arguments that we can pass as part of a
-  command e.g `--skip-preview`.
 - `stack-name` (required) - The name of the stack that Pulumi will be operating
   on
 
@@ -65,29 +63,6 @@ By default, this action will try to authenticate Pulumi with the
 [Pulumi SaaS](https://app.pulumi.com/). If you have not specified a
 `PULUMI_ACCESS_TOKEN` then you will need to specify an alternative backend via
 the `cloud-url` argument.
-
-### Command Arguments
-
-Commands aguments can be passed in 1 of 2 ways:
-
-```yaml
-- uses: pulumi/actions@v2
-  with:
-    command: up
-    stack-name: dev
-    args: --skip-preview --yes
-  env:
-    PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-```
-
-```yaml
-- uses: pulumi/actions@v2
-  with:
-    command: up --skip-preview --yes
-    stack-name: dev
-  env:
-    PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-```
 
 ### Stack Outputs
 
