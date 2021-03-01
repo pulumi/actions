@@ -301,10 +301,6 @@ jobs:
           command: up
           stack-name: dev
           cloud-url: gs://my-bucket-name
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-west-2'
 ```
 
 ### Pulumi - NodeJS Runtime + Azure Blob Self Managed Backend
