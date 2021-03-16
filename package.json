@@ -20,11 +20,6 @@
     "{.eslintrc}": "prettier --write",
     "*.md": "prettier --write"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn build && git add dist/* && lint-staged"
-    }
-  },
   "devDependencies": {
     "@types/faker": "^5.1.7",
     "@types/jest": "~26.0.20",

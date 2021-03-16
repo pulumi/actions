@@ -1,0 +1,24 @@
+name: Check for updated dist files
+on: # rebuild any PRs and main branch changes
+  pull_request:
+
+jobs:
+  build-test: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            dist:
+              - 'dist/**'
+      - uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            Hi 👋
+
+            Thank you for this contribution!
+            Due to security reasons, we only allow updating the `dist/**` files with our own workflows.
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: pulumi-bot
