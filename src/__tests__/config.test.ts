@@ -33,6 +33,7 @@ describe('config.ts', () => {
       githubToken: 'n/a',
       commentOnPr: false,
       workDir: './',
+      upsert: false,
     });
   });
   it('should fail if configuration are invalid', async () => {
@@ -72,6 +73,7 @@ describe('config.ts', () => {
       githubToken: 'n/a',
       commentOnPr: true,
       workDir: './',
+      upsert: false,
     });
   });
 });
