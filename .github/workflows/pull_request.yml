@@ -3,7 +3,7 @@ on:
   pull_request:
 
 jobs:
-  check-if-changed:
+  check-if-dist-changed:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,6 +14,7 @@ jobs:
             dist:
               - 'dist/**'
       - uses: mshick/add-pr-comment@v1
+        if: steps.changes.outputs.dist == 'true'
         with:
           message: |
             Hi 👋
