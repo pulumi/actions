@@ -1,4 +1,4 @@
-name: 'Sample Pulumi NodeJS Application with extra options'
+name: 'Application with Extra Options'
 on:
   pull_request:
   push:
