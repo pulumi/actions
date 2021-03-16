@@ -26,13 +26,21 @@ describe('config.ts', () => {
     const c = await makeConfig();
     expect(c).toBeTruthy();
     expect(c).toEqual({
-      args: '',
       command: 'up',
       stackName: 'dev',
       cloudUrl: 'file://~',
       githubToken: 'n/a',
       commentOnPr: false,
       workDir: './',
+      options: {
+        parallel: undefined,
+        message: undefined,
+        diff: undefined,
+        expectNoChanges: undefined,
+        replace: undefined,
+        target: undefined,
+        targetDependents: undefined,
+      },
     });
   });
   it('should fail if configuration are invalid', async () => {
@@ -65,13 +73,21 @@ describe('config.ts', () => {
     const c = await makeConfig();
     expect(c).toBeTruthy();
     expect(c).toEqual({
-      args: '',
       command: 'up',
       stackName: 'dev',
       cloudUrl: 'file://~',
       githubToken: 'n/a',
       commentOnPr: true,
       workDir: './',
+      options: {
+        parallel: undefined,
+        message: undefined,
+        diff: undefined,
+        expectNoChanges: undefined,
+        replace: undefined,
+        target: undefined,
+        targetDependents: undefined,
+      },
     });
   });
 });

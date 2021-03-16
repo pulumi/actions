@@ -41,12 +41,15 @@ const main = async () => {
   };
 
   const actions: Record<Commands, () => Promise<string>> = {
-    up: () => stack.up({ onOutput }).then((r) => r.stdout),
-    update: () => stack.up({ onOutput }).then((r) => r.stdout),
-    refresh: () => stack.refresh({ onOutput }).then((r) => r.stdout),
-    destroy: () => stack.destroy({ onOutput }).then((r) => r.stdout),
+    up: () => stack.up({ onOutput, ...config.options }).then((r) => r.stdout),
+    update: () =>
+      stack.up({ onOutput, ...config.options }).then((r) => r.stdout),
+    refresh: () =>
+      stack.refresh({ onOutput, ...config.options }).then((r) => r.stdout),
+    destroy: () =>
+      stack.destroy({ onOutput, ...config.options }).then((r) => r.stdout),
     preview: async () => {
-      const { stdout, stderr } = await stack.preview();
+      const { stdout, stderr } = await stack.preview(config.options);
       onOutput(stdout);
       onOutput(stderr);
       return stdout;

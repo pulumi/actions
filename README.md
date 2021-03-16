@@ -53,11 +53,34 @@ The action can be configured with the following arguments:
   equivalent of what would be passed to the `pulumi login` command. The action
   will login to the appropriate backend on your behalf provided it is configured
   with the correct access credentials for that backend.
+
 - `comment-on-pr` - (optional) If `true`, then the action will add the results
   of the Pulumi action to the PR
 
 - `github-token` - (required if comment-on-pr) A GitHub token that has access
   levels to allow the Action to comment on a PR.
+
+### Extra options
+
+- `parallel` - (optional) Allow P resource operations to run in parallel at once
+  (1 for no parallelism). Defaults to unbounded.
+
+- `message` - (optional) Optional message to associate with the update operation
+
+- `expect-no-changes` - (optional) Return an error if any changes occur during
+  this update
+
+- `diff` - (optional) Display operation as a rich diff showing the overall
+  change
+
+- `replace` - (optional) Specify resources to replace. Multiple resources can be
+  specified one per line
+
+- `target` - (optional) Specify a single resource URN to update. Other resources
+  will not be updated. Multiple resources can be specified one per line
+
+- `target-dependents` - (optional) Allows updating of dependent targets
+  discovered but not specified in target.
 
 By default, this action will try to authenticate Pulumi with the
 [Pulumi SaaS](https://app.pulumi.com/). If you have not specified a
