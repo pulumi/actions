@@ -1,4 +1,4 @@
-import { parseBoolean, parseInputToArray, parseNumber } from "../utils";
+import { parseArray, parseBoolean, parseNumber } from '../utils';
 
 describe('utils.ts', () => {
   it('should parse input to array', () => {
@@ -9,11 +9,11 @@ describe('utils.ts', () => {
 
     const undef = '';
 
-    const inputArray = parseInputToArray(input);
+    const inputArray = parseArray(input);
 
     expect(inputArray[0]).toBe('hello');
     expect(inputArray[1]).toBe('world');
-    expect(parseInputToArray(undef)).toBeUndefined();
+    expect(parseArray(undef)).toBeUndefined();
   });
 
   it('should parse boolean', () => {
@@ -26,7 +26,7 @@ describe('utils.ts', () => {
     expect(parseBoolean(falsy)).toBeFalsy();
     expect(parseBoolean(falsyTypo)).toBeFalsy();
     expect(parseBoolean(undef)).toBeUndefined();
-  })
+  });
 
   it('should parse number', () => {
     const truthy = '1';
@@ -37,4 +37,4 @@ describe('utils.ts', () => {
     expect(parseNumber(falsy)).toBeNaN();
     expect(parseNumber(undef)).toBeUndefined();
   });
-})
+});

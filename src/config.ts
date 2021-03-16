@@ -1,6 +1,6 @@
 import { getInput } from '@actions/core';
 import * as rt from 'runtypes';
-import { parseBoolean, parseNumber } from './libs/utils';
+import { parseArray, parseBoolean, parseNumber } from './libs/utils';
 
 export const command = rt.Union(
   rt.Literal('up'),
@@ -54,8 +54,8 @@ export async function makeConfig(): Promise<Config> {
       message: getInput('message'),
       expectNoChanges: parseBoolean(getInput('expect-no-changes')),
       diff: parseBoolean(getInput('diff')),
-      replace: getInput('replace'),
-      target: getInput('target'),
+      replace: parseArray(getInput('replace')),
+      target: parseArray(getInput('target')),
       targetDependents: parseBoolean(getInput('target-dependents')),
     },
   });

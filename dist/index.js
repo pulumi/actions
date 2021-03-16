@@ -107362,7 +107362,7 @@ function invariant(condition, message) {
         throw new Error(message);
     }
 }
-function parseInputToArray(input) {
+function parseArray(input) {
     return parseUndefined(input)
         ? input.split(/\r?\n/).reduce((acc, line) => acc
             .concat(line.split(','))
@@ -107422,8 +107422,8 @@ function makeConfig() {
                 message: (0,core.getInput)('message'),
                 expectNoChanges: parseBoolean((0,core.getInput)('expect-no-changes')),
                 diff: parseBoolean((0,core.getInput)('diff')),
-                replace: (0,core.getInput)('replace'),
-                target: (0,core.getInput)('target'),
+                replace: parseArray((0,core.getInput)('replace')),
+                target: parseArray((0,core.getInput)('target')),
                 targetDependents: parseBoolean((0,core.getInput)('target-dependents')),
             },
         });

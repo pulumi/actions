@@ -8,7 +8,7 @@ export function invariant(
   }
 }
 
-export function parseInputToArray(input: string): string[] {
+export function parseArray(input: string): string[] {
   return parseUndefined(input)
     ? input.split(/\r?\n/).reduce<string[]>(
         (acc, line) =>
