@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import * as core from '@actions/core';
-import { LocalWorkspace } from '@pulumi/pulumi/x/automation';
+import { LocalProgramArgs, LocalWorkspace } from '@pulumi/pulumi/x/automation';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { addPullRequestMessage } from './libs/pr';
@@ -28,10 +28,14 @@ const main = async () => {
   );
   core.debug(`Working directory resolved at ${workDir}`);
 
-  const stack = await LocalWorkspace.selectStack({
+  const stackArgs: LocalProgramArgs = {
     stackName: config.stackName,
     workDir: workDir,
-  });
+  };
+
+  const stack = await (config.upsert
+    ? LocalWorkspace.createOrSelectStack(stackArgs)
+    : LocalWorkspace.selectStack(stackArgs));
 
   core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
 
