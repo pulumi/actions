@@ -31,6 +31,8 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
       - run: npm install
         working-directory: .github/test-stacks/nodejs
+      - run: yarn install
+      - run: yarn build
       - uses: ./
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret

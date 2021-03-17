@@ -4321,7 +4321,7 @@ function getCall(channel, path, options) {
  * object and handles serialization and deseraizliation.
  */
 class BaseInterceptingCall {
-    constructor(call, 
+    constructor(call,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     methodDefinition) {
         this.call = call;
@@ -4433,7 +4433,7 @@ class BaseUnaryInterceptingCall extends BaseInterceptingCall {
  */
 class BaseStreamingInterceptingCall extends BaseInterceptingCall {
 }
-function getBottomInterceptingCall(channel, options, 
+function getBottomInterceptingCall(channel, options,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 methodDefinition) {
     const call = getCall(channel, methodDefinition.path, options);
@@ -4444,7 +4444,7 @@ methodDefinition) {
         return new BaseUnaryInterceptingCall(call, methodDefinition);
     }
 }
-function getInterceptingCall(interceptorArgs, 
+function getInterceptingCall(interceptorArgs,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 methodDefinition, options, channel) {
     if (interceptorArgs.clientInterceptors.length > 0 &&
@@ -7992,7 +7992,7 @@ class ServerWritableStreamImpl extends stream_1.Writable {
     getDeadline() {
         return this.call.getDeadline();
     }
-    _write(chunk, encoding, 
+    _write(chunk, encoding,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     callback) {
         try {
@@ -14529,7 +14529,7 @@ const metadata_1 = __nccwpck_require__(8085);
 const output_1 = __nccwpck_require__(3037);
 const runtime_1 = __nccwpck_require__(5022);
 function makeSecret(value) {
-    return new output_1.Output([], Promise.resolve(value), 
+    return new output_1.Output([], Promise.resolve(value),
     /*isKnown:*/ Promise.resolve(true), /*isSecret:*/ Promise.resolve(true), Promise.resolve([]));
 }
 /**
@@ -20877,8 +20877,8 @@ function isSecret(val) {
 }
 exports.isSecret = isSecret;
 function createSimpleOutput(val) {
-    return new exports.Output(new Set(), val instanceof Promise ? val : Promise.resolve(val), 
-    /*isKnown*/ Promise.resolve(true), 
+    return new exports.Output(new Set(), val instanceof Promise ? val : Promise.resolve(val),
+    /*isKnown*/ Promise.resolve(true),
     /*isSecret */ Promise.resolve(false), Promise.resolve(new Set()));
 }
 function all(val) {
@@ -37472,8 +37472,8 @@ function computeCapturedVariableNames(file) {
         // capture so that we pass 'this' along.
         walk(node.expression);
         if (isAwaiterCall(node)) {
-            return visitBaseFunction(node.arguments[3], 
-            /*isArrowFunction*/ true, 
+            return visitBaseFunction(node.arguments[3],
+            /*isArrowFunction*/ true,
             /*name*/ undefined);
         }
         // For normal calls, just walk all arguments normally.
@@ -39639,7 +39639,7 @@ function prepareResource(label, res, custom, props, opts) {
         {
             let resolveValue;
             let resolveIsKnown;
-            res.urn = new output_1.Output(res, debuggable_1.debuggablePromise(new Promise(resolve => resolveValue = resolve), `resolveURN(${label})`), debuggable_1.debuggablePromise(new Promise(resolve => resolveIsKnown = resolve), `resolveURNIsKnown(${label})`), 
+            res.urn = new output_1.Output(res, debuggable_1.debuggablePromise(new Promise(resolve => resolveValue = resolve), `resolveURN(${label})`), debuggable_1.debuggablePromise(new Promise(resolve => resolveIsKnown = resolve), `resolveURNIsKnown(${label})`),
             /*isSecret:*/ Promise.resolve(false), Promise.resolve(res));
             resolveURN = (v, err) => {
                 resolveValue(v);
@@ -52611,7 +52611,7 @@ async function isAvailable() {
         // runtime environment. We use the same promise for each of these calls
         // to reduce the network load.
         if (cachedIsAvailableResponse === undefined) {
-            cachedIsAvailableResponse = metadataAccessor('instance', undefined, detectGCPAvailableRetries(), 
+            cachedIsAvailableResponse = metadataAccessor('instance', undefined, detectGCPAvailableRetries(),
             // If the default HOST_ADDRESS has been overridden, we should not
             // make an effort to try SECONDARY_HOST_ADDRESS (as we are likely in
             // a non-GCP environment):
@@ -62668,6 +62668,8 @@ function throwWarning(state, message) {
   }
 }
 
+    state.version = args[0];
+    state.checkLineBreaks = (minor < 2);
 
 var directiveHandlers = {
 
@@ -62791,6 +62793,8 @@ function storeMappingPair(state, _result, overridableKeys, keyTag, keyNode, valu
         keyNode[index] = '[object Object]';
       }
     }
+    _result[keyNode] = valueNode;
+    delete overridableKeys[keyNode];
   }
 
   // Avoid code execution in load() via toString property
@@ -64064,6 +64068,7 @@ function loadDocuments(input, options) {
     state.position = nullpos;
     throwError(state, 'null byte is not allowed in input');
   }
+}
 
   // Use 0 as string terminator. That significantly simplifies bounds check.
   state.input += '\0';
@@ -64072,6 +64077,8 @@ function loadDocuments(input, options) {
     state.lineIndent += 1;
     state.position += 1;
   }
+  throw new YAMLException('expected a single document in the stream, but found more');
+}
 
   while (state.position < (state.length - 1)) {
     readDocument(state);
@@ -107401,13 +107408,9 @@ const config = lib.Record({
     stackName: lib.String,
     workDir: lib.String,
     commentOnPr: lib.Boolean,
-    options: options,
-})
-    .And(lib.Partial({
-    // Optional options
-    cloudUrl: lib.String,
-    githubToken: lib.String,
-}));
+    args: lib.String.Or(lib.Undefined),
+    upsert: lib.Boolean.Or(lib.Undefined),
+});
 function makeConfig() {
     return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
         return config.check({
@@ -107416,16 +107419,9 @@ function makeConfig() {
             workDir: (0,core.getInput)('work-dir') || './',
             cloudUrl: (0,core.getInput)('cloud-url'),
             githubToken: (0,core.getInput)('github-token'),
-            commentOnPr: parseBoolean((0,core.getInput)('comment-on-pr')),
-            options: {
-                parallel: parseNumber((0,core.getInput)('parallel')),
-                message: (0,core.getInput)('message'),
-                expectNoChanges: parseBoolean((0,core.getInput)('expect-no-changes')),
-                diff: parseBoolean((0,core.getInput)('diff')),
-                replace: parseArray((0,core.getInput)('replace')),
-                target: parseArray((0,core.getInput)('target')),
-                targetDependents: parseBoolean((0,core.getInput)('target-dependents')),
-            },
+            commentOnPr: (0,core.getInput)('comment-on-pr') === 'true' ? true : false,
+            args: (0,core.getInput)('args') || args.join(' '),
+            upsert: (0,core.getInput)('upsert') === 'true' ? true : false,
         });
     });
 }
@@ -107524,10 +107520,13 @@ const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
     }
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
     core.debug(`Working directory resolved at ${workDir}`);
-    const stack = yield automation.LocalWorkspace.selectStack({
+    const stackArgs = {
         stackName: config.stackName,
         workDir: workDir,
-    });
+    };
+    const stack = yield (config.upsert
+        ? automation.LocalWorkspace.createOrSelectStack(stackArgs)
+        : automation.LocalWorkspace.selectStack(stackArgs));
     core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
     const onOutput = (msg) => {
         core.debug(msg);
@@ -107867,7 +107866,7 @@ module.exports = require("zlib");;
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -107880,7 +107879,7 @@ module.exports = require("zlib");;
 /******/ 			loaded: false,
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
@@ -107889,14 +107888,14 @@ module.exports = require("zlib");;
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
-/******/ 	
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
@@ -107908,7 +107907,7 @@ module.exports = require("zlib");;
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
 /******/ 		__nccwpck_require__.nmd = (module) => {
@@ -107917,9 +107916,9 @@ module.exports = require("zlib");;
 /******/ 			return module;
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/compat */
-/******/ 	
+/******/
 /******/ 	__nccwpck_require__.ab = __dirname + "/";/************************************************************************/
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup

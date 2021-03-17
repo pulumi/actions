@@ -31,6 +31,8 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
       - run: pip install -r requirements.txt
         working-directory: .github/test-stacks/python
+      - run: yarn install
+      - run: yarn build
       - uses: ./
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
