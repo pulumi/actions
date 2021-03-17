@@ -19,6 +19,7 @@ export const config = rt.Record({
   githubToken: rt.String.Or(rt.Undefined),
   commentOnPr: rt.Boolean,
   args: rt.String.Or(rt.Undefined),
+  upsert: rt.Boolean.Or(rt.Undefined),
 });
 
 export type Config = rt.Static<typeof config>;
@@ -33,5 +34,6 @@ export async function makeConfig(): Promise<Config> {
     githubToken: getInput('github-token'),
     commentOnPr: getInput('comment-on-pr') === 'true' ? true : false,
     args: getInput('args') || args.join(' '),
+    upsert: getInput('upsert') === 'true' ? true : false,
   });
 }
