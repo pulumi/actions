@@ -31,6 +31,8 @@ jobs:
         working-directory: .github/test-stacks/dotnet
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - run: yarn install
+      - run: yarn build
       - uses: ./
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
