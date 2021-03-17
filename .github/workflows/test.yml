@@ -29,6 +29,8 @@ jobs:
         working-directory: .github/test-stacks/golang
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - run: yarn install
+      - run: yarn build
       - uses: ./
         if: always()
         id: pulumi
@@ -55,6 +57,8 @@ jobs:
         working-directory: .github/test-stacks/golang
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - run: yarn install
+      - run: yarn build
       - uses: ./
         if: always()
         env:
@@ -80,6 +84,8 @@ jobs:
         working-directory: .github/test-stacks/golang
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - run: yarn install
+      - run: yarn build
       - uses: ./
         if: always()
         env:
