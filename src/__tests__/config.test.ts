@@ -32,7 +32,7 @@ describe('config.ts', () => {
       githubToken: 'n/a',
       commentOnPr: false,
       workDir: './',
-      upsert: false,
+      upsert: undefined,
       options: {
         parallel: undefined,
         message: undefined,
@@ -80,7 +80,7 @@ describe('config.ts', () => {
       githubToken: 'n/a',
       commentOnPr: true,
       workDir: './',
-      upsert: false,
+      upsert: undefined,
       options: {
         parallel: undefined,
         message: undefined,
