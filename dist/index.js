@@ -107355,33 +107355,79 @@ var core = __nccwpck_require__(2186);
 var automation = __nccwpck_require__(5883);
 // EXTERNAL MODULE: ./node_modules/runtypes/lib/index.js
 var lib = __nccwpck_require__(5568);
+// CONCATENATED MODULE: ./src/libs/utils.ts
+/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
+function invariant(condition, message) {
+    if (!condition) {
+        throw new Error(message);
+    }
+}
+function parseArray(input) {
+    return parseUndefined(input)
+        ? input.split(/\r?\n/).reduce((acc, line) => acc
+            .concat(line.split(','))
+            .filter((pat) => pat)
+            .map((pat) => pat.trim()), [])
+        : undefined;
+}
+function parseUndefined(input) {
+    return input === undefined || input === '' ? undefined : input;
+}
+function parseBoolean(input) {
+    return parseUndefined(input) ? input === 'true' : undefined;
+}
+function parseNumber(input) {
+    return parseUndefined(input) ? Number(input) : undefined;
+}
+
 // CONCATENATED MODULE: ./src/config.ts
 
 
 
+
 const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'));
+const options = lib.Partial({
+    parallel: lib.Number,
+    message: lib.String,
+    expectNoChanges: lib.Boolean,
+    diff: lib.Boolean,
+    replace: lib.Array(lib.String),
+    target: lib.Array(lib.String),
+    targetDependents: lib.Boolean,
+});
 const config = lib.Record({
+    // Required options
     command: command,
     stackName: lib.String,
     workDir: lib.String,
-    cloudUrl: lib.String.Or(lib.Undefined),
-    githubToken: lib.String.Or(lib.Undefined),
     commentOnPr: lib.Boolean,
-    args: lib.String.Or(lib.Undefined),
-    upsert: lib.Boolean.Or(lib.Undefined),
-});
+    options: options,
+})
+    .And(lib.Partial({
+    // Optional options
+    cloudUrl: lib.String,
+    githubToken: lib.String,
+    upsert: lib.Boolean,
+}));
 function makeConfig() {
     return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
-        const [command, ...args] = (0,core.getInput)('command', { required: true }).split(' ');
         return config.check({
-            command,
+            command: (0,core.getInput)('command', { required: true }),
             stackName: (0,core.getInput)('stack-name', { required: true }),
             workDir: (0,core.getInput)('work-dir') || './',
             cloudUrl: (0,core.getInput)('cloud-url'),
             githubToken: (0,core.getInput)('github-token'),
-            commentOnPr: (0,core.getInput)('comment-on-pr') === 'true' ? true : false,
-            args: (0,core.getInput)('args') || args.join(' '),
-            upsert: (0,core.getInput)('upsert') === 'true' ? true : false,
+            commentOnPr: parseBoolean((0,core.getInput)('comment-on-pr')),
+            upsert: parseBoolean((0,core.getInput)('upsert')),
+            options: {
+                parallel: parseNumber((0,core.getInput)('parallel')),
+                message: (0,core.getInput)('message'),
+                expectNoChanges: parseBoolean((0,core.getInput)('expect-no-changes')),
+                diff: parseBoolean((0,core.getInput)('diff')),
+                replace: parseArray((0,core.getInput)('replace')),
+                target: parseArray((0,core.getInput)('target')),
+                targetDependents: parseBoolean((0,core.getInput)('target-dependents')),
+            },
         });
     });
 }
@@ -107399,14 +107445,6 @@ const environmentVariables = dist.cleanEnv(process.env, {
 
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
-// CONCATENATED MODULE: ./src/libs/utils.ts
-/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
-function invariant(condition, message) {
-    if (!condition) {
-        throw new Error(message);
-    }
-}
-
 // CONCATENATED MODULE: ./src/libs/pr.ts
 
 
@@ -107501,12 +107539,12 @@ const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
         core.info(msg);
     };
     const actions = {
-        up: () => stack.up({ onOutput }).then((r) => r.stdout),
-        update: () => stack.up({ onOutput }).then((r) => r.stdout),
-        refresh: () => stack.refresh({ onOutput }).then((r) => r.stdout),
-        destroy: () => stack.destroy({ onOutput }).then((r) => r.stdout),
+        up: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
+        update: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
+        refresh: () => stack.refresh(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
+        destroy: () => stack.destroy(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
         preview: () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
-            const { stdout, stderr } = yield stack.preview();
+            const { stdout, stderr } = yield stack.preview(config.options);
             onOutput(stdout);
             onOutput(stderr);
             return stdout;
