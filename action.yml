@@ -27,6 +27,30 @@ inputs:
     description: 'A cloud URL to log in to'
     required: false
     default: ''
+  parallel:
+    description: 'Allow P resource operations to run in parallel at once (1 for no parallelism). Defaults to unbounded.'
+    required: false
+    default: '2147483647'
+  message:
+    description: 'Optional message to associate with the update operation'
+    required: false
+    default: ''
+  expect-no-changes:
+    description: 'Return an error if any changes occur during this update'
+    required: false
+  diff:
+    description: 'Display operation as a rich diff showing the overall change'
+    required: false
+  replace:
+    description: 'Specify resources to replace. Multiple resources can be specified one per line'
+    required: false
+  target:
+    description: 'Specify a single resource URN to update. Other resources will not be updated. Multiple resources can be specified one per line'
+    required: false
+  target-dependents:
+    description: 'Allows updating of dependent targets discovered but not specified in target.'
+    required: false
+    default: 'false'
 outputs:
   output:
     description: Output from running command
