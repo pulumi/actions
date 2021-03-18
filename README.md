@@ -42,8 +42,8 @@ The action can be configured with the following arguments:
 
 - `command` (required) - The command to pass to the Pulumi CLI. Accepted values
   are `up` (update), `refresh`, `destroy` and `preview`. This command is the
-  equivalent of running `pulumi <command>` if your terminal. Please note, you
-  can pass command arguments as part of this input parameter
+  equivalent of running `pulumi <command>` if your terminal. 
+
 - `stack-name` (required) - The name of the stack that Pulumi will be operating
   on
 
