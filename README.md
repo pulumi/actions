@@ -42,7 +42,7 @@ The action can be configured with the following arguments:
 
 - `command` (required) - The command to pass to the Pulumi CLI. Accepted values
   are `up` (update), `refresh`, `destroy` and `preview`. This command is the
-  equivalent of running `pulumi <command>` if your terminal. 
+  equivalent of running `pulumi <command>` if your terminal.
 
 - `stack-name` (required) - The name of the stack that Pulumi will be operating
   on
@@ -59,6 +59,9 @@ The action can be configured with the following arguments:
 
 - `github-token` - (required if comment-on-pr) A GitHub token that has access
   levels to allow the Action to comment on a PR.
+
+- `refresh` - (optional) If `true`, stack is refreshed before running the
+  `command`.
 
 ### Extra options
 
