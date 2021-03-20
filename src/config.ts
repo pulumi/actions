@@ -37,6 +37,7 @@ export const config = rt
       cloudUrl: rt.String,
       githubToken: rt.String,
       upsert: rt.Boolean,
+      refresh: rt.Boolean,
     }),
   );
 
@@ -51,6 +52,7 @@ export async function makeConfig(): Promise<Config> {
     githubToken: getInput('github-token'),
     commentOnPr: parseBoolean(getInput('comment-on-pr')),
     upsert: parseBoolean(getInput('upsert')),
+    refresh: parseBoolean(getInput('refresh')),
     options: {
       parallel: parseNumber(getInput('parallel')),
       message: getInput('message'),
