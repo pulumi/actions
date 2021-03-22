@@ -9,7 +9,7 @@ on:
 jobs:
   test-workflow:
     runs-on: ${{ matrix.os }}
-    name: Testing Pulumi ${{ matrix.command }} on ${{ matrix.os }}
+    name: Testing arguments - ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
         command: [ up, refresh, destroy, preview ]
@@ -45,7 +45,7 @@ jobs:
           diff: true
   test-refresh-and-upsert:
     runs-on: ${{ matrix.os }}
-    name: Testing Pulumi ${{ matrix.command }} on ${{ matrix.os }}
+    name: Testing refresh/upsert – ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
         command: [ up, refresh, destroy, preview ]
