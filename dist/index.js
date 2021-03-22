@@ -111641,6 +111641,7 @@ const config = lib.Record({
     cloudUrl: lib.String,
     githubToken: lib.String,
     upsert: lib.Boolean,
+    refresh: lib.Boolean,
 }));
 function makeConfig() {
     return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
@@ -111652,6 +111653,7 @@ function makeConfig() {
             githubToken: (0,core.getInput)('github-token'),
             commentOnPr: parseBoolean((0,core.getInput)('comment-on-pr')),
             upsert: parseBoolean((0,core.getInput)('upsert')),
+            refresh: parseBoolean((0,core.getInput)('refresh')),
             options: {
                 parallel: parseNumber((0,core.getInput)('parallel')),
                 message: (0,core.getInput)('message'),
@@ -111766,11 +111768,16 @@ const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
     const stack = yield (config.upsert
         ? automation.LocalWorkspace.createOrSelectStack(stackArgs)
         : automation.LocalWorkspace.selectStack(stackArgs));
-    core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
     const onOutput = (msg) => {
         core.debug(msg);
         core.info(msg);
     };
+    if (config.refresh) {
+        core.startGroup(`Refresh stack on ${config.stackName}`);
+        yield stack.refresh({ onOutput });
+        core.endGroup();
+    }
+    core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
     const actions = {
         up: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
         update: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
