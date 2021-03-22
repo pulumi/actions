@@ -41,4 +41,4 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           work-dir: .github/test-stacks/golang
-      - run: echo "The random string is ${{ steps.pulumi.outputs.name }}"
+      - run: echo "The random string is `${{ steps.pulumi.outputs.name }}`"
