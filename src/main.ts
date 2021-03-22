@@ -9,7 +9,7 @@ import { invariant } from './libs/utils';
 
 const main = async () => {
   const config = await makeConfig();
-  core.debug('Configuration is loaded');
+  core.debug(`Configuration is loaded: ${JSON.stringify(config, null, 2)}`);
 
   invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
