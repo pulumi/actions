@@ -56,7 +56,7 @@ inputs:
     required: false
     default: 'false'
   upsert:
-    description: 'Create the stack if it currently doesn't not exist'
+    description: 'Create the stack if it currently does not exist'
     required: false
     default: 'false'
 outputs:
