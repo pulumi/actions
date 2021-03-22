@@ -107824,6 +107824,7 @@ Object.defineProperty(exports, "Undefined", ({ enumerable: true, get: function (
 Object.defineProperty(exports, "Null", ({ enumerable: true, get: function () { return literal_1.Null; } }));
 __exportStar(__nccwpck_require__(5609), exports);
 __exportStar(__nccwpck_require__(8986), exports);
+__exportStar(__nccwpck_require__(399), exports);
 __exportStar(__nccwpck_require__(1545), exports);
 __exportStar(__nccwpck_require__(6829), exports);
 __exportStar(__nccwpck_require__(8100), exports);
@@ -107989,6 +107990,7 @@ var show = function (needsParens, circular) { return function (refl) {
             case 'void':
             case 'boolean':
             case 'number':
+            case 'bigint':
             case 'string':
             case 'symbol':
             case 'function':
@@ -108093,6 +108095,29 @@ function withExtraModifierFuncs(A) {
 
 /***/ }),
 
+/***/ 399:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BigInt = void 0;
+var runtype_1 = __nccwpck_require__(5601);
+/**
+ * Validates that a value is a bigint.
+ */
+exports.BigInt = runtype_1.create(function (value) {
+    return typeof value === 'bigint'
+        ? { success: true, value: value }
+        : {
+            success: false,
+            message: "Expected bigint, but was " + (value === null ? value : typeof value),
+        };
+}, { tag: 'bigint' });
+
+
+/***/ }),
+
 /***/ 5609:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -108180,56 +108205,77 @@ exports.Guard = Guard;
 /***/ }),
 
 /***/ 3170:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Dictionary = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var string_1 = __nccwpck_require__(1545);
+var constraint_1 = __nccwpck_require__(2928);
 var show_1 = __nccwpck_require__(6045);
+var NumberKey = constraint_1.Constraint(string_1.String, function (s) { return !isNaN(+s); }, { name: 'number' });
 function Dictionary(value, key) {
-    if (key === void 0) { key = 'string'; }
+    var keyRuntype = key === undefined
+        ? string_1.String
+        : key === 'string'
+            ? string_1.String
+            : key === 'number'
+                ? NumberKey
+                : key;
+    var keyString = show_1.default(keyRuntype);
     return runtype_1.create(function (x, visited) {
         if (x === null || x === undefined) {
-            var a = runtype_1.create(x, { tag: 'dictionary', key: key, value: value });
+            var a = runtype_1.create(x, { tag: 'dictionary', key: keyString, value: value });
             return { success: false, message: "Expected " + show_1.default(a) + ", but was " + x };
         }
         if (typeof x !== 'object') {
-            var a = runtype_1.create(x, { tag: 'dictionary', key: key, value: value });
+            var a = runtype_1.create(x, { tag: 'dictionary', key: keyString, value: value });
             return { success: false, message: "Expected " + show_1.default(a.reflect) + ", but was " + typeof x };
         }
         if (Object.getPrototypeOf(x) !== Object.prototype) {
             if (!Array.isArray(x)) {
-                var a = runtype_1.create(x, { tag: 'dictionary', key: key, value: value });
+                var a = runtype_1.create(x, { tag: 'dictionary', key: keyString, value: value });
                 return {
                     success: false,
                     message: "Expected " + show_1.default(a.reflect) + ", but was " + Object.getPrototypeOf(x),
                 };
             }
-            else if (key === 'string')
+            else if (keyString === 'string')
                 return { success: false, message: 'Expected dictionary, but was array' };
         }
-        for (var k in x) {
-            // Object keys are unknown strings
-            if (key === 'number') {
-                if (isNaN(+k))
-                    return {
-                        success: false,
-                        message: 'Expected dictionary key to be a number, but was string',
-                    };
+        var numberString = /^(?:NaN|-?\d+(?:\.\d+)?)$/u;
+        for (var _i = 0, _a = __spreadArray(__spreadArray([], Object.getOwnPropertyNames(x)), Object.getOwnPropertySymbols(x)); _i < _a.length; _i++) {
+            var k = _a[_i];
+            // We should provide interoperability with `number` and `string` here,
+            // as a user would expect JavaScript engines to convert numeric keys to
+            // string keys automatically. So, if the key can be interpreted as a
+            // decimal number, then test it against a `Number` OR `String` runtype.
+            var isNumberLikeKey = typeof k === 'string' && numberString.test(k);
+            var l = isNumberLikeKey ? global.Number(k) : k;
+            if (isNumberLikeKey ? !keyRuntype.guard(l) && !keyRuntype.guard(k) : !keyRuntype.guard(l)) {
+                return {
+                    success: false,
+                    message: "Expected dictionary key to be a " + keyString + ", but was " + typeof l,
+                };
             }
             var validated = runtype_1.innerValidate(value, x[k], visited);
             if (!validated.success) {
                 return {
                     success: false,
                     message: validated.message,
-                    key: validated.key ? k + "." + validated.key : k,
+                    key: validated.key ? global.String(k) + "." + validated.key : global.String(k),
                 };
             }
         }
         return { success: true, value: x };
-    }, { tag: 'dictionary', key: key, value: value });
+    }, { tag: 'dictionary', key: keyString, value: value });
 }
 exports.Dictionary = Dictionary;
 
@@ -108359,7 +108405,11 @@ var runtype_1 = __nccwpck_require__(5601);
  * Be aware of an Array of Symbols `[Symbol()]` which would throw "TypeError: Cannot convert a Symbol value to a string"
  */
 function literal(value) {
-    return Array.isArray(value) ? String(value.map(String)) : String(value);
+    return Array.isArray(value)
+        ? String(value.map(String))
+        : typeof value === 'bigint'
+            ? String(value) + 'n'
+            : String(value);
 }
 /**
  * Construct a runtype for a type literal.
