@@ -6,7 +6,7 @@ updates:
       interval: "daily"
     labels:
       - "impact/no-changelog-required"
-      - "github-actions"
+      - "github_actions"
       - "dependencies"
   - package-ecosystem: "npm"
     directory: "/"
@@ -16,6 +16,6 @@ updates:
       - dependency-name: "typescript*"
     labels:
       - "impact/no-changelog-required"
-      - "npm"
+      - "javascript"
       - "dependencies"
     
