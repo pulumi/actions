@@ -84,6 +84,11 @@ The action can be configured with the following arguments:
 
 - `target-dependents` - (optional) Allows updating of dependent targets
   discovered but not specified in target.
+- `upsert` - (optiona) Allows the creation of the specified stack if it
+  currently doesn't exist.  
+  **PLEASE NOTE:** This will create a Pulumi.<stack-name>.yaml file that you
+  will need to add back to source control as part of the action if you wish to
+  perform any further tasks with that stack.
 
 By default, this action will try to authenticate Pulumi with the
 [Pulumi SaaS](https://app.pulumi.com/). If you have not specified a
