@@ -37,12 +37,18 @@ const main = async () => {
     ? LocalWorkspace.createOrSelectStack(stackArgs)
     : LocalWorkspace.selectStack(stackArgs));
 
-  core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
-
   const onOutput = (msg: string) => {
     core.debug(msg);
     core.info(msg);
   };
+
+  if (config.refresh) {
+    core.startGroup(`Refresh stack on ${config.stackName}`);
+    await stack.refresh({ onOutput });
+    core.endGroup();
+  }
+
+  core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
 
   const actions: Record<Commands, () => Promise<string>> = {
     up: () => stack.up({ onOutput, ...config.options }).then((r) => r.stdout),

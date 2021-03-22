@@ -51,6 +51,14 @@ inputs:
     description: 'Allows updating of dependent targets discovered but not specified in target.'
     required: false
     default: 'false'
+  refresh:
+    description: 'Perform a stack refresh as part of the operation'
+    required: false
+    default: 'false'
+  upsert:
+    description: 'Create the stack if it currently does not exist'
+    required: false
+    default: 'false'
 outputs:
   output:
     description: Output from running command

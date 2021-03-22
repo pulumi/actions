@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-_(none)_
+- Add ability to refresh a stack by passing `refresh: true`
+  [#128](https://github.com/pulumi/actions/pull/128)
 
 ---
 
