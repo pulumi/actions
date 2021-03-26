@@ -15537,7 +15537,7 @@ function warn(msg, resource, streamId, ephemeral) {
 }
 exports.warn = warn;
 /**
- * error logs a fatal error to indicate that the tool should stop processing resource operations immediately.
+ * error logs a fatal condition. Consider raising an exception after calling error to stop the Pulumi program.
  */
 function error(msg, resource, streamId, ephemeral) {
     errcnt++; // remember the error so we can suppress leaks.
@@ -39550,7 +39550,7 @@ class MockMonitor {
     readResource(req, callback) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = this.mocks.newResource(req.getType(), req.getName(), rpc_1.deserializeProperties(req.getProperties()), req.getProvider(), req.getId());
+                const result = this.mocks.newResource(req.getType(), req.getName(), rpc_1.deserializeProperties(req.getProperties()), req.getProvider(), req.getId(), req.getCustom());
                 const urn = this.newUrn(req.getParent(), req.getType(), req.getName());
                 const serializedState = yield rpc_1.serializeProperties("", result.state);
                 this.resources.set(urn, { urn, id: result.id, state: serializedState });
@@ -39567,7 +39567,7 @@ class MockMonitor {
     registerResource(req, callback) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = this.mocks.newResource(req.getType(), req.getName(), rpc_1.deserializeProperties(req.getObject()), req.getProvider(), req.getImportid());
+                const result = this.mocks.newResource(req.getType(), req.getName(), rpc_1.deserializeProperties(req.getObject()), req.getProvider(), req.getImportid(), req.getCustom());
                 const urn = this.newUrn(req.getParent(), req.getType(), req.getName());
                 const serializedState = yield rpc_1.serializeProperties("", result.state);
                 this.resources.set(urn, { urn, id: result.id, state: serializedState });
@@ -42095,8 +42095,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const fs = __nccwpck_require__(5747);
 const yaml = __nccwpck_require__(8286);
 const os = __nccwpck_require__(2087);
+const semver = __nccwpck_require__(7486);
 const upath = __nccwpck_require__(8004);
 const cmd_1 = __nccwpck_require__(3052);
+const minimumVersion_1 = __nccwpck_require__(4667);
 const stack_1 = __nccwpck_require__(4093);
 /**
  * LocalWorkspace is a default implementation of the Workspace interface.
@@ -42130,7 +42132,7 @@ class LocalWorkspace {
         }
         this.workDir = dir;
         this.envVars = envs;
-        const readinessPromises = [];
+        const readinessPromises = [this.getPulumiVersion(minimumVersion_1.minimumVersion)];
         if (opts && opts.projectSettings) {
             readinessPromises.push(this.saveProjectSettings(opts.projectSettings));
         }
@@ -42140,6 +42142,12 @@ class LocalWorkspace {
             }
         }
         this.ready = Promise.all(readinessPromises);
+    }
+    /**
+     * The version of the underlying Pulumi CLI/Engine.
+     */
+    get pulumiVersion() {
+        return this._pulumiVersion.toString();
     }
     /**
      * Creates a workspace using the specified options. Used for maximal control and customization
@@ -42581,6 +42589,14 @@ class LocalWorkspace {
             return;
         });
     }
+    getPulumiVersion(minVersion) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.runPulumiCmd(["version"]);
+            const version = new semver.SemVer(result.stdout.trim());
+            validatePulumiVersion(minVersion, version);
+            this._pulumiVersion = version;
+        });
+    }
     runPulumiCmd(args) {
         return __awaiter(this, void 0, void 0, function* () {
             let envs = {};
@@ -42622,6 +42638,41 @@ function defaultProject(projectName) {
     const settings = { name: projectName, runtime: "nodejs" };
     return settings;
 }
+/** @internal */
+function validatePulumiVersion(minVersion, currentVersion) {
+    if (minVersion.major < currentVersion.major) {
+        throw new Error(`Major version mismatch. You are using Pulumi CLI version ${currentVersion.toString()} with Automation SDK v${minVersion.major}. Please update the SDK.`);
+    }
+    if (minVersion.compare(currentVersion) === 1) {
+        throw new Error(`Minimum version requirement failed. The minimum CLI version requirement is ${minVersion.toString()}, your current CLI version is ${currentVersion.toString()}. Please update the Pulumi CLI.`);
+    }
+}
+exports.validatePulumiVersion = validatePulumiVersion;
+
+
+/***/ }),
+
+/***/ 4667:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+// Copyright 2016-2021, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const semver = __nccwpck_require__(7486);
+exports.minimumVersion = new semver.SemVer("v2.21.0");
 
 
 /***/ }),
