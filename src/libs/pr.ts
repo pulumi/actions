@@ -9,7 +9,7 @@ export async function handlePullRequestMessage(
   invariant(payload.pull_request, 'Missing pull request event data.');
 
   // check if the action has previously commented
-  hasPreviousComment(repo, githubToken).then(function (results) {
+  hasPreviousComment(repo, githubToken, payload).then(function (results) {
     if (results) {
       updatePullRequestMessage(body, githubToken)
     } else {
@@ -18,12 +18,12 @@ export async function handlePullRequestMessage(
   });
 }
 
-async function hasPreviousComment(repo, githubToken) {
+async function hasPreviousComment(repo, githubToken, payload) {
   const octokit = getOctokit(githubToken)
   for await (const { data: comments } of octokit.paginate.iterator(
     octokit.issues.listComments, {
     ...repo,
-    issue_number: 1
+    issue_number: payload.pull_request.number,
   })) {
     const comment = comments.find(comment =>
       findComment("pulumi", comment)
