@@ -1,5 +1,5 @@
 import * as gh from '@actions/github';
-import { addPullRequestMessage } from '../pr';
+import { handlePullRequestMessage } from '../pr';
 
 const createComment = jest.fn();
 jest.mock('@actions/github', () => ({
@@ -27,14 +27,14 @@ describe('pr.ts', () => {
 
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
 
-    await addPullRequestMessage('test', 'test');
+    await handlePullRequestMessage('test', 'test');
     expect(createComment).toHaveBeenCalled();
   });
   it('should fail if no pull request data', async () => {
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
     // @ts-ignore
     gh.context = { payload: {} };
-    await expect(addPullRequestMessage('test', 'test')).rejects.toThrowError(
+    await expect(handlePullRequestMessage('test', 'test')).rejects.toThrowError(
       'Missing pull request event data',
     );
   });
