@@ -107869,7 +107869,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Brand = exports.InstanceOf = exports.Null = exports.Undefined = exports.Literal = void 0;
+exports.InstanceOf = exports.Null = exports.Undefined = exports.Literal = void 0;
 __exportStar(__nccwpck_require__(4447), exports);
 __exportStar(__nccwpck_require__(6299), exports);
 __exportStar(__nccwpck_require__(8154), exports);
@@ -107894,13 +107894,13 @@ __exportStar(__nccwpck_require__(2687), exports);
 __exportStar(__nccwpck_require__(3170), exports);
 __exportStar(__nccwpck_require__(7898), exports);
 __exportStar(__nccwpck_require__(7902), exports);
+__exportStar(__nccwpck_require__(6807), exports);
 __exportStar(__nccwpck_require__(6209), exports);
 var instanceof_1 = __nccwpck_require__(689);
 Object.defineProperty(exports, "InstanceOf", ({ enumerable: true, get: function () { return instanceof_1.InstanceOf; } }));
 __exportStar(__nccwpck_require__(7606), exports);
 __exportStar(__nccwpck_require__(2928), exports);
-var brand_1 = __nccwpck_require__(6928);
-Object.defineProperty(exports, "Brand", ({ enumerable: true, get: function () { return brand_1.Brand; } }));
+__exportStar(__nccwpck_require__(6928), exports);
 __exportStar(__nccwpck_require__(3505), exports);
 
 
@@ -107974,6 +107974,7 @@ function create(validate, A) {
     A.guard = guard;
     A.Or = Or;
     A.And = And;
+    A.optional = optional;
     A.withConstraint = withConstraint;
     A.withGuard = withGuard;
     A.withBrand = withBrand;
@@ -107995,6 +107996,9 @@ function create(validate, A) {
     }
     function And(B) {
         return index_1.Intersect(A, B);
+    }
+    function optional() {
+        return index_1.Optional(A);
     }
     function withConstraint(constraint, options) {
         return index_1.Constraint(A, constraint, options);
@@ -108070,7 +108074,9 @@ var show = function (needsParens, circular) { return function (refl) {
                 return keys.length
                     ? "{ " + keys
                         .map(function (k) {
-                        return "" + readonlyTag(refl) + k + partialTag(refl) + ": " + show(false, circular)(refl.fields[k]) + ";";
+                        return "" + readonlyTag(refl) + k + partialTag(refl, k) + ": " + (refl.fields[k].tag === 'optional'
+                            ? show(false, circular)(refl.fields[k].underlying)
+                            : show(false, circular)(refl.fields[k])) + ";";
                     })
                         .join(' ') + " }"
                     : '{}';
@@ -108081,6 +108087,8 @@ var show = function (needsParens, circular) { return function (refl) {
                 return parenthesize("" + refl.alternatives.map(show(true, circular)).join(' | '));
             case 'intersect':
                 return parenthesize("" + refl.intersectees.map(show(true, circular)).join(' & '));
+            case 'optional':
+                return show(needsParens, circular)(refl.underlying) + ' | undefined';
             case 'constraint':
                 return refl.name || show(needsParens, circular)(refl.underlying);
             case 'instanceof':
@@ -108096,9 +108104,9 @@ var show = function (needsParens, circular) { return function (refl) {
     throw Error('impossible');
 }; };
 exports.default = show(false, new Set());
-function partialTag(_a) {
-    var isPartial = _a.isPartial;
-    return isPartial ? '?' : '';
+function partialTag(_a, key) {
+    var isPartial = _a.isPartial, fields = _a.fields;
+    return isPartial || (key !== undefined && fields[key].tag === 'optional') ? '?' : '';
 }
 function readonlyTag(_a) {
     var isReadonly = _a.isReadonly;
@@ -108540,6 +108548,25 @@ exports.Number = runtype_1.create(function (value) {
 
 /***/ }),
 
+/***/ 6807:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Optional = void 0;
+var runtype_1 = __nccwpck_require__(5601);
+/**
+ * Validates optional value.
+ */
+function Optional(runtype) {
+    return runtype_1.create(function (value) { return (value === undefined ? { success: true, value: value } : runtype.validate(value)); }, { tag: 'optional', underlying: runtype });
+}
+exports.Optional = Optional;
+
+
+/***/ }),
+
 /***/ 2687:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -108560,9 +108587,11 @@ function InternalRecord(fields, isPartial, isReadonly) {
             return { success: false, message: "Expected " + show_1.default(a) + ", but was " + x };
         }
         for (var key in fields) {
-            if (!isPartial || (util_1.hasKey(key, x) && x[key] !== undefined)) {
-                var value = isPartial || util_1.hasKey(key, x) ? x[key] : undefined;
-                var validated = runtype_1.innerValidate(fields[key], value, visited);
+            var isOptional = isPartial || fields[key].reflect.tag === 'optional';
+            if (util_1.hasKey(key, x)) {
+                if (isOptional && x[key] === undefined)
+                    continue;
+                var validated = runtype_1.innerValidate(fields[key], x[key], visited);
                 if (!validated.success) {
                     return {
                         success: false,
@@ -108570,6 +108599,13 @@ function InternalRecord(fields, isPartial, isReadonly) {
                         key: validated.key ? key + "." + validated.key : key,
                     };
                 }
+            }
+            else if (!isOptional) {
+                return {
+                    success: false,
+                    message: "Expected \"" + key + "\" property to be present, but was missing",
+                    key: key,
+                };
             }
         }
         return { success: true, value: x };
@@ -108630,18 +108666,46 @@ exports.String = runtype_1.create(function (value) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Symbol = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var f = function (key) {
+    return runtype_1.create(function (value) {
+        if (typeof value !== 'symbol') {
+            return {
+                success: false,
+                message: "Expected symbol, but was " + typeStringOf(value),
+            };
+        }
+        else {
+            var keyForValue = global.Symbol.keyFor(value);
+            if (keyForValue !== key) {
+                return {
+                    success: false,
+                    message: "Expected symbol key to be " + quoteIfPresent(key) + ", but was " + quoteIfPresent(keyForValue),
+                };
+            }
+            else {
+                return { success: true, value: value };
+            }
+        }
+    }, { tag: 'symbol', key: key });
+};
 /**
- * Validates that a value is a symbol.
+ * Validates that a value is a symbol, regardless of whether it is keyed or not.
  */
-var Sym = runtype_1.create(function (value) {
-    return typeof value === 'symbol'
-        ? { success: true, value: value }
-        : {
+exports.Symbol = runtype_1.create(function (value) {
+    if (typeof value !== 'symbol') {
+        return {
             success: false,
-            message: "Expected symbol, but was " + (value === null ? value : typeof value),
+            message: "Expected symbol, but was " + typeStringOf(value),
         };
-}, { tag: 'symbol' });
-exports.Symbol = Sym;
+    }
+    else {
+        return { success: true, value: value };
+    }
+}, Object.assign(f, { tag: 'symbol' }));
+var quoteIfPresent = function (key) { return (key === undefined ? 'undefined' : "\"" + key + "\""); };
+var typeStringOf = function (value) {
+    return value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value;
+};
 
 
 /***/ }),
