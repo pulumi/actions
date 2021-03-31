@@ -47,7 +47,7 @@ jobs:
             dist:
               - 'dist/**'
 
-      - run: echo ::warning::There are no changes to dist files"
+      - run: echo "::warning::There are no changes to dist files"
         if: steps.changes.outputs.dist != 'true'
 
   test-dotnet-stack:
