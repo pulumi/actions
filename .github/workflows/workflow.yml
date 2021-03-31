@@ -1,0 +1,86 @@
+name: 'Actions Workflow'
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  install-and-build:
+    name: Install and Build GHA
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - run: yarn install
+
+      - name: Cache dist files
+        id: dist-cache
+        uses: actions/cache@v2
+        with:
+          path: dist/
+          key: ${{ runner.os }}-build-${{ github.ref }}
+
+      - run: yarn build
+        if: steps.dist-cache.outputs.cache-hit != 'true'
+
+  test-dotnet-stack:
+    needs: install-and-build
+    runs-on: ${{ matrix.os }}
+    name: Dotnet Stack ${{ matrix.command }} on ${{ matrix.os }}
+    strategy:
+      matrix:
+        command: [ up, refresh, destroy, preview ]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get cached dist files
+        id: dist-cache
+        uses: actions/cache@v2
+        with:
+          path: dist/
+          key: ${{ runner.os }}-build-${{ github.ref }}
+
+      - run: exit 1
+        if: steps.dist-cache.outputs.cache-hit != 'true'
+
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1
+
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1.0.1
+
+      - name: Create local stack
+        run: |
+          pulumi login --local
+          pulumi stack init dev
+        working-directory: .github/test-stacks/dotnet
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          work-dir: .github/test-stacks/dotnet
