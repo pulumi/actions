@@ -41,6 +41,7 @@ describe('config.ts', () => {
         replace: undefined,
         target: undefined,
         targetDependents: undefined,
+        editCommentOnPr: undefined,
       },
     });
   });
@@ -89,6 +90,7 @@ describe('config.ts', () => {
         replace: undefined,
         target: undefined,
         targetDependents: undefined,
+        editCommentOnPr: undefined,
       },
     });
   });

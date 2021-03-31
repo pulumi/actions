@@ -90,6 +90,7 @@ const main = async () => {
 ${output}
 \`\`\``,
       config.githubToken,
+      config.options.editCommentOnPr
     );
   }
 
