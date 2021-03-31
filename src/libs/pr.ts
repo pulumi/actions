@@ -14,13 +14,13 @@ export async function handlePullRequestMessage(
     ...repo,
     issue_number: payload.pull_request.number
   })
-  const comment_id = comments.find(comment => comment.body.startsWith(text));
+  const comment = comments.find(comment => comment.body.startsWith(text));
 
   if (body && githubToken) {
-    if (comment_id) {
+    if (comment) {
       await octokit.issues.updateComment({
         ...repo,
-        comment_id: comment_id.id,
+        comment_id: comment.id,
         body,
       });
     } else {
