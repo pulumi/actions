@@ -5,7 +5,7 @@ import { invariant } from './utils';
 export async function handlePullRequestMessage(
   body: string,
   githubToken: string,
-  editCommentOnPr: boolean,
+  editCommentOnPr?: boolean,
 ): Promise<void> {
   const { payload, repo } = context;
   invariant(payload.pull_request, 'Missing pull request event data.');
