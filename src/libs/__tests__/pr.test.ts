@@ -1,12 +1,15 @@
 import * as gh from '@actions/github';
 import { handlePullRequestMessage } from '../pr';
 
+const resp = {data: {comments: []}};
 const createComment = jest.fn();
+const listComments = jest.fn(() => resp);
 jest.mock('@actions/github', () => ({
   context: {},
   getOctokit: jest.fn(() => ({
     issues: {
       createComment,
+      listComments,
     },
   })),
 }));
@@ -28,8 +31,10 @@ describe('pr.ts', () => {
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
 
     await handlePullRequestMessage('test', 'test');
+    expect(listComments).toHaveBeenCalled();
     expect(createComment).toHaveBeenCalled();
   });
+
   it('should fail if no pull request data', async () => {
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
     // @ts-ignore
