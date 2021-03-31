@@ -48,7 +48,7 @@ jobs:
               - 'dist/**'
 
       - run: echo ::warning::There are no changes to `dist` files"
-        if: steps.changes.outputs.dist == 'true'
+        if: steps.changes.outputs.dist != 'true'
 
   test-dotnet-stack:
     needs: install-and-build
