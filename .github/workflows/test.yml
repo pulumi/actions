@@ -29,6 +29,8 @@ jobs:
           go-version: '^1.13.1'
       - name: Install pulumi
         uses: pulumi/action-install-pulumi-cli@v1.0.1
+        with:
+          pulumi-version: 3.0.0-beta.1
       - run: |
           pulumi login --local
           pulumi stack init dev
