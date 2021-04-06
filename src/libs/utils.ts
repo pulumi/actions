@@ -1,4 +1,6 @@
 /* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
+import * as core from '@actions/core';
+
 export function invariant(
   condition: unknown,
   message?: string,
@@ -6,6 +8,11 @@ export function invariant(
   if (!condition) {
     throw new Error(message);
   }
+}
+
+export function onOutput(msg: string) {
+  core.debug(msg);
+  core.info(msg);
 }
 
 export function parseArray(input: string): string[] {

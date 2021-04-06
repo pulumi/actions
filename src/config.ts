@@ -22,24 +22,20 @@ export const options = rt.Partial({
   targetDependents: rt.Boolean,
 });
 
-export const config = rt
-  .Record({
-    // Required options
-    command: command,
-    stackName: rt.String,
-    workDir: rt.String,
-    commentOnPr: rt.Boolean,
-    options: options,
-  })
-  .And(
-    rt.Partial({
-      // Optional options
-      cloudUrl: rt.String,
-      githubToken: rt.String,
-      upsert: rt.Boolean,
-      refresh: rt.Boolean,
-    }),
-  );
+export const config = rt.Record({
+  // Required options
+  command: command,
+  stackName: rt.String,
+  workDir: rt.String,
+  commentOnPr: rt.Boolean,
+  options: options,
+
+  // Optional options
+  cloudUrl: rt.String.optional(),
+  githubToken: rt.String.optional(),
+  upsert: rt.Boolean.optional(),
+  refresh: rt.Boolean.optional(),
+});
 
 export type Config = rt.Static<typeof config>;
 
@@ -50,7 +46,7 @@ export async function makeConfig(): Promise<Config> {
     workDir: getInput('work-dir') || './',
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
-    commentOnPr: parseBoolean(getInput('comment-on-pr')),
+    commentOnPr: parseBoolean(getInput('comment-on-pr') || 'false'),
     upsert: parseBoolean(getInput('upsert')),
     refresh: parseBoolean(getInput('refresh')),
     options: {

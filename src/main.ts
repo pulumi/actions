@@ -2,25 +2,20 @@ import { resolve } from 'path';
 import * as core from '@actions/core';
 import { LocalProgramArgs, LocalWorkspace } from '@pulumi/pulumi/x/automation';
 import { Commands, makeConfig } from './config';
-import { environmentVariables } from './libs/envs';
+import { makeEnv } from './libs/envs';
 import { addPullRequestMessage } from './libs/pr';
-import * as pulumiCli from './libs/pulumi-cli';
-import { invariant } from './libs/utils';
+import * as pulumi from './libs/pulumi';
+import { invariant, onOutput } from './libs/utils';
 
-const main = async () => {
+export const main = async (): Promise<void> => {
   const config = await makeConfig();
+  const environmentVariables = makeEnv();
   core.debug('Configuration is loaded');
 
-  invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
+  invariant(pulumi.isAvailable(), 'Pulumi CLI is not available.');
   core.debug('Pulumi CLI is available');
 
-  if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
-    core.debug(`Logging into to Pulumi`);
-    await pulumiCli.run('login');
-  } else if (config.cloudUrl) {
-    core.debug(`Logging into to ${config.cloudUrl}`);
-    await pulumiCli.run('login', config.cloudUrl);
-  }
+  await pulumi.login(environmentVariables, config);
 
   const workDir = resolve(
     environmentVariables.GITHUB_WORKSPACE,
@@ -37,10 +32,6 @@ const main = async () => {
     ? LocalWorkspace.createOrSelectStack(stackArgs)
     : LocalWorkspace.selectStack(stackArgs));
 
-  const onOutput = (msg: string) => {
-    core.debug(msg);
-    core.info(msg);
-  };
 
   if (config.refresh) {
     core.startGroup(`Refresh stack on ${config.stackName}`);
