@@ -39959,23 +39959,51 @@ function prepareResource(label, res, custom, props, opts) {
         let resolveURN;
         {
             let resolveValue;
+            let rejectValue;
             let resolveIsKnown;
-            res.urn = new output_1.Output(res, debuggable_1.debuggablePromise(new Promise(resolve => resolveValue = resolve), `resolveURN(${label})`), debuggable_1.debuggablePromise(new Promise(resolve => resolveIsKnown = resolve), `resolveURNIsKnown(${label})`), 
+            let rejectIsKnown;
+            res.urn = new output_1.Output(res, debuggable_1.debuggablePromise(new Promise((resolve, reject) => {
+                resolveValue = resolve;
+                rejectValue = reject;
+            }), `resolveURN(${label})`), debuggable_1.debuggablePromise(new Promise((resolve, reject) => {
+                resolveIsKnown = resolve;
+                rejectIsKnown = reject;
+            }), `resolveURNIsKnown(${label})`), 
             /*isSecret:*/ Promise.resolve(false), Promise.resolve(res));
             resolveURN = (v, err) => {
-                resolveValue(v);
-                resolveIsKnown(err === undefined);
+                if (!!err) {
+                    rejectValue(err);
+                    rejectIsKnown(err);
+                }
+                else {
+                    resolveValue(v);
+                    resolveIsKnown(true);
+                }
             };
         }
         // If a custom resource, make room for the ID property.
         let resolveID;
         if (custom) {
             let resolveValue;
+            let rejectValue;
             let resolveIsKnown;
-            res.id = new output_1.Output(res, debuggable_1.debuggablePromise(new Promise(resolve => resolveValue = resolve), `resolveID(${label})`), debuggable_1.debuggablePromise(new Promise(resolve => resolveIsKnown = resolve), `resolveIDIsKnown(${label})`), Promise.resolve(false), Promise.resolve(res));
+            let rejectIsKnown;
+            res.id = new output_1.Output(res, debuggable_1.debuggablePromise(new Promise((resolve, reject) => {
+                resolveValue = resolve;
+                rejectValue = reject;
+            }), `resolveID(${label})`), debuggable_1.debuggablePromise(new Promise((resolve, reject) => {
+                resolveIsKnown = resolve;
+                rejectIsKnown = reject;
+            }), `resolveIDIsKnown(${label})`), Promise.resolve(false), Promise.resolve(res));
             resolveID = (v, isKnown, err) => {
-                resolveValue(v);
-                resolveIsKnown(err ? false : isKnown);
+                if (!!err) {
+                    rejectValue(err);
+                    rejectIsKnown(err);
+                }
+                else {
+                    resolveValue(v);
+                    resolveIsKnown(isKnown);
+                }
             };
         }
         // Now "transfer" all input properties into unresolved Promises on res.  This way,
@@ -40341,17 +40369,41 @@ function transferProperties(onto, label, props) {
             throw new Error(`Property '${k}' is already initialized on target '${label}`);
         }
         let resolveValue;
+        let rejectValue;
         let resolveIsKnown;
+        let rejectIsKnown;
         let resolveIsSecret;
+        let rejectIsSecret;
         let resolveDeps;
+        let rejectDeps;
         resolvers[k] = (v, isKnown, isSecret, deps = [], err) => {
-            resolveValue(v);
-            resolveIsKnown(err ? false : isKnown);
-            resolveIsSecret(isSecret);
-            resolveDeps(deps);
+            if (!!err) {
+                rejectValue(err);
+                rejectIsKnown(err);
+                rejectIsSecret(err);
+                rejectDeps(err);
+            }
+            else {
+                resolveValue(v);
+                resolveIsKnown(isKnown);
+                resolveIsSecret(isSecret);
+                resolveDeps(deps);
+            }
         };
         const propString = output_1.Output.isInstance(props[k]) ? "Output<T>" : `${props[k]}`;
-        onto[k] = new output_1.Output(onto, debuggable_1.debuggablePromise(new Promise(resolve => resolveValue = resolve), `transferProperty(${label}, ${k}, ${propString})`), debuggable_1.debuggablePromise(new Promise(resolve => resolveIsKnown = resolve), `transferIsStable(${label}, ${k}, ${propString})`), debuggable_1.debuggablePromise(new Promise(resolve => resolveIsSecret = resolve), `transferIsSecret(${label}, ${k}, ${propString})`), debuggable_1.debuggablePromise(new Promise(resolve => resolveDeps = resolve), `transferDeps(${label}, ${k}, ${propString})`));
+        onto[k] = new output_1.Output(onto, debuggable_1.debuggablePromise(new Promise((resolve, reject) => {
+            resolveValue = resolve;
+            rejectValue = reject;
+        }), `transferProperty(${label}, ${k}, ${propString})`), debuggable_1.debuggablePromise(new Promise((resolve, reject) => {
+            resolveIsKnown = resolve;
+            rejectIsKnown = reject;
+        }), `transferIsStable(${label}, ${k}, ${propString})`), debuggable_1.debuggablePromise(new Promise((resolve, reject) => {
+            resolveIsSecret = resolve;
+            rejectIsSecret = reject;
+        }), `transferIsSecret(${label}, ${k}, ${propString})`), debuggable_1.debuggablePromise(new Promise((resolve, reject) => {
+            resolveDeps = resolve;
+            rejectDeps = reject;
+        }), `transferDeps(${label}, ${k}, ${propString})`));
     }
     return resolvers;
 }
@@ -42213,7 +42265,24 @@ class LocalWorkspace {
                 wsOpts = Object.assign(Object.assign({}, opts), { program: args.program });
             }
             if (!wsOpts.projectSettings) {
-                wsOpts.projectSettings = defaultProject(args.projectName);
+                if (!!wsOpts.workDir) {
+                    try {
+                        // Try to load the project settings.
+                        loadProjectSettings(wsOpts.workDir);
+                    }
+                    catch (e) {
+                        // If it failed to find the project settings file, set a default project.
+                        if (e.toString().includes("failed to find project settings")) {
+                            wsOpts.projectSettings = defaultProject(args.projectName);
+                        }
+                        else {
+                            throw e;
+                        }
+                    }
+                }
+                else {
+                    wsOpts.projectSettings = defaultProject(args.projectName);
+                }
             }
             const ws = new LocalWorkspace(wsOpts);
             yield ws.ready;
@@ -42227,19 +42296,7 @@ class LocalWorkspace {
      */
     projectSettings() {
         return __awaiter(this, void 0, void 0, function* () {
-            for (const ext of settingsExtensions) {
-                const isJSON = ext === ".json";
-                const path = upath.joinSafe(this.workDir, `Pulumi${ext}`);
-                if (!fs.existsSync(path)) {
-                    continue;
-                }
-                const contents = fs.readFileSync(path).toString();
-                if (isJSON) {
-                    return JSON.parse(contents);
-                }
-                return yaml.safeLoad(contents);
-            }
-            throw new Error(`failed to find project settings file in workdir: ${this.workDir}`);
+            return loadProjectSettings(this.workDir);
         });
     }
     /**
@@ -42637,6 +42694,21 @@ function getStackSettingsName(name) {
 function defaultProject(projectName) {
     const settings = { name: projectName, runtime: "nodejs" };
     return settings;
+}
+function loadProjectSettings(workDir) {
+    for (const ext of settingsExtensions) {
+        const isJSON = ext === ".json";
+        const path = upath.joinSafe(workDir, `Pulumi${ext}`);
+        if (!fs.existsSync(path)) {
+            continue;
+        }
+        const contents = fs.readFileSync(path).toString();
+        if (isJSON) {
+            return JSON.parse(contents);
+        }
+        return yaml.safeLoad(contents);
+    }
+    throw new Error(`failed to find project settings file in workdir: ${workDir}`);
 }
 /** @internal */
 function validatePulumiVersion(minVersion, currentVersion) {
