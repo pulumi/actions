@@ -43,9 +43,9 @@
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@actions/github": "^4.0.0",
-    "@pulumi/pulumi": "^2.23.2",
+    "@pulumi/pulumi": "^2.24.1",
     "envalid": "^7.1.0",
-    "runtypes": "^5.2.0",
+    "runtypes": "^6.0.0",
     "typescript": "~4.1.3"
   }
 }

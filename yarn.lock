@@ -690,10 +690,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@pulumi/pulumi@^2.23.2":
-  version "2.23.2"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-2.23.2.tgz#f6677ea16359e2ddbe3498975e20e60716a76a5b"
-  integrity sha512-V5vnzWdtTPlRBp6Fcexf9X4+IZH8e9YA1jvnuGVboLpZp/abmj1G1PFIhQ1YwLJsph87pHlAweDY17Li9XF42w==
+"@pulumi/pulumi@^2.24.1":
+  version "2.24.1"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-2.24.1.tgz#79ec88c1c4576064b7dd31cccd6ea4bb0e7bed10"
+  integrity sha512-GVsZlHTnb5YsEoiYM1sQuhSz/iFxd0vuZtV105YyyB69s5Ij7TVFFwG3fN/S9OHfzTX0EKz1vUerDyuRe4XGaA==
   dependencies:
     "@grpc/grpc-js" "^1.2.7"
     "@logdna/tail-file" "^2.0.6"
@@ -4424,10 +4424,10 @@ run-parallel@^1.1.9:
   resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.1.10.tgz#60a51b2ae836636c81377df16cb107351bcd13ef"
   integrity sha512-zb/1OuZ6flOlH6tQyMPUrE3x3Ulxjlo9WIVXR4yVYi4H9UXQaeIsPbLn2R3O3vQCnDKkAl2qHiuocKKX4Tz/Sw==
 
-runtypes@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/runtypes/-/runtypes-5.2.0.tgz#1751a17860807873f0fddb4b15a5cd80fe574947"
-  integrity sha512-ArcmkYvNWkHrwg4Ic7St365oUGAkiIcs6vNmoRNzADv7nBhrTQC8C562TYnIV9nxxMxdmAAHsehD78xuWeYPJA==
+runtypes@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/runtypes/-/runtypes-6.0.0.tgz#0010e7e050a41d4ab38b6138051dfb8774a53f07"
+  integrity sha512-hVBZ2S0i9MmyViSpwCU7TGFuEZxjPIeTMbhCpz59/8C3IGbPL6N03bIVALGfVWZQ+MTXORjWpWnZUP3hPyw96w==
 
 rxjs@^6.6.3:
   version "6.6.3"
