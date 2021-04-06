@@ -20,7 +20,7 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -32,7 +32,7 @@ jobs:
 
       - name: Cache dist files
         id: dist-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -110,7 +110,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -156,7 +156,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -184,7 +184,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         id: npm-cache
         with:
           path: ${{ steps.npm-cache-dir.outputs.dir }}
@@ -218,7 +218,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -241,7 +241,7 @@ jobs:
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         if: startsWith(runner.os, 'Linux')
         with:
           path: ~/.cache/pip
@@ -249,7 +249,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         if: startsWith(runner.os, 'macOS')
         with:
           path: ~/Library/Caches/pip
@@ -257,7 +257,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         if: startsWith(runner.os, 'Windows')
         with:
           path: ~\AppData\Local\pip\Cache
@@ -290,7 +290,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -303,7 +303,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         id: npm-cache
         with:
           path: ${{ steps.npm-cache-dir.outputs.dir }}
