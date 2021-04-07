@@ -1,12 +1,11 @@
-require('./sourcemap-register.js');module.exports =
-/******/ (() => { // webpackBootstrap
+require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 8160:
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"i8\":\"1.2.8\",\"h$\":{\"d\":\"^8.13.0 || >=10.10.0\"}}");
+module.exports = JSON.parse('{"i8":"1.2.8","h$":{"d":"^8.13.0 || >=10.10.0"}}');
 
 /***/ }),
 
@@ -112010,263 +112009,6 @@ try {
 
 /***/ }),
 
-/***/ 3535:
-/***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-// ESM COMPAT FLAG
-__nccwpck_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ./node_modules/tslib/tslib.js
-var tslib = __nccwpck_require__(4351);
-// EXTERNAL MODULE: external "path"
-var external_path_ = __nccwpck_require__(5622);
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(2186);
-// EXTERNAL MODULE: ./node_modules/@pulumi/pulumi/x/automation/index.js
-var automation = __nccwpck_require__(5883);
-// EXTERNAL MODULE: ./node_modules/runtypes/lib/index.js
-var lib = __nccwpck_require__(5568);
-// CONCATENATED MODULE: ./src/libs/utils.ts
-/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
-function invariant(condition, message) {
-    if (!condition) {
-        throw new Error(message);
-    }
-}
-function parseArray(input) {
-    return parseUndefined(input)
-        ? input.split(/\r?\n/).reduce((acc, line) => acc
-            .concat(line.split(','))
-            .filter((pat) => pat)
-            .map((pat) => pat.trim()), [])
-        : undefined;
-}
-function parseUndefined(input) {
-    return input === undefined || input === '' ? undefined : input;
-}
-function parseBoolean(input) {
-    return parseUndefined(input) ? input === 'true' : undefined;
-}
-function parseNumber(input) {
-    return parseUndefined(input) ? Number(input) : undefined;
-}
-
-// CONCATENATED MODULE: ./src/config.ts
-
-
-
-
-const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'));
-const options = lib.Partial({
-    parallel: lib.Number,
-    message: lib.String,
-    expectNoChanges: lib.Boolean,
-    diff: lib.Boolean,
-    replace: lib.Array(lib.String),
-    target: lib.Array(lib.String),
-    targetDependents: lib.Boolean,
-});
-const config = lib.Record({
-    // Required options
-    command: command,
-    stackName: lib.String,
-    workDir: lib.String,
-    commentOnPr: lib.Boolean,
-    options: options,
-})
-    .And(lib.Partial({
-    // Optional options
-    cloudUrl: lib.String,
-    githubToken: lib.String,
-    upsert: lib.Boolean,
-    refresh: lib.Boolean,
-}));
-function makeConfig() {
-    return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
-        return config.check({
-            command: (0,core.getInput)('command', { required: true }),
-            stackName: (0,core.getInput)('stack-name', { required: true }),
-            workDir: (0,core.getInput)('work-dir') || './',
-            cloudUrl: (0,core.getInput)('cloud-url'),
-            githubToken: (0,core.getInput)('github-token'),
-            commentOnPr: parseBoolean((0,core.getInput)('comment-on-pr')),
-            upsert: parseBoolean((0,core.getInput)('upsert')),
-            refresh: parseBoolean((0,core.getInput)('refresh')),
-            options: {
-                parallel: parseNumber((0,core.getInput)('parallel')),
-                message: (0,core.getInput)('message'),
-                expectNoChanges: parseBoolean((0,core.getInput)('expect-no-changes')),
-                diff: parseBoolean((0,core.getInput)('diff')),
-                replace: parseArray((0,core.getInput)('replace')),
-                target: parseArray((0,core.getInput)('target')),
-                targetDependents: parseBoolean((0,core.getInput)('target-dependents')),
-            },
-        });
-    });
-}
-
-// EXTERNAL MODULE: ./node_modules/envalid/dist/index.js
-var dist = __nccwpck_require__(2322);
-// CONCATENATED MODULE: ./src/libs/envs.ts
-
-const environmentVariables = dist.cleanEnv(process.env, {
-    GITHUB_WORKSPACE: dist.str(),
-    PULUMI_ACCESS_TOKEN: dist.str({
-        default: '',
-    }),
-});
-
-// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
-var github = __nccwpck_require__(5438);
-// CONCATENATED MODULE: ./src/libs/pr.ts
-
-
-
-function addPullRequestMessage(body, githubToken) {
-    return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
-        const { payload, repo } = github.context;
-        invariant(payload.pull_request, 'Missing pull request event data.');
-        const octokit = (0,github.getOctokit)(githubToken);
-        yield octokit.issues.createComment(Object.assign(Object.assign({}, repo), { issue_number: payload.pull_request.number, body }));
-    });
-}
-
-// EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
-var exec = __nccwpck_require__(1514);
-// CONCATENATED MODULE: ./src/libs/exec.ts
-
-
-const exec_exec = (command, args = [], silent) => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
-    let stdout = '';
-    let stderr = '';
-    const options = {
-        silent: silent,
-        ignoreReturnCode: true,
-    };
-    options.listeners = {
-        stdout: (data) => {
-            stdout += data.toString();
-        },
-        stderr: (data) => {
-            stderr += data.toString();
-        },
-    };
-    const returnCode = yield exec.exec(command, args, options);
-    return {
-        success: returnCode === 0,
-        stdout: stdout.trim(),
-        stderr: stderr.trim(),
-    };
-});
-
-// CONCATENATED MODULE: ./src/libs/pulumi-cli.ts
-
-
-function isAvailable() {
-    return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
-        const res = yield exec_exec(`pulumi`, [], true);
-        return res.stderr != '' && !res.success ? false : res.success;
-    });
-}
-function run(...args) {
-    return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
-        yield exec_exec(`pulumi`, args, true);
-    });
-}
-
-// CONCATENATED MODULE: ./src/main.ts
-
-
-
-
-
-
-
-
-
-const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
-    const config = yield makeConfig();
-    core.debug('Configuration is loaded');
-    invariant(isAvailable(), 'Pulumi CLI is not available.');
-    core.debug('Pulumi CLI is available');
-    if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
-        core.debug(`Logging into to Pulumi`);
-        yield run('login');
-    }
-    else if (config.cloudUrl) {
-        core.debug(`Logging into to ${config.cloudUrl}`);
-        yield run('login', config.cloudUrl);
-    }
-    const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
-    core.debug(`Working directory resolved at ${workDir}`);
-    const stackArgs = {
-        stackName: config.stackName,
-        workDir: workDir,
-    };
-    const stack = yield (config.upsert
-        ? automation.LocalWorkspace.createOrSelectStack(stackArgs)
-        : automation.LocalWorkspace.selectStack(stackArgs));
-    const onOutput = (msg) => {
-        core.debug(msg);
-        core.info(msg);
-    };
-    if (config.refresh) {
-        core.startGroup(`Refresh stack on ${config.stackName}`);
-        yield stack.refresh({ onOutput });
-        core.endGroup();
-    }
-    core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
-    const actions = {
-        up: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
-        update: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
-        refresh: () => stack.refresh(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
-        destroy: () => stack.destroy(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
-        preview: () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
-            const { stdout, stderr } = yield stack.preview(config.options);
-            onOutput(stdout);
-            onOutput(stderr);
-            return stdout;
-        }),
-    };
-    core.debug(`Running action ${config.command}`);
-    const output = yield actions[config.command]();
-    core.debug(`Done running action ${config.command}`);
-    core.setOutput('output', output);
-    const outputs = yield stack.outputs();
-    for (const [outKey, outExport] of Object.entries(outputs)) {
-        core.setOutput(outKey, outExport.value);
-        if (outExport.secret) {
-            core.setSecret(outExport.value);
-        }
-    }
-    if (config.commentOnPr) {
-        core.debug(`Commenting on pull request`);
-        invariant(config.githubToken, 'github-token is missing.');
-        addPullRequestMessage(`#### :tropical_drink: \`${config.command}\`
-\`\`\`
-${output}
-\`\`\``, config.githubToken);
-    }
-    core.endGroup();
-});
-(() => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
-    try {
-        yield main();
-    }
-    catch (err) {
-        if (err.message.stderr) {
-            core.setFailed(err.message.stderr);
-        }
-        else {
-            core.setFailed(err.message);
-        }
-    }
-}))();
-
-
-/***/ }),
-
 /***/ 2877:
 /***/ ((module) => {
 
@@ -112279,7 +112021,7 @@ module.exports = eval("require")("encoding");
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"name\":\"google-auth-library\",\"version\":\"6.1.6\",\"author\":\"Google Inc.\",\"description\":\"Google APIs Authentication Client Library for Node.js\",\"engines\":{\"node\":\">=10\"},\"main\":\"./build/src/index.js\",\"types\":\"./build/src/index.d.ts\",\"repository\":\"googleapis/google-auth-library-nodejs.git\",\"keywords\":[\"google\",\"api\",\"google apis\",\"client\",\"client library\"],\"dependencies\":{\"arrify\":\"^2.0.0\",\"base64-js\":\"^1.3.0\",\"ecdsa-sig-formatter\":\"^1.0.11\",\"fast-text-encoding\":\"^1.0.0\",\"gaxios\":\"^4.0.0\",\"gcp-metadata\":\"^4.2.0\",\"gtoken\":\"^5.0.4\",\"jws\":\"^4.0.0\",\"lru-cache\":\"^6.0.0\"},\"devDependencies\":{\"@compodoc/compodoc\":\"^1.1.7\",\"@types/base64-js\":\"^1.2.5\",\"@types/chai\":\"^4.1.7\",\"@types/jws\":\"^3.1.0\",\"@types/lru-cache\":\"^5.0.0\",\"@types/mocha\":\"^8.0.0\",\"@types/mv\":\"^2.1.0\",\"@types/ncp\":\"^2.0.1\",\"@types/node\":\"^10.5.1\",\"@types/sinon\":\"^9.0.0\",\"@types/tmp\":\"^0.2.0\",\"assert-rejects\":\"^1.0.0\",\"c8\":\"^7.0.0\",\"chai\":\"^4.2.0\",\"codecov\":\"^3.0.2\",\"execa\":\"^5.0.0\",\"gts\":\"^2.0.0\",\"is-docker\":\"^2.0.0\",\"karma\":\"^6.0.0\",\"karma-chrome-launcher\":\"^3.0.0\",\"karma-coverage\":\"^2.0.0\",\"karma-firefox-launcher\":\"^2.0.0\",\"karma-mocha\":\"^2.0.0\",\"karma-remap-coverage\":\"^0.1.5\",\"karma-sourcemap-loader\":\"^0.3.7\",\"karma-webpack\":\"^4.0.0\",\"keypair\":\"^1.0.1\",\"linkinator\":\"^2.0.0\",\"mocha\":\"^8.0.0\",\"mv\":\"^2.1.1\",\"ncp\":\"^2.0.0\",\"nock\":\"^13.0.0\",\"null-loader\":\"^4.0.0\",\"puppeteer\":\"^5.0.0\",\"sinon\":\"^9.0.0\",\"tmp\":\"^0.2.0\",\"ts-loader\":\"^8.0.0\",\"typescript\":\"^3.8.3\",\"webpack\":\"^4.20.2\",\"webpack-cli\":\"^4.0.0\",\"@microsoft/api-documenter\":\"^7.8.10\",\"@microsoft/api-extractor\":\"^7.8.10\"},\"files\":[\"build/src\",\"!build/src/**/*.map\"],\"scripts\":{\"test\":\"c8 mocha build/test\",\"clean\":\"gts clean\",\"prepare\":\"npm run compile\",\"lint\":\"gts check\",\"compile\":\"tsc -p .\",\"fix\":\"gts fix\",\"pretest\":\"npm run compile\",\"docs\":\"compodoc src/\",\"samples-test\":\"cd samples/ && npm link ../ && npm test && cd ../\",\"system-test\":\"mocha build/system-test --timeout 60000\",\"presystem-test\":\"npm run compile\",\"webpack\":\"webpack\",\"browser-test\":\"karma start\",\"docs-test\":\"linkinator docs\",\"predocs-test\":\"npm run docs\",\"prelint\":\"cd samples; npm link ../; npm install\",\"precompile\":\"gts clean\",\"api-extractor\":\"api-extractor run --local\",\"api-documenter\":\"api-documenter yaml --input-folder=temp\"},\"license\":\"Apache-2.0\"}");
+module.exports = JSON.parse('{"name":"google-auth-library","version":"6.1.6","author":"Google Inc.","description":"Google APIs Authentication Client Library for Node.js","engines":{"node":">=10"},"main":"./build/src/index.js","types":"./build/src/index.d.ts","repository":"googleapis/google-auth-library-nodejs.git","keywords":["google","api","google apis","client","client library"],"dependencies":{"arrify":"^2.0.0","base64-js":"^1.3.0","ecdsa-sig-formatter":"^1.0.11","fast-text-encoding":"^1.0.0","gaxios":"^4.0.0","gcp-metadata":"^4.2.0","gtoken":"^5.0.4","jws":"^4.0.0","lru-cache":"^6.0.0"},"devDependencies":{"@compodoc/compodoc":"^1.1.7","@types/base64-js":"^1.2.5","@types/chai":"^4.1.7","@types/jws":"^3.1.0","@types/lru-cache":"^5.0.0","@types/mocha":"^8.0.0","@types/mv":"^2.1.0","@types/ncp":"^2.0.1","@types/node":"^10.5.1","@types/sinon":"^9.0.0","@types/tmp":"^0.2.0","assert-rejects":"^1.0.0","c8":"^7.0.0","chai":"^4.2.0","codecov":"^3.0.2","execa":"^5.0.0","gts":"^2.0.0","is-docker":"^2.0.0","karma":"^6.0.0","karma-chrome-launcher":"^3.0.0","karma-coverage":"^2.0.0","karma-firefox-launcher":"^2.0.0","karma-mocha":"^2.0.0","karma-remap-coverage":"^0.1.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^4.0.0","keypair":"^1.0.1","linkinator":"^2.0.0","mocha":"^8.0.0","mv":"^2.1.1","ncp":"^2.0.0","nock":"^13.0.0","null-loader":"^4.0.0","puppeteer":"^5.0.0","sinon":"^9.0.0","tmp":"^0.2.0","ts-loader":"^8.0.0","typescript":"^3.8.3","webpack":"^4.20.2","webpack-cli":"^4.0.0","@microsoft/api-documenter":"^7.8.10","@microsoft/api-extractor":"^7.8.10"},"files":["build/src","!build/src/**/*.map"],"scripts":{"test":"c8 mocha build/test","clean":"gts clean","prepare":"npm run compile","lint":"gts check","compile":"tsc -p .","fix":"gts fix","pretest":"npm run compile","docs":"compodoc src/","samples-test":"cd samples/ && npm link ../ && npm test && cd ../","system-test":"mocha build/system-test --timeout 60000","presystem-test":"npm run compile","webpack":"webpack","browser-test":"karma start","docs-test":"linkinator docs","predocs-test":"npm run docs","prelint":"cd samples; npm link ../; npm install","precompile":"gts clean","api-extractor":"api-extractor run --local","api-documenter":"api-documenter yaml --input-folder=temp"},"license":"Apache-2.0"}');
 
 /***/ }),
 
@@ -112287,7 +112029,7 @@ module.exports = JSON.parse("{\"name\":\"google-auth-library\",\"version\":\"6.1
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"topLevel\":{\"dependancies\":\"dependencies\",\"dependecies\":\"dependencies\",\"depdenencies\":\"dependencies\",\"devEependencies\":\"devDependencies\",\"depends\":\"dependencies\",\"dev-dependencies\":\"devDependencies\",\"devDependences\":\"devDependencies\",\"devDepenencies\":\"devDependencies\",\"devdependencies\":\"devDependencies\",\"repostitory\":\"repository\",\"repo\":\"repository\",\"prefereGlobal\":\"preferGlobal\",\"hompage\":\"homepage\",\"hampage\":\"homepage\",\"autohr\":\"author\",\"autor\":\"author\",\"contributers\":\"contributors\",\"publicationConfig\":\"publishConfig\",\"script\":\"scripts\"},\"bugs\":{\"web\":\"url\",\"name\":\"url\"},\"script\":{\"server\":\"start\",\"tests\":\"test\"}}");
+module.exports = JSON.parse('{"topLevel":{"dependancies":"dependencies","dependecies":"dependencies","depdenencies":"dependencies","devEependencies":"devDependencies","depends":"dependencies","dev-dependencies":"devDependencies","devDependences":"devDependencies","devDepenencies":"devDependencies","devdependencies":"devDependencies","repostitory":"repository","repo":"repository","prefereGlobal":"preferGlobal","hompage":"homepage","hampage":"homepage","autohr":"author","autor":"author","contributers":"contributors","publicationConfig":"publishConfig","script":"scripts"},"bugs":{"web":"url","name":"url"},"script":{"server":"start","tests":"test"}}');
 
 /***/ }),
 
@@ -112295,7 +112037,7 @@ module.exports = JSON.parse("{\"topLevel\":{\"dependancies\":\"dependencies\",\"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"repositories\":\"'repositories' (plural) Not supported. Please pick one as the 'repository' field\",\"missingRepository\":\"No repository field.\",\"brokenGitUrl\":\"Probably broken git url: %s\",\"nonObjectScripts\":\"scripts must be an object\",\"nonStringScript\":\"script values must be string commands\",\"nonArrayFiles\":\"Invalid 'files' member\",\"invalidFilename\":\"Invalid filename in 'files' list: %s\",\"nonArrayBundleDependencies\":\"Invalid 'bundleDependencies' list. Must be array of package names\",\"nonStringBundleDependency\":\"Invalid bundleDependencies member: %s\",\"nonDependencyBundleDependency\":\"Non-dependency in bundleDependencies: %s\",\"nonObjectDependencies\":\"%s field must be an object\",\"nonStringDependency\":\"Invalid dependency: %s %s\",\"deprecatedArrayDependencies\":\"specifying %s as array is deprecated\",\"deprecatedModules\":\"modules field is deprecated\",\"nonArrayKeywords\":\"keywords should be an array of strings\",\"nonStringKeyword\":\"keywords should be an array of strings\",\"conflictingName\":\"%s is also the name of a node core module.\",\"nonStringDescription\":\"'description' field should be a string\",\"missingDescription\":\"No description\",\"missingReadme\":\"No README data\",\"missingLicense\":\"No license field.\",\"nonEmailUrlBugsString\":\"Bug string field must be url, email, or {email,url}\",\"nonUrlBugsUrlField\":\"bugs.url field must be a string url. Deleted.\",\"nonEmailBugsEmailField\":\"bugs.email field must be a string email. Deleted.\",\"emptyNormalizedBugs\":\"Normalized value of bugs field is an empty object. Deleted.\",\"nonUrlHomepage\":\"homepage field must be a string url. Deleted.\",\"invalidLicense\":\"license should be a valid SPDX license expression\",\"typo\":\"%s should probably be %s.\"}");
+module.exports = JSON.parse('{"repositories":"\'repositories\' (plural) Not supported. Please pick one as the \'repository\' field","missingRepository":"No repository field.","brokenGitUrl":"Probably broken git url: %s","nonObjectScripts":"scripts must be an object","nonStringScript":"script values must be string commands","nonArrayFiles":"Invalid \'files\' member","invalidFilename":"Invalid filename in \'files\' list: %s","nonArrayBundleDependencies":"Invalid \'bundleDependencies\' list. Must be array of package names","nonStringBundleDependency":"Invalid bundleDependencies member: %s","nonDependencyBundleDependency":"Non-dependency in bundleDependencies: %s","nonObjectDependencies":"%s field must be an object","nonStringDependency":"Invalid dependency: %s %s","deprecatedArrayDependencies":"specifying %s as array is deprecated","deprecatedModules":"modules field is deprecated","nonArrayKeywords":"keywords should be an array of strings","nonStringKeyword":"keywords should be an array of strings","conflictingName":"%s is also the name of a node core module.","nonStringDescription":"\'description\' field should be a string","missingDescription":"No description","missingReadme":"No README data","missingLicense":"No license field.","nonEmailUrlBugsString":"Bug string field must be url, email, or {email,url}","nonUrlBugsUrlField":"bugs.url field must be a string url. Deleted.","nonEmailBugsEmailField":"bugs.email field must be a string email. Deleted.","emptyNormalizedBugs":"Normalized value of bugs field is an empty object. Deleted.","nonUrlHomepage":"homepage field must be a string url. Deleted.","invalidLicense":"license should be a valid SPDX license expression","typo":"%s should probably be %s."}');
 
 /***/ }),
 
@@ -112303,7 +112045,7 @@ module.exports = JSON.parse("{\"repositories\":\"'repositories' (plural) Not sup
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"assert\":true,\"async_hooks\":\">= 8\",\"buffer_ieee754\":\"< 0.9.7\",\"buffer\":true,\"child_process\":true,\"cluster\":true,\"console\":true,\"constants\":true,\"crypto\":true,\"_debug_agent\":\">= 1 && < 8\",\"_debugger\":\"< 8\",\"dgram\":true,\"dns\":true,\"domain\":true,\"events\":true,\"freelist\":\"< 6\",\"fs\":true,\"fs/promises\":[\">= 10 && < 10.1\",\">= 14\"],\"_http_agent\":\">= 0.11.1\",\"_http_client\":\">= 0.11.1\",\"_http_common\":\">= 0.11.1\",\"_http_incoming\":\">= 0.11.1\",\"_http_outgoing\":\">= 0.11.1\",\"_http_server\":\">= 0.11.1\",\"http\":true,\"http2\":\">= 8.8\",\"https\":true,\"inspector\":\">= 8.0.0\",\"_linklist\":\"< 8\",\"module\":true,\"net\":true,\"node-inspect/lib/_inspect\":\">= 7.6.0 && < 12\",\"node-inspect/lib/internal/inspect_client\":\">= 7.6.0 && < 12\",\"node-inspect/lib/internal/inspect_repl\":\">= 7.6.0 && < 12\",\"os\":true,\"path\":true,\"perf_hooks\":\">= 8.5\",\"process\":\">= 1\",\"punycode\":true,\"querystring\":true,\"readline\":true,\"repl\":true,\"smalloc\":\">= 0.11.5 && < 3\",\"_stream_duplex\":\">= 0.9.4\",\"_stream_transform\":\">= 0.9.4\",\"_stream_wrap\":\">= 1.4.1\",\"_stream_passthrough\":\">= 0.9.4\",\"_stream_readable\":\">= 0.9.4\",\"_stream_writable\":\">= 0.9.4\",\"stream\":true,\"string_decoder\":true,\"sys\":true,\"timers\":true,\"_tls_common\":\">= 0.11.13\",\"_tls_legacy\":\">= 0.11.3 && < 10\",\"_tls_wrap\":\">= 0.11.3\",\"tls\":true,\"trace_events\":\">= 10\",\"tty\":true,\"url\":true,\"util\":true,\"v8/tools/arguments\":\">= 10 && < 12\",\"v8/tools/codemap\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/consarray\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/csvparser\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/logreader\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/profile_view\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8/tools/splaytree\":[\">= 4.4.0 && < 5\",\">= 5.2.0 && < 12\"],\"v8\":\">= 1\",\"vm\":true,\"wasi\":\">= 13.4 && < 13.5\",\"worker_threads\":\">= 11.7\",\"zlib\":true}");
+module.exports = JSON.parse('{"assert":true,"async_hooks":">= 8","buffer_ieee754":"< 0.9.7","buffer":true,"child_process":true,"cluster":true,"console":true,"constants":true,"crypto":true,"_debug_agent":">= 1 && < 8","_debugger":"< 8","dgram":true,"dns":true,"domain":true,"events":true,"freelist":"< 6","fs":true,"fs/promises":[">= 10 && < 10.1",">= 14"],"_http_agent":">= 0.11.1","_http_client":">= 0.11.1","_http_common":">= 0.11.1","_http_incoming":">= 0.11.1","_http_outgoing":">= 0.11.1","_http_server":">= 0.11.1","http":true,"http2":">= 8.8","https":true,"inspector":">= 8.0.0","_linklist":"< 8","module":true,"net":true,"node-inspect/lib/_inspect":">= 7.6.0 && < 12","node-inspect/lib/internal/inspect_client":">= 7.6.0 && < 12","node-inspect/lib/internal/inspect_repl":">= 7.6.0 && < 12","os":true,"path":true,"perf_hooks":">= 8.5","process":">= 1","punycode":true,"querystring":true,"readline":true,"repl":true,"smalloc":">= 0.11.5 && < 3","_stream_duplex":">= 0.9.4","_stream_transform":">= 0.9.4","_stream_wrap":">= 1.4.1","_stream_passthrough":">= 0.9.4","_stream_readable":">= 0.9.4","_stream_writable":">= 0.9.4","stream":true,"string_decoder":true,"sys":true,"timers":true,"_tls_common":">= 0.11.13","_tls_legacy":">= 0.11.3 && < 10","_tls_wrap":">= 0.11.3","tls":true,"trace_events":">= 10","tty":true,"url":true,"util":true,"v8/tools/arguments":">= 10 && < 12","v8/tools/codemap":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/consarray":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/csvparser":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/logreader":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/profile_view":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8/tools/splaytree":[">= 4.4.0 && < 5",">= 5.2.0 && < 12"],"v8":">= 1","vm":true,"wasi":">= 13.4 && < 13.5","worker_threads":">= 11.7","zlib":true}');
 
 /***/ }),
 
@@ -112311,7 +112053,7 @@ module.exports = JSON.parse("{\"assert\":true,\"async_hooks\":\">= 8\",\"buffer_
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("[\"389-exception\",\"Autoconf-exception-2.0\",\"Autoconf-exception-3.0\",\"Bison-exception-2.2\",\"Bootloader-exception\",\"Classpath-exception-2.0\",\"CLISP-exception-2.0\",\"DigiRule-FOSS-exception\",\"eCos-exception-2.0\",\"Fawkes-Runtime-exception\",\"FLTK-exception\",\"Font-exception-2.0\",\"freertos-exception-2.0\",\"GCC-exception-2.0\",\"GCC-exception-3.1\",\"gnu-javamail-exception\",\"GPL-3.0-linking-exception\",\"GPL-3.0-linking-source-exception\",\"GPL-CC-1.0\",\"i2p-gpl-java-exception\",\"Libtool-exception\",\"Linux-syscall-note\",\"LLVM-exception\",\"LZMA-exception\",\"mif-exception\",\"Nokia-Qt-exception-1.1\",\"OCaml-LGPL-linking-exception\",\"OCCT-exception-1.0\",\"OpenJDK-assembly-exception-1.0\",\"openvpn-openssl-exception\",\"PS-or-PDF-font-exception-20170817\",\"Qt-GPL-exception-1.0\",\"Qt-LGPL-exception-1.1\",\"Qwt-exception-1.0\",\"Swift-exception\",\"u-boot-exception-2.0\",\"Universal-FOSS-exception-1.0\",\"WxWindows-exception-3.1\"]");
+module.exports = JSON.parse('["389-exception","Autoconf-exception-2.0","Autoconf-exception-3.0","Bison-exception-2.2","Bootloader-exception","Classpath-exception-2.0","CLISP-exception-2.0","DigiRule-FOSS-exception","eCos-exception-2.0","Fawkes-Runtime-exception","FLTK-exception","Font-exception-2.0","freertos-exception-2.0","GCC-exception-2.0","GCC-exception-3.1","gnu-javamail-exception","GPL-3.0-linking-exception","GPL-3.0-linking-source-exception","GPL-CC-1.0","i2p-gpl-java-exception","Libtool-exception","Linux-syscall-note","LLVM-exception","LZMA-exception","mif-exception","Nokia-Qt-exception-1.1","OCaml-LGPL-linking-exception","OCCT-exception-1.0","OpenJDK-assembly-exception-1.0","openvpn-openssl-exception","PS-or-PDF-font-exception-20170817","Qt-GPL-exception-1.0","Qt-LGPL-exception-1.1","Qwt-exception-1.0","Swift-exception","u-boot-exception-2.0","Universal-FOSS-exception-1.0","WxWindows-exception-3.1"]');
 
 /***/ }),
 
@@ -112319,7 +112061,7 @@ module.exports = JSON.parse("[\"389-exception\",\"Autoconf-exception-2.0\",\"Aut
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("[\"AGPL-1.0\",\"AGPL-3.0\",\"GFDL-1.1\",\"GFDL-1.2\",\"GFDL-1.3\",\"GPL-1.0\",\"GPL-2.0\",\"GPL-2.0-with-GCC-exception\",\"GPL-2.0-with-autoconf-exception\",\"GPL-2.0-with-bison-exception\",\"GPL-2.0-with-classpath-exception\",\"GPL-2.0-with-font-exception\",\"GPL-3.0\",\"GPL-3.0-with-GCC-exception\",\"GPL-3.0-with-autoconf-exception\",\"LGPL-2.0\",\"LGPL-2.1\",\"LGPL-3.0\",\"Nunit\",\"StandardML-NJ\",\"eCos-2.0\",\"wxWindows\"]");
+module.exports = JSON.parse('["AGPL-1.0","AGPL-3.0","GFDL-1.1","GFDL-1.2","GFDL-1.3","GPL-1.0","GPL-2.0","GPL-2.0-with-GCC-exception","GPL-2.0-with-autoconf-exception","GPL-2.0-with-bison-exception","GPL-2.0-with-classpath-exception","GPL-2.0-with-font-exception","GPL-3.0","GPL-3.0-with-GCC-exception","GPL-3.0-with-autoconf-exception","LGPL-2.0","LGPL-2.1","LGPL-3.0","Nunit","StandardML-NJ","eCos-2.0","wxWindows"]');
 
 /***/ }),
 
@@ -112327,7 +112069,7 @@ module.exports = JSON.parse("[\"AGPL-1.0\",\"AGPL-3.0\",\"GFDL-1.1\",\"GFDL-1.2\
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("[\"0BSD\",\"AAL\",\"ADSL\",\"AFL-1.1\",\"AFL-1.2\",\"AFL-2.0\",\"AFL-2.1\",\"AFL-3.0\",\"AGPL-1.0-only\",\"AGPL-1.0-or-later\",\"AGPL-3.0-only\",\"AGPL-3.0-or-later\",\"AMDPLPA\",\"AML\",\"AMPAS\",\"ANTLR-PD\",\"APAFML\",\"APL-1.0\",\"APSL-1.0\",\"APSL-1.1\",\"APSL-1.2\",\"APSL-2.0\",\"Abstyles\",\"Adobe-2006\",\"Adobe-Glyph\",\"Afmparse\",\"Aladdin\",\"Apache-1.0\",\"Apache-1.1\",\"Apache-2.0\",\"Artistic-1.0\",\"Artistic-1.0-Perl\",\"Artistic-1.0-cl8\",\"Artistic-2.0\",\"BSD-1-Clause\",\"BSD-2-Clause\",\"BSD-2-Clause-FreeBSD\",\"BSD-2-Clause-NetBSD\",\"BSD-2-Clause-Patent\",\"BSD-3-Clause\",\"BSD-3-Clause-Attribution\",\"BSD-3-Clause-Clear\",\"BSD-3-Clause-LBNL\",\"BSD-3-Clause-No-Nuclear-License\",\"BSD-3-Clause-No-Nuclear-License-2014\",\"BSD-3-Clause-No-Nuclear-Warranty\",\"BSD-3-Clause-Open-MPI\",\"BSD-4-Clause\",\"BSD-4-Clause-UC\",\"BSD-Protection\",\"BSD-Source-Code\",\"BSL-1.0\",\"Bahyph\",\"Barr\",\"Beerware\",\"BitTorrent-1.0\",\"BitTorrent-1.1\",\"BlueOak-1.0.0\",\"Borceux\",\"CATOSL-1.1\",\"CC-BY-1.0\",\"CC-BY-2.0\",\"CC-BY-2.5\",\"CC-BY-3.0\",\"CC-BY-4.0\",\"CC-BY-NC-1.0\",\"CC-BY-NC-2.0\",\"CC-BY-NC-2.5\",\"CC-BY-NC-3.0\",\"CC-BY-NC-4.0\",\"CC-BY-NC-ND-1.0\",\"CC-BY-NC-ND-2.0\",\"CC-BY-NC-ND-2.5\",\"CC-BY-NC-ND-3.0\",\"CC-BY-NC-ND-4.0\",\"CC-BY-NC-SA-1.0\",\"CC-BY-NC-SA-2.0\",\"CC-BY-NC-SA-2.5\",\"CC-BY-NC-SA-3.0\",\"CC-BY-NC-SA-4.0\",\"CC-BY-ND-1.0\",\"CC-BY-ND-2.0\",\"CC-BY-ND-2.5\",\"CC-BY-ND-3.0\",\"CC-BY-ND-4.0\",\"CC-BY-SA-1.0\",\"CC-BY-SA-2.0\",\"CC-BY-SA-2.5\",\"CC-BY-SA-3.0\",\"CC-BY-SA-4.0\",\"CC-PDDC\",\"CC0-1.0\",\"CDDL-1.0\",\"CDDL-1.1\",\"CDLA-Permissive-1.0\",\"CDLA-Sharing-1.0\",\"CECILL-1.0\",\"CECILL-1.1\",\"CECILL-2.0\",\"CECILL-2.1\",\"CECILL-B\",\"CECILL-C\",\"CERN-OHL-1.1\",\"CERN-OHL-1.2\",\"CNRI-Jython\",\"CNRI-Python\",\"CNRI-Python-GPL-Compatible\",\"CPAL-1.0\",\"CPL-1.0\",\"CPOL-1.02\",\"CUA-OPL-1.0\",\"Caldera\",\"ClArtistic\",\"Condor-1.1\",\"Crossword\",\"CrystalStacker\",\"Cube\",\"D-FSL-1.0\",\"DOC\",\"DSDP\",\"Dotseqn\",\"ECL-1.0\",\"ECL-2.0\",\"EFL-1.0\",\"EFL-2.0\",\"EPL-1.0\",\"EPL-2.0\",\"EUDatagrid\",\"EUPL-1.0\",\"EUPL-1.1\",\"EUPL-1.2\",\"Entessa\",\"ErlPL-1.1\",\"Eurosym\",\"FSFAP\",\"FSFUL\",\"FSFULLR\",\"FTL\",\"Fair\",\"Frameworx-1.0\",\"FreeImage\",\"GFDL-1.1-only\",\"GFDL-1.1-or-later\",\"GFDL-1.2-only\",\"GFDL-1.2-or-later\",\"GFDL-1.3-only\",\"GFDL-1.3-or-later\",\"GL2PS\",\"GPL-1.0-only\",\"GPL-1.0-or-later\",\"GPL-2.0-only\",\"GPL-2.0-or-later\",\"GPL-3.0-only\",\"GPL-3.0-or-later\",\"Giftware\",\"Glide\",\"Glulxe\",\"HPND\",\"HPND-sell-variant\",\"HaskellReport\",\"IBM-pibs\",\"ICU\",\"IJG\",\"IPA\",\"IPL-1.0\",\"ISC\",\"ImageMagick\",\"Imlib2\",\"Info-ZIP\",\"Intel\",\"Intel-ACPI\",\"Interbase-1.0\",\"JPNIC\",\"JSON\",\"JasPer-2.0\",\"LAL-1.2\",\"LAL-1.3\",\"LGPL-2.0-only\",\"LGPL-2.0-or-later\",\"LGPL-2.1-only\",\"LGPL-2.1-or-later\",\"LGPL-3.0-only\",\"LGPL-3.0-or-later\",\"LGPLLR\",\"LPL-1.0\",\"LPL-1.02\",\"LPPL-1.0\",\"LPPL-1.1\",\"LPPL-1.2\",\"LPPL-1.3a\",\"LPPL-1.3c\",\"Latex2e\",\"Leptonica\",\"LiLiQ-P-1.1\",\"LiLiQ-R-1.1\",\"LiLiQ-Rplus-1.1\",\"Libpng\",\"Linux-OpenIB\",\"MIT\",\"MIT-0\",\"MIT-CMU\",\"MIT-advertising\",\"MIT-enna\",\"MIT-feh\",\"MITNFA\",\"MPL-1.0\",\"MPL-1.1\",\"MPL-2.0\",\"MPL-2.0-no-copyleft-exception\",\"MS-PL\",\"MS-RL\",\"MTLL\",\"MakeIndex\",\"MirOS\",\"Motosoto\",\"Multics\",\"Mup\",\"NASA-1.3\",\"NBPL-1.0\",\"NCSA\",\"NGPL\",\"NLOD-1.0\",\"NLPL\",\"NOSL\",\"NPL-1.0\",\"NPL-1.1\",\"NPOSL-3.0\",\"NRL\",\"NTP\",\"Naumen\",\"Net-SNMP\",\"NetCDF\",\"Newsletr\",\"Nokia\",\"Noweb\",\"OCCT-PL\",\"OCLC-2.0\",\"ODC-By-1.0\",\"ODbL-1.0\",\"OFL-1.0\",\"OFL-1.1\",\"OGL-UK-1.0\",\"OGL-UK-2.0\",\"OGL-UK-3.0\",\"OGTSL\",\"OLDAP-1.1\",\"OLDAP-1.2\",\"OLDAP-1.3\",\"OLDAP-1.4\",\"OLDAP-2.0\",\"OLDAP-2.0.1\",\"OLDAP-2.1\",\"OLDAP-2.2\",\"OLDAP-2.2.1\",\"OLDAP-2.2.2\",\"OLDAP-2.3\",\"OLDAP-2.4\",\"OLDAP-2.5\",\"OLDAP-2.6\",\"OLDAP-2.7\",\"OLDAP-2.8\",\"OML\",\"OPL-1.0\",\"OSET-PL-2.1\",\"OSL-1.0\",\"OSL-1.1\",\"OSL-2.0\",\"OSL-2.1\",\"OSL-3.0\",\"OpenSSL\",\"PDDL-1.0\",\"PHP-3.0\",\"PHP-3.01\",\"Parity-6.0.0\",\"Plexus\",\"PostgreSQL\",\"Python-2.0\",\"QPL-1.0\",\"Qhull\",\"RHeCos-1.1\",\"RPL-1.1\",\"RPL-1.5\",\"RPSL-1.0\",\"RSA-MD\",\"RSCPL\",\"Rdisc\",\"Ruby\",\"SAX-PD\",\"SCEA\",\"SGI-B-1.0\",\"SGI-B-1.1\",\"SGI-B-2.0\",\"SHL-0.5\",\"SHL-0.51\",\"SISSL\",\"SISSL-1.2\",\"SMLNJ\",\"SMPPL\",\"SNIA\",\"SPL-1.0\",\"SSPL-1.0\",\"SWL\",\"Saxpath\",\"Sendmail\",\"Sendmail-8.23\",\"SimPL-2.0\",\"Sleepycat\",\"Spencer-86\",\"Spencer-94\",\"Spencer-99\",\"SugarCRM-1.1.3\",\"TAPR-OHL-1.0\",\"TCL\",\"TCP-wrappers\",\"TMate\",\"TORQUE-1.1\",\"TOSL\",\"TU-Berlin-1.0\",\"TU-Berlin-2.0\",\"UPL-1.0\",\"Unicode-DFS-2015\",\"Unicode-DFS-2016\",\"Unicode-TOU\",\"Unlicense\",\"VOSTROM\",\"VSL-1.0\",\"Vim\",\"W3C\",\"W3C-19980720\",\"W3C-20150513\",\"WTFPL\",\"Watcom-1.0\",\"Wsuipa\",\"X11\",\"XFree86-1.1\",\"XSkat\",\"Xerox\",\"Xnet\",\"YPL-1.0\",\"YPL-1.1\",\"ZPL-1.1\",\"ZPL-2.0\",\"ZPL-2.1\",\"Zed\",\"Zend-2.0\",\"Zimbra-1.3\",\"Zimbra-1.4\",\"Zlib\",\"blessing\",\"bzip2-1.0.5\",\"bzip2-1.0.6\",\"copyleft-next-0.3.0\",\"copyleft-next-0.3.1\",\"curl\",\"diffmark\",\"dvipdfm\",\"eGenix\",\"gSOAP-1.3b\",\"gnuplot\",\"iMatix\",\"libpng-2.0\",\"libtiff\",\"mpich2\",\"psfrag\",\"psutils\",\"xinetd\",\"xpp\",\"zlib-acknowledgement\"]");
+module.exports = JSON.parse('["0BSD","AAL","ADSL","AFL-1.1","AFL-1.2","AFL-2.0","AFL-2.1","AFL-3.0","AGPL-1.0-only","AGPL-1.0-or-later","AGPL-3.0-only","AGPL-3.0-or-later","AMDPLPA","AML","AMPAS","ANTLR-PD","APAFML","APL-1.0","APSL-1.0","APSL-1.1","APSL-1.2","APSL-2.0","Abstyles","Adobe-2006","Adobe-Glyph","Afmparse","Aladdin","Apache-1.0","Apache-1.1","Apache-2.0","Artistic-1.0","Artistic-1.0-Perl","Artistic-1.0-cl8","Artistic-2.0","BSD-1-Clause","BSD-2-Clause","BSD-2-Clause-FreeBSD","BSD-2-Clause-NetBSD","BSD-2-Clause-Patent","BSD-3-Clause","BSD-3-Clause-Attribution","BSD-3-Clause-Clear","BSD-3-Clause-LBNL","BSD-3-Clause-No-Nuclear-License","BSD-3-Clause-No-Nuclear-License-2014","BSD-3-Clause-No-Nuclear-Warranty","BSD-3-Clause-Open-MPI","BSD-4-Clause","BSD-4-Clause-UC","BSD-Protection","BSD-Source-Code","BSL-1.0","Bahyph","Barr","Beerware","BitTorrent-1.0","BitTorrent-1.1","BlueOak-1.0.0","Borceux","CATOSL-1.1","CC-BY-1.0","CC-BY-2.0","CC-BY-2.5","CC-BY-3.0","CC-BY-4.0","CC-BY-NC-1.0","CC-BY-NC-2.0","CC-BY-NC-2.5","CC-BY-NC-3.0","CC-BY-NC-4.0","CC-BY-NC-ND-1.0","CC-BY-NC-ND-2.0","CC-BY-NC-ND-2.5","CC-BY-NC-ND-3.0","CC-BY-NC-ND-4.0","CC-BY-NC-SA-1.0","CC-BY-NC-SA-2.0","CC-BY-NC-SA-2.5","CC-BY-NC-SA-3.0","CC-BY-NC-SA-4.0","CC-BY-ND-1.0","CC-BY-ND-2.0","CC-BY-ND-2.5","CC-BY-ND-3.0","CC-BY-ND-4.0","CC-BY-SA-1.0","CC-BY-SA-2.0","CC-BY-SA-2.5","CC-BY-SA-3.0","CC-BY-SA-4.0","CC-PDDC","CC0-1.0","CDDL-1.0","CDDL-1.1","CDLA-Permissive-1.0","CDLA-Sharing-1.0","CECILL-1.0","CECILL-1.1","CECILL-2.0","CECILL-2.1","CECILL-B","CECILL-C","CERN-OHL-1.1","CERN-OHL-1.2","CNRI-Jython","CNRI-Python","CNRI-Python-GPL-Compatible","CPAL-1.0","CPL-1.0","CPOL-1.02","CUA-OPL-1.0","Caldera","ClArtistic","Condor-1.1","Crossword","CrystalStacker","Cube","D-FSL-1.0","DOC","DSDP","Dotseqn","ECL-1.0","ECL-2.0","EFL-1.0","EFL-2.0","EPL-1.0","EPL-2.0","EUDatagrid","EUPL-1.0","EUPL-1.1","EUPL-1.2","Entessa","ErlPL-1.1","Eurosym","FSFAP","FSFUL","FSFULLR","FTL","Fair","Frameworx-1.0","FreeImage","GFDL-1.1-only","GFDL-1.1-or-later","GFDL-1.2-only","GFDL-1.2-or-later","GFDL-1.3-only","GFDL-1.3-or-later","GL2PS","GPL-1.0-only","GPL-1.0-or-later","GPL-2.0-only","GPL-2.0-or-later","GPL-3.0-only","GPL-3.0-or-later","Giftware","Glide","Glulxe","HPND","HPND-sell-variant","HaskellReport","IBM-pibs","ICU","IJG","IPA","IPL-1.0","ISC","ImageMagick","Imlib2","Info-ZIP","Intel","Intel-ACPI","Interbase-1.0","JPNIC","JSON","JasPer-2.0","LAL-1.2","LAL-1.3","LGPL-2.0-only","LGPL-2.0-or-later","LGPL-2.1-only","LGPL-2.1-or-later","LGPL-3.0-only","LGPL-3.0-or-later","LGPLLR","LPL-1.0","LPL-1.02","LPPL-1.0","LPPL-1.1","LPPL-1.2","LPPL-1.3a","LPPL-1.3c","Latex2e","Leptonica","LiLiQ-P-1.1","LiLiQ-R-1.1","LiLiQ-Rplus-1.1","Libpng","Linux-OpenIB","MIT","MIT-0","MIT-CMU","MIT-advertising","MIT-enna","MIT-feh","MITNFA","MPL-1.0","MPL-1.1","MPL-2.0","MPL-2.0-no-copyleft-exception","MS-PL","MS-RL","MTLL","MakeIndex","MirOS","Motosoto","Multics","Mup","NASA-1.3","NBPL-1.0","NCSA","NGPL","NLOD-1.0","NLPL","NOSL","NPL-1.0","NPL-1.1","NPOSL-3.0","NRL","NTP","Naumen","Net-SNMP","NetCDF","Newsletr","Nokia","Noweb","OCCT-PL","OCLC-2.0","ODC-By-1.0","ODbL-1.0","OFL-1.0","OFL-1.1","OGL-UK-1.0","OGL-UK-2.0","OGL-UK-3.0","OGTSL","OLDAP-1.1","OLDAP-1.2","OLDAP-1.3","OLDAP-1.4","OLDAP-2.0","OLDAP-2.0.1","OLDAP-2.1","OLDAP-2.2","OLDAP-2.2.1","OLDAP-2.2.2","OLDAP-2.3","OLDAP-2.4","OLDAP-2.5","OLDAP-2.6","OLDAP-2.7","OLDAP-2.8","OML","OPL-1.0","OSET-PL-2.1","OSL-1.0","OSL-1.1","OSL-2.0","OSL-2.1","OSL-3.0","OpenSSL","PDDL-1.0","PHP-3.0","PHP-3.01","Parity-6.0.0","Plexus","PostgreSQL","Python-2.0","QPL-1.0","Qhull","RHeCos-1.1","RPL-1.1","RPL-1.5","RPSL-1.0","RSA-MD","RSCPL","Rdisc","Ruby","SAX-PD","SCEA","SGI-B-1.0","SGI-B-1.1","SGI-B-2.0","SHL-0.5","SHL-0.51","SISSL","SISSL-1.2","SMLNJ","SMPPL","SNIA","SPL-1.0","SSPL-1.0","SWL","Saxpath","Sendmail","Sendmail-8.23","SimPL-2.0","Sleepycat","Spencer-86","Spencer-94","Spencer-99","SugarCRM-1.1.3","TAPR-OHL-1.0","TCL","TCP-wrappers","TMate","TORQUE-1.1","TOSL","TU-Berlin-1.0","TU-Berlin-2.0","UPL-1.0","Unicode-DFS-2015","Unicode-DFS-2016","Unicode-TOU","Unlicense","VOSTROM","VSL-1.0","Vim","W3C","W3C-19980720","W3C-20150513","WTFPL","Watcom-1.0","Wsuipa","X11","XFree86-1.1","XSkat","Xerox","Xnet","YPL-1.0","YPL-1.1","ZPL-1.1","ZPL-2.0","ZPL-2.1","Zed","Zend-2.0","Zimbra-1.3","Zimbra-1.4","Zlib","blessing","bzip2-1.0.5","bzip2-1.0.6","copyleft-next-0.3.0","copyleft-next-0.3.1","curl","diffmark","dvipdfm","eGenix","gSOAP-1.3b","gnuplot","iMatix","libpng-2.0","libtiff","mpich2","psfrag","psutils","xinetd","xpp","zlib-acknowledgement"]');
 
 /***/ }),
 
@@ -112563,8 +112305,9 @@ module.exports = require("zlib");;
 /******/ 	// The require function
 /******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -112612,11 +112355,264 @@ module.exports = require("zlib");;
 /******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	__nccwpck_require__.ab = __dirname + "/";/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	return __nccwpck_require__(3535);
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+// ESM COMPAT FLAG
+__nccwpck_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/tslib/tslib.js
+var tslib = __nccwpck_require__(4351);
+// EXTERNAL MODULE: external "path"
+var external_path_ = __nccwpck_require__(5622);
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(2186);
+// EXTERNAL MODULE: ./node_modules/@pulumi/pulumi/x/automation/index.js
+var automation = __nccwpck_require__(5883);
+// EXTERNAL MODULE: ./node_modules/runtypes/lib/index.js
+var lib = __nccwpck_require__(5568);
+;// CONCATENATED MODULE: ./src/libs/utils.ts
+/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
+function invariant(condition, message) {
+    if (!condition) {
+        throw new Error(message);
+    }
+}
+function parseArray(input) {
+    return parseUndefined(input)
+        ? input.split(/\r?\n/).reduce((acc, line) => acc
+            .concat(line.split(','))
+            .filter((pat) => pat)
+            .map((pat) => pat.trim()), [])
+        : undefined;
+}
+function parseUndefined(input) {
+    return input === undefined || input === '' ? undefined : input;
+}
+function parseBoolean(input) {
+    return parseUndefined(input) ? input === 'true' : undefined;
+}
+function parseNumber(input) {
+    return parseUndefined(input) ? Number(input) : undefined;
+}
+
+;// CONCATENATED MODULE: ./src/config.ts
+
+
+
+
+const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'));
+const options = lib.Partial({
+    parallel: lib.Number,
+    message: lib.String,
+    expectNoChanges: lib.Boolean,
+    diff: lib.Boolean,
+    replace: lib.Array(lib.String),
+    target: lib.Array(lib.String),
+    targetDependents: lib.Boolean,
+});
+const config = lib.Record({
+    // Required options
+    command: command,
+    stackName: lib.String,
+    workDir: lib.String,
+    commentOnPr: lib.Boolean,
+    options: options,
+})
+    .And(lib.Partial({
+    // Optional options
+    cloudUrl: lib.String,
+    githubToken: lib.String,
+    upsert: lib.Boolean,
+    refresh: lib.Boolean,
+}));
+function makeConfig() {
+    return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
+        return config.check({
+            command: (0,core.getInput)('command', { required: true }),
+            stackName: (0,core.getInput)('stack-name', { required: true }),
+            workDir: (0,core.getInput)('work-dir') || './',
+            cloudUrl: (0,core.getInput)('cloud-url'),
+            githubToken: (0,core.getInput)('github-token'),
+            commentOnPr: parseBoolean((0,core.getInput)('comment-on-pr')),
+            upsert: parseBoolean((0,core.getInput)('upsert')),
+            refresh: parseBoolean((0,core.getInput)('refresh')),
+            options: {
+                parallel: parseNumber((0,core.getInput)('parallel')),
+                message: (0,core.getInput)('message'),
+                expectNoChanges: parseBoolean((0,core.getInput)('expect-no-changes')),
+                diff: parseBoolean((0,core.getInput)('diff')),
+                replace: parseArray((0,core.getInput)('replace')),
+                target: parseArray((0,core.getInput)('target')),
+                targetDependents: parseBoolean((0,core.getInput)('target-dependents')),
+            },
+        });
+    });
+}
+
+// EXTERNAL MODULE: ./node_modules/envalid/dist/index.js
+var dist = __nccwpck_require__(2322);
+;// CONCATENATED MODULE: ./src/libs/envs.ts
+
+const environmentVariables = dist.cleanEnv(process.env, {
+    GITHUB_WORKSPACE: dist.str(),
+    PULUMI_ACCESS_TOKEN: dist.str({
+        default: '',
+    }),
+});
+
+// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
+var github = __nccwpck_require__(5438);
+;// CONCATENATED MODULE: ./src/libs/pr.ts
+
+
+
+function addPullRequestMessage(body, githubToken) {
+    return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
+        const { payload, repo } = github.context;
+        invariant(payload.pull_request, 'Missing pull request event data.');
+        const octokit = (0,github.getOctokit)(githubToken);
+        yield octokit.issues.createComment(Object.assign(Object.assign({}, repo), { issue_number: payload.pull_request.number, body }));
+    });
+}
+
+// EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
+var exec = __nccwpck_require__(1514);
+;// CONCATENATED MODULE: ./src/libs/exec.ts
+
+
+const exec_exec = (command, args = [], silent) => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
+    let stdout = '';
+    let stderr = '';
+    const options = {
+        silent: silent,
+        ignoreReturnCode: true,
+    };
+    options.listeners = {
+        stdout: (data) => {
+            stdout += data.toString();
+        },
+        stderr: (data) => {
+            stderr += data.toString();
+        },
+    };
+    const returnCode = yield exec.exec(command, args, options);
+    return {
+        success: returnCode === 0,
+        stdout: stdout.trim(),
+        stderr: stderr.trim(),
+    };
+});
+
+;// CONCATENATED MODULE: ./src/libs/pulumi-cli.ts
+
+
+function isAvailable() {
+    return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
+        const res = yield exec_exec(`pulumi`, [], true);
+        return res.stderr != '' && !res.success ? false : res.success;
+    });
+}
+function run(...args) {
+    return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
+        yield exec_exec(`pulumi`, args, true);
+    });
+}
+
+;// CONCATENATED MODULE: ./src/main.ts
+
+
+
+
+
+
+
+
+
+const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
+    const config = yield makeConfig();
+    core.debug('Configuration is loaded');
+    invariant(isAvailable(), 'Pulumi CLI is not available.');
+    core.debug('Pulumi CLI is available');
+    if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
+        core.debug(`Logging into to Pulumi`);
+        yield run('login');
+    }
+    else if (config.cloudUrl) {
+        core.debug(`Logging into to ${config.cloudUrl}`);
+        yield run('login', config.cloudUrl);
+    }
+    const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
+    core.debug(`Working directory resolved at ${workDir}`);
+    const stackArgs = {
+        stackName: config.stackName,
+        workDir: workDir,
+    };
+    const stack = yield (config.upsert
+        ? automation.LocalWorkspace.createOrSelectStack(stackArgs)
+        : automation.LocalWorkspace.selectStack(stackArgs));
+    const onOutput = (msg) => {
+        core.debug(msg);
+        core.info(msg);
+    };
+    if (config.refresh) {
+        core.startGroup(`Refresh stack on ${config.stackName}`);
+        yield stack.refresh({ onOutput });
+        core.endGroup();
+    }
+    core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
+    const actions = {
+        up: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
+        update: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
+        refresh: () => stack.refresh(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
+        destroy: () => stack.destroy(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
+        preview: () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
+            const { stdout, stderr } = yield stack.preview(config.options);
+            onOutput(stdout);
+            onOutput(stderr);
+            return stdout;
+        }),
+    };
+    core.debug(`Running action ${config.command}`);
+    const output = yield actions[config.command]();
+    core.debug(`Done running action ${config.command}`);
+    core.setOutput('output', output);
+    const outputs = yield stack.outputs();
+    for (const [outKey, outExport] of Object.entries(outputs)) {
+        core.setOutput(outKey, outExport.value);
+        if (outExport.secret) {
+            core.setSecret(outExport.value);
+        }
+    }
+    if (config.commentOnPr) {
+        core.debug(`Commenting on pull request`);
+        invariant(config.githubToken, 'github-token is missing.');
+        addPullRequestMessage(`#### :tropical_drink: \`${config.command}\`
+\`\`\`
+${output}
+\`\`\``, config.githubToken);
+    }
+    core.endGroup();
+});
+(() => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
+    try {
+        yield main();
+    }
+    catch (err) {
+        if (err.message.stderr) {
+            core.setFailed(err.message.stderr);
+        }
+        else {
+            core.setFailed(err.message);
+        }
+    }
+}))();
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
