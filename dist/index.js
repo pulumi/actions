@@ -107717,35 +107717,63 @@ module.exports = function requireFromString(code, filename, opts) {
 /***/ }),
 
 /***/ 3340:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AsyncContract = void 0;
 var errors_1 = __nccwpck_require__(3590);
+var util_1 = __nccwpck_require__(5571);
 function AsyncContract() {
     var runtypes = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         runtypes[_i] = arguments[_i];
     }
     var lastIndex = runtypes.length - 1;
-    var argTypes = runtypes.slice(0, lastIndex);
-    var returnType = runtypes[lastIndex];
+    var argRuntypes = runtypes.slice(0, lastIndex);
+    var returnRuntype = runtypes[lastIndex];
     return {
         enforce: function (f) { return function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            if (args.length < argTypes.length)
-                throw new errors_1.ValidationError("Expected " + argTypes.length + " arguments but only received " + args.length);
-            for (var i = 0; i < argTypes.length; i++)
-                argTypes[i].check(args[i]);
-            var returnedPromise = f.apply(void 0, args);
-            if (!(returnedPromise instanceof Promise))
-                throw new errors_1.ValidationError("Expected function to return a promise, but instead got " + returnedPromise);
-            return returnedPromise.then(returnType.check);
+            if (args.length < argRuntypes.length) {
+                var message = "Expected " + argRuntypes.length + " arguments but only received " + args.length;
+                var failure = util_1.FAILURE.ARGUMENT_INCORRECT(message);
+                throw new errors_1.ValidationError(failure);
+            }
+            for (var i = 0; i < argRuntypes.length; i++)
+                argRuntypes[i].check(args[i]);
+            var returnedPromise = f.apply(void 0, __spreadArray([], __read(args)));
+            if (!(returnedPromise instanceof Promise)) {
+                var message = "Expected function to return a promise, but instead got " + returnedPromise;
+                var failure = util_1.FAILURE.RETURN_INCORRECT(message);
+                throw new errors_1.ValidationError(failure);
+            }
+            return returnedPromise.then(returnRuntype.check);
         }; },
     };
 }
@@ -107755,32 +107783,57 @@ exports.AsyncContract = AsyncContract;
 /***/ }),
 
 /***/ 8154:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Contract = void 0;
 var errors_1 = __nccwpck_require__(3590);
+var util_1 = __nccwpck_require__(5571);
 function Contract() {
     var runtypes = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         runtypes[_i] = arguments[_i];
     }
     var lastIndex = runtypes.length - 1;
-    var argTypes = runtypes.slice(0, lastIndex);
-    var returnType = runtypes[lastIndex];
+    var argRuntypes = runtypes.slice(0, lastIndex);
+    var returnRuntype = runtypes[lastIndex];
     return {
         enforce: function (f) { return function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            if (args.length < argTypes.length)
-                throw new errors_1.ValidationError("Expected " + argTypes.length + " arguments but only received " + args.length);
-            for (var i = 0; i < argTypes.length; i++)
-                argTypes[i].check(args[i]);
-            return returnType.check(f.apply(void 0, args));
+            if (args.length < argRuntypes.length) {
+                var message = "Expected " + argRuntypes.length + " arguments but only received " + args.length;
+                var failure = util_1.FAILURE.ARGUMENT_INCORRECT(message);
+                throw new errors_1.ValidationError(failure);
+            }
+            for (var i = 0; i < argRuntypes.length; i++)
+                argRuntypes[i].check(args[i]);
+            return returnRuntype.check(f.apply(void 0, __spreadArray([], __read(args))));
         }; },
     };
 }
@@ -107797,6 +107850,7 @@ exports.Contract = Contract;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checked = exports.check = void 0;
 var errors_1 = __nccwpck_require__(3590);
+var util_1 = __nccwpck_require__(5571);
 var prototypes = new WeakMap();
 /**
  * A parameter decorator. Explicitly mark the parameter as checked on every method call in combination with `@checked` method decorator. The number of `@check` params must be the same as the number of provided runtypes into `@checked`.\
@@ -107873,9 +107927,11 @@ function checked() {
             }
             runtypes.forEach(function (type, typeIndex) {
                 var parameterIndex = validParameterIndices[typeIndex];
-                var validated = type.validate(args[parameterIndex]);
-                if (!validated.success) {
-                    throw new errors_1.ValidationError(methodId + ", argument #" + parameterIndex + ": " + validated.message, validated.key);
+                var result = type.validate(args[parameterIndex]);
+                if (!result.success) {
+                    var message = methodId + ", argument #" + parameterIndex + ": " + result.message;
+                    var failure = util_1.FAILURE.ARGUMENT_INCORRECT(message);
+                    throw new errors_1.ValidationError(failure);
                 }
             });
             return method.apply(this, args);
@@ -107911,10 +107967,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ValidationError = void 0;
 var ValidationError = /** @class */ (function (_super) {
     __extends(ValidationError, _super);
-    function ValidationError(message, key) {
-        var _this = _super.call(this, key ? message + " in " + key : message) || this;
-        _this.key = key;
+    function ValidationError(failure) {
+        var _this = _super.call(this, failure.message) || this;
         _this.name = 'ValidationError';
+        _this.code = failure.code;
+        if (failure.details !== undefined)
+            _this.details = failure.details;
         Object.setPrototypeOf(_this, ValidationError.prototype);
         return _this;
     }
@@ -107979,10 +108037,37 @@ __exportStar(__nccwpck_require__(3505), exports);
 /***/ }),
 
 /***/ 2055:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
 
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.match = void 0;
 function match() {
@@ -107991,10 +108076,20 @@ function match() {
         cases[_i] = arguments[_i];
     }
     return function (x) {
-        for (var _i = 0, cases_1 = cases; _i < cases_1.length; _i++) {
-            var _a = cases_1[_i], T = _a[0], f = _a[1];
-            if (T.guard(x))
-                return f(x);
+        var e_1, _a;
+        try {
+            for (var cases_1 = __values(cases), cases_1_1 = cases_1.next(); !cases_1_1.done; cases_1_1 = cases_1.next()) {
+                var _b = __read(cases_1_1.value, 2), T = _b[0], f = _b[1];
+                if (T.guard(x))
+                    return f(x);
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (cases_1_1 && !cases_1_1.done && (_a = cases_1.return)) _a.call(cases_1);
+            }
+            finally { if (e_1) throw e_1.error; }
         }
         throw new Error('No alternatives were matched');
     };
@@ -108020,6 +108115,29 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Failcode = void 0;
+exports.Failcode = {
+    /** The type of the received primitive value is incompatible with expected one. */
+    TYPE_INCORRECT: 'TYPE_INCORRECT',
+    /** The received primitive value is incorrect. */
+    VALUE_INCORRECT: 'VALUE_INCORRECT',
+    /** The key of the property is incorrect. */
+    KEY_INCORRECT: 'KEY_INCORRECT',
+    /** One or more elements or properties of the received object are incorrect. */
+    CONTENT_INCORRECT: 'CONTENT_INCORRECT',
+    /** One or more arguments passed to the function is incorrect. */
+    ARGUMENT_INCORRECT: 'ARGUMENT_INCORRECT',
+    /** The value returned by the function is incorrect. */
+    RETURN_INCORRECT: 'RETURN_INCORRECT',
+    /** The received value does not fulfill the constraint. */
+    CONSTRAINT_FAILED: 'CONSTRAINT_FAILED',
+    /** The property must be present but missing. */
+    PROPERTY_MISSING: 'PROPERTY_MISSING',
+    /** The property must not be present but present. */
+    PROPERTY_PRESENT: 'PROPERTY_PRESENT',
+    /** The value must not be present but present. */
+    NOTHING_EXPECTED: 'NOTHING_EXPECTED',
+};
 
 
 /***/ }),
@@ -108034,12 +108152,13 @@ exports.innerValidate = exports.create = void 0;
 var index_1 = __nccwpck_require__(5568);
 var show_1 = __nccwpck_require__(6045);
 var errors_1 = __nccwpck_require__(3590);
+var util_1 = __nccwpck_require__(5571);
 function create(validate, A) {
     A.check = check;
     A.assert = check;
     A._innerValidate = function (value, visited) {
         if (visited.has(value, A))
-            return { success: true, value: value };
+            return util_1.SUCCESS(value);
         return validate(value, visited);
     };
     A.validate = function (value) { return A._innerValidate(value, VisitedState()); };
@@ -108054,11 +108173,11 @@ function create(validate, A) {
     A.toString = function () { return "Runtype<" + show_1.default(A) + ">"; };
     return A;
     function check(x) {
-        var validated = A.validate(x);
-        if (validated.success) {
-            return validated.value;
-        }
-        throw new errors_1.ValidationError(validated.message, validated.key);
+        var result = A.validate(x);
+        if (result.success)
+            return result.value;
+        else
+            throw new errors_1.ValidationError(result);
     }
     function guard(x) {
         return A.validate(x).success;
@@ -108164,8 +108283,7 @@ var show = function (needsParens, circular) { return function (refl) {
             case 'constraint':
                 return refl.name || show(needsParens, circular)(refl.underlying);
             case 'instanceof':
-                var name_1 = refl.ctor.name;
-                return "InstanceOf<" + name_1 + ">";
+                return refl.ctor.name;
             case 'brand':
                 return show(needsParens, circular)(refl.entity);
         }
@@ -108173,6 +108291,7 @@ var show = function (needsParens, circular) { return function (refl) {
     finally {
         circular.delete(refl);
     }
+    /* istanbul ignore next */
     throw Error('impossible');
 }; };
 exports.default = show(false, new Set());
@@ -108196,30 +108315,30 @@ function readonlyTag(_a) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Array = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
 /**
  * Construct an array runtype from a runtype for its elements.
  */
 function InternalArr(element, isReadonly) {
+    var self = { tag: 'array', isReadonly: isReadonly, element: element };
     return withExtraModifierFuncs(runtype_1.create(function (xs, visited) {
-        if (!Array.isArray(xs)) {
-            return {
-                success: false,
-                message: "Expected array, but was " + (xs === null ? xs : typeof xs),
-            };
-        }
-        for (var _i = 0, xs_1 = xs; _i < xs_1.length; _i++) {
-            var x = xs_1[_i];
-            var validated = runtype_1.innerValidate(element, x, visited);
-            if (!validated.success) {
-                return {
-                    success: false,
-                    message: validated.message,
-                    key: validated.key ? "[" + xs.indexOf(x) + "]." + validated.key : "[" + xs.indexOf(x) + "]",
-                };
-            }
-        }
-        return { success: true, value: xs };
-    }, { tag: 'array', isReadonly: isReadonly, element: element }));
+        if (!Array.isArray(xs))
+            return util_1.FAILURE.TYPE_INCORRECT(self, xs);
+        var keys = util_1.enumerableKeysOf(xs);
+        var results = keys.map(function (key) {
+            return runtype_1.innerValidate(element, xs[key], visited);
+        });
+        var details = keys.reduce(function (details, key) {
+            var result = results[key];
+            if (!result.success)
+                details[key] = result.details || result.message;
+            return details;
+        }, []);
+        if (util_1.enumerableKeysOf(details).length !== 0)
+            return util_1.FAILURE.CONTENT_INCORRECT(self, details);
+        else
+            return util_1.SUCCESS(xs);
+    }, self));
 }
 function Arr(element) {
     return InternalArr(element, false);
@@ -108244,17 +108363,12 @@ function withExtraModifierFuncs(A) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BigInt = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
+var self = { tag: 'bigint' };
 /**
  * Validates that a value is a bigint.
  */
-exports.BigInt = runtype_1.create(function (value) {
-    return typeof value === 'bigint'
-        ? { success: true, value: value }
-        : {
-            success: false,
-            message: "Expected bigint, but was " + (value === null ? value : typeof value),
-        };
-}, { tag: 'bigint' });
+exports.BigInt = runtype_1.create(function (value) { return (typeof value === 'bigint' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -108267,17 +108381,12 @@ exports.BigInt = runtype_1.create(function (value) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Boolean = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
+var self = { tag: 'boolean' };
 /**
  * Validates that a value is a boolean.
  */
-exports.Boolean = runtype_1.create(function (value) {
-    return typeof value === 'boolean'
-        ? { success: true, value: value }
-        : {
-            success: false,
-            message: "Expected boolean, but was " + (value === null ? value : typeof value),
-        };
-}, { tag: 'boolean' });
+exports.Boolean = runtype_1.create(function (value) { return (typeof value === 'boolean' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -108291,16 +108400,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Brand = void 0;
 var runtype_1 = __nccwpck_require__(5601);
 function Brand(brand, entity) {
-    return runtype_1.create(function (value) {
-        var validated = entity.validate(value);
-        return validated.success
-            ? { success: true, value: validated.value }
-            : validated;
-    }, {
-        tag: 'brand',
-        brand: brand,
-        entity: entity,
-    });
+    var self = { tag: 'brand', brand: brand, entity: entity };
+    return runtype_1.create(function (value) { return entity.validate(value); }, self);
 }
 exports.Brand = Brand;
 
@@ -108315,28 +108416,29 @@ exports.Brand = Brand;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Guard = exports.Constraint = void 0;
 var runtype_1 = __nccwpck_require__(5601);
-var string_1 = __nccwpck_require__(1545);
+var util_1 = __nccwpck_require__(5571);
 var unknown_1 = __nccwpck_require__(6643);
 function Constraint(underlying, constraint, options) {
-    return runtype_1.create(function (value) {
-        var name = options && options.name;
-        var validated = underlying.validate(value);
-        if (!validated.success) {
-            return validated;
-        }
-        var result = constraint(validated.value);
-        if (string_1.String.guard(result))
-            return { success: false, message: result };
-        else if (!result)
-            return { success: false, message: "Failed " + (name || 'constraint') + " check" };
-        return { success: true, value: validated.value };
-    }, {
+    var name = options && options.name;
+    var args = options && options.args;
+    var self = {
         tag: 'constraint',
         underlying: underlying,
         constraint: constraint,
-        name: options && options.name,
-        args: options && options.args,
-    });
+        name: name,
+        args: args,
+    };
+    return runtype_1.create(function (value) {
+        var result = underlying.validate(value);
+        if (!result.success)
+            return result;
+        var message = constraint(result.value);
+        if (typeof message === 'string')
+            return util_1.FAILURE.CONSTRAINT_FAILED(self, message);
+        else if (!message)
+            return util_1.FAILURE.CONSTRAINT_FAILED(self);
+        return util_1.SUCCESS(result.value);
+    }, self);
 }
 exports.Constraint = Constraint;
 var Guard = function (guard, options) { return unknown_1.Unknown.withGuard(guard, options); };
@@ -108346,21 +108448,17 @@ exports.Guard = Guard;
 /***/ }),
 
 /***/ 3170:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Dictionary = void 0;
 var runtype_1 = __nccwpck_require__(5601);
 var string_1 = __nccwpck_require__(1545);
 var constraint_1 = __nccwpck_require__(2928);
 var show_1 = __nccwpck_require__(6045);
+var util_1 = __nccwpck_require__(5571);
 var NumberKey = constraint_1.Constraint(string_1.String, function (s) { return !isNaN(+s); }, { name: 'number' });
 function Dictionary(value, key) {
     var keyRuntype = key === undefined
@@ -108371,52 +108469,42 @@ function Dictionary(value, key) {
                 ? NumberKey
                 : key;
     var keyString = show_1.default(keyRuntype);
+    var self = { tag: 'dictionary', key: keyString, value: value };
     return runtype_1.create(function (x, visited) {
-        if (x === null || x === undefined) {
-            var a = runtype_1.create(x, { tag: 'dictionary', key: keyString, value: value });
-            return { success: false, message: "Expected " + show_1.default(a) + ", but was " + x };
-        }
-        if (typeof x !== 'object') {
-            var a = runtype_1.create(x, { tag: 'dictionary', key: keyString, value: value });
-            return { success: false, message: "Expected " + show_1.default(a.reflect) + ", but was " + typeof x };
-        }
-        if (Object.getPrototypeOf(x) !== Object.prototype) {
-            if (!Array.isArray(x)) {
-                var a = runtype_1.create(x, { tag: 'dictionary', key: keyString, value: value });
-                return {
-                    success: false,
-                    message: "Expected " + show_1.default(a.reflect) + ", but was " + Object.getPrototypeOf(x),
-                };
-            }
-            else if (keyString === 'string')
-                return { success: false, message: 'Expected dictionary, but was array' };
-        }
+        if (x === null || x === undefined || typeof x !== 'object')
+            return util_1.FAILURE.TYPE_INCORRECT(self, x);
+        if (Object.getPrototypeOf(x) !== Object.prototype)
+            if (!Array.isArray(x) || keyString === 'string')
+                return util_1.FAILURE.TYPE_INCORRECT(self, x);
         var numberString = /^(?:NaN|-?\d+(?:\.\d+)?)$/u;
-        for (var _i = 0, _a = __spreadArray(__spreadArray([], Object.getOwnPropertyNames(x)), Object.getOwnPropertySymbols(x)); _i < _a.length; _i++) {
-            var k = _a[_i];
+        var keys = util_1.enumerableKeysOf(x);
+        var results = keys.reduce(function (results, key) {
             // We should provide interoperability with `number` and `string` here,
             // as a user would expect JavaScript engines to convert numeric keys to
             // string keys automatically. So, if the key can be interpreted as a
             // decimal number, then test it against a `Number` OR `String` runtype.
-            var isNumberLikeKey = typeof k === 'string' && numberString.test(k);
-            var l = isNumberLikeKey ? global.Number(k) : k;
-            if (isNumberLikeKey ? !keyRuntype.guard(l) && !keyRuntype.guard(k) : !keyRuntype.guard(l)) {
-                return {
-                    success: false,
-                    message: "Expected dictionary key to be a " + keyString + ", but was " + typeof l,
-                };
+            var isNumberLikeKey = typeof key === 'string' && numberString.test(key);
+            var keyInterop = isNumberLikeKey ? global.Number(key) : key;
+            if (isNumberLikeKey
+                ? !keyRuntype.guard(keyInterop) && !keyRuntype.guard(key)
+                : !keyRuntype.guard(keyInterop)) {
+                results[key] = util_1.FAILURE.KEY_INCORRECT(self, keyRuntype.reflect, keyInterop);
             }
-            var validated = runtype_1.innerValidate(value, x[k], visited);
-            if (!validated.success) {
-                return {
-                    success: false,
-                    message: validated.message,
-                    key: validated.key ? global.String(k) + "." + validated.key : global.String(k),
-                };
-            }
-        }
-        return { success: true, value: x };
-    }, { tag: 'dictionary', key: keyString, value: value });
+            else
+                results[key] = runtype_1.innerValidate(value, x[key], visited);
+            return results;
+        }, {});
+        var details = keys.reduce(function (details, key) {
+            var result = results[key];
+            if (!result.success)
+                details[key] = result.details || result.message;
+            return details;
+        }, {});
+        if (util_1.enumerableKeysOf(details).length !== 0)
+            return util_1.FAILURE.CONTENT_INCORRECT(self, details);
+        else
+            return util_1.SUCCESS(x);
+    }, self);
 }
 exports.Dictionary = Dictionary;
 
@@ -108431,17 +108519,12 @@ exports.Dictionary = Dictionary;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Function = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
+var self = { tag: 'function' };
 /**
  * Construct a runtype for functions.
  */
-exports.Function = runtype_1.create(function (value) {
-    return typeof value === 'function'
-        ? { success: true, value: value }
-        : {
-            success: false,
-            message: "Expected function, but was " + (value === null ? value : typeof value),
-        };
-}, { tag: 'function' });
+exports.Function = runtype_1.create(function (value) { return (typeof value === 'function' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -108454,15 +108537,10 @@ exports.Function = runtype_1.create(function (value) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InstanceOf = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
 function InstanceOf(ctor) {
-    return runtype_1.create(function (value) {
-        return value instanceof ctor
-            ? { success: true, value: value }
-            : {
-                success: false,
-                message: "Expected " + ctor.name + ", but was " + (value === null ? value : typeof value),
-            };
-    }, { tag: 'instanceof', ctor: ctor });
+    var self = { tag: 'instanceof', ctor: ctor };
+    return runtype_1.create(function (value) { return (value instanceof ctor ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 }
 exports.InstanceOf = InstanceOf;
 
@@ -108470,28 +108548,53 @@ exports.InstanceOf = InstanceOf;
 /***/ }),
 
 /***/ 7902:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Intersect = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
+/**
+ * Construct an intersection runtype from runtypes for its alternatives.
+ */
 function Intersect() {
     var intersectees = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         intersectees[_i] = arguments[_i];
     }
+    var self = { tag: 'intersect', intersectees: intersectees };
     return runtype_1.create(function (value, visited) {
-        for (var _i = 0, intersectees_1 = intersectees; _i < intersectees_1.length; _i++) {
-            var targetType = intersectees_1[_i];
-            var validated = runtype_1.innerValidate(targetType, value, visited);
-            if (!validated.success) {
-                return validated;
+        var e_1, _a;
+        try {
+            for (var intersectees_1 = __values(intersectees), intersectees_1_1 = intersectees_1.next(); !intersectees_1_1.done; intersectees_1_1 = intersectees_1.next()) {
+                var targetType = intersectees_1_1.value;
+                var result = runtype_1.innerValidate(targetType, value, visited);
+                if (!result.success)
+                    return result;
             }
         }
-        return { success: true, value: value };
-    }, { tag: 'intersect', intersectees: intersectees });
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (intersectees_1_1 && !intersectees_1_1.done && (_a = intersectees_1.return)) _a.call(intersectees_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        return util_1.SUCCESS(value);
+    }, self);
 }
 exports.Intersect = Intersect;
 
@@ -108542,6 +108645,7 @@ exports.Lazy = Lazy;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Null = exports.Undefined = exports.Literal = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
 /**
  * Be aware of an Array of Symbols `[Symbol()]` which would throw "TypeError: Cannot convert a Symbol value to a string"
  */
@@ -108556,14 +108660,12 @@ function literal(value) {
  * Construct a runtype for a type literal.
  */
 function Literal(valueBase) {
+    var self = { tag: 'literal', value: valueBase };
     return runtype_1.create(function (value) {
         return value === valueBase
-            ? { success: true, value: value }
-            : {
-                success: false,
-                message: "Expected literal '" + literal(valueBase) + "', but was '" + literal(value) + "'",
-            };
-    }, { tag: 'literal', value: valueBase });
+            ? util_1.SUCCESS(value)
+            : util_1.FAILURE.VALUE_INCORRECT('literal', "`" + literal(valueBase) + "`", "`" + literal(value) + "`");
+    }, self);
 }
 exports.Literal = Literal;
 /**
@@ -108586,13 +108688,12 @@ exports.Null = Literal(null);
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Never = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
+var self = { tag: 'never' };
 /**
  * Validates nothing (unknown fails).
  */
-exports.Never = runtype_1.create(function (value) { return ({
-    success: false,
-    message: "Expected nothing, but was " + (value === null ? value : typeof value),
-}); }, { tag: 'never' });
+exports.Never = runtype_1.create(util_1.FAILURE.NOTHING_EXPECTED, self);
 
 
 /***/ }),
@@ -108605,17 +108706,12 @@ exports.Never = runtype_1.create(function (value) { return ({
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Number = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
+var self = { tag: 'number' };
 /**
  * Validates that a value is a number.
  */
-exports.Number = runtype_1.create(function (value) {
-    return typeof value === 'number'
-        ? { success: true, value: value }
-        : {
-            success: false,
-            message: "Expected number, but was " + (value === null ? value : typeof value),
-        };
-}, { tag: 'number' });
+exports.Number = runtype_1.create(function (value) { return (typeof value === 'number' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -108628,11 +108724,13 @@ exports.Number = runtype_1.create(function (value) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Optional = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
 /**
  * Validates optional value.
  */
 function Optional(runtype) {
-    return runtype_1.create(function (value) { return (value === undefined ? { success: true, value: value } : runtype.validate(value)); }, { tag: 'optional', underlying: runtype });
+    var self = { tag: 'optional', underlying: runtype };
+    return runtype_1.create(function (value) { return (value === undefined ? util_1.SUCCESS(value) : runtype.validate(value)); }, self);
 }
 exports.Optional = Optional;
 
@@ -108640,48 +108738,90 @@ exports.Optional = Optional;
 /***/ }),
 
 /***/ 2687:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Partial = exports.Record = exports.InternalRecord = void 0;
 var runtype_1 = __nccwpck_require__(5601);
 var util_1 = __nccwpck_require__(5571);
-var show_1 = __nccwpck_require__(6045);
 /**
  * Construct a record runtype from runtypes for its values.
  */
 function InternalRecord(fields, isPartial, isReadonly) {
+    var self = { tag: 'record', isPartial: isPartial, isReadonly: isReadonly, fields: fields };
     return withExtraModifierFuncs(runtype_1.create(function (x, visited) {
         if (x === null || x === undefined) {
-            var a = runtype_1.create(function (_x) { return ({ success: true, value: _x }); }, { tag: 'record', fields: fields });
-            return { success: false, message: "Expected " + show_1.default(a) + ", but was " + x };
+            return util_1.FAILURE.TYPE_INCORRECT(self, x);
         }
-        for (var key in fields) {
-            var isOptional = isPartial || fields[key].reflect.tag === 'optional';
-            if (util_1.hasKey(key, x)) {
-                if (isOptional && x[key] === undefined)
-                    continue;
-                var validated = runtype_1.innerValidate(fields[key], x[key], visited);
-                if (!validated.success) {
-                    return {
-                        success: false,
-                        message: validated.message,
-                        key: validated.key ? key + "." + validated.key : key,
-                    };
+        var keysOfFields = util_1.enumerableKeysOf(fields);
+        if (keysOfFields.length !== 0 && typeof x !== 'object')
+            return util_1.FAILURE.TYPE_INCORRECT(self, x);
+        var keys = __spreadArray([], __read(new Set(__spreadArray(__spreadArray([], __read(keysOfFields)), __read(util_1.enumerableKeysOf(x))))));
+        var results = keys.reduce(function (results, key) {
+            var fieldsHasKey = util_1.hasKey(key, fields);
+            var xHasKey = util_1.hasKey(key, x);
+            if (fieldsHasKey) {
+                var runtype = fields[key];
+                var isOptional = isPartial || runtype.reflect.tag === 'optional';
+                if (xHasKey) {
+                    var value = x[key];
+                    if (isOptional && value === undefined)
+                        results[key] = util_1.SUCCESS(value);
+                    else
+                        results[key] = runtype_1.innerValidate(runtype, value, visited);
+                }
+                else {
+                    if (!isOptional)
+                        results[key] = util_1.FAILURE.PROPERTY_MISSING(runtype.reflect);
+                    else
+                        results[key] = util_1.SUCCESS(undefined);
                 }
             }
-            else if (!isOptional) {
-                return {
-                    success: false,
-                    message: "Expected \"" + key + "\" property to be present, but was missing",
-                    key: key,
-                };
+            else if (xHasKey) {
+                // TODO: exact record validation
+                var value = x[key];
+                results[key] = util_1.SUCCESS(value);
             }
-        }
-        return { success: true, value: x };
-    }, { tag: 'record', isPartial: isPartial, isReadonly: isReadonly, fields: fields }));
+            else {
+                /* istanbul ignore next */
+                throw new Error('impossible');
+            }
+            return results;
+        }, {});
+        var details = keys.reduce(function (details, key) {
+            var result = results[key];
+            if (!result.success)
+                details[key] = result.details || result.message;
+            return details;
+        }, {});
+        if (util_1.enumerableKeysOf(details).length !== 0)
+            return util_1.FAILURE.CONTENT_INCORRECT(self, details);
+        else
+            return util_1.SUCCESS(x);
+    }, self));
 }
 exports.InternalRecord = InternalRecord;
 function Record(fields) {
@@ -108715,17 +108855,12 @@ function withExtraModifierFuncs(A) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.String = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
+var self = { tag: 'string' };
 /**
  * Validates that a value is a string.
  */
-exports.String = runtype_1.create(function (value) {
-    return typeof value === 'string'
-        ? { success: true, value: value }
-        : {
-            success: false,
-            message: "Expected string, but was " + (value === null ? value : typeof value),
-        };
-}, { tag: 'string' });
+exports.String = runtype_1.create(function (value) { return (typeof value === 'string' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -108738,46 +108873,27 @@ exports.String = runtype_1.create(function (value) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Symbol = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
 var f = function (key) {
+    var self = { tag: 'symbol', key: key };
     return runtype_1.create(function (value) {
-        if (typeof value !== 'symbol') {
-            return {
-                success: false,
-                message: "Expected symbol, but was " + typeStringOf(value),
-            };
-        }
+        if (typeof value !== 'symbol')
+            return util_1.FAILURE.TYPE_INCORRECT(self, value);
         else {
             var keyForValue = global.Symbol.keyFor(value);
-            if (keyForValue !== key) {
-                return {
-                    success: false,
-                    message: "Expected symbol key to be " + quoteIfPresent(key) + ", but was " + quoteIfPresent(keyForValue),
-                };
-            }
-            else {
-                return { success: true, value: value };
-            }
+            if (keyForValue !== key)
+                return util_1.FAILURE.VALUE_INCORRECT('symbol key', quoteIfPresent(key), quoteIfPresent(keyForValue));
+            else
+                return util_1.SUCCESS(value);
         }
-    }, { tag: 'symbol', key: key });
+    }, self);
 };
+var self = { tag: 'symbol' };
 /**
  * Validates that a value is a symbol, regardless of whether it is keyed or not.
  */
-exports.Symbol = runtype_1.create(function (value) {
-    if (typeof value !== 'symbol') {
-        return {
-            success: false,
-            message: "Expected symbol, but was " + typeStringOf(value),
-        };
-    }
-    else {
-        return { success: true, value: value };
-    }
-}, Object.assign(f, { tag: 'symbol' }));
+exports.Symbol = runtype_1.create(function (value) { return (typeof value === 'symbol' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, Object.assign(f, self));
 var quoteIfPresent = function (key) { return (key === undefined ? 'undefined' : "\"" + key + "\""); };
-var typeStringOf = function (value) {
-    return value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value;
-};
 
 
 /***/ }),
@@ -108790,40 +108906,36 @@ var typeStringOf = function (value) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Tuple = void 0;
 var runtype_1 = __nccwpck_require__(5601);
-var array_1 = __nccwpck_require__(8100);
-var unknown_1 = __nccwpck_require__(6643);
+var util_1 = __nccwpck_require__(5571);
+/**
+ * Construct a tuple runtype from runtypes for each of its elements.
+ */
 function Tuple() {
     var components = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         components[_i] = arguments[_i];
     }
-    return runtype_1.create(function (x, visited) {
-        var validated = runtype_1.innerValidate(array_1.Array(unknown_1.Unknown), x, visited);
-        if (!validated.success) {
-            return {
-                success: false,
-                message: "Expected tuple to be an array:\u00A0" + validated.message,
-                key: validated.key,
-            };
-        }
-        if (validated.value.length !== components.length) {
-            return {
-                success: false,
-                message: "Expected an array of length " + components.length + ", but was " + validated.value.length,
-            };
-        }
-        for (var i = 0; i < components.length; i++) {
-            var validatedComponent = runtype_1.innerValidate(components[i], validated.value[i], visited);
-            if (!validatedComponent.success) {
-                return {
-                    success: false,
-                    message: validatedComponent.message,
-                    key: validatedComponent.key ? "[" + i + "]." + validatedComponent.key : "[" + i + "]",
-                };
-            }
-        }
-        return { success: true, value: x };
-    }, { tag: 'tuple', components: components });
+    var self = { tag: 'tuple', components: components };
+    return runtype_1.create(function (xs, visited) {
+        if (!Array.isArray(xs))
+            return util_1.FAILURE.TYPE_INCORRECT(self, xs);
+        if (xs.length !== components.length)
+            return util_1.FAILURE.CONSTRAINT_FAILED(self, "Expected length " + components.length + ", but was " + xs.length);
+        var keys = util_1.enumerableKeysOf(xs);
+        var results = keys.map(function (key) {
+            return runtype_1.innerValidate(components[key], xs[key], visited);
+        });
+        var details = keys.reduce(function (details, key) {
+            var result = results[key];
+            if (!result.success)
+                details[key] = result.details || result.message;
+            return details;
+        }, []);
+        if (util_1.enumerableKeysOf(details).length !== 0)
+            return util_1.FAILURE.CONTENT_INCORRECT(self, details);
+        else
+            return util_1.SUCCESS(xs);
+    }, self);
 }
 exports.Tuple = Tuple;
 
@@ -108831,15 +108943,28 @@ exports.Tuple = Tuple;
 /***/ }),
 
 /***/ 7898:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Union = void 0;
 var runtype_1 = __nccwpck_require__(5601);
-var show_1 = __nccwpck_require__(6045);
 var util_1 = __nccwpck_require__(5571);
+/**
+ * Construct a union runtype from runtypes for its alternatives.
+ */
 function Union() {
     var alternatives = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -108858,56 +108983,97 @@ function Union() {
             }
         };
     };
+    var self = { tag: 'union', alternatives: alternatives, match: match };
     return runtype_1.create(function (value, visited) {
-        var commonLiteralFields = {};
-        for (var _i = 0, alternatives_1 = alternatives; _i < alternatives_1.length; _i++) {
-            var alternative = alternatives_1[_i];
-            if (alternative.reflect.tag === 'record') {
-                var _loop_1 = function (fieldName) {
-                    var field = alternative.reflect.fields[fieldName];
-                    if (field.tag === 'literal') {
-                        if (commonLiteralFields[fieldName]) {
-                            if (commonLiteralFields[fieldName].every(function (value) { return value !== field.value; })) {
-                                commonLiteralFields[fieldName].push(field.value);
-                            }
-                        }
-                        else {
-                            commonLiteralFields[fieldName] = [field.value];
-                        }
-                    }
-                };
-                for (var fieldName in alternative.reflect.fields) {
-                    _loop_1(fieldName);
+        var e_1, _a, e_2, _b, e_3, _c, e_4, _d;
+        if (typeof value !== 'object' || value === null) {
+            try {
+                for (var alternatives_1 = __values(alternatives), alternatives_1_1 = alternatives_1.next(); !alternatives_1_1.done; alternatives_1_1 = alternatives_1.next()) {
+                    var alternative = alternatives_1_1.value;
+                    if (runtype_1.innerValidate(alternative, value, visited).success)
+                        return util_1.SUCCESS(value);
                 }
             }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (alternatives_1_1 && !alternatives_1_1.done && (_a = alternatives_1.return)) _a.call(alternatives_1);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            return util_1.FAILURE.TYPE_INCORRECT(self, value);
+        }
+        var commonLiteralFields = {};
+        try {
+            for (var alternatives_2 = __values(alternatives), alternatives_2_1 = alternatives_2.next(); !alternatives_2_1.done; alternatives_2_1 = alternatives_2.next()) {
+                var alternative = alternatives_2_1.value;
+                if (alternative.reflect.tag === 'record') {
+                    var _loop_1 = function (fieldName) {
+                        var field = alternative.reflect.fields[fieldName];
+                        if (field.tag === 'literal') {
+                            if (commonLiteralFields[fieldName]) {
+                                if (commonLiteralFields[fieldName].every(function (value) { return value !== field.value; })) {
+                                    commonLiteralFields[fieldName].push(field.value);
+                                }
+                            }
+                            else {
+                                commonLiteralFields[fieldName] = [field.value];
+                            }
+                        }
+                    };
+                    for (var fieldName in alternative.reflect.fields) {
+                        _loop_1(fieldName);
+                    }
+                }
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (alternatives_2_1 && !alternatives_2_1.done && (_b = alternatives_2.return)) _b.call(alternatives_2);
+            }
+            finally { if (e_2) throw e_2.error; }
         }
         for (var fieldName in commonLiteralFields) {
             if (commonLiteralFields[fieldName].length === alternatives.length) {
-                for (var _a = 0, alternatives_2 = alternatives; _a < alternatives_2.length; _a++) {
-                    var alternative = alternatives_2[_a];
-                    if (alternative.reflect.tag === 'record') {
-                        var field = alternative.reflect.fields[fieldName];
-                        if (field.tag === 'literal' &&
-                            util_1.hasKey(fieldName, value) &&
-                            value[fieldName] === field.value) {
-                            return runtype_1.innerValidate(alternative, value, visited);
+                try {
+                    for (var alternatives_3 = (e_3 = void 0, __values(alternatives)), alternatives_3_1 = alternatives_3.next(); !alternatives_3_1.done; alternatives_3_1 = alternatives_3.next()) {
+                        var alternative = alternatives_3_1.value;
+                        if (alternative.reflect.tag === 'record') {
+                            var field = alternative.reflect.fields[fieldName];
+                            if (field.tag === 'literal' &&
+                                util_1.hasKey(fieldName, value) &&
+                                value[fieldName] === field.value) {
+                                return runtype_1.innerValidate(alternative, value, visited);
+                            }
                         }
                     }
                 }
+                catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                finally {
+                    try {
+                        if (alternatives_3_1 && !alternatives_3_1.done && (_c = alternatives_3.return)) _c.call(alternatives_3);
+                    }
+                    finally { if (e_3) throw e_3.error; }
+                }
             }
         }
-        for (var _b = 0, alternatives_3 = alternatives; _b < alternatives_3.length; _b++) {
-            var targetType = alternatives_3[_b];
-            if (runtype_1.innerValidate(targetType, value, visited).success) {
-                return { success: true, value: value };
+        try {
+            for (var alternatives_4 = __values(alternatives), alternatives_4_1 = alternatives_4.next(); !alternatives_4_1.done; alternatives_4_1 = alternatives_4.next()) {
+                var targetType = alternatives_4_1.value;
+                if (runtype_1.innerValidate(targetType, value, visited).success)
+                    return util_1.SUCCESS(value);
             }
         }
-        var a = runtype_1.create(value, { tag: 'union', alternatives: alternatives });
-        return {
-            success: false,
-            message: "Expected " + show_1.default(a) + ", but was " + (value === null ? value : typeof value),
-        };
-    }, { tag: 'union', alternatives: alternatives, match: match });
+        catch (e_4_1) { e_4 = { error: e_4_1 }; }
+        finally {
+            try {
+                if (alternatives_4_1 && !alternatives_4_1.done && (_d = alternatives_4.return)) _d.call(alternatives_4);
+            }
+            finally { if (e_4) throw e_4.error; }
+        }
+        return util_1.FAILURE.TYPE_INCORRECT(self, value);
+    }, self);
 }
 exports.Union = Union;
 
@@ -108922,10 +109088,12 @@ exports.Union = Union;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Unknown = void 0;
 var runtype_1 = __nccwpck_require__(5601);
+var util_1 = __nccwpck_require__(5571);
+var self = { tag: 'unknown' };
 /**
  * Validates anything, but provides no new type information about it.
  */
-exports.Unknown = runtype_1.create(function (value) { return ({ success: true, value: value }); }, { tag: 'unknown' });
+exports.Unknown = runtype_1.create(function (value) { return util_1.SUCCESS(value); }, self);
 
 
 /***/ }),
@@ -108949,18 +109117,92 @@ exports.Void = unknown_1.Unknown;
 /***/ }),
 
 /***/ 5571:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.hasKey = void 0;
 // Type guard to determine if an object has a given key
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FAILURE = exports.SUCCESS = exports.enumerableKeysOf = exports.typeOf = exports.hasKey = void 0;
+var result_1 = __nccwpck_require__(6299);
+var show_1 = __nccwpck_require__(6045);
 // If this feature gets implemented, we can use `in` instead: https://github.com/Microsoft/TypeScript/issues/10485
-function hasKey(k, o) {
-    return typeof o === 'object' && k in o;
+function hasKey(key, object) {
+    return typeof object === 'object' && object !== null && key in object;
 }
 exports.hasKey = hasKey;
+var typeOf = function (value) {
+    return typeof value === 'object'
+        ? value === null
+            ? 'null'
+            : Array.isArray(value)
+                ? 'array'
+                : value.constructor.name === 'Object'
+                    ? 'object'
+                    : value.constructor.name
+        : typeof value;
+};
+exports.typeOf = typeOf;
+var enumerableKeysOf = function (object) {
+    return typeof object === 'object' && object !== null
+        ? Reflect.ownKeys(object).filter(function (key) { return object.propertyIsEnumerable(key); })
+        : [];
+};
+exports.enumerableKeysOf = enumerableKeysOf;
+function SUCCESS(value) {
+    return { success: true, value: value };
+}
+exports.SUCCESS = SUCCESS;
+exports.FAILURE = Object.assign(function (code, message, details) { return (__assign({ success: false, code: code,
+    message: message }, (details ? { details: details } : {}))); }, {
+    TYPE_INCORRECT: function (self, value) {
+        var message = "Expected " + show_1.default(self) + ", but was " + exports.typeOf(value);
+        return exports.FAILURE(result_1.Failcode.TYPE_INCORRECT, message);
+    },
+    VALUE_INCORRECT: function (name, expected, received) {
+        return exports.FAILURE(result_1.Failcode.VALUE_INCORRECT, "Expected " + name + " " + String(expected) + ", but was " + String(received));
+    },
+    KEY_INCORRECT: function (self, expected, value) {
+        return exports.FAILURE(result_1.Failcode.KEY_INCORRECT, "Expected " + show_1.default(self) + " key to be " + show_1.default(expected) + ", but was " + exports.typeOf(value));
+    },
+    CONTENT_INCORRECT: function (self, details) {
+        var message = "Expected " + show_1.default(self) + ", but was incompatible";
+        return exports.FAILURE(result_1.Failcode.CONTENT_INCORRECT, message, details);
+    },
+    ARGUMENT_INCORRECT: function (message) {
+        return exports.FAILURE(result_1.Failcode.ARGUMENT_INCORRECT, message);
+    },
+    RETURN_INCORRECT: function (message) {
+        return exports.FAILURE(result_1.Failcode.RETURN_INCORRECT, message);
+    },
+    CONSTRAINT_FAILED: function (self, message) {
+        var info = message ? ": " + message : '';
+        return exports.FAILURE(result_1.Failcode.CONSTRAINT_FAILED, "Failed constraint check for " + show_1.default(self) + info);
+    },
+    PROPERTY_MISSING: function (self) {
+        var message = "Expected " + show_1.default(self) + ", but was missing";
+        return exports.FAILURE(result_1.Failcode.PROPERTY_MISSING, message);
+    },
+    PROPERTY_PRESENT: function (value) {
+        var message = "Expected nothing, but was " + exports.typeOf(value);
+        return exports.FAILURE(result_1.Failcode.PROPERTY_PRESENT, message);
+    },
+    NOTHING_EXPECTED: function (value) {
+        var message = "Expected nothing, but was " + exports.typeOf(value);
+        return exports.FAILURE(result_1.Failcode.NOTHING_EXPECTED, message);
+    },
+});
 
 
 /***/ }),
