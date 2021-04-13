@@ -21,7 +21,7 @@
     "*.md": "prettier --write"
   },
   "devDependencies": {
-    "@types/faker": "^5.5.0",
+    "@types/faker": "^5.5.1",
     "@types/jest": "~26.0.22",
     "@types/node": "~14.14.37",
     "@typescript-eslint/eslint-plugin": "~4.21.0",
