@@ -15209,8 +15209,23 @@ class ConfigMissingError extends errors_1.RunError {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const resource = __nccwpck_require__(796);
 const runtime = __nccwpck_require__(5022);
+const providerCache = new WeakMap();
 function serializeProvider(provider) {
-    return runtime.serializeFunction(() => provider).then(sf => sf.text);
+    let result;
+    if (runtime.cacheDynamicProviders()) {
+        const cachedProvider = providerCache.get(provider);
+        if (cachedProvider) {
+            result = cachedProvider;
+        }
+        else {
+            result = runtime.serializeFunction(() => provider).then(sf => sf.text);
+            providerCache.set(provider, result);
+        }
+    }
+    else {
+        result = runtime.serializeFunction(() => provider).then(sf => sf.text);
+    }
+    return result;
 }
 /**
  * Resource represents a Pulumi Resource that incorporates an inline implementation of the Resource's CRUD operations.
@@ -15488,6 +15503,12 @@ const settings_1 = __nccwpck_require__(4530);
 const engproto = __nccwpck_require__(986);
 let errcnt = 0;
 let lastLog = Promise.resolve();
+const messageLevels = {
+    [engproto.LogSeverity.DEBUG]: "debug",
+    [engproto.LogSeverity.INFO]: "info",
+    [engproto.LogSeverity.WARNING]: "warn",
+    [engproto.LogSeverity.ERROR]: "error",
+};
 /**
  * hasErrors returns true if any errors have occurred in the program.
  */
@@ -15576,7 +15597,15 @@ function log(engine, sev, msg, resource, streamId, ephemeral) {
             }
         });
     });
-    return lastLog.catch(() => undefined);
+    return lastLog.catch((err) => {
+        // debug messages never go to stdout/err
+        if (sev !== engproto.LogSeverity.DEBUG) {
+            // if we're unable to deliver the log message, deliver to stderr instead
+            console.error(`failed to deliver log message. \nerror: ${err} \noriginal message: ${msg}\n message severity: ${messageLevels[sev]}`);
+        }
+        // we still need to free up the outstanding promise chain, whether or not delivery succeeded.
+        keepAlive();
+    });
 }
 
 
@@ -20844,6 +20873,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const resource_1 = __nccwpck_require__(796);
 const runtime = __nccwpck_require__(5022);
 const utils = __nccwpck_require__(1888);
+/*tslint:disable:no-shadowed-variable*/
 /**
  * Output helps encode the relationship between Resources in a Pulumi application. Specifically an
  * Output holds onto a piece of Data and the Resource it was generated from. An Output value can
@@ -32639,7 +32669,8 @@ proto.pulumirpc.RegisterResourceRequest.toObject = function(includeInstance, msg
     deletebeforereplacedefined: jspb.Message.getBooleanFieldWithDefault(msg, 18, false),
     supportspartialvalues: jspb.Message.getBooleanFieldWithDefault(msg, 19, false),
     remote: jspb.Message.getBooleanFieldWithDefault(msg, 20, false),
-    acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 21, false)
+    acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 21, false),
+    providersMap: (f = msg.getProvidersMap()) ? f.toObject(includeInstance, undefined) : []
   };
 
   if (includeInstance) {
@@ -32763,6 +32794,12 @@ proto.pulumirpc.RegisterResourceRequest.deserializeBinaryFromReader = function(m
     case 21:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setAcceptresources(value);
+      break;
+    case 22:
+      var value = msg.getProvidersMap();
+      reader.readMessage(value, function(message, reader) {
+        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "", "");
+         });
       break;
     default:
       reader.skipField();
@@ -32938,6 +32975,10 @@ proto.pulumirpc.RegisterResourceRequest.serializeBinaryToWriter = function(messa
       21,
       f
     );
+  }
+  f = message.getProvidersMap(true);
+  if (f && f.getLength() > 0) {
+    f.serializeBinary(22, writer, jspb.BinaryWriter.prototype.writeString, jspb.BinaryWriter.prototype.writeString);
   }
 };
 
@@ -33782,6 +33823,28 @@ proto.pulumirpc.RegisterResourceRequest.prototype.getAcceptresources = function(
 proto.pulumirpc.RegisterResourceRequest.prototype.setAcceptresources = function(value) {
   return jspb.Message.setProto3BooleanField(this, 21, value);
 };
+
+
+/**
+ * map<string, string> providers = 22;
+ * @param {boolean=} opt_noLazyCreate Do not create the map if
+ * empty, instead returning `undefined`
+ * @return {!jspb.Map<string,string>}
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.getProvidersMap = function(opt_noLazyCreate) {
+  return /** @type {!jspb.Map<string,string>} */ (
+      jspb.Message.getMapField(this, 22, opt_noLazyCreate,
+      null));
+};
+
+
+/**
+ * Clears values from the map. The map will be non-null.
+ * @return {!proto.pulumirpc.RegisterResourceRequest} returns this
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.clearProvidersMap = function() {
+  this.getProvidersMap().clear();
+  return this;};
 
 
 
@@ -34792,6 +34855,8 @@ const plugproto = __nccwpck_require__(8008);
 const statusproto = __nccwpck_require__(3690);
 class Server {
     constructor(engineAddr, provider) {
+        /** Queue of construct calls. */
+        this.constructQueue = Promise.resolve();
         this.engineAddr = engineAddr;
         this.provider = provider;
     }
@@ -34988,6 +35053,20 @@ class Server {
     }
     construct(call, callback) {
         return __awaiter(this, void 0, void 0, function* () {
+            // Serialize invocations of `construct` so that each call runs one after another, avoiding concurrent runs.
+            // We do this because `construct` has to modify global state to reset the SDK's runtime options.
+            // This is a short-term workaround to provide correctness, but likely isn't sustainable long-term due to the
+            // limits it places on parallelism. We will likely want to investigate if it's possible to run each invocation
+            // in its own context, possibly using Node's `createContext` API:
+            // https://nodejs.org/api/vm.html#vm_vm_createcontext_contextobject_options
+            const res = this.constructQueue.then(() => this.constructImpl(call, callback));
+            // tslint:disable:no-empty
+            this.constructQueue = res.catch(() => { });
+            return res;
+        });
+    }
+    constructImpl(call, callback) {
+        return __awaiter(this, void 0, void 0, function* () {
             try {
                 const req = call.request;
                 const type = req.getType();
@@ -35018,7 +35097,15 @@ class Server {
                     const deps = (inputDeps ? inputDeps.getUrnsList() : [])
                         .map(depUrn => new resource.DependencyResource(depUrn));
                     const input = deserializedInputs[k];
-                    inputs[k] = new output_1.Output(deps, Promise.resolve(runtime.unwrapRpcSecret(input)), Promise.resolve(true), Promise.resolve(runtime.isRpcSecret(input)), Promise.resolve([]));
+                    const isSecret = runtime.isRpcSecret(input);
+                    if (!isSecret && deps.length === 0) {
+                        // If it's a prompt value, return it directly without wrapping it as an output.
+                        inputs[k] = input;
+                    }
+                    else {
+                        // Otherwise, wrap it in an output so we can handle secrets and/or track dependencies.
+                        inputs[k] = new output_1.Output(deps, Promise.resolve(runtime.unwrapRpcSecret(input)), Promise.resolve(true), Promise.resolve(isSecret), Promise.resolve([]));
+                    }
                 }
                 // Rebuild the resource options.
                 const dependsOn = [];
@@ -35050,6 +35137,8 @@ class Server {
                     stateDependenciesMap.set(key, deps);
                 }
                 resp.setState(structproto.Struct.fromJavaScript(state));
+                // Wait for RPC operations to complete and disconnect.
+                yield runtime.disconnect();
                 callback(undefined, resp);
             }
             catch (e) {
@@ -37551,12 +37640,13 @@ function computeCapturedVariableNames(file) {
     log.debug(`Found free variables: ${JSON.stringify(result)}`);
     return result;
     function isBuiltIn(ident) {
-        // The __awaiter is never considered built-in.  We do this as async/await code will generate
-        // this (so we will need it), but some libraries (like tslib) will add this to the 'global'
-        // object.  If we think this is built-in, we won't serialize it, and the function may not
+        // __awaiter and __rest are never considered built-in.  We do this as async/await code will generate
+        // an __awaiter (so we will need it), but some libraries (like tslib) will add this to the 'global'
+        // object.  The same is true for __rest when destructuring.
+        // If we think these are built-in, we won't serialize them, and the functions may not
         // actually be available if the import that caused it to get attached isn't included in the
         // final serialized code.
-        if (ident === "__awaiter") {
+        if (ident === "__awaiter" || ident === "__rest") {
             return false;
         }
         // Anything in the global dictionary is a built-in.  So is anything that's a global Node.js object;
@@ -41020,6 +41110,8 @@ const nodeEnvKeys = {
     monitorAddr: "PULUMI_NODEJS_MONITOR",
     engineAddr: "PULUMI_NODEJS_ENGINE",
     syncDir: "PULUMI_NODEJS_SYNC",
+    // this value is not set by the CLI and is controlled via a user set env var unlike the values above
+    cacheDynamicProviders: "PULUMI_NODEJS_CACHE_DYNAMIC_PROVIDERS",
 };
 const pulumiEnvKeys = {
     testMode: "PULUMI_TEST_MODE",
@@ -41112,6 +41204,13 @@ function isLegacyApplyEnabled() {
     return options().legacyApply === true;
 }
 exports.isLegacyApplyEnabled = isLegacyApplyEnabled;
+/**
+ * Returns true true if we will cache serialized dynamic providers on the program side
+ */
+function cacheDynamicProviders() {
+    return options().cacheDynamicProviders === true;
+}
+exports.cacheDynamicProviders = cacheDynamicProviders;
 /**
  * Get the project being run by the current update.
  */
@@ -41263,6 +41362,7 @@ function options() {
         monitorAddr: process.env[nodeEnvKeys.monitorAddr],
         engineAddr: process.env[nodeEnvKeys.engineAddr],
         syncDir: process.env[nodeEnvKeys.syncDir],
+        cacheDynamicProviders: (process.env[nodeEnvKeys.cacheDynamicProviders] === "true"),
         // pulumi specific
         testModeEnabled: (process.env[pulumiEnvKeys.testMode] === "true"),
         legacyApply: (process.env[pulumiEnvKeys.legacyApply] === "true"),
@@ -42110,6 +42210,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 __export(__nccwpck_require__(3052));
 __export(__nccwpck_require__(5993));
 __export(__nccwpck_require__(4093));
+__export(__nccwpck_require__(772));
 __export(__nccwpck_require__(6884));
 __export(__nccwpck_require__(4077));
 
@@ -42152,6 +42253,7 @@ const upath = __nccwpck_require__(8004);
 const cmd_1 = __nccwpck_require__(3052);
 const minimumVersion_1 = __nccwpck_require__(4667);
 const stack_1 = __nccwpck_require__(4093);
+const stackSettings_1 = __nccwpck_require__(772);
 /**
  * LocalWorkspace is a default implementation of the Workspace interface.
  * A Workspace is the execution context containing a single Pulumi project, a program,
@@ -42343,10 +42445,19 @@ class LocalWorkspace {
                     continue;
                 }
                 const contents = fs.readFileSync(path).toString();
+                let stackSettings;
                 if (isJSON) {
-                    return JSON.parse(contents);
+                    stackSettings = JSON.parse(contents);
                 }
-                return yaml.safeLoad(contents);
+                stackSettings = yaml.safeLoad(contents);
+                // Transform the serialized representation back to what we expect.
+                for (const key of stackSettings_1.stackSettingsSerDeKeys) {
+                    if (stackSettings.hasOwnProperty(key[0])) {
+                        stackSettings[key[1]] = stackSettings[key[0]];
+                        delete stackSettings[key[0]];
+                    }
+                }
+                return stackSettings;
             }
             throw new Error(`failed to find stack settings file in workdir: ${this.workDir}`);
         });
@@ -42370,12 +42481,20 @@ class LocalWorkspace {
                 }
             }
             const path = upath.joinSafe(this.workDir, `Pulumi.${stackSettingsName}${foundExt}`);
+            const serializeSettings = settings;
             let contents;
+            // Transform the keys to the serialized representation that we expect.
+            for (const key of stackSettings_1.stackSettingsSerDeKeys) {
+                if (serializeSettings.hasOwnProperty(key[1])) {
+                    serializeSettings[key[0]] = serializeSettings[key[1]];
+                    delete serializeSettings[key[1]];
+                }
+            }
             if (foundExt === ".json") {
-                contents = JSON.stringify(settings, null, 4);
+                contents = JSON.stringify(serializeSettings, null, 4);
             }
             else {
-                contents = yaml.safeDump(settings, { skipInvalid: true });
+                contents = yaml.safeDump(serializeSettings, { skipInvalid: true });
             }
             return fs.writeFileSync(path, contents);
         });
@@ -42692,7 +42811,7 @@ function getStackSettingsName(name) {
     return parts[parts.length - 1];
 }
 function defaultProject(projectName) {
-    const settings = { name: projectName, runtime: "nodejs" };
+    const settings = { name: projectName, runtime: "nodejs", main: process.cwd() };
     return settings;
 }
 function loadProjectSettings(workDir) {
@@ -42744,7 +42863,7 @@ exports.validatePulumiVersion = validatePulumiVersion;
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const semver = __nccwpck_require__(7486);
-exports.minimumVersion = new semver.SemVer("v2.21.0");
+exports.minimumVersion = new semver.SemVer("v2.25.0-alpha");
 
 
 /***/ }),
@@ -42791,11 +42910,13 @@ class LanguageServer {
         this.program = program;
         this.running = false;
     }
-    onPulumiExit() {
-        // check for leaks once the CLI exits
-        const [leaks, leakMessage] = runtime.leakedPromises();
-        if (leaks.size !== 0) {
-            throw new Error(leakMessage);
+    onPulumiExit(hasError) {
+        // check for leaks once the CLI exits but skip if the program otherwise errored to keep error output clean
+        if (!hasError) {
+            const [leaks, leakMessage] = runtime.leakedPromises();
+            if (leaks.size !== 0) {
+                throw new Error(leakMessage);
+            }
         }
         // these are globals and we need to clean up after ourselves
         runtime.resetOptions("", "", -1, "", "", false);
@@ -43013,32 +43134,20 @@ class Stack {
             return stack;
         });
     }
-    // Try for up to 10s to start tailing the file, invoking the callback once per line.
     readLines(logPath, callback) {
         return __awaiter(this, void 0, void 0, function* () {
-            let n = 0;
             const eventLogTail = new TailFile(logPath, { startPos: 0 });
-            while (true) {
-                try {
-                    yield eventLogTail.start();
-                    eventLogTail
-                        .on("tail_error", (err) => {
-                        throw err;
-                    })
-                        .pipe(split2())
-                        .on("data", (line) => {
-                        const event = JSON.parse(line);
-                        callback(event);
-                    });
-                    return eventLogTail;
-                }
-                catch (err) {
-                    if (n++ > 100) {
-                        throw err;
-                    }
-                    yield delay(100);
-                }
-            }
+            yield eventLogTail.start();
+            eventLogTail
+                .on("tail_error", (err) => {
+                throw err;
+            })
+                .pipe(split2())
+                .on("data", (line) => {
+                const event = JSON.parse(line);
+                callback(event);
+            });
+            return eventLogTail;
         });
     }
     /**
@@ -43084,7 +43193,8 @@ class Stack {
                     args.push("--parallel", opts.parallel.toString());
                 }
             }
-            let onExit = () => { return; };
+            let onExit = (hasError) => { return; };
+            let didError = false;
             if (program) {
                 kind = execKind.inline;
                 const server = new grpc.Server({
@@ -43103,8 +43213,8 @@ class Stack {
                     });
                 });
                 server.start();
-                onExit = () => {
-                    languageServer.onPulumiExit();
+                onExit = (hasError) => {
+                    languageServer.onPulumiExit(hasError);
                     server.forceShutdown();
                 };
                 args.push(`--client=127.0.0.1:${port}`);
@@ -43127,8 +43237,12 @@ class Stack {
             try {
                 [upResult, tail] = yield Promise.all([upPromise, logPromise]);
             }
+            catch (e) {
+                didError = true;
+                throw e;
+            }
             finally {
-                onExit();
+                onExit(didError);
                 yield cleanUp(tail, logFile);
             }
             // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
@@ -43185,7 +43299,8 @@ class Stack {
                     args.push("--parallel", opts.parallel.toString());
                 }
             }
-            let onExit = () => { return; };
+            let onExit = (hasError) => { return; };
+            let didError = false;
             if (program) {
                 kind = execKind.inline;
                 const server = new grpc.Server({
@@ -43204,8 +43319,8 @@ class Stack {
                     });
                 });
                 server.start();
-                onExit = () => {
-                    languageServer.onPulumiExit();
+                onExit = (hasError) => {
+                    languageServer.onPulumiExit(hasError);
                     server.forceShutdown();
                 };
                 args.push(`--client=127.0.0.1:${port}`);
@@ -43231,8 +43346,12 @@ class Stack {
             try {
                 [preResult, tail] = yield Promise.all([prePromise, logPromise]);
             }
+            catch (e) {
+                didError = true;
+                throw e;
+            }
             finally {
-                onExit();
+                onExit(didError);
                 yield cleanUp(tail, logFile);
             }
             if (!summaryEvent) {
@@ -43537,7 +43656,10 @@ const execKind = {
 const delay = (duration) => new Promise(resolve => setTimeout(resolve, duration));
 const createLogFile = (command) => {
     const logDir = fs.mkdtempSync(upath.joinSafe(os.tmpdir(), `automation-logs-${command}-`));
-    return upath.joinSafe(logDir, "eventlog.txt");
+    const logFile = upath.joinSafe(logDir, "eventlog.txt");
+    // just open/close the file to make sure it exists when we start polling.
+    fs.closeSync(fs.openSync(logFile, "w"));
+    return logFile;
 };
 const cleanUp = (tail, logFile) => __awaiter(void 0, void 0, void 0, function* () {
     if (tail) {
@@ -43547,6 +43669,35 @@ const cleanUp = (tail, logFile) => __awaiter(void 0, void 0, void 0, function* (
         fs.rmdir(path.dirname(logFile), { recursive: true }, () => { return; });
     }
 });
+
+
+/***/ }),
+
+/***/ 772:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright 2016-2020, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+/** @internal */
+exports.stackSettingsSerDeKeys = [
+    ["secretsprovider", "secretsProvider"],
+    ["encryptedkey", "encryptedKey"],
+    ["encryptionsalt", "encryptionSalt"],
+];
 
 
 /***/ }),
