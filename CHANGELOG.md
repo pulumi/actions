@@ -9,9 +9,9 @@ _(none)_
 ## 2.3.0 (2021-04-15)
 
 - Upgrade to v2.25.0 of Pulumi Automation API
-  [#180](https://github.com/pulumi/actions/pull/180)
-
-- Default
+  [#180](https://github.com/pulumi/actions/pull/180)  
+  **PLEASE NOTE:** This minimum version of the Pulumi CLI to work with this
+  action has been updated to be 2.25.0
 
 ## 2.2.0 (2021-03-22)
 
