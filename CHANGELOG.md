@@ -6,6 +6,13 @@ _(none)_
 
 ---
 
+## 2.3.0 (2021-04-15)
+
+- Upgrade to v2.25.0 of Pulumi Automation API
+  [#180](https://github.com/pulumi/actions/pull/180)
+
+- Default
+
 ## 2.2.0 (2021-03-22)
 
 - Add ability to refresh a stack by passing `refresh: true`

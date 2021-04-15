@@ -57,8 +57,8 @@ The action can be configured with the following arguments:
 - `comment-on-pr` - (optional) If `true`, then the action will add the results
   of the Pulumi action to the PR
 
-- `github-token` - (required if comment-on-pr) A GitHub token that has access
-  levels to allow the Action to comment on a PR.
+- `github-token` - (optional) A GitHub token that has access levels to allow the
+  Action to comment on a PR. Defaults to `${{ github.token }}`
 
 - `refresh` - (optional) If `true`, stack is refreshed before running the
   `command`.
@@ -84,7 +84,7 @@ The action can be configured with the following arguments:
 
 - `target-dependents` - (optional) Allows updating of dependent targets
   discovered but not specified in target.
-- `upsert` - (optiona) Allows the creation of the specified stack if it
+- `upsert` - (optional) Allows the creation of the specified stack if it
   currently doesn't exist.  
   **PLEASE NOTE:** This will create a Pulumi.<stack-name>.yaml file that you
   will need to add back to source control as part of the action if you wish to
