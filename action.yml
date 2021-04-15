@@ -20,9 +20,9 @@ inputs:
     required: false
     default: 'false'
   github-token:
-    description: 'Github Token (required to comment on pull requests)'
+    description: 'Github Token'
     required: false
-    default: ''
+    default: ${{ github.token }}
   cloud-url:
     description: 'A cloud URL to log in to'
     required: false
