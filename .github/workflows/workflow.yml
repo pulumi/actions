@@ -77,7 +77,9 @@ jobs:
           dotnet-version: 3.1
 
       - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        uses: pulumi/action-install-pulumi-cli@v1
+        with:
+          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
@@ -122,8 +124,10 @@ jobs:
         with:
           go-version: 1.15.x
 
-      - name: Install Pulumi CLI
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1
+        with:
+          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
@@ -169,7 +173,9 @@ jobs:
           node-version: 14.x
 
       - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        uses: pulumi/action-install-pulumi-cli@v1
+        with:
+          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
@@ -230,8 +236,10 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Install Pulumi CLI
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1
+        with:
+          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
@@ -316,7 +324,9 @@ jobs:
           node-version: 14.x
 
       - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        uses: pulumi/action-install-pulumi-cli@v1
+        with:
+          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
