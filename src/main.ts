@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import * as core from '@actions/core';
-import { LocalProgramArgs, LocalWorkspace } from '@pulumi/pulumi/x/automation';
+import { LocalProgramArgs, LocalWorkspace } from '@pulumi/pulumi/automation';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { addPullRequestMessage } from './libs/pr';

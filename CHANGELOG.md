@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-_(none)_
+- Upgrade to Pulumi 3.0 **PLEASE NOTE:** This minimum version of the Pulumi CLI
+  to work with this action has been updated to be 3.0.0
 
 ---
 
