@@ -78,8 +78,6 @@ jobs:
 
       - name: Install pulumi
         uses: pulumi/action-install-pulumi-cli@v1
-        with:
-          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
@@ -126,8 +124,6 @@ jobs:
 
       - name: Install pulumi
         uses: pulumi/action-install-pulumi-cli@v1
-        with:
-          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
@@ -174,8 +170,6 @@ jobs:
 
       - name: Install pulumi
         uses: pulumi/action-install-pulumi-cli@v1
-        with:
-          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
@@ -238,8 +232,6 @@ jobs:
 
       - name: Install pulumi
         uses: pulumi/action-install-pulumi-cli@v1
-        with:
-          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
@@ -325,8 +317,6 @@ jobs:
 
       - name: Install pulumi
         uses: pulumi/action-install-pulumi-cli@v1
-        with:
-          pulumi-version: 3.0.0
 
       - name: Create local stack
         run: |
