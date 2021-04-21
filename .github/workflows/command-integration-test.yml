@@ -17,7 +17,7 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v2.1.5
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -29,7 +29,7 @@ jobs:
 
       - name: Cache dist files
         id: dist-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -104,7 +104,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -117,7 +117,7 @@ jobs:
           dotnet-version: 3.1
 
       - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        uses: pulumi/action-install-pulumi-cli@v1
 
       - name: Create local stack
         run: |
@@ -150,7 +150,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -162,8 +162,8 @@ jobs:
         with:
           go-version: 1.15.x
 
-      - name: Install Pulumi CLI
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1
 
       - name: Create local stack
         run: |
@@ -196,7 +196,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -209,7 +209,7 @@ jobs:
           node-version: 14.x
 
       - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        uses: pulumi/action-install-pulumi-cli@v1
 
       - name: Create local stack
         run: |
@@ -224,7 +224,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
 
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v2.1.5
         id: npm-cache
         with:
           path: ${{ steps.npm-cache-dir.outputs.dir }}
@@ -258,7 +258,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -270,8 +270,8 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Install Pulumi CLI
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1
 
       - name: Create local stack
         run: |
@@ -281,7 +281,7 @@ jobs:
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
 
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v2.1.5
         if: startsWith(runner.os, 'Linux')
         with:
           path: ~/.cache/pip
@@ -289,7 +289,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v2.1.5
         if: startsWith(runner.os, 'macOS')
         with:
           path: ~/Library/Caches/pip
@@ -297,7 +297,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v2.1.5
         if: startsWith(runner.os, 'Windows')
         with:
           path: ~\AppData\Local\pip\Cache
@@ -330,7 +330,7 @@ jobs:
 
       - name: Get cached dist files
         id: dist-cache
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: dist/
           key: ${{ runner.os }}-build-${{ github.ref }}
@@ -343,7 +343,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
 
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v2.1.5
         id: npm-cache
         with:
           path: ${{ steps.npm-cache-dir.outputs.dir }}
@@ -356,7 +356,7 @@ jobs:
           node-version: 14.x
 
       - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        uses: pulumi/action-install-pulumi-cli@v1
 
       - name: Create local stack
         run: |

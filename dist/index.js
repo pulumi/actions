@@ -205,6 +205,7 @@ exports.getInput = getInput;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setOutput(name, value) {
+    process.stdout.write(os.EOL);
     command_1.issueCommand('set-output', { name }, value);
 }
 exports.setOutput = setOutput;
@@ -2754,7 +2755,7 @@ const constants_1 = __nccwpck_require__(634);
 const filter_stack_1 = __nccwpck_require__(6450);
 const metadata_1 = __nccwpck_require__(3665);
 const stream_decoder_1 = __nccwpck_require__(6575);
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const constants_2 = __nccwpck_require__(634);
 const TRACER_NAME = 'call_stream';
 const { HTTP2_HEADER_STATUS, HTTP2_HEADER_CONTENT_TYPE, NGHTTP2_CANCEL, } = http2.constants;
@@ -3762,7 +3763,7 @@ const call_credentials_filter_1 = __nccwpck_require__(6380);
 const deadline_filter_1 = __nccwpck_require__(1217);
 const compression_filter_1 = __nccwpck_require__(7616);
 const resolver_1 = __nccwpck_require__(1594);
-const logging_1 = __nccwpck_require__(1429);
+const logging_1 = __nccwpck_require__(5993);
 const max_message_size_filter_1 = __nccwpck_require__(659);
 const http_proxy_1 = __nccwpck_require__(4000);
 const uri_parser_1 = __nccwpck_require__(5974);
@@ -5281,7 +5282,7 @@ exports.DeadlineFilterFactory = DeadlineFilterFactory;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-var logging_1 = __nccwpck_require__(1429);
+var logging_1 = __nccwpck_require__(5993);
 Object.defineProperty(exports, "trace", ({ enumerable: true, get: function () { return logging_1.trace; } }));
 var resolver_1 = __nccwpck_require__(1594);
 Object.defineProperty(exports, "registerResolver", ({ enumerable: true, get: function () { return resolver_1.registerResolver; } }));
@@ -5456,12 +5457,12 @@ exports.BaseFilter = BaseFilter;
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getProxiedConnection = exports.mapProxyName = void 0;
-const logging_1 = __nccwpck_require__(1429);
+const logging_1 = __nccwpck_require__(5993);
 const constants_1 = __nccwpck_require__(634);
 const resolver_1 = __nccwpck_require__(1594);
 const http = __nccwpck_require__(8605);
 const tls = __nccwpck_require__(4016);
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const subchannel_1 = __nccwpck_require__(4764);
 const uri_parser_1 = __nccwpck_require__(5974);
 const url_1 = __nccwpck_require__(8835);
@@ -5714,7 +5715,7 @@ const constants_1 = __nccwpck_require__(634);
 Object.defineProperty(exports, "logVerbosity", ({ enumerable: true, get: function () { return constants_1.LogVerbosity; } }));
 Object.defineProperty(exports, "status", ({ enumerable: true, get: function () { return constants_1.Status; } }));
 Object.defineProperty(exports, "propagate", ({ enumerable: true, get: function () { return constants_1.Propagate; } }));
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const make_client_1 = __nccwpck_require__(8541);
 Object.defineProperty(exports, "loadPackageDefinition", ({ enumerable: true, get: function () { return make_client_1.loadPackageDefinition; } }));
 Object.defineProperty(exports, "makeClientConstructor", ({ enumerable: true, get: function () { return make_client_1.makeClientConstructor; } }));
@@ -5972,7 +5973,7 @@ const load_balancer_1 = __nccwpck_require__(2680);
 const channel_1 = __nccwpck_require__(3860);
 const picker_1 = __nccwpck_require__(2817);
 const subchannel_1 = __nccwpck_require__(4764);
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const constants_1 = __nccwpck_require__(634);
 const TRACER_NAME = 'pick_first';
 function trace(text) {
@@ -6338,7 +6339,7 @@ const load_balancer_1 = __nccwpck_require__(2680);
 const channel_1 = __nccwpck_require__(3860);
 const picker_1 = __nccwpck_require__(2817);
 const subchannel_1 = __nccwpck_require__(4764);
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const constants_1 = __nccwpck_require__(634);
 const TRACER_NAME = 'round_robin';
 function trace(text) {
@@ -6586,7 +6587,7 @@ exports.registerAll = registerAll;
 
 /***/ }),
 
-/***/ 1429:
+/***/ 5993:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -6916,7 +6917,7 @@ exports.MaxMessageSizeFilterFactory = MaxMessageSizeFilterFactory;
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Metadata = void 0;
-const logging_1 = __nccwpck_require__(1429);
+const logging_1 = __nccwpck_require__(5993);
 const constants_1 = __nccwpck_require__(634);
 const LEGAL_KEY_REGEX = /^[0-9a-z_.-]+$/;
 const LEGAL_NON_BINARY_VALUE_REGEX = /^[ -~]*$/;
@@ -7272,7 +7273,7 @@ const util = __nccwpck_require__(1669);
 const service_config_1 = __nccwpck_require__(1761);
 const constants_1 = __nccwpck_require__(634);
 const metadata_1 = __nccwpck_require__(3665);
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const constants_2 = __nccwpck_require__(634);
 const uri_parser_1 = __nccwpck_require__(5974);
 const net_1 = __nccwpck_require__(1631);
@@ -7670,7 +7671,7 @@ const picker_1 = __nccwpck_require__(2817);
 const backoff_timeout_1 = __nccwpck_require__(4186);
 const constants_1 = __nccwpck_require__(634);
 const metadata_1 = __nccwpck_require__(3665);
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const constants_2 = __nccwpck_require__(634);
 const uri_parser_1 = __nccwpck_require__(5974);
 const load_balancer_child_handler_1 = __nccwpck_require__(7559);
@@ -7890,7 +7891,7 @@ const stream_1 = __nccwpck_require__(2413);
 const constants_1 = __nccwpck_require__(634);
 const metadata_1 = __nccwpck_require__(3665);
 const stream_decoder_1 = __nccwpck_require__(6575);
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const TRACER_NAME = 'server_call';
 function trace(text) {
     logging.trace(constants_1.LogVerbosity.DEBUG, TRACER_NAME, text);
@@ -8522,7 +8523,7 @@ const constants_1 = __nccwpck_require__(634);
 const metadata_1 = __nccwpck_require__(3665);
 const server_call_1 = __nccwpck_require__(2533);
 const resolver_1 = __nccwpck_require__(1594);
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const subchannel_1 = __nccwpck_require__(4764);
 const uri_parser_1 = __nccwpck_require__(5974);
 const TRACER_NAME = 'server';
@@ -9604,7 +9605,7 @@ const tls_1 = __nccwpck_require__(4016);
 const channel_1 = __nccwpck_require__(3860);
 const backoff_timeout_1 = __nccwpck_require__(4186);
 const resolver_1 = __nccwpck_require__(1594);
-const logging = __nccwpck_require__(1429);
+const logging = __nccwpck_require__(5993);
 const constants_1 = __nccwpck_require__(634);
 const http_proxy_1 = __nccwpck_require__(4000);
 const net = __nccwpck_require__(1631);
@@ -14825,6 +14826,1723 @@ __export(__nccwpck_require__(3886));
 
 /***/ }),
 
+/***/ 9586:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+// Copyright 2016-2020, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const childProcess = __nccwpck_require__(3129);
+const errors_1 = __nccwpck_require__(1369);
+/** @internal */
+class CommandResult {
+    constructor(stdout, stderr, code, err) {
+        this.stdout = stdout;
+        this.stderr = stderr;
+        this.code = code;
+        this.err = err;
+    }
+    toString() {
+        let errStr = "";
+        if (this.err) {
+            errStr = this.err.toString();
+        }
+        return `code: ${this.code}\n stdout: ${this.stdout}\n stderr: ${this.stderr}\n err?: ${errStr}\n`;
+    }
+}
+exports.CommandResult = CommandResult;
+const unknownErrCode = -2;
+/** @internal */
+function runPulumiCmd(args, cwd, additionalEnv, onOutput) {
+    // all commands should be run in non-interactive mode.
+    // this causes commands to fail rather than prompting for input (and thus hanging indefinitely)
+    args.push("--non-interactive");
+    const env = Object.assign(Object.assign({}, process.env), additionalEnv);
+    return new Promise((resolve, reject) => {
+        const proc = childProcess.spawn("pulumi", args, { env, cwd });
+        // TODO: write to buffers and avoid concatenation
+        let stdout = "";
+        let stderr = "";
+        proc.stdout.on("data", (data) => {
+            if (data && data.toString) {
+                data = data.toString();
+            }
+            if (onOutput) {
+                onOutput(data);
+            }
+            stdout += data;
+        });
+        proc.stderr.on("data", (data) => {
+            stderr += data;
+        });
+        proc.on("exit", (code, signal) => {
+            const resCode = code !== null ? code : unknownErrCode;
+            const result = new CommandResult(stdout, stderr, resCode);
+            if (code !== 0) {
+                return reject(errors_1.createCommandError(result));
+            }
+            return resolve(result);
+        });
+        proc.on("error", (err) => {
+            const result = new CommandResult(stdout, stderr, unknownErrCode, err);
+            return reject(errors_1.createCommandError(result));
+        });
+    });
+}
+exports.runPulumiCmd = runPulumiCmd;
+
+
+/***/ }),
+
+/***/ 1369:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright 2016-2020, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+/**
+ * CommandError is an error resulting from invocation of a Pulumi Command.
+ * @alpha
+ */
+class CommandError extends Error {
+    /** @internal */
+    constructor(commandResult) {
+        super(commandResult.toString());
+        this.commandResult = commandResult;
+        this.name = "CommandError";
+    }
+}
+exports.CommandError = CommandError;
+/**
+ * ConcurrentUpdateError is thrown when attempting to update a stack that already has an update in progress.
+ */
+class ConcurrentUpdateError extends CommandError {
+    /** @internal */
+    constructor(commandResult) {
+        super(commandResult);
+        this.name = "ConcurrentUpdateError";
+    }
+}
+exports.ConcurrentUpdateError = ConcurrentUpdateError;
+/**
+ * StackNotFoundError is thrown when attempting to select a stack that does not exist.
+ */
+class StackNotFoundError extends CommandError {
+    /** @internal */
+    constructor(commandResult) {
+        super(commandResult);
+        this.name = "StackNotFoundError";
+    }
+}
+exports.StackNotFoundError = StackNotFoundError;
+/**
+ * StackAlreadyExistsError is thrown when attempting to create a stack that already exists.
+ */
+class StackAlreadyExistsError extends CommandError {
+    /** @internal */
+    constructor(commandResult) {
+        super(commandResult);
+        this.name = "StackAlreadyExistsError";
+    }
+}
+exports.StackAlreadyExistsError = StackAlreadyExistsError;
+const notFoundRegex = new RegExp("no stack named.*found");
+const alreadyExistsRegex = new RegExp("stack.*already exists");
+const conflictText = "[409] Conflict: Another update is currently in progress.";
+/** @internal */
+function createCommandError(result) {
+    const stderr = result.stderr;
+    return (notFoundRegex.test(stderr) ? new StackNotFoundError(result) :
+        alreadyExistsRegex.test(stderr) ? new StackAlreadyExistsError(result) :
+            stderr.indexOf(conflictText) >= 0 ? new ConcurrentUpdateError(result) :
+                new CommandError(result));
+}
+exports.createCommandError = createCommandError;
+
+
+/***/ }),
+
+/***/ 6568:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright 2016-2020, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var DiffKind;
+(function (DiffKind) {
+    // add indicates that the property was added.
+    DiffKind["add"] = "add";
+    // addReplace indicates that the property was added and requires that the resource be replaced.
+    DiffKind["addReplace"] = "add-replace";
+    // delete indicates that the property was deleted.
+    DiffKind["delete"] = "delete";
+    // deleteReplace indicates that the property was deleted and requires that the resource be replaced.
+    DiffKind["deleteReplace"] = "delete-replace";
+    // update indicates that the property was updated.
+    DiffKind["update"] = "update";
+    // updateReplace indicates that the property was updated and requires that the resource be replaced.
+    DiffKind["updateReplace"] = "update-replace";
+})(DiffKind = exports.DiffKind || (exports.DiffKind = {}));
+
+
+/***/ }),
+
+/***/ 4925:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+// Copyright 2016-2020, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__export(__nccwpck_require__(9586));
+__export(__nccwpck_require__(1369));
+__export(__nccwpck_require__(9010));
+__export(__nccwpck_require__(5973));
+__export(__nccwpck_require__(5142));
+__export(__nccwpck_require__(6568));
+
+
+/***/ }),
+
+/***/ 5142:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Copyright 2016-2020, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const fs = __nccwpck_require__(5747);
+const yaml = __nccwpck_require__(8286);
+const os = __nccwpck_require__(2087);
+const semver = __nccwpck_require__(7486);
+const upath = __nccwpck_require__(8004);
+const cmd_1 = __nccwpck_require__(9586);
+const minimumVersion_1 = __nccwpck_require__(8410);
+const stack_1 = __nccwpck_require__(9010);
+const stackSettings_1 = __nccwpck_require__(5973);
+/**
+ * LocalWorkspace is a default implementation of the Workspace interface.
+ * A Workspace is the execution context containing a single Pulumi project, a program,
+ * and multiple stacks. Workspaces are used to manage the execution environment,
+ * providing various utilities such as plugin installation, environment configuration
+ * ($PULUMI_HOME), and creation, deletion, and listing of Stacks.
+ * LocalWorkspace relies on Pulumi.yaml and Pulumi.<stack>.yaml as the intermediate format
+ * for Project and Stack settings. Modifying ProjectSettings will
+ * alter the Workspace Pulumi.yaml file, and setting config on a Stack will modify the Pulumi.<stack>.yaml file.
+ * This is identical to the behavior of Pulumi CLI driven workspaces.
+ *
+ * @alpha
+ */
+class LocalWorkspace {
+    constructor(opts) {
+        let dir = "";
+        let envs = {};
+        if (opts) {
+            const { workDir, pulumiHome, program, envVars, secretsProvider } = opts;
+            if (workDir) {
+                dir = workDir;
+            }
+            this.pulumiHome = pulumiHome;
+            this.program = program;
+            this.secretsProvider = secretsProvider;
+            envs = Object.assign({}, envVars);
+        }
+        if (!dir) {
+            dir = fs.mkdtempSync(upath.joinSafe(os.tmpdir(), "automation-"));
+        }
+        this.workDir = dir;
+        this.envVars = envs;
+        const readinessPromises = [this.getPulumiVersion(minimumVersion_1.minimumVersion)];
+        if (opts && opts.projectSettings) {
+            readinessPromises.push(this.saveProjectSettings(opts.projectSettings));
+        }
+        if (opts && opts.stackSettings) {
+            for (const [name, value] of Object.entries(opts.stackSettings)) {
+                readinessPromises.push(this.saveStackSettings(name, value));
+            }
+        }
+        this.ready = Promise.all(readinessPromises);
+    }
+    /**
+     * The version of the underlying Pulumi CLI/Engine.
+     */
+    get pulumiVersion() {
+        return this._pulumiVersion.toString();
+    }
+    /**
+     * Creates a workspace using the specified options. Used for maximal control and customization
+     * of the underlying environment before any stacks are created or selected.
+     *
+     * @param opts Options used to configure the Workspace
+     */
+    static create(opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const ws = new LocalWorkspace(opts);
+            yield ws.ready;
+            return ws;
+        });
+    }
+    static createStack(args, opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (isInlineProgramArgs(args)) {
+                return yield this.inlineSourceStackHelper(args, stack_1.Stack.create, opts);
+            }
+            else if (isLocalProgramArgs(args)) {
+                return yield this.localSourceStackHelper(args, stack_1.Stack.create, opts);
+            }
+            throw new Error(`unexpected args: ${args}`);
+        });
+    }
+    static selectStack(args, opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (isInlineProgramArgs(args)) {
+                return yield this.inlineSourceStackHelper(args, stack_1.Stack.select, opts);
+            }
+            else if (isLocalProgramArgs(args)) {
+                return yield this.localSourceStackHelper(args, stack_1.Stack.select, opts);
+            }
+            throw new Error(`unexpected args: ${args}`);
+        });
+    }
+    static createOrSelectStack(args, opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (isInlineProgramArgs(args)) {
+                return yield this.inlineSourceStackHelper(args, stack_1.Stack.createOrSelect, opts);
+            }
+            else if (isLocalProgramArgs(args)) {
+                return yield this.localSourceStackHelper(args, stack_1.Stack.createOrSelect, opts);
+            }
+            throw new Error(`unexpected args: ${args}`);
+        });
+    }
+    static localSourceStackHelper(args, initFn, opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let wsOpts = { workDir: args.workDir };
+            if (opts) {
+                wsOpts = Object.assign(Object.assign({}, opts), { workDir: args.workDir });
+            }
+            const ws = new LocalWorkspace(wsOpts);
+            yield ws.ready;
+            return yield initFn(args.stackName, ws);
+        });
+    }
+    static inlineSourceStackHelper(args, initFn, opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let wsOpts = { program: args.program };
+            if (opts) {
+                wsOpts = Object.assign(Object.assign({}, opts), { program: args.program });
+            }
+            if (!wsOpts.projectSettings) {
+                if (!!wsOpts.workDir) {
+                    try {
+                        // Try to load the project settings.
+                        loadProjectSettings(wsOpts.workDir);
+                    }
+                    catch (e) {
+                        // If it failed to find the project settings file, set a default project.
+                        if (e.toString().includes("failed to find project settings")) {
+                            wsOpts.projectSettings = defaultProject(args.projectName);
+                        }
+                        else {
+                            throw e;
+                        }
+                    }
+                }
+                else {
+                    wsOpts.projectSettings = defaultProject(args.projectName);
+                }
+            }
+            const ws = new LocalWorkspace(wsOpts);
+            yield ws.ready;
+            return yield initFn(args.stackName, ws);
+        });
+    }
+    /**
+     * Returns the settings object for the current project if any
+     * LocalWorkspace reads settings from the Pulumi.yaml in the workspace.
+     * A workspace can contain only a single project at a time.
+     */
+    projectSettings() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return loadProjectSettings(this.workDir);
+        });
+    }
+    /**
+     * Overwrites the settings object in the current project.
+     * There can only be a single project per workspace. Fails if new project name does not match old.
+     * LocalWorkspace writes this value to a Pulumi.yaml file in Workspace.WorkDir().
+     *
+     * @param settings The settings object to save to the Workspace.
+     */
+    saveProjectSettings(settings) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let foundExt = ".yaml";
+            for (const ext of settingsExtensions) {
+                const testPath = upath.joinSafe(this.workDir, `Pulumi${ext}`);
+                if (fs.existsSync(testPath)) {
+                    foundExt = ext;
+                    break;
+                }
+            }
+            const path = upath.joinSafe(this.workDir, `Pulumi${foundExt}`);
+            let contents;
+            if (foundExt === ".json") {
+                contents = JSON.stringify(settings, null, 4);
+            }
+            else {
+                contents = yaml.safeDump(settings, { skipInvalid: true });
+            }
+            return fs.writeFileSync(path, contents);
+        });
+    }
+    /**
+     * Returns the settings object for the stack matching the specified stack name if any.
+     * LocalWorkspace reads this from a Pulumi.<stack>.yaml file in Workspace.WorkDir().
+     *
+     * @param stackName The stack to retrieve settings from.
+     */
+    stackSettings(stackName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const stackSettingsName = getStackSettingsName(stackName);
+            for (const ext of settingsExtensions) {
+                const isJSON = ext === ".json";
+                const path = upath.joinSafe(this.workDir, `Pulumi.${stackSettingsName}${ext}`);
+                if (!fs.existsSync(path)) {
+                    continue;
+                }
+                const contents = fs.readFileSync(path).toString();
+                let stackSettings;
+                if (isJSON) {
+                    stackSettings = JSON.parse(contents);
+                }
+                stackSettings = yaml.safeLoad(contents);
+                // Transform the serialized representation back to what we expect.
+                for (const key of stackSettings_1.stackSettingsSerDeKeys) {
+                    if (stackSettings.hasOwnProperty(key[0])) {
+                        stackSettings[key[1]] = stackSettings[key[0]];
+                        delete stackSettings[key[0]];
+                    }
+                }
+                return stackSettings;
+            }
+            throw new Error(`failed to find stack settings file in workdir: ${this.workDir}`);
+        });
+    }
+    /**
+     * Overwrites the settings object for the stack matching the specified stack name.
+     * LocalWorkspace writes this value to a Pulumi.<stack>.yaml file in Workspace.WorkDir()
+     *
+     * @param stackName The stack to operate on.
+     * @param settings The settings object to save.
+     */
+    saveStackSettings(stackName, settings) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const stackSettingsName = getStackSettingsName(stackName);
+            let foundExt = ".yaml";
+            for (const ext of settingsExtensions) {
+                const testPath = upath.joinSafe(this.workDir, `Pulumi.${stackSettingsName}${ext}`);
+                if (fs.existsSync(testPath)) {
+                    foundExt = ext;
+                    break;
+                }
+            }
+            const path = upath.joinSafe(this.workDir, `Pulumi.${stackSettingsName}${foundExt}`);
+            const serializeSettings = settings;
+            let contents;
+            // Transform the keys to the serialized representation that we expect.
+            for (const key of stackSettings_1.stackSettingsSerDeKeys) {
+                if (serializeSettings.hasOwnProperty(key[1])) {
+                    serializeSettings[key[0]] = serializeSettings[key[1]];
+                    delete serializeSettings[key[1]];
+                }
+            }
+            if (foundExt === ".json") {
+                contents = JSON.stringify(serializeSettings, null, 4);
+            }
+            else {
+                contents = yaml.safeDump(serializeSettings, { skipInvalid: true });
+            }
+            return fs.writeFileSync(path, contents);
+        });
+    }
+    /**
+     * Creates and sets a new stack with the stack name, failing if one already exists.
+     *
+     * @param stackName The stack to create.
+     */
+    createStack(stackName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const args = ["stack", "init", stackName];
+            if (this.secretsProvider) {
+                args.push("--secrets-provider", this.secretsProvider);
+            }
+            yield this.runPulumiCmd(args);
+        });
+    }
+    /**
+     * Selects and sets an existing stack matching the stack name, failing if none exists.
+     *
+     * @param stackName The stack to select.
+     */
+    selectStack(stackName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.runPulumiCmd(["stack", "select", stackName]);
+        });
+    }
+    /**
+     * Deletes the stack and all associated configuration and history.
+     *
+     * @param stackName The stack to remove
+     */
+    removeStack(stackName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.runPulumiCmd(["stack", "rm", "--yes", stackName]);
+        });
+    }
+    /**
+     * Returns the value associated with the specified stack name and key,
+     * scoped to the current workspace. LocalWorkspace reads this config from the matching Pulumi.stack.yaml file.
+     *
+     * @param stackName The stack to read config from
+     * @param key The key to use for the config lookup
+     */
+    getConfig(stackName, key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.selectStack(stackName);
+            const result = yield this.runPulumiCmd(["config", "get", key, "--json"]);
+            return JSON.parse(result.stdout);
+        });
+    }
+    /**
+     * Returns the config map for the specified stack name, scoped to the current workspace.
+     * LocalWorkspace reads this config from the matching Pulumi.stack.yaml file.
+     *
+     * @param stackName The stack to read config from
+     */
+    getAllConfig(stackName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.selectStack(stackName);
+            const result = yield this.runPulumiCmd(["config", "--show-secrets", "--json"]);
+            return JSON.parse(result.stdout);
+        });
+    }
+    /**
+     * Sets the specified key-value pair on the provided stack name.
+     * LocalWorkspace writes this value to the matching Pulumi.<stack>.yaml file in Workspace.WorkDir().
+     *
+     * @param stackName The stack to operate on
+     * @param key The config key to set
+     * @param value The value to set
+     */
+    setConfig(stackName, key, value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.selectStack(stackName);
+            const secretArg = value.secret ? "--secret" : "--plaintext";
+            yield this.runPulumiCmd(["config", "set", key, value.value, secretArg]);
+        });
+    }
+    /**
+     * Sets all values in the provided config map for the specified stack name.
+     * LocalWorkspace writes the config to the matching Pulumi.<stack>.yaml file in Workspace.WorkDir().
+     *
+     * @param stackName The stack to operate on
+     * @param config The `ConfigMap` to upsert against the existing config.
+     */
+    setAllConfig(stackName, config) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let args = ["config", "set-all", "--stack", stackName];
+            for (const [key, value] of Object.entries(config)) {
+                const secretArg = value.secret ? "--secret" : "--plaintext";
+                args = [...args, secretArg, `${key}=${value.value}`];
+            }
+            yield this.runPulumiCmd(args);
+        });
+    }
+    /**
+     * Removes the specified key-value pair on the provided stack name.
+     * It will remove any matching values in the Pulumi.<stack>.yaml file in Workspace.WorkDir().
+     *
+     * @param stackName The stack to operate on
+     * @param key The config key to remove
+     */
+    removeConfig(stackName, key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.selectStack(stackName);
+            yield this.runPulumiCmd(["config", "rm", key]);
+        });
+    }
+    /**
+     *
+     * Removes all values in the provided key list for the specified stack name
+     * It will remove any matching values in the Pulumi.<stack>.yaml file in Workspace.WorkDir().
+     *
+     * @param stackName The stack to operate on
+     * @param keys The list of keys to remove from the underlying config
+     */
+    removeAllConfig(stackName, keys) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.runPulumiCmd(["config", "rm-all", "--stack", stackName, ...keys]);
+        });
+    }
+    /**
+     * Gets and sets the config map used with the last update for Stack matching stack name.
+     * It will overwrite all configuration in the Pulumi.<stack>.yaml file in Workspace.WorkDir().
+     *
+     * @param stackName The stack to refresh
+     */
+    refreshConfig(stackName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.selectStack(stackName);
+            yield this.runPulumiCmd(["config", "refresh", "--force"]);
+            return this.getAllConfig(stackName);
+        });
+    }
+    /**
+     * Returns the currently authenticated user.
+     */
+    whoAmI() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.runPulumiCmd(["whoami"]);
+            return { user: result.stdout.trim() };
+        });
+    }
+    /**
+     * Returns a summary of the currently selected stack, if any.
+     */
+    stack() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const stacks = yield this.listStacks();
+            for (const stack of stacks) {
+                if (stack.current) {
+                    return stack;
+                }
+            }
+            return undefined;
+        });
+    }
+    /**
+     * Returns all Stacks created under the current Project.
+     * This queries underlying backend and may return stacks not present in the Workspace (as Pulumi.<stack>.yaml files).
+     */
+    listStacks() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.runPulumiCmd(["stack", "ls", "--json"]);
+            return JSON.parse(result.stdout);
+        });
+    }
+    /**
+     * Installs a plugin in the Workspace, for example to use cloud providers like AWS or GCP.
+     *
+     * @param name the name of the plugin.
+     * @param version the version of the plugin e.g. "v1.0.0".
+     * @param kind the kind of plugin, defaults to "resource"
+     */
+    installPlugin(name, version, kind = "resource") {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.runPulumiCmd(["plugin", "install", kind, name, version]);
+        });
+    }
+    /**
+     * Removes a plugin from the Workspace matching the specified name and version.
+     *
+     * @param name the optional name of the plugin.
+     * @param versionRange optional semver range to check when removing plugins matching the given name
+     *  e.g. "1.0.0", ">1.0.0".
+     * @param kind he kind of plugin, defaults to "resource".
+     */
+    removePlugin(name, versionRange, kind = "resource") {
+        return __awaiter(this, void 0, void 0, function* () {
+            const args = ["plugin", "rm", kind];
+            if (name) {
+                args.push(name);
+            }
+            if (versionRange) {
+                args.push(versionRange);
+            }
+            args.push("--yes");
+            yield this.runPulumiCmd(args);
+        });
+    }
+    /**
+     * Returns a list of all plugins installed in the Workspace.
+     */
+    listPlugins() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.runPulumiCmd(["plugin", "ls", "--json"]);
+            return JSON.parse(result.stdout, (key, value) => {
+                if (key === "installTime" || key === "lastUsedTime") {
+                    return new Date(value);
+                }
+                return value;
+            });
+        });
+    }
+    /**
+     * exportStack exports the deployment state of the stack.
+     * This can be combined with Workspace.importStack to edit a stack's state (such as recovery from failed deployments).
+     *
+     * @param stackName the name of the stack.
+     */
+    exportStack(stackName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.selectStack(stackName);
+            const result = yield this.runPulumiCmd(["stack", "export", "--show-secrets"]);
+            return JSON.parse(result.stdout);
+        });
+    }
+    /**
+     * importStack imports the specified deployment state into a pre-existing stack.
+     * This can be combined with Workspace.exportStack to edit a stack's state (such as recovery from failed deployments).
+     *
+     * @param stackName the name of the stack.
+     * @param state the stack state to import.
+     */
+    importStack(stackName, state) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.selectStack(stackName);
+            const randomSuffix = Math.floor(100000 + Math.random() * 900000);
+            const filepath = upath.joinSafe(os.tmpdir(), `automation-${randomSuffix}`);
+            const contents = JSON.stringify(state, null, 4);
+            fs.writeFileSync(filepath, contents);
+            yield this.runPulumiCmd(["stack", "import", "--file", filepath]);
+            fs.unlinkSync(filepath);
+        });
+    }
+    /**
+     * serializeArgsForOp is hook to provide additional args to every CLI commands before they are executed.
+     * Provided with stack name,
+     * returns a list of args to append to an invoked command ["--config=...", ]
+     * LocalWorkspace does not utilize this extensibility point.
+     */
+    serializeArgsForOp(_) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // LocalWorkspace does not utilize this extensibility point.
+            return [];
+        });
+    }
+    /**
+     * postCommandCallback is a hook executed after every command. Called with the stack name.
+     * An extensibility point to perform workspace cleanup (CLI operations may create/modify a Pulumi.stack.yaml)
+     * LocalWorkspace does not utilize this extensibility point.
+     */
+    postCommandCallback(_) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // LocalWorkspace does not utilize this extensibility point.
+            return;
+        });
+    }
+    getPulumiVersion(minVersion) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.runPulumiCmd(["version"]);
+            const version = new semver.SemVer(result.stdout.trim());
+            validatePulumiVersion(minVersion, version);
+            this._pulumiVersion = version;
+        });
+    }
+    runPulumiCmd(args) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let envs = {};
+            if (this.pulumiHome) {
+                envs["PULUMI_HOME"] = this.pulumiHome;
+            }
+            envs = Object.assign(Object.assign({}, envs), this.envVars);
+            return cmd_1.runPulumiCmd(args, this.workDir, envs);
+        });
+    }
+}
+exports.LocalWorkspace = LocalWorkspace;
+/**
+ * Returns true if the provided `args` object satisfies the `LocalProgramArgs` interface.
+ *
+ * @param args The args object to evaluate
+ */
+function isLocalProgramArgs(args) {
+    return args.workDir !== undefined;
+}
+/**
+ * Returns true if the provided `args` object satisfies the `InlineProgramArgs` interface.
+ *
+ * @param args The args object to evaluate
+ */
+function isInlineProgramArgs(args) {
+    return args.projectName !== undefined &&
+        args.program !== undefined;
+}
+const settingsExtensions = [".yaml", ".yml", ".json"];
+function getStackSettingsName(name) {
+    const parts = name.split("/");
+    if (parts.length < 1) {
+        return name;
+    }
+    return parts[parts.length - 1];
+}
+function defaultProject(projectName) {
+    const settings = { name: projectName, runtime: "nodejs", main: process.cwd() };
+    return settings;
+}
+function loadProjectSettings(workDir) {
+    for (const ext of settingsExtensions) {
+        const isJSON = ext === ".json";
+        const path = upath.joinSafe(workDir, `Pulumi${ext}`);
+        if (!fs.existsSync(path)) {
+            continue;
+        }
+        const contents = fs.readFileSync(path).toString();
+        if (isJSON) {
+            return JSON.parse(contents);
+        }
+        return yaml.safeLoad(contents);
+    }
+    throw new Error(`failed to find project settings file in workdir: ${workDir}`);
+}
+/** @internal */
+function validatePulumiVersion(minVersion, currentVersion) {
+    if (minVersion.major < currentVersion.major) {
+        throw new Error(`Major version mismatch. You are using Pulumi CLI version ${currentVersion.toString()} with Automation SDK v${minVersion.major}. Please update the SDK.`);
+    }
+    if (minVersion.compare(currentVersion) === 1) {
+        throw new Error(`Minimum version requirement failed. The minimum CLI version requirement is ${minVersion.toString()}, your current CLI version is ${currentVersion.toString()}. Please update the Pulumi CLI.`);
+    }
+}
+exports.validatePulumiVersion = validatePulumiVersion;
+
+
+/***/ }),
+
+/***/ 8410:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+// Copyright 2016-2021, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const semver = __nccwpck_require__(7486);
+exports.minimumVersion = new semver.SemVer("v3.0.0");
+
+
+/***/ }),
+
+/***/ 3621:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Copyright 2016-2020, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const errors_1 = __nccwpck_require__(9693);
+const log = __nccwpck_require__(642);
+const runtime = __nccwpck_require__(5022);
+const langproto = __nccwpck_require__(3979);
+const plugproto = __nccwpck_require__(8008);
+// maxRPCMessageSize raises the gRPC Max Message size from `4194304` (4mb) to `419430400` (400mb)
+/** @internal */
+exports.maxRPCMessageSize = 1024 * 1024 * 400;
+/** @internal */
+class LanguageServer {
+    constructor(program) {
+        this.program = program;
+        this.running = false;
+    }
+    onPulumiExit(hasError) {
+        // check for leaks once the CLI exits but skip if the program otherwise errored to keep error output clean
+        if (!hasError) {
+            const [leaks, leakMessage] = runtime.leakedPromises();
+            if (leaks.size !== 0) {
+                throw new Error(leakMessage);
+            }
+        }
+        // these are globals and we need to clean up after ourselves
+        runtime.resetOptions("", "", -1, "", "", false);
+    }
+    getRequiredPlugins(call, callback) {
+        const resp = new langproto.GetRequiredPluginsResponse();
+        resp.setPluginsList([]);
+        callback(undefined, resp);
+    }
+    run(call, callback) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const req = call.request;
+            const resp = new langproto.RunResponse();
+            this.running = true;
+            const errorSet = new Set();
+            const uncaughtHandler = newUncaughtHandler(errorSet);
+            try {
+                const args = req.getArgsList();
+                const engineAddr = args && args.length > 0 ? args[0] : "";
+                runtime.resetOptions(req.getProject(), req.getStack(), req.getParallel(), engineAddr, req.getMonitorAddress(), req.getDryrun());
+                const config = {};
+                for (const [k, v] of ((_a = req.getConfigMap()) === null || _a === void 0 ? void 0 : _a.entries()) || []) {
+                    config[k] = v;
+                }
+                runtime.setAllConfig(config);
+                process.on("uncaughtException", uncaughtHandler);
+                // @ts-ignore 'unhandledRejection' will almost always invoke uncaughtHandler with an Error. so
+                // just suppress the TS strictness here.
+                process.on("unhandledRejection", uncaughtHandler);
+                try {
+                    yield runtime.runInPulumiStack(this.program);
+                    yield runtime.disconnect();
+                    process.off("uncaughtException", uncaughtHandler);
+                    process.off("unhandledRejection", uncaughtHandler);
+                }
+                catch (e) {
+                    yield runtime.disconnect();
+                    process.off("uncaughtException", uncaughtHandler);
+                    process.off("unhandledRejection", uncaughtHandler);
+                    if (!errors_1.isGrpcError(e)) {
+                        throw e;
+                    }
+                }
+                if (errorSet.size !== 0 || log.hasErrors()) {
+                    throw new Error("One or more errors occurred");
+                }
+            }
+            catch (e) {
+                const err = e instanceof Error ? e : new Error(`unknown error ${e}`);
+                resp.setError(err.message);
+                callback(err, undefined);
+            }
+            callback(undefined, resp);
+        });
+    }
+    getPluginInfo(call, callback) {
+        const resp = new plugproto.PluginInfo();
+        resp.setVersion("1.0.0");
+        callback(undefined, resp);
+    }
+}
+exports.LanguageServer = LanguageServer;
+function newUncaughtHandler(errorSet) {
+    return (err) => {
+        // In node, if you throw an error in a chained promise, but the exception is not finally
+        // handled, then you can end up getting an unhandledRejection for each exception/promise
+        // pair.  Because the exception is the same through all of these, we keep track of it and
+        // only report it once so the user doesn't get N messages for the same thing.
+        if (errorSet.has(err)) {
+            return;
+        }
+        errorSet.add(err);
+        // Default message should be to include the full stack (which includes the message), or
+        // fallback to just the message if we can't get the stack.
+        //
+        // If both the stack and message are empty, then just stringify the err object itself. This
+        // is also necessary as users can throw arbitrary things in JS (including non-Errors).
+        let defaultMessage = "";
+        if (!!err) {
+            defaultMessage = err.stack || err.message || ("" + err);
+        }
+        // First, log the error.
+        if (errors_1.RunError.isInstance(err)) {
+            // Always hide the stack for RunErrors.
+            log.error(err.message);
+        }
+        else if (errors_1.ResourceError.isInstance(err)) {
+            // Hide the stack if requested to by the ResourceError creator.
+            const message = err.hideStack ? err.message : defaultMessage;
+            log.error(message, err.resource);
+        }
+        else if (!errors_1.isGrpcError(err)) {
+            log.error(`Unhandled exception: ${defaultMessage}`);
+        }
+    };
+}
+
+
+/***/ }),
+
+/***/ 9010:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Copyright 2016-2020, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const fs = __nccwpck_require__(5747);
+const os = __nccwpck_require__(2087);
+const path = __nccwpck_require__(5622);
+const upath = __nccwpck_require__(8004);
+const grpc = __nccwpck_require__(7025);
+const TailFile = __nccwpck_require__(725);
+const split2 = __nccwpck_require__(5000);
+const cmd_1 = __nccwpck_require__(9586);
+const errors_1 = __nccwpck_require__(1369);
+const server_1 = __nccwpck_require__(3621);
+const langrpc = __nccwpck_require__(5628);
+const secretSentinel = "[secret]";
+/**
+ * Stack is an isolated, independently configurable instance of a Pulumi program.
+ * Stack exposes methods for the full pulumi lifecycle (up/preview/refresh/destroy), as well as managing configuration.
+ * Multiple Stacks are commonly used to denote different phases of development
+ * (such as development, staging and production) or feature branches (such as feature-x-dev, jane-feature-x-dev).
+ *
+ * @alpha
+ */
+class Stack {
+    constructor(name, workspace, mode) {
+        this.name = name;
+        this.workspace = workspace;
+        switch (mode) {
+            case "create":
+                this.ready = workspace.createStack(name);
+                return this;
+            case "select":
+                this.ready = workspace.selectStack(name);
+                return this;
+            case "createOrSelect":
+                this.ready = workspace.createStack(name).catch((err) => {
+                    if (err instanceof errors_1.StackAlreadyExistsError) {
+                        return workspace.selectStack(name);
+                    }
+                    throw err;
+                });
+                return this;
+            default:
+                throw new Error(`unexpected Stack creation mode: ${mode}`);
+        }
+    }
+    /**
+     * Creates a new stack using the given workspace, and stack name.
+     * It fails if a stack with that name already exists
+     *
+     * @param name The name identifying the Stack.
+     * @param workspace The Workspace the Stack was created from.
+     */
+    static create(name, workspace) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const stack = new Stack(name, workspace, "create");
+            yield stack.ready;
+            return stack;
+        });
+    }
+    /**
+     * Selects stack using the given workspace, and stack name.
+     * It returns an error if the given Stack does not exist. All LocalWorkspace operations will call `select`
+     * before running.
+     *
+     * @param name The name identifying the Stack.
+     * @param workspace The Workspace the Stack was created from.
+     */
+    static select(name, workspace) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const stack = new Stack(name, workspace, "select");
+            yield stack.ready;
+            return stack;
+        });
+    }
+    /**
+     * Tries to create a new stack using the given workspace and
+     * stack name if the stack does not already exist,
+     * or falls back to selecting the existing stack. If the stack does not exist,
+     * it will be created and selected.
+     *
+     * @param name The name identifying the Stack.
+     * @param workspace The Workspace the Stack was created from.
+     */
+    static createOrSelect(name, workspace) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const stack = new Stack(name, workspace, "createOrSelect");
+            yield stack.ready;
+            return stack;
+        });
+    }
+    readLines(logPath, callback) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const eventLogTail = new TailFile(logPath, { startPos: 0 });
+            yield eventLogTail.start();
+            eventLogTail
+                .on("tail_error", (err) => {
+                throw err;
+            })
+                .pipe(split2())
+                .on("data", (line) => {
+                const event = JSON.parse(line);
+                callback(event);
+            });
+            return eventLogTail;
+        });
+    }
+    /**
+     * Creates or updates the resources in a stack by executing the program in the Workspace.
+     * https://www.pulumi.com/docs/reference/cli/pulumi_up/
+     *
+     * @param opts Options to customize the behavior of the update.
+     */
+    up(opts) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function* () {
+            const args = ["up", "--yes", "--skip-preview"];
+            let kind = execKind.local;
+            let program = this.workspace.program;
+            yield this.workspace.selectStack(this.name);
+            if (opts) {
+                if (opts.program) {
+                    program = opts.program;
+                }
+                if (opts.message) {
+                    args.push("--message", opts.message);
+                }
+                if (opts.expectNoChanges) {
+                    args.push("--expect-no-changes");
+                }
+                if (opts.diff) {
+                    args.push("--diff");
+                }
+                if (opts.replace) {
+                    for (const rURN of opts.replace) {
+                        args.push("--replace", rURN);
+                    }
+                }
+                if (opts.target) {
+                    for (const tURN of opts.target) {
+                        args.push("--target", tURN);
+                    }
+                }
+                if (opts.targetDependents) {
+                    args.push("--target-dependents");
+                }
+                if (opts.parallel) {
+                    args.push("--parallel", opts.parallel.toString());
+                }
+            }
+            let onExit = (hasError) => { return; };
+            let didError = false;
+            if (program) {
+                kind = execKind.inline;
+                const server = new grpc.Server({
+                    "grpc.max_receive_message_length": server_1.maxRPCMessageSize,
+                });
+                const languageServer = new server_1.LanguageServer(program);
+                server.addService(langrpc.LanguageRuntimeService, languageServer);
+                const port = yield new Promise((resolve, reject) => {
+                    server.bindAsync(`0.0.0.0:0`, grpc.ServerCredentials.createInsecure(), (err, p) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        else {
+                            resolve(p);
+                        }
+                    });
+                });
+                server.start();
+                onExit = (hasError) => {
+                    languageServer.onPulumiExit(hasError);
+                    server.forceShutdown();
+                };
+                args.push(`--client=127.0.0.1:${port}`);
+            }
+            args.push("--exec-kind", kind);
+            let logPromise;
+            let logFile;
+            // Set up event log tailing
+            if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
+                const onEvent = opts.onEvent;
+                logFile = createLogFile("up");
+                args.push("--event-log", logFile);
+                logPromise = this.readLines(logFile, (event) => {
+                    onEvent(event);
+                });
+            }
+            const upPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
+            let upResult;
+            let tail;
+            try {
+                [upResult, tail] = yield Promise.all([upPromise, logPromise]);
+            }
+            catch (e) {
+                didError = true;
+                throw e;
+            }
+            finally {
+                onExit(didError);
+                yield cleanUp(tail, logFile);
+            }
+            // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
+            const outputs = yield this.outputs();
+            const summary = yield this.info();
+            return {
+                stdout: upResult.stdout,
+                stderr: upResult.stderr,
+                summary: summary,
+                outputs: outputs,
+            };
+        });
+    }
+    /**
+     * Performs a dry-run update to a stack, returning pending changes.
+     * https://www.pulumi.com/docs/reference/cli/pulumi_preview/
+     *
+     * @param opts Options to customize the behavior of the preview.
+     */
+    preview(opts) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const args = ["preview"];
+            let kind = execKind.local;
+            let program = this.workspace.program;
+            yield this.workspace.selectStack(this.name);
+            if (opts) {
+                if (opts.program) {
+                    program = opts.program;
+                }
+                if (opts.message) {
+                    args.push("--message", opts.message);
+                }
+                if (opts.expectNoChanges) {
+                    args.push("--expect-no-changes");
+                }
+                if (opts.diff) {
+                    args.push("--diff");
+                }
+                if (opts.replace) {
+                    for (const rURN of opts.replace) {
+                        args.push("--replace", rURN);
+                    }
+                }
+                if (opts.target) {
+                    for (const tURN of opts.target) {
+                        args.push("--target", tURN);
+                    }
+                }
+                if (opts.targetDependents) {
+                    args.push("--target-dependents");
+                }
+                if (opts.parallel) {
+                    args.push("--parallel", opts.parallel.toString());
+                }
+            }
+            let onExit = (hasError) => { return; };
+            let didError = false;
+            if (program) {
+                kind = execKind.inline;
+                const server = new grpc.Server({
+                    "grpc.max_receive_message_length": server_1.maxRPCMessageSize,
+                });
+                const languageServer = new server_1.LanguageServer(program);
+                server.addService(langrpc.LanguageRuntimeService, languageServer);
+                const port = yield new Promise((resolve, reject) => {
+                    server.bindAsync(`0.0.0.0:0`, grpc.ServerCredentials.createInsecure(), (err, p) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        else {
+                            resolve(p);
+                        }
+                    });
+                });
+                server.start();
+                onExit = (hasError) => {
+                    languageServer.onPulumiExit(hasError);
+                    server.forceShutdown();
+                };
+                args.push(`--client=127.0.0.1:${port}`);
+            }
+            args.push("--exec-kind", kind);
+            // Set up event log tailing
+            const logFile = createLogFile("preview");
+            args.push("--event-log", logFile);
+            let summaryEvent;
+            const logPromise = this.readLines(logFile, (event) => {
+                var _a;
+                if (event.summaryEvent) {
+                    summaryEvent = event.summaryEvent;
+                }
+                if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
+                    const onEvent = opts.onEvent;
+                    onEvent(event);
+                }
+            });
+            const prePromise = this.runPulumiCmd(args, (_a = opts) === null || _a === void 0 ? void 0 : _a.onOutput);
+            let preResult;
+            let tail;
+            try {
+                [preResult, tail] = yield Promise.all([prePromise, logPromise]);
+            }
+            catch (e) {
+                didError = true;
+                throw e;
+            }
+            finally {
+                onExit(didError);
+                yield cleanUp(tail, logFile);
+            }
+            if (!summaryEvent) {
+                throw new Error("No summary of changes.");
+            }
+            return {
+                stdout: preResult.stdout,
+                stderr: preResult.stderr,
+                changeSummary: summaryEvent.resourceChanges,
+            };
+        });
+    }
+    /**
+     * Compares the current stack’s resource state with the state known to exist in the actual
+     * cloud provider. Any such changes are adopted into the current stack.
+     *
+     * @param opts Options to customize the behavior of the refresh.
+     */
+    refresh(opts) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function* () {
+            const args = ["refresh", "--yes", "--skip-preview"];
+            yield this.workspace.selectStack(this.name);
+            if (opts) {
+                if (opts.message) {
+                    args.push("--message", opts.message);
+                }
+                if (opts.expectNoChanges) {
+                    args.push("--expect-no-changes");
+                }
+                if (opts.target) {
+                    for (const tURN of opts.target) {
+                        args.push("--target", tURN);
+                    }
+                }
+                if (opts.parallel) {
+                    args.push("--parallel", opts.parallel.toString());
+                }
+            }
+            let logPromise;
+            let logFile;
+            // Set up event log tailing
+            if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
+                const onEvent = opts.onEvent;
+                logFile = createLogFile("refresh");
+                args.push("--event-log", logFile);
+                logPromise = this.readLines(logFile, (event) => {
+                    onEvent(event);
+                });
+            }
+            const kind = this.workspace.program ? execKind.inline : execKind.local;
+            args.push("--exec-kind", kind);
+            const refPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
+            const [refResult, tail] = yield Promise.all([refPromise, logPromise]);
+            yield cleanUp(tail, logFile);
+            const summary = yield this.info();
+            return {
+                stdout: refResult.stdout,
+                stderr: refResult.stderr,
+                summary: summary,
+            };
+        });
+    }
+    /**
+     * Destroy deletes all resources in a stack, leaving all history and configuration intact.
+     *
+     * @param opts Options to customize the behavior of the destroy.
+     */
+    destroy(opts) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function* () {
+            const args = ["destroy", "--yes", "--skip-preview"];
+            yield this.workspace.selectStack(this.name);
+            if (opts) {
+                if (opts.message) {
+                    args.push("--message", opts.message);
+                }
+                if (opts.target) {
+                    for (const tURN of opts.target) {
+                        args.push("--target", tURN);
+                    }
+                }
+                if (opts.targetDependents) {
+                    args.push("--target-dependents");
+                }
+                if (opts.parallel) {
+                    args.push("--parallel", opts.parallel.toString());
+                }
+            }
+            let logPromise;
+            let logFile;
+            // Set up event log tailing
+            if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
+                const onEvent = opts.onEvent;
+                logFile = createLogFile("destroy");
+                args.push("--event-log", logFile);
+                logPromise = this.readLines(logFile, (event) => {
+                    onEvent(event);
+                });
+            }
+            const kind = this.workspace.program ? execKind.inline : execKind.local;
+            args.push("--exec-kind", kind);
+            const desPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
+            const [desResult, tail] = yield Promise.all([desPromise, logPromise]);
+            yield cleanUp(tail, logFile);
+            const summary = yield this.info();
+            return {
+                stdout: desResult.stdout,
+                stderr: desResult.stderr,
+                summary: summary,
+            };
+        });
+    }
+    /**
+     * Returns the config value associated with the specified key.
+     *
+     * @param key The key to use for the config lookup
+     */
+    getConfig(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.getConfig(this.name, key);
+        });
+    }
+    /**
+     * Returns the full config map associated with the stack in the Workspace.
+     */
+    getAllConfig() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.getAllConfig(this.name);
+        });
+    }
+    /**
+     * Sets a config key-value pair on the Stack in the associated Workspace.
+     *
+     * @param key The key to set.
+     * @param value The config value to set.
+     */
+    setConfig(key, value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.setConfig(this.name, key, value);
+        });
+    }
+    /**
+     * Sets all specified config values on the stack in the associated Workspace.
+     *
+     * @param config The map of config key-value pairs to set.
+     */
+    setAllConfig(config) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.setAllConfig(this.name, config);
+        });
+    }
+    /**
+     * Removes the specified config key from the Stack in the associated Workspace.
+     *
+     * @param key The config key to remove.
+     */
+    removeConfig(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.removeConfig(this.name, key);
+        });
+    }
+    /**
+     * Removes the specified config keys from the Stack in the associated Workspace.
+     *
+     * @param keys The config keys to remove.
+     */
+    removeAllConfig(keys) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.removeAllConfig(this.name, keys);
+        });
+    }
+    /**
+     * Gets and sets the config map used with the last update.
+     */
+    refreshConfig() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.refreshConfig(this.name);
+        });
+    }
+    /**
+     * Gets the current set of Stack outputs from the last Stack.up().
+     */
+    outputs() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.workspace.selectStack(this.name);
+            // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
+            const maskedResult = yield this.runPulumiCmd(["stack", "output", "--json"]);
+            const plaintextResult = yield this.runPulumiCmd(["stack", "output", "--json", "--show-secrets"]);
+            const maskedOuts = JSON.parse(maskedResult.stdout);
+            const plaintextOuts = JSON.parse(plaintextResult.stdout);
+            const outputs = {};
+            for (const [key, value] of Object.entries(plaintextOuts)) {
+                const secret = maskedOuts[key] === secretSentinel;
+                outputs[key] = { value, secret };
+            }
+            return outputs;
+        });
+    }
+    /**
+     * Returns a list summarizing all previous and current results from Stack lifecycle operations
+     * (up/preview/refresh/destroy).
+     */
+    history(pageSize, page) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const args = ["stack", "history", "--json", "--show-secrets"];
+            if (pageSize) {
+                if (!page || page < 1) {
+                    page = 1;
+                }
+                args.push("--page-size", Math.floor(pageSize).toString(), "--page", Math.floor(page).toString());
+            }
+            const result = yield this.runPulumiCmd(args);
+            return JSON.parse(result.stdout, (key, value) => {
+                if (key === "startTime" || key === "endTime") {
+                    return new Date(value);
+                }
+                return value;
+            });
+        });
+    }
+    info() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const history = yield this.history(1 /*pageSize*/);
+            if (!history || history.length === 0) {
+                return undefined;
+            }
+            return history[0];
+        });
+    }
+    /**
+     * Cancel stops a stack's currently running update. It returns an error if no update is currently running.
+     * Note that this operation is _very dangerous_, and may leave the stack in an inconsistent state
+     * if a resource operation was pending when the update was canceled.
+     * This command is not supported for local backends.
+     */
+    cancel() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.workspace.selectStack(this.name);
+            yield this.runPulumiCmd(["cancel", "--yes"]);
+        });
+    }
+    /**
+     * exportStack exports the deployment state of the stack.
+     * This can be combined with Stack.importStack to edit a stack's state (such as recovery from failed deployments).
+     */
+    exportStack() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.exportStack(this.name);
+        });
+    }
+    /**
+     * importStack imports the specified deployment state into a pre-existing stack.
+     * This can be combined with Stack.exportStack to edit a stack's state (such as recovery from failed deployments).
+     *
+     * @param state the stack state to import.
+     */
+    importStack(state) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.importStack(this.name, state);
+        });
+    }
+    runPulumiCmd(args, onOutput) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let envs = {
+                "PULUMI_DEBUG_COMMANDS": "true",
+            };
+            const pulumiHome = this.workspace.pulumiHome;
+            if (pulumiHome) {
+                envs["PULUMI_HOME"] = pulumiHome;
+            }
+            envs = Object.assign(Object.assign({}, envs), this.workspace.envVars);
+            const additionalArgs = yield this.workspace.serializeArgsForOp(this.name);
+            args = [...args, ...additionalArgs];
+            const result = yield cmd_1.runPulumiCmd(args, this.workspace.workDir, envs, onOutput);
+            yield this.workspace.postCommandCallback(this.name);
+            return result;
+        });
+    }
+}
+exports.Stack = Stack;
+/**
+ * Returns a stack name formatted with the greatest possible specificity:
+ * org/project/stack or user/project/stack
+ * Using this format avoids ambiguity in stack identity guards creating or selecting the wrong stack.
+ * Note that filestate backends (local file, S3, Azure Blob) do not support stack names in this
+ * format, and instead only use the stack name without an org/user or project to qualify it.
+ * See: https://github.com/pulumi/pulumi/issues/2522
+ *
+ * @param org The org (or user) that contains the Stack.
+ * @param project The project that parents the Stack.
+ * @param stack The name of the Stack.
+ */
+function fullyQualifiedStackName(org, project, stack) {
+    return `${org}/${project}/${stack}`;
+}
+exports.fullyQualifiedStackName = fullyQualifiedStackName;
+const execKind = {
+    local: "auto.local",
+    inline: "auto.inline",
+};
+const delay = (duration) => new Promise(resolve => setTimeout(resolve, duration));
+const createLogFile = (command) => {
+    const logDir = fs.mkdtempSync(upath.joinSafe(os.tmpdir(), `automation-logs-${command}-`));
+    const logFile = upath.joinSafe(logDir, "eventlog.txt");
+    // just open/close the file to make sure it exists when we start polling.
+    fs.closeSync(fs.openSync(logFile, "w"));
+    return logFile;
+};
+const cleanUp = (tail, logFile) => __awaiter(void 0, void 0, void 0, function* () {
+    if (tail) {
+        yield tail.quit();
+    }
+    if (logFile) {
+        fs.rmdir(path.dirname(logFile), { recursive: true }, () => { return; });
+    }
+});
+
+
+/***/ }),
+
+/***/ 5973:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright 2016-2020, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+/** @internal */
+exports.stackSettingsSerDeKeys = [
+    ["secretsprovider", "secretsProvider"],
+    ["encryptedkey", "encryptedKey"],
+    ["encryptionsalt", "encryptionSalt"],
+];
+
+
+/***/ }),
+
 /***/ 5178:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -15208,8 +16926,24 @@ class ConfigMissingError extends errors_1.RunError {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const resource = __nccwpck_require__(796);
 const runtime = __nccwpck_require__(5022);
+const providerCache = new WeakMap();
 function serializeProvider(provider) {
-    return runtime.serializeFunction(() => provider).then(sf => sf.text);
+    let result;
+    // caching is enabled by default as of 3.0
+    if (runtime.cacheDynamicProviders()) {
+        const cachedProvider = providerCache.get(provider);
+        if (cachedProvider) {
+            result = cachedProvider;
+        }
+        else {
+            result = runtime.serializeFunction(() => provider).then(sf => sf.text);
+            providerCache.set(provider, result);
+        }
+    }
+    else {
+        result = runtime.serializeFunction(() => provider).then(sf => sf.text);
+    }
+    return result;
 }
 /**
  * Resource represents a Pulumi Resource that incorporates an inline implementation of the Resource's CRUD operations.
@@ -15354,6 +17088,8 @@ __export(__nccwpck_require__(4919));
 // Export submodules individually.
 const asset = __nccwpck_require__(3031);
 exports.asset = asset;
+const automation = __nccwpck_require__(4925);
+exports.automation = automation;
 const dynamic = __nccwpck_require__(686);
 exports.dynamic = dynamic;
 const iterable = __nccwpck_require__(6134);
@@ -15487,6 +17223,12 @@ const settings_1 = __nccwpck_require__(4530);
 const engproto = __nccwpck_require__(986);
 let errcnt = 0;
 let lastLog = Promise.resolve();
+const messageLevels = {
+    [engproto.LogSeverity.DEBUG]: "debug",
+    [engproto.LogSeverity.INFO]: "info",
+    [engproto.LogSeverity.WARNING]: "warn",
+    [engproto.LogSeverity.ERROR]: "error",
+};
 /**
  * hasErrors returns true if any errors have occurred in the program.
  */
@@ -15575,7 +17317,15 @@ function log(engine, sev, msg, resource, streamId, ephemeral) {
             }
         });
     });
-    return lastLog.catch(() => undefined);
+    return lastLog.catch((err) => {
+        // debug messages never go to stdout/err
+        if (sev !== engproto.LogSeverity.DEBUG) {
+            // if we're unable to deliver the log message, deliver to stderr instead
+            console.error(`failed to deliver log message. \nerror: ${err} \noriginal message: ${msg}\n message severity: ${messageLevels[sev]}`);
+        }
+        // we still need to free up the outstanding promise chain, whether or not delivery succeeded.
+        keepAlive();
+    });
 }
 
 
@@ -20843,6 +22593,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const resource_1 = __nccwpck_require__(796);
 const runtime = __nccwpck_require__(5022);
 const utils = __nccwpck_require__(1888);
+/*tslint:disable:no-shadowed-variable*/
 /**
  * Output helps encode the relationship between Resources in a Pulumi application. Specifically an
  * Output holds onto a piece of Data and the Resource it was generated from. An Output value can
@@ -32638,7 +34389,8 @@ proto.pulumirpc.RegisterResourceRequest.toObject = function(includeInstance, msg
     deletebeforereplacedefined: jspb.Message.getBooleanFieldWithDefault(msg, 18, false),
     supportspartialvalues: jspb.Message.getBooleanFieldWithDefault(msg, 19, false),
     remote: jspb.Message.getBooleanFieldWithDefault(msg, 20, false),
-    acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 21, false)
+    acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 21, false),
+    providersMap: (f = msg.getProvidersMap()) ? f.toObject(includeInstance, undefined) : []
   };
 
   if (includeInstance) {
@@ -32762,6 +34514,12 @@ proto.pulumirpc.RegisterResourceRequest.deserializeBinaryFromReader = function(m
     case 21:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setAcceptresources(value);
+      break;
+    case 22:
+      var value = msg.getProvidersMap();
+      reader.readMessage(value, function(message, reader) {
+        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "", "");
+         });
       break;
     default:
       reader.skipField();
@@ -32937,6 +34695,10 @@ proto.pulumirpc.RegisterResourceRequest.serializeBinaryToWriter = function(messa
       21,
       f
     );
+  }
+  f = message.getProvidersMap(true);
+  if (f && f.getLength() > 0) {
+    f.serializeBinary(22, writer, jspb.BinaryWriter.prototype.writeString, jspb.BinaryWriter.prototype.writeString);
   }
 };
 
@@ -33781,6 +35543,28 @@ proto.pulumirpc.RegisterResourceRequest.prototype.getAcceptresources = function(
 proto.pulumirpc.RegisterResourceRequest.prototype.setAcceptresources = function(value) {
   return jspb.Message.setProto3BooleanField(this, 21, value);
 };
+
+
+/**
+ * map<string, string> providers = 22;
+ * @param {boolean=} opt_noLazyCreate Do not create the map if
+ * empty, instead returning `undefined`
+ * @return {!jspb.Map<string,string>}
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.getProvidersMap = function(opt_noLazyCreate) {
+  return /** @type {!jspb.Map<string,string>} */ (
+      jspb.Message.getMapField(this, 22, opt_noLazyCreate,
+      null));
+};
+
+
+/**
+ * Clears values from the map. The map will be non-null.
+ * @return {!proto.pulumirpc.RegisterResourceRequest} returns this
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.clearProvidersMap = function() {
+  this.getProvidersMap().clear();
+  return this;};
 
 
 
@@ -34791,6 +36575,8 @@ const plugproto = __nccwpck_require__(8008);
 const statusproto = __nccwpck_require__(3690);
 class Server {
     constructor(engineAddr, provider) {
+        /** Queue of construct calls. */
+        this.constructQueue = Promise.resolve();
         this.engineAddr = engineAddr;
         this.provider = provider;
     }
@@ -34987,6 +36773,20 @@ class Server {
     }
     construct(call, callback) {
         return __awaiter(this, void 0, void 0, function* () {
+            // Serialize invocations of `construct` so that each call runs one after another, avoiding concurrent runs.
+            // We do this because `construct` has to modify global state to reset the SDK's runtime options.
+            // This is a short-term workaround to provide correctness, but likely isn't sustainable long-term due to the
+            // limits it places on parallelism. We will likely want to investigate if it's possible to run each invocation
+            // in its own context, possibly using Node's `createContext` API:
+            // https://nodejs.org/api/vm.html#vm_vm_createcontext_contextobject_options
+            const res = this.constructQueue.then(() => this.constructImpl(call, callback));
+            // tslint:disable:no-empty
+            this.constructQueue = res.catch(() => { });
+            return res;
+        });
+    }
+    constructImpl(call, callback) {
+        return __awaiter(this, void 0, void 0, function* () {
             try {
                 const req = call.request;
                 const type = req.getType();
@@ -35017,7 +36817,15 @@ class Server {
                     const deps = (inputDeps ? inputDeps.getUrnsList() : [])
                         .map(depUrn => new resource.DependencyResource(depUrn));
                     const input = deserializedInputs[k];
-                    inputs[k] = new output_1.Output(deps, Promise.resolve(runtime.unwrapRpcSecret(input)), Promise.resolve(true), Promise.resolve(runtime.isRpcSecret(input)), Promise.resolve([]));
+                    const isSecret = runtime.isRpcSecret(input);
+                    if (!isSecret && deps.length === 0) {
+                        // If it's a prompt value, return it directly without wrapping it as an output.
+                        inputs[k] = input;
+                    }
+                    else {
+                        // Otherwise, wrap it in an output so we can handle secrets and/or track dependencies.
+                        inputs[k] = new output_1.Output(deps, Promise.resolve(runtime.unwrapRpcSecret(input)), Promise.resolve(true), Promise.resolve(isSecret), Promise.resolve([]));
+                    }
                 }
                 // Rebuild the resource options.
                 const dependsOn = [];
@@ -35049,6 +36857,8 @@ class Server {
                     stateDependenciesMap.set(key, deps);
                 }
                 resp.setState(structproto.Struct.fromJavaScript(state));
+                // Wait for RPC operations to complete and disconnect.
+                yield runtime.disconnect();
                 callback(undefined, resp);
             }
             catch (e) {
@@ -37550,12 +39360,13 @@ function computeCapturedVariableNames(file) {
     log.debug(`Found free variables: ${JSON.stringify(result)}`);
     return result;
     function isBuiltIn(ident) {
-        // The __awaiter is never considered built-in.  We do this as async/await code will generate
-        // this (so we will need it), but some libraries (like tslib) will add this to the 'global'
-        // object.  If we think this is built-in, we won't serialize it, and the function may not
+        // __awaiter and __rest are never considered built-in.  We do this as async/await code will generate
+        // an __awaiter (so we will need it), but some libraries (like tslib) will add this to the 'global'
+        // object.  The same is true for __rest when destructuring.
+        // If we think these are built-in, we won't serialize them, and the functions may not
         // actually be available if the import that caused it to get attached isn't included in the
         // final serialized code.
-        if (ident === "__awaiter") {
+        if (ident === "__awaiter" || ident === "__rest") {
             return false;
         }
         // Anything in the global dictionary is a built-in.  So is anything that's a global Node.js object;
@@ -38815,6 +40626,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const util = __nccwpck_require__(1669);
+const vm = __nccwpck_require__(2184);
 const v8Hooks = __nccwpck_require__(9580);
 /** @internal */
 function getFunctionLocationAsync(func) {
@@ -38882,39 +40694,58 @@ function lookupCapturedVariableValueAsync(func, freeVariable, throwOnFailure) {
     });
 }
 exports.lookupCapturedVariableValueAsync = lookupCapturedVariableValueAsync;
+// Isolated singleton context accessible from the inspector.
+// Used instead of `global` object to support executions with multiple V8 vm contexts as, e.g., done by Jest.
+const inflightContext = createContext();
+function createContext() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const context = {
+            contextId: 0,
+            functions: {},
+            currentFunctionId: 0,
+            calls: {},
+            currentCallId: 0,
+        };
+        const session = yield v8Hooks.getSessionAsync();
+        const post = util.promisify(session.post);
+        // Create own context with known context id and functionsContext as `global`
+        yield post.call(session, "Runtime.enable");
+        const contextIdAsync = new Promise(resolve => {
+            session.once("Runtime.executionContextCreated", event => {
+                resolve(event.params.context.id);
+            });
+        });
+        vm.createContext(context);
+        context.contextId = yield contextIdAsync;
+        yield post.call(session, "Runtime.disable");
+        return context;
+    });
+}
 function getRuntimeIdForFunctionAsync(func) {
     return __awaiter(this, void 0, void 0, function* () {
         // In order to get information about an object, we need to put it in a well known location so
-        // that we can call Runtime.evaluate and find it.  To do this, we just make a special map on the
-        // 'global' object, and map from a unique-id to that object.  We then call Runtime.evaluate with
-        // an expression that then points to that unique-id in that global object.  The runtime will
-        // then find the object and give us back an internal id for it.  We can then query for
-        // information about the object through that internal id.
+        // that we can call Runtime.evaluate and find it.  To do this, we use a special map on the
+        // 'global' object of a vm context only used for this purpose, and map from a unique-id to that
+        // object.  We then call Runtime.evaluate with an expression that then points to that unique-id
+        // in that global object.  The runtime will then find the object and give us back an internal id
+        // for it.  We can then query for information about the object through that internal id.
         //
         // Note: the reason for the mapping object and the unique-id we create is so that we don't run
         // into any issues when being called asynchronously.  We don't want to place the object in a
         // location that might be overwritten by another call while we're asynchronously waiting for our
         // original call to complete.
-        //
-        // We also lazily initialize this in case pulumi has been loaded through another module and has
-        // already initialize this global state.
-        const globalAny = global;
-        if (!globalAny.__inflightFunctions) {
-            globalAny.__inflightFunctions = {};
-            globalAny.__currentFunctionId = 0;
-        }
-        // Place the function in a unique location off of the global object.
-        const currentFunctionName = "id" + globalAny.__currentFunctionId++;
-        globalAny.__inflightFunctions[currentFunctionName] = func;
+        const session = yield v8Hooks.getSessionAsync();
+        const post = util.promisify(session.post);
+        // Place the function in a unique location
+        const context = yield inflightContext;
+        const currentFunctionName = "id" + context.currentFunctionId++;
+        context.functions[currentFunctionName] = func;
+        const contextId = context.contextId;
+        const expression = `functions.${currentFunctionName}`;
         try {
-            const session = yield v8Hooks.getSessionAsync();
-            const post = util.promisify(session.post);
-            const expression = `global.__inflightFunctions.${currentFunctionName}`;
-            // This cast will become unnecessary when we move to TS 3.1.6 or above.  In that version they
-            // support typesafe '.call' calls.
-            const retType = yield post.call(session, "Runtime.evaluate", { expression });
+            const retType = yield post.call(session, "Runtime.evaluate", { contextId, expression });
             if (retType.exceptionDetails) {
-                throw new Error(`Error calling "Runtime.evaluate(${expression})": ` + retType.exceptionDetails.text);
+                throw new Error(`Error calling "Runtime.evaluate(${expression})" on context ${contextId}: ` + retType.exceptionDetails.text);
             }
             const remoteObject = retType.result;
             if (remoteObject.type !== "function") {
@@ -38926,7 +40757,7 @@ function getRuntimeIdForFunctionAsync(func) {
             return remoteObject.objectId;
         }
         finally {
-            delete globalAny.__inflightFunctions[currentFunctionName];
+            delete context.functions[currentFunctionName];
         }
     });
 }
@@ -38952,18 +40783,11 @@ function getValueForObjectId(objectId) {
         // memory as the bound 'this' value.  Inside that function declaration, we can then access
         // 'this' and assign it to a unique-id in a well known mapping table we have set up.  As above,
         // the unique-id is to prevent any issues with multiple in-flight asynchronous calls.
-        //
-        // We also lazily initialize this in case pulumi has been loaded through another module and has
-        // already initialize this global state.
-        const globalAny = global;
-        if (!globalAny.__inflightCalls) {
-            globalAny.__inflightCalls = {};
-            globalAny.__currentCallId = 0;
-        }
         const session = yield v8Hooks.getSessionAsync();
         const post = util.promisify(session.post);
+        const context = yield inflightContext;
         // Get an id for an unused location in the global table.
-        const tableId = "id" + globalAny.__currentCallId++;
+        const tableId = "id" + context.currentCallId++;
         // Now, ask the runtime to call a fictitious method on the scopes-array object.  When it
         // does, it will get the actual underlying value for the scopes array and bind it to the
         // 'this' value inside the function.  Inside the function we then just grab 'this' and
@@ -38973,19 +40797,19 @@ function getValueForObjectId(objectId) {
         const retType = yield post.call(session, "Runtime.callFunctionOn", {
             objectId,
             functionDeclaration: `function () {
-                global.__inflightCalls["${tableId}"] = this;
+                calls["${tableId}"] = this;
             }`,
         });
         if (retType.exceptionDetails) {
             throw new Error(`Error calling "Runtime.callFunction(${objectId})": `
                 + retType.exceptionDetails.text);
         }
-        if (!globalAny.__inflightCalls.hasOwnProperty(tableId)) {
+        if (!context.calls.hasOwnProperty(tableId)) {
             throw new Error(`Value was not stored into table after calling "Runtime.callFunctionOn(${objectId})"`);
         }
         // Extract value and clear our table entry.
-        const val = globalAny.__inflightCalls[tableId];
-        delete globalAny.__inflightCalls[tableId];
+        const val = context.calls[tableId];
+        delete context.calls[tableId];
         return val;
     });
 }
@@ -39536,7 +41360,11 @@ class MockMonitor {
                     callback(null, resp);
                     return;
                 }
-                const result = this.mocks.call(tok, inputs, req.getProvider());
+                const result = this.mocks.call({
+                    token: tok,
+                    inputs: inputs,
+                    provider: req.getProvider(),
+                });
                 const response = new provproto.InvokeResponse();
                 response.setReturn(structproto.Struct.fromJavaScript(yield rpc_1.serializeProperties("", result)));
                 callback(null, response);
@@ -39549,7 +41377,14 @@ class MockMonitor {
     readResource(req, callback) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = this.mocks.newResource(req.getType(), req.getName(), rpc_1.deserializeProperties(req.getProperties()), req.getProvider(), req.getId(), req.getCustom());
+                const result = this.mocks.newResource({
+                    type: req.getType(),
+                    name: req.getName(),
+                    inputs: rpc_1.deserializeProperties(req.getProperties()),
+                    provider: req.getProvider(),
+                    custom: req.getCustom(),
+                    id: req.getId(),
+                });
                 const urn = this.newUrn(req.getParent(), req.getType(), req.getName());
                 const serializedState = yield rpc_1.serializeProperties("", result.state);
                 this.resources.set(urn, { urn, id: result.id, state: serializedState });
@@ -39566,7 +41401,14 @@ class MockMonitor {
     registerResource(req, callback) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = this.mocks.newResource(req.getType(), req.getName(), rpc_1.deserializeProperties(req.getObject()), req.getProvider(), req.getImportid(), req.getCustom());
+                const result = this.mocks.newResource({
+                    type: req.getType(),
+                    name: req.getName(),
+                    inputs: rpc_1.deserializeProperties(req.getObject()),
+                    provider: req.getProvider(),
+                    custom: req.getCustom(),
+                    id: req.getImportid(),
+                });
                 const urn = this.newUrn(req.getParent(), req.getType(), req.getName());
                 const serializedState = yield rpc_1.serializeProperties("", result.state);
                 this.resources.set(urn, { urn, id: result.id, state: serializedState });
@@ -41019,6 +42861,8 @@ const nodeEnvKeys = {
     monitorAddr: "PULUMI_NODEJS_MONITOR",
     engineAddr: "PULUMI_NODEJS_ENGINE",
     syncDir: "PULUMI_NODEJS_SYNC",
+    // this value is not set by the CLI and is controlled via a user set env var unlike the values above
+    cacheDynamicProviders: "PULUMI_NODEJS_CACHE_DYNAMIC_PROVIDERS",
 };
 const pulumiEnvKeys = {
     testMode: "PULUMI_TEST_MODE",
@@ -41111,6 +42955,13 @@ function isLegacyApplyEnabled() {
     return options().legacyApply === true;
 }
 exports.isLegacyApplyEnabled = isLegacyApplyEnabled;
+/**
+ * Returns true (default) if we will cache serialized dynamic providers on the program side
+ */
+function cacheDynamicProviders() {
+    return options().cacheDynamicProviders === true;
+}
+exports.cacheDynamicProviders = cacheDynamicProviders;
 /**
  * Get the project being run by the current update.
  */
@@ -41262,6 +43113,7 @@ function options() {
         monitorAddr: process.env[nodeEnvKeys.monitorAddr],
         engineAddr: process.env[nodeEnvKeys.engineAddr],
         syncDir: process.env[nodeEnvKeys.syncDir],
+        cacheDynamicProviders: process.env[nodeEnvKeys.cacheDynamicProviders] !== "false",
         // pulumi specific
         testModeEnabled: (process.env[pulumiEnvKeys.testMode] === "true"),
         legacyApply: (process.env[pulumiEnvKeys.legacyApply] === "true"),
@@ -41483,7 +43335,7 @@ const settings_1 = __nccwpck_require__(4530);
 /**
  * rootPulumiStackTypeName is the type name that should be used to construct the root component in the tree of Pulumi
  * resources allocated by a deployment.  This must be kept up to date with
- * `github.com/pulumi/pulumi/sdk/v2/go/common/resource/stack.RootStackType`.
+ * `github.com/pulumi/pulumi/sdk/v3/go/common/resource/stack.RootStackType`.
  */
 exports.rootPulumiStackTypeName = "pulumi:pulumi:Stack";
 let stackResource;
@@ -41880,1672 +43732,6 @@ exports.union = union;
 /** @internal */
 exports.disableResourceReferences = process.env.PULUMI_DISABLE_RESOURCE_REFERENCES === "1" ||
     (_a = process.env.PULUMI_DISABLE_RESOURCE_REFERENCES, (_a !== null && _a !== void 0 ? _a : "")).toUpperCase() === "TRUE";
-
-
-/***/ }),
-
-/***/ 3052:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-// Copyright 2016-2020, Pulumi Corporation.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const childProcess = __nccwpck_require__(3129);
-const errors_1 = __nccwpck_require__(5993);
-/** @internal */
-class CommandResult {
-    constructor(stdout, stderr, code, err) {
-        this.stdout = stdout;
-        this.stderr = stderr;
-        this.code = code;
-        this.err = err;
-    }
-    toString() {
-        let errStr = "";
-        if (this.err) {
-            errStr = this.err.toString();
-        }
-        return `code: ${this.code}\n stdout: ${this.stdout}\n stderr: ${this.stderr}\n err?: ${errStr}\n`;
-    }
-}
-exports.CommandResult = CommandResult;
-const unknownErrCode = -2;
-/** @internal */
-function runPulumiCmd(args, cwd, additionalEnv, onOutput) {
-    // all commands should be run in non-interactive mode.
-    // this causes commands to fail rather than prompting for input (and thus hanging indefinitely)
-    args.push("--non-interactive");
-    const env = Object.assign(Object.assign({}, process.env), additionalEnv);
-    return new Promise((resolve, reject) => {
-        const proc = childProcess.spawn("pulumi", args, { env, cwd });
-        // TODO: write to buffers and avoid concatenation
-        let stdout = "";
-        let stderr = "";
-        proc.stdout.on("data", (data) => {
-            if (data && data.toString) {
-                data = data.toString();
-            }
-            if (onOutput) {
-                onOutput(data);
-            }
-            stdout += data;
-        });
-        proc.stderr.on("data", (data) => {
-            stderr += data;
-        });
-        proc.on("exit", (code, signal) => {
-            const resCode = code !== null ? code : unknownErrCode;
-            const result = new CommandResult(stdout, stderr, resCode);
-            if (code !== 0) {
-                return reject(errors_1.createCommandError(result));
-            }
-            return resolve(result);
-        });
-        proc.on("error", (err) => {
-            const result = new CommandResult(stdout, stderr, unknownErrCode, err);
-            return reject(errors_1.createCommandError(result));
-        });
-    });
-}
-exports.runPulumiCmd = runPulumiCmd;
-
-
-/***/ }),
-
-/***/ 5993:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-// Copyright 2016-2020, Pulumi Corporation.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-/**
- * CommandError is an error resulting from invocation of a Pulumi Command.
- * @alpha
- */
-class CommandError extends Error {
-    /** @internal */
-    constructor(commandResult) {
-        super(commandResult.toString());
-        this.commandResult = commandResult;
-        this.name = "CommandError";
-    }
-}
-exports.CommandError = CommandError;
-/**
- * ConcurrentUpdateError is thrown when attempting to update a stack that already has an update in progress.
- */
-class ConcurrentUpdateError extends CommandError {
-    /** @internal */
-    constructor(commandResult) {
-        super(commandResult);
-        this.name = "ConcurrentUpdateError";
-    }
-}
-exports.ConcurrentUpdateError = ConcurrentUpdateError;
-/**
- * StackNotFoundError is thrown when attempting to select a stack that does not exist.
- */
-class StackNotFoundError extends CommandError {
-    /** @internal */
-    constructor(commandResult) {
-        super(commandResult);
-        this.name = "StackNotFoundError";
-    }
-}
-exports.StackNotFoundError = StackNotFoundError;
-/**
- * StackAlreadyExistsError is thrown when attempting to create a stack that already exists.
- */
-class StackAlreadyExistsError extends CommandError {
-    /** @internal */
-    constructor(commandResult) {
-        super(commandResult);
-        this.name = "StackAlreadyExistsError";
-    }
-}
-exports.StackAlreadyExistsError = StackAlreadyExistsError;
-const notFoundRegex = new RegExp("no stack named.*found");
-const alreadyExistsRegex = new RegExp("stack.*already exists");
-const conflictText = "[409] Conflict: Another update is currently in progress.";
-/** @internal */
-function createCommandError(result) {
-    const stderr = result.stderr;
-    return (notFoundRegex.test(stderr) ? new StackNotFoundError(result) :
-        alreadyExistsRegex.test(stderr) ? new StackAlreadyExistsError(result) :
-            stderr.indexOf(conflictText) >= 0 ? new ConcurrentUpdateError(result) :
-                new CommandError(result));
-}
-exports.createCommandError = createCommandError;
-
-
-/***/ }),
-
-/***/ 4077:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-// Copyright 2016-2020, Pulumi Corporation.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-var DiffKind;
-(function (DiffKind) {
-    // add indicates that the property was added.
-    DiffKind["add"] = "add";
-    // addReplace indicates that the property was added and requires that the resource be replaced.
-    DiffKind["addReplace"] = "add-replace";
-    // delete indicates that the property was deleted.
-    DiffKind["delete"] = "delete";
-    // deleteReplace indicates that the property was deleted and requires that the resource be replaced.
-    DiffKind["deleteReplace"] = "delete-replace";
-    // update indicates that the property was updated.
-    DiffKind["update"] = "update";
-    // updateReplace indicates that the property was updated and requires that the resource be replaced.
-    DiffKind["updateReplace"] = "update-replace";
-})(DiffKind = exports.DiffKind || (exports.DiffKind = {}));
-
-
-/***/ }),
-
-/***/ 5883:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-// Copyright 2016-2020, Pulumi Corporation.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-__export(__nccwpck_require__(3052));
-__export(__nccwpck_require__(5993));
-__export(__nccwpck_require__(4093));
-__export(__nccwpck_require__(6884));
-__export(__nccwpck_require__(4077));
-
-
-/***/ }),
-
-/***/ 6884:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-// Copyright 2016-2020, Pulumi Corporation.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const fs = __nccwpck_require__(5747);
-const yaml = __nccwpck_require__(8286);
-const os = __nccwpck_require__(2087);
-const semver = __nccwpck_require__(7486);
-const upath = __nccwpck_require__(8004);
-const cmd_1 = __nccwpck_require__(3052);
-const minimumVersion_1 = __nccwpck_require__(4667);
-const stack_1 = __nccwpck_require__(4093);
-/**
- * LocalWorkspace is a default implementation of the Workspace interface.
- * A Workspace is the execution context containing a single Pulumi project, a program,
- * and multiple stacks. Workspaces are used to manage the execution environment,
- * providing various utilities such as plugin installation, environment configuration
- * ($PULUMI_HOME), and creation, deletion, and listing of Stacks.
- * LocalWorkspace relies on Pulumi.yaml and Pulumi.<stack>.yaml as the intermediate format
- * for Project and Stack settings. Modifying ProjectSettings will
- * alter the Workspace Pulumi.yaml file, and setting config on a Stack will modify the Pulumi.<stack>.yaml file.
- * This is identical to the behavior of Pulumi CLI driven workspaces.
- *
- * @alpha
- */
-class LocalWorkspace {
-    constructor(opts) {
-        let dir = "";
-        let envs = {};
-        if (opts) {
-            const { workDir, pulumiHome, program, envVars, secretsProvider } = opts;
-            if (workDir) {
-                dir = workDir;
-            }
-            this.pulumiHome = pulumiHome;
-            this.program = program;
-            this.secretsProvider = secretsProvider;
-            envs = Object.assign({}, envVars);
-        }
-        if (!dir) {
-            dir = fs.mkdtempSync(upath.joinSafe(os.tmpdir(), "automation-"));
-        }
-        this.workDir = dir;
-        this.envVars = envs;
-        const readinessPromises = [this.getPulumiVersion(minimumVersion_1.minimumVersion)];
-        if (opts && opts.projectSettings) {
-            readinessPromises.push(this.saveProjectSettings(opts.projectSettings));
-        }
-        if (opts && opts.stackSettings) {
-            for (const [name, value] of Object.entries(opts.stackSettings)) {
-                readinessPromises.push(this.saveStackSettings(name, value));
-            }
-        }
-        this.ready = Promise.all(readinessPromises);
-    }
-    /**
-     * The version of the underlying Pulumi CLI/Engine.
-     */
-    get pulumiVersion() {
-        return this._pulumiVersion.toString();
-    }
-    /**
-     * Creates a workspace using the specified options. Used for maximal control and customization
-     * of the underlying environment before any stacks are created or selected.
-     *
-     * @param opts Options used to configure the Workspace
-     */
-    static create(opts) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const ws = new LocalWorkspace(opts);
-            yield ws.ready;
-            return ws;
-        });
-    }
-    static createStack(args, opts) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (isInlineProgramArgs(args)) {
-                return yield this.inlineSourceStackHelper(args, stack_1.Stack.create, opts);
-            }
-            else if (isLocalProgramArgs(args)) {
-                return yield this.localSourceStackHelper(args, stack_1.Stack.create, opts);
-            }
-            throw new Error(`unexpected args: ${args}`);
-        });
-    }
-    static selectStack(args, opts) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (isInlineProgramArgs(args)) {
-                return yield this.inlineSourceStackHelper(args, stack_1.Stack.select, opts);
-            }
-            else if (isLocalProgramArgs(args)) {
-                return yield this.localSourceStackHelper(args, stack_1.Stack.select, opts);
-            }
-            throw new Error(`unexpected args: ${args}`);
-        });
-    }
-    static createOrSelectStack(args, opts) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (isInlineProgramArgs(args)) {
-                return yield this.inlineSourceStackHelper(args, stack_1.Stack.createOrSelect, opts);
-            }
-            else if (isLocalProgramArgs(args)) {
-                return yield this.localSourceStackHelper(args, stack_1.Stack.createOrSelect, opts);
-            }
-            throw new Error(`unexpected args: ${args}`);
-        });
-    }
-    static localSourceStackHelper(args, initFn, opts) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let wsOpts = { workDir: args.workDir };
-            if (opts) {
-                wsOpts = Object.assign(Object.assign({}, opts), { workDir: args.workDir });
-            }
-            const ws = new LocalWorkspace(wsOpts);
-            yield ws.ready;
-            return yield initFn(args.stackName, ws);
-        });
-    }
-    static inlineSourceStackHelper(args, initFn, opts) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let wsOpts = { program: args.program };
-            if (opts) {
-                wsOpts = Object.assign(Object.assign({}, opts), { program: args.program });
-            }
-            if (!wsOpts.projectSettings) {
-                if (!!wsOpts.workDir) {
-                    try {
-                        // Try to load the project settings.
-                        loadProjectSettings(wsOpts.workDir);
-                    }
-                    catch (e) {
-                        // If it failed to find the project settings file, set a default project.
-                        if (e.toString().includes("failed to find project settings")) {
-                            wsOpts.projectSettings = defaultProject(args.projectName);
-                        }
-                        else {
-                            throw e;
-                        }
-                    }
-                }
-                else {
-                    wsOpts.projectSettings = defaultProject(args.projectName);
-                }
-            }
-            const ws = new LocalWorkspace(wsOpts);
-            yield ws.ready;
-            return yield initFn(args.stackName, ws);
-        });
-    }
-    /**
-     * Returns the settings object for the current project if any
-     * LocalWorkspace reads settings from the Pulumi.yaml in the workspace.
-     * A workspace can contain only a single project at a time.
-     */
-    projectSettings() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return loadProjectSettings(this.workDir);
-        });
-    }
-    /**
-     * Overwrites the settings object in the current project.
-     * There can only be a single project per workspace. Fails if new project name does not match old.
-     * LocalWorkspace writes this value to a Pulumi.yaml file in Workspace.WorkDir().
-     *
-     * @param settings The settings object to save to the Workspace.
-     */
-    saveProjectSettings(settings) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let foundExt = ".yaml";
-            for (const ext of settingsExtensions) {
-                const testPath = upath.joinSafe(this.workDir, `Pulumi${ext}`);
-                if (fs.existsSync(testPath)) {
-                    foundExt = ext;
-                    break;
-                }
-            }
-            const path = upath.joinSafe(this.workDir, `Pulumi${foundExt}`);
-            let contents;
-            if (foundExt === ".json") {
-                contents = JSON.stringify(settings, null, 4);
-            }
-            else {
-                contents = yaml.safeDump(settings, { skipInvalid: true });
-            }
-            return fs.writeFileSync(path, contents);
-        });
-    }
-    /**
-     * Returns the settings object for the stack matching the specified stack name if any.
-     * LocalWorkspace reads this from a Pulumi.<stack>.yaml file in Workspace.WorkDir().
-     *
-     * @param stackName The stack to retrieve settings from.
-     */
-    stackSettings(stackName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const stackSettingsName = getStackSettingsName(stackName);
-            for (const ext of settingsExtensions) {
-                const isJSON = ext === ".json";
-                const path = upath.joinSafe(this.workDir, `Pulumi.${stackSettingsName}${ext}`);
-                if (!fs.existsSync(path)) {
-                    continue;
-                }
-                const contents = fs.readFileSync(path).toString();
-                if (isJSON) {
-                    return JSON.parse(contents);
-                }
-                return yaml.safeLoad(contents);
-            }
-            throw new Error(`failed to find stack settings file in workdir: ${this.workDir}`);
-        });
-    }
-    /**
-     * Overwrites the settings object for the stack matching the specified stack name.
-     * LocalWorkspace writes this value to a Pulumi.<stack>.yaml file in Workspace.WorkDir()
-     *
-     * @param stackName The stack to operate on.
-     * @param settings The settings object to save.
-     */
-    saveStackSettings(stackName, settings) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const stackSettingsName = getStackSettingsName(stackName);
-            let foundExt = ".yaml";
-            for (const ext of settingsExtensions) {
-                const testPath = upath.joinSafe(this.workDir, `Pulumi.${stackSettingsName}${ext}`);
-                if (fs.existsSync(testPath)) {
-                    foundExt = ext;
-                    break;
-                }
-            }
-            const path = upath.joinSafe(this.workDir, `Pulumi.${stackSettingsName}${foundExt}`);
-            let contents;
-            if (foundExt === ".json") {
-                contents = JSON.stringify(settings, null, 4);
-            }
-            else {
-                contents = yaml.safeDump(settings, { skipInvalid: true });
-            }
-            return fs.writeFileSync(path, contents);
-        });
-    }
-    /**
-     * Creates and sets a new stack with the stack name, failing if one already exists.
-     *
-     * @param stackName The stack to create.
-     */
-    createStack(stackName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const args = ["stack", "init", stackName];
-            if (this.secretsProvider) {
-                args.push("--secrets-provider", this.secretsProvider);
-            }
-            yield this.runPulumiCmd(args);
-        });
-    }
-    /**
-     * Selects and sets an existing stack matching the stack name, failing if none exists.
-     *
-     * @param stackName The stack to select.
-     */
-    selectStack(stackName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.runPulumiCmd(["stack", "select", stackName]);
-        });
-    }
-    /**
-     * Deletes the stack and all associated configuration and history.
-     *
-     * @param stackName The stack to remove
-     */
-    removeStack(stackName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.runPulumiCmd(["stack", "rm", "--yes", stackName]);
-        });
-    }
-    /**
-     * Returns the value associated with the specified stack name and key,
-     * scoped to the current workspace. LocalWorkspace reads this config from the matching Pulumi.stack.yaml file.
-     *
-     * @param stackName The stack to read config from
-     * @param key The key to use for the config lookup
-     */
-    getConfig(stackName, key) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            const result = yield this.runPulumiCmd(["config", "get", key, "--json"]);
-            return JSON.parse(result.stdout);
-        });
-    }
-    /**
-     * Returns the config map for the specified stack name, scoped to the current workspace.
-     * LocalWorkspace reads this config from the matching Pulumi.stack.yaml file.
-     *
-     * @param stackName The stack to read config from
-     */
-    getAllConfig(stackName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            const result = yield this.runPulumiCmd(["config", "--show-secrets", "--json"]);
-            return JSON.parse(result.stdout);
-        });
-    }
-    /**
-     * Sets the specified key-value pair on the provided stack name.
-     * LocalWorkspace writes this value to the matching Pulumi.<stack>.yaml file in Workspace.WorkDir().
-     *
-     * @param stackName The stack to operate on
-     * @param key The config key to set
-     * @param value The value to set
-     */
-    setConfig(stackName, key, value) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            const secretArg = value.secret ? "--secret" : "--plaintext";
-            yield this.runPulumiCmd(["config", "set", key, value.value, secretArg]);
-        });
-    }
-    /**
-     * Sets all values in the provided config map for the specified stack name.
-     * LocalWorkspace writes the config to the matching Pulumi.<stack>.yaml file in Workspace.WorkDir().
-     *
-     * @param stackName The stack to operate on
-     * @param config The `ConfigMap` to upsert against the existing config.
-     */
-    setAllConfig(stackName, config) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let args = ["config", "set-all", "--stack", stackName];
-            for (const [key, value] of Object.entries(config)) {
-                const secretArg = value.secret ? "--secret" : "--plaintext";
-                args = [...args, secretArg, `${key}=${value.value}`];
-            }
-            yield this.runPulumiCmd(args);
-        });
-    }
-    /**
-     * Removes the specified key-value pair on the provided stack name.
-     * It will remove any matching values in the Pulumi.<stack>.yaml file in Workspace.WorkDir().
-     *
-     * @param stackName The stack to operate on
-     * @param key The config key to remove
-     */
-    removeConfig(stackName, key) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            yield this.runPulumiCmd(["config", "rm", key]);
-        });
-    }
-    /**
-     *
-     * Removes all values in the provided key list for the specified stack name
-     * It will remove any matching values in the Pulumi.<stack>.yaml file in Workspace.WorkDir().
-     *
-     * @param stackName The stack to operate on
-     * @param keys The list of keys to remove from the underlying config
-     */
-    removeAllConfig(stackName, keys) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.runPulumiCmd(["config", "rm-all", "--stack", stackName, ...keys]);
-        });
-    }
-    /**
-     * Gets and sets the config map used with the last update for Stack matching stack name.
-     * It will overwrite all configuration in the Pulumi.<stack>.yaml file in Workspace.WorkDir().
-     *
-     * @param stackName The stack to refresh
-     */
-    refreshConfig(stackName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            yield this.runPulumiCmd(["config", "refresh", "--force"]);
-            return this.getAllConfig(stackName);
-        });
-    }
-    /**
-     * Returns the currently authenticated user.
-     */
-    whoAmI() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.runPulumiCmd(["whoami"]);
-            return { user: result.stdout.trim() };
-        });
-    }
-    /**
-     * Returns a summary of the currently selected stack, if any.
-     */
-    stack() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const stacks = yield this.listStacks();
-            for (const stack of stacks) {
-                if (stack.current) {
-                    return stack;
-                }
-            }
-            return undefined;
-        });
-    }
-    /**
-     * Returns all Stacks created under the current Project.
-     * This queries underlying backend and may return stacks not present in the Workspace (as Pulumi.<stack>.yaml files).
-     */
-    listStacks() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.runPulumiCmd(["stack", "ls", "--json"]);
-            return JSON.parse(result.stdout);
-        });
-    }
-    /**
-     * Installs a plugin in the Workspace, for example to use cloud providers like AWS or GCP.
-     *
-     * @param name the name of the plugin.
-     * @param version the version of the plugin e.g. "v1.0.0".
-     * @param kind the kind of plugin, defaults to "resource"
-     */
-    installPlugin(name, version, kind = "resource") {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.runPulumiCmd(["plugin", "install", kind, name, version]);
-        });
-    }
-    /**
-     * Removes a plugin from the Workspace matching the specified name and version.
-     *
-     * @param name the optional name of the plugin.
-     * @param versionRange optional semver range to check when removing plugins matching the given name
-     *  e.g. "1.0.0", ">1.0.0".
-     * @param kind he kind of plugin, defaults to "resource".
-     */
-    removePlugin(name, versionRange, kind = "resource") {
-        return __awaiter(this, void 0, void 0, function* () {
-            const args = ["plugin", "rm", kind];
-            if (name) {
-                args.push(name);
-            }
-            if (versionRange) {
-                args.push(versionRange);
-            }
-            args.push("--yes");
-            yield this.runPulumiCmd(args);
-        });
-    }
-    /**
-     * Returns a list of all plugins installed in the Workspace.
-     */
-    listPlugins() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.runPulumiCmd(["plugin", "ls", "--json"]);
-            return JSON.parse(result.stdout, (key, value) => {
-                if (key === "installTime" || key === "lastUsedTime") {
-                    return new Date(value);
-                }
-                return value;
-            });
-        });
-    }
-    /**
-     * exportStack exports the deployment state of the stack.
-     * This can be combined with Workspace.importStack to edit a stack's state (such as recovery from failed deployments).
-     *
-     * @param stackName the name of the stack.
-     */
-    exportStack(stackName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            const result = yield this.runPulumiCmd(["stack", "export", "--show-secrets"]);
-            return JSON.parse(result.stdout);
-        });
-    }
-    /**
-     * importStack imports the specified deployment state into a pre-existing stack.
-     * This can be combined with Workspace.exportStack to edit a stack's state (such as recovery from failed deployments).
-     *
-     * @param stackName the name of the stack.
-     * @param state the stack state to import.
-     */
-    importStack(stackName, state) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            const randomSuffix = Math.floor(100000 + Math.random() * 900000);
-            const filepath = upath.joinSafe(os.tmpdir(), `automation-${randomSuffix}`);
-            const contents = JSON.stringify(state, null, 4);
-            fs.writeFileSync(filepath, contents);
-            yield this.runPulumiCmd(["stack", "import", "--file", filepath]);
-            fs.unlinkSync(filepath);
-        });
-    }
-    /**
-     * serializeArgsForOp is hook to provide additional args to every CLI commands before they are executed.
-     * Provided with stack name,
-     * returns a list of args to append to an invoked command ["--config=...", ]
-     * LocalWorkspace does not utilize this extensibility point.
-     */
-    serializeArgsForOp(_) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // LocalWorkspace does not utilize this extensibility point.
-            return [];
-        });
-    }
-    /**
-     * postCommandCallback is a hook executed after every command. Called with the stack name.
-     * An extensibility point to perform workspace cleanup (CLI operations may create/modify a Pulumi.stack.yaml)
-     * LocalWorkspace does not utilize this extensibility point.
-     */
-    postCommandCallback(_) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // LocalWorkspace does not utilize this extensibility point.
-            return;
-        });
-    }
-    getPulumiVersion(minVersion) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.runPulumiCmd(["version"]);
-            const version = new semver.SemVer(result.stdout.trim());
-            validatePulumiVersion(minVersion, version);
-            this._pulumiVersion = version;
-        });
-    }
-    runPulumiCmd(args) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let envs = {};
-            if (this.pulumiHome) {
-                envs["PULUMI_HOME"] = this.pulumiHome;
-            }
-            envs = Object.assign(Object.assign({}, envs), this.envVars);
-            return cmd_1.runPulumiCmd(args, this.workDir, envs);
-        });
-    }
-}
-exports.LocalWorkspace = LocalWorkspace;
-/**
- * Returns true if the provided `args` object satisfies the `LocalProgramArgs` interface.
- *
- * @param args The args object to evaluate
- */
-function isLocalProgramArgs(args) {
-    return args.workDir !== undefined;
-}
-/**
- * Returns true if the provided `args` object satisfies the `InlineProgramArgs` interface.
- *
- * @param args The args object to evaluate
- */
-function isInlineProgramArgs(args) {
-    return args.projectName !== undefined &&
-        args.program !== undefined;
-}
-const settingsExtensions = [".yaml", ".yml", ".json"];
-function getStackSettingsName(name) {
-    const parts = name.split("/");
-    if (parts.length < 1) {
-        return name;
-    }
-    return parts[parts.length - 1];
-}
-function defaultProject(projectName) {
-    const settings = { name: projectName, runtime: "nodejs" };
-    return settings;
-}
-function loadProjectSettings(workDir) {
-    for (const ext of settingsExtensions) {
-        const isJSON = ext === ".json";
-        const path = upath.joinSafe(workDir, `Pulumi${ext}`);
-        if (!fs.existsSync(path)) {
-            continue;
-        }
-        const contents = fs.readFileSync(path).toString();
-        if (isJSON) {
-            return JSON.parse(contents);
-        }
-        return yaml.safeLoad(contents);
-    }
-    throw new Error(`failed to find project settings file in workdir: ${workDir}`);
-}
-/** @internal */
-function validatePulumiVersion(minVersion, currentVersion) {
-    if (minVersion.major < currentVersion.major) {
-        throw new Error(`Major version mismatch. You are using Pulumi CLI version ${currentVersion.toString()} with Automation SDK v${minVersion.major}. Please update the SDK.`);
-    }
-    if (minVersion.compare(currentVersion) === 1) {
-        throw new Error(`Minimum version requirement failed. The minimum CLI version requirement is ${minVersion.toString()}, your current CLI version is ${currentVersion.toString()}. Please update the Pulumi CLI.`);
-    }
-}
-exports.validatePulumiVersion = validatePulumiVersion;
-
-
-/***/ }),
-
-/***/ 4667:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-// Copyright 2016-2021, Pulumi Corporation.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const semver = __nccwpck_require__(7486);
-exports.minimumVersion = new semver.SemVer("v2.21.0");
-
-
-/***/ }),
-
-/***/ 5717:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-// Copyright 2016-2020, Pulumi Corporation.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const errors_1 = __nccwpck_require__(9693);
-const log = __nccwpck_require__(642);
-const runtime = __nccwpck_require__(5022);
-const langproto = __nccwpck_require__(3979);
-const plugproto = __nccwpck_require__(8008);
-// maxRPCMessageSize raises the gRPC Max Message size from `4194304` (4mb) to `419430400` (400mb)
-/** @internal */
-exports.maxRPCMessageSize = 1024 * 1024 * 400;
-/** @internal */
-class LanguageServer {
-    constructor(program) {
-        this.program = program;
-        this.running = false;
-    }
-    onPulumiExit() {
-        // check for leaks once the CLI exits
-        const [leaks, leakMessage] = runtime.leakedPromises();
-        if (leaks.size !== 0) {
-            throw new Error(leakMessage);
-        }
-        // these are globals and we need to clean up after ourselves
-        runtime.resetOptions("", "", -1, "", "", false);
-    }
-    getRequiredPlugins(call, callback) {
-        const resp = new langproto.GetRequiredPluginsResponse();
-        resp.setPluginsList([]);
-        callback(undefined, resp);
-    }
-    run(call, callback) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            const req = call.request;
-            const resp = new langproto.RunResponse();
-            this.running = true;
-            const errorSet = new Set();
-            const uncaughtHandler = newUncaughtHandler(errorSet);
-            try {
-                const args = req.getArgsList();
-                const engineAddr = args && args.length > 0 ? args[0] : "";
-                runtime.resetOptions(req.getProject(), req.getStack(), req.getParallel(), engineAddr, req.getMonitorAddress(), req.getDryrun());
-                const config = {};
-                for (const [k, v] of ((_a = req.getConfigMap()) === null || _a === void 0 ? void 0 : _a.entries()) || []) {
-                    config[k] = v;
-                }
-                runtime.setAllConfig(config);
-                process.on("uncaughtException", uncaughtHandler);
-                // @ts-ignore 'unhandledRejection' will almost always invoke uncaughtHandler with an Error. so
-                // just suppress the TS strictness here.
-                process.on("unhandledRejection", uncaughtHandler);
-                try {
-                    yield runtime.runInPulumiStack(this.program);
-                    yield runtime.disconnect();
-                    process.off("uncaughtException", uncaughtHandler);
-                    process.off("unhandledRejection", uncaughtHandler);
-                }
-                catch (e) {
-                    yield runtime.disconnect();
-                    process.off("uncaughtException", uncaughtHandler);
-                    process.off("unhandledRejection", uncaughtHandler);
-                    if (!errors_1.isGrpcError(e)) {
-                        throw e;
-                    }
-                }
-                if (errorSet.size !== 0 || log.hasErrors()) {
-                    throw new Error("One or more errors occurred");
-                }
-            }
-            catch (e) {
-                const err = e instanceof Error ? e : new Error(`unknown error ${e}`);
-                resp.setError(err.message);
-                callback(err, undefined);
-            }
-            callback(undefined, resp);
-        });
-    }
-    getPluginInfo(call, callback) {
-        const resp = new plugproto.PluginInfo();
-        resp.setVersion("1.0.0");
-        callback(undefined, resp);
-    }
-}
-exports.LanguageServer = LanguageServer;
-function newUncaughtHandler(errorSet) {
-    return (err) => {
-        // In node, if you throw an error in a chained promise, but the exception is not finally
-        // handled, then you can end up getting an unhandledRejection for each exception/promise
-        // pair.  Because the exception is the same through all of these, we keep track of it and
-        // only report it once so the user doesn't get N messages for the same thing.
-        if (errorSet.has(err)) {
-            return;
-        }
-        errorSet.add(err);
-        // Default message should be to include the full stack (which includes the message), or
-        // fallback to just the message if we can't get the stack.
-        //
-        // If both the stack and message are empty, then just stringify the err object itself. This
-        // is also necessary as users can throw arbitrary things in JS (including non-Errors).
-        let defaultMessage = "";
-        if (!!err) {
-            defaultMessage = err.stack || err.message || ("" + err);
-        }
-        // First, log the error.
-        if (errors_1.RunError.isInstance(err)) {
-            // Always hide the stack for RunErrors.
-            log.error(err.message);
-        }
-        else if (errors_1.ResourceError.isInstance(err)) {
-            // Hide the stack if requested to by the ResourceError creator.
-            const message = err.hideStack ? err.message : defaultMessage;
-            log.error(message, err.resource);
-        }
-        else if (!errors_1.isGrpcError(err)) {
-            log.error(`Unhandled exception: ${defaultMessage}`);
-        }
-    };
-}
-
-
-/***/ }),
-
-/***/ 4093:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-// Copyright 2016-2020, Pulumi Corporation.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const fs = __nccwpck_require__(5747);
-const os = __nccwpck_require__(2087);
-const path = __nccwpck_require__(5622);
-const upath = __nccwpck_require__(8004);
-const grpc = __nccwpck_require__(7025);
-const TailFile = __nccwpck_require__(725);
-const split2 = __nccwpck_require__(5000);
-const cmd_1 = __nccwpck_require__(3052);
-const errors_1 = __nccwpck_require__(5993);
-const server_1 = __nccwpck_require__(5717);
-const langrpc = __nccwpck_require__(5628);
-const secretSentinel = "[secret]";
-/**
- * Stack is an isolated, independently configurable instance of a Pulumi program.
- * Stack exposes methods for the full pulumi lifecycle (up/preview/refresh/destroy), as well as managing configuration.
- * Multiple Stacks are commonly used to denote different phases of development
- * (such as development, staging and production) or feature branches (such as feature-x-dev, jane-feature-x-dev).
- *
- * @alpha
- */
-class Stack {
-    constructor(name, workspace, mode) {
-        this.name = name;
-        this.workspace = workspace;
-        switch (mode) {
-            case "create":
-                this.ready = workspace.createStack(name);
-                return this;
-            case "select":
-                this.ready = workspace.selectStack(name);
-                return this;
-            case "createOrSelect":
-                this.ready = workspace.createStack(name).catch((err) => {
-                    if (err instanceof errors_1.StackAlreadyExistsError) {
-                        return workspace.selectStack(name);
-                    }
-                    throw err;
-                });
-                return this;
-            default:
-                throw new Error(`unexpected Stack creation mode: ${mode}`);
-        }
-    }
-    /**
-     * Creates a new stack using the given workspace, and stack name.
-     * It fails if a stack with that name already exists
-     *
-     * @param name The name identifying the Stack.
-     * @param workspace The Workspace the Stack was created from.
-     */
-    static create(name, workspace) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const stack = new Stack(name, workspace, "create");
-            yield stack.ready;
-            return stack;
-        });
-    }
-    /**
-     * Selects stack using the given workspace, and stack name.
-     * It returns an error if the given Stack does not exist. All LocalWorkspace operations will call `select`
-     * before running.
-     *
-     * @param name The name identifying the Stack.
-     * @param workspace The Workspace the Stack was created from.
-     */
-    static select(name, workspace) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const stack = new Stack(name, workspace, "select");
-            yield stack.ready;
-            return stack;
-        });
-    }
-    /**
-     * Tries to create a new stack using the given workspace and
-     * stack name if the stack does not already exist,
-     * or falls back to selecting the existing stack. If the stack does not exist,
-     * it will be created and selected.
-     *
-     * @param name The name identifying the Stack.
-     * @param workspace The Workspace the Stack was created from.
-     */
-    static createOrSelect(name, workspace) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const stack = new Stack(name, workspace, "createOrSelect");
-            yield stack.ready;
-            return stack;
-        });
-    }
-    // Try for up to 10s to start tailing the file, invoking the callback once per line.
-    readLines(logPath, callback) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let n = 0;
-            const eventLogTail = new TailFile(logPath, { startPos: 0 });
-            while (true) {
-                try {
-                    yield eventLogTail.start();
-                    eventLogTail
-                        .on("tail_error", (err) => {
-                        throw err;
-                    })
-                        .pipe(split2())
-                        .on("data", (line) => {
-                        const event = JSON.parse(line);
-                        callback(event);
-                    });
-                    return eventLogTail;
-                }
-                catch (err) {
-                    if (n++ > 100) {
-                        throw err;
-                    }
-                    yield delay(100);
-                }
-            }
-        });
-    }
-    /**
-     * Creates or updates the resources in a stack by executing the program in the Workspace.
-     * https://www.pulumi.com/docs/reference/cli/pulumi_up/
-     *
-     * @param opts Options to customize the behavior of the update.
-     */
-    up(opts) {
-        var _a, _b;
-        return __awaiter(this, void 0, void 0, function* () {
-            const args = ["up", "--yes", "--skip-preview"];
-            let kind = execKind.local;
-            let program = this.workspace.program;
-            yield this.workspace.selectStack(this.name);
-            if (opts) {
-                if (opts.program) {
-                    program = opts.program;
-                }
-                if (opts.message) {
-                    args.push("--message", opts.message);
-                }
-                if (opts.expectNoChanges) {
-                    args.push("--expect-no-changes");
-                }
-                if (opts.diff) {
-                    args.push("--diff");
-                }
-                if (opts.replace) {
-                    for (const rURN of opts.replace) {
-                        args.push("--replace", rURN);
-                    }
-                }
-                if (opts.target) {
-                    for (const tURN of opts.target) {
-                        args.push("--target", tURN);
-                    }
-                }
-                if (opts.targetDependents) {
-                    args.push("--target-dependents");
-                }
-                if (opts.parallel) {
-                    args.push("--parallel", opts.parallel.toString());
-                }
-            }
-            let onExit = () => { return; };
-            if (program) {
-                kind = execKind.inline;
-                const server = new grpc.Server({
-                    "grpc.max_receive_message_length": server_1.maxRPCMessageSize,
-                });
-                const languageServer = new server_1.LanguageServer(program);
-                server.addService(langrpc.LanguageRuntimeService, languageServer);
-                const port = yield new Promise((resolve, reject) => {
-                    server.bindAsync(`0.0.0.0:0`, grpc.ServerCredentials.createInsecure(), (err, p) => {
-                        if (err) {
-                            reject(err);
-                        }
-                        else {
-                            resolve(p);
-                        }
-                    });
-                });
-                server.start();
-                onExit = () => {
-                    languageServer.onPulumiExit();
-                    server.forceShutdown();
-                };
-                args.push(`--client=127.0.0.1:${port}`);
-            }
-            args.push("--exec-kind", kind);
-            let logPromise;
-            let logFile;
-            // Set up event log tailing
-            if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
-                const onEvent = opts.onEvent;
-                logFile = createLogFile("up");
-                args.push("--event-log", logFile);
-                logPromise = this.readLines(logFile, (event) => {
-                    onEvent(event);
-                });
-            }
-            const upPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
-            let upResult;
-            let tail;
-            try {
-                [upResult, tail] = yield Promise.all([upPromise, logPromise]);
-            }
-            finally {
-                onExit();
-                yield cleanUp(tail, logFile);
-            }
-            // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
-            const outputs = yield this.outputs();
-            const summary = yield this.info();
-            return {
-                stdout: upResult.stdout,
-                stderr: upResult.stderr,
-                summary: summary,
-                outputs: outputs,
-            };
-        });
-    }
-    /**
-     * Performs a dry-run update to a stack, returning pending changes.
-     * https://www.pulumi.com/docs/reference/cli/pulumi_preview/
-     *
-     * @param opts Options to customize the behavior of the preview.
-     */
-    preview(opts) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            const args = ["preview"];
-            let kind = execKind.local;
-            let program = this.workspace.program;
-            yield this.workspace.selectStack(this.name);
-            if (opts) {
-                if (opts.program) {
-                    program = opts.program;
-                }
-                if (opts.message) {
-                    args.push("--message", opts.message);
-                }
-                if (opts.expectNoChanges) {
-                    args.push("--expect-no-changes");
-                }
-                if (opts.diff) {
-                    args.push("--diff");
-                }
-                if (opts.replace) {
-                    for (const rURN of opts.replace) {
-                        args.push("--replace", rURN);
-                    }
-                }
-                if (opts.target) {
-                    for (const tURN of opts.target) {
-                        args.push("--target", tURN);
-                    }
-                }
-                if (opts.targetDependents) {
-                    args.push("--target-dependents");
-                }
-                if (opts.parallel) {
-                    args.push("--parallel", opts.parallel.toString());
-                }
-            }
-            let onExit = () => { return; };
-            if (program) {
-                kind = execKind.inline;
-                const server = new grpc.Server({
-                    "grpc.max_receive_message_length": server_1.maxRPCMessageSize,
-                });
-                const languageServer = new server_1.LanguageServer(program);
-                server.addService(langrpc.LanguageRuntimeService, languageServer);
-                const port = yield new Promise((resolve, reject) => {
-                    server.bindAsync(`0.0.0.0:0`, grpc.ServerCredentials.createInsecure(), (err, p) => {
-                        if (err) {
-                            reject(err);
-                        }
-                        else {
-                            resolve(p);
-                        }
-                    });
-                });
-                server.start();
-                onExit = () => {
-                    languageServer.onPulumiExit();
-                    server.forceShutdown();
-                };
-                args.push(`--client=127.0.0.1:${port}`);
-            }
-            args.push("--exec-kind", kind);
-            // Set up event log tailing
-            const logFile = createLogFile("preview");
-            args.push("--event-log", logFile);
-            let summaryEvent;
-            const logPromise = this.readLines(logFile, (event) => {
-                var _a;
-                if (event.summaryEvent) {
-                    summaryEvent = event.summaryEvent;
-                }
-                if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
-                    const onEvent = opts.onEvent;
-                    onEvent(event);
-                }
-            });
-            const prePromise = this.runPulumiCmd(args, (_a = opts) === null || _a === void 0 ? void 0 : _a.onOutput);
-            let preResult;
-            let tail;
-            try {
-                [preResult, tail] = yield Promise.all([prePromise, logPromise]);
-            }
-            finally {
-                onExit();
-                yield cleanUp(tail, logFile);
-            }
-            if (!summaryEvent) {
-                throw new Error("No summary of changes.");
-            }
-            return {
-                stdout: preResult.stdout,
-                stderr: preResult.stderr,
-                changeSummary: summaryEvent.resourceChanges,
-            };
-        });
-    }
-    /**
-     * Compares the current stack’s resource state with the state known to exist in the actual
-     * cloud provider. Any such changes are adopted into the current stack.
-     *
-     * @param opts Options to customize the behavior of the refresh.
-     */
-    refresh(opts) {
-        var _a, _b;
-        return __awaiter(this, void 0, void 0, function* () {
-            const args = ["refresh", "--yes", "--skip-preview"];
-            yield this.workspace.selectStack(this.name);
-            if (opts) {
-                if (opts.message) {
-                    args.push("--message", opts.message);
-                }
-                if (opts.expectNoChanges) {
-                    args.push("--expect-no-changes");
-                }
-                if (opts.target) {
-                    for (const tURN of opts.target) {
-                        args.push("--target", tURN);
-                    }
-                }
-                if (opts.parallel) {
-                    args.push("--parallel", opts.parallel.toString());
-                }
-            }
-            let logPromise;
-            let logFile;
-            // Set up event log tailing
-            if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
-                const onEvent = opts.onEvent;
-                logFile = createLogFile("refresh");
-                args.push("--event-log", logFile);
-                logPromise = this.readLines(logFile, (event) => {
-                    onEvent(event);
-                });
-            }
-            const kind = this.workspace.program ? execKind.inline : execKind.local;
-            args.push("--exec-kind", kind);
-            const refPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
-            const [refResult, tail] = yield Promise.all([refPromise, logPromise]);
-            yield cleanUp(tail, logFile);
-            const summary = yield this.info();
-            return {
-                stdout: refResult.stdout,
-                stderr: refResult.stderr,
-                summary: summary,
-            };
-        });
-    }
-    /**
-     * Destroy deletes all resources in a stack, leaving all history and configuration intact.
-     *
-     * @param opts Options to customize the behavior of the destroy.
-     */
-    destroy(opts) {
-        var _a, _b;
-        return __awaiter(this, void 0, void 0, function* () {
-            const args = ["destroy", "--yes", "--skip-preview"];
-            yield this.workspace.selectStack(this.name);
-            if (opts) {
-                if (opts.message) {
-                    args.push("--message", opts.message);
-                }
-                if (opts.target) {
-                    for (const tURN of opts.target) {
-                        args.push("--target", tURN);
-                    }
-                }
-                if (opts.targetDependents) {
-                    args.push("--target-dependents");
-                }
-                if (opts.parallel) {
-                    args.push("--parallel", opts.parallel.toString());
-                }
-            }
-            let logPromise;
-            let logFile;
-            // Set up event log tailing
-            if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
-                const onEvent = opts.onEvent;
-                logFile = createLogFile("destroy");
-                args.push("--event-log", logFile);
-                logPromise = this.readLines(logFile, (event) => {
-                    onEvent(event);
-                });
-            }
-            const kind = this.workspace.program ? execKind.inline : execKind.local;
-            args.push("--exec-kind", kind);
-            const desPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
-            const [desResult, tail] = yield Promise.all([desPromise, logPromise]);
-            yield cleanUp(tail, logFile);
-            const summary = yield this.info();
-            return {
-                stdout: desResult.stdout,
-                stderr: desResult.stderr,
-                summary: summary,
-            };
-        });
-    }
-    /**
-     * Returns the config value associated with the specified key.
-     *
-     * @param key The key to use for the config lookup
-     */
-    getConfig(key) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.workspace.getConfig(this.name, key);
-        });
-    }
-    /**
-     * Returns the full config map associated with the stack in the Workspace.
-     */
-    getAllConfig() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.workspace.getAllConfig(this.name);
-        });
-    }
-    /**
-     * Sets a config key-value pair on the Stack in the associated Workspace.
-     *
-     * @param key The key to set.
-     * @param value The config value to set.
-     */
-    setConfig(key, value) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.workspace.setConfig(this.name, key, value);
-        });
-    }
-    /**
-     * Sets all specified config values on the stack in the associated Workspace.
-     *
-     * @param config The map of config key-value pairs to set.
-     */
-    setAllConfig(config) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.workspace.setAllConfig(this.name, config);
-        });
-    }
-    /**
-     * Removes the specified config key from the Stack in the associated Workspace.
-     *
-     * @param key The config key to remove.
-     */
-    removeConfig(key) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.workspace.removeConfig(this.name, key);
-        });
-    }
-    /**
-     * Removes the specified config keys from the Stack in the associated Workspace.
-     *
-     * @param keys The config keys to remove.
-     */
-    removeAllConfig(keys) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.workspace.removeAllConfig(this.name, keys);
-        });
-    }
-    /**
-     * Gets and sets the config map used with the last update.
-     */
-    refreshConfig() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.workspace.refreshConfig(this.name);
-        });
-    }
-    /**
-     * Gets the current set of Stack outputs from the last Stack.up().
-     */
-    outputs() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.workspace.selectStack(this.name);
-            // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
-            const maskedResult = yield this.runPulumiCmd(["stack", "output", "--json"]);
-            const plaintextResult = yield this.runPulumiCmd(["stack", "output", "--json", "--show-secrets"]);
-            const maskedOuts = JSON.parse(maskedResult.stdout);
-            const plaintextOuts = JSON.parse(plaintextResult.stdout);
-            const outputs = {};
-            for (const [key, value] of Object.entries(plaintextOuts)) {
-                const secret = maskedOuts[key] === secretSentinel;
-                outputs[key] = { value, secret };
-            }
-            return outputs;
-        });
-    }
-    /**
-     * Returns a list summarizing all previous and current results from Stack lifecycle operations
-     * (up/preview/refresh/destroy).
-     */
-    history(pageSize, page) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const args = ["history", "--json", "--show-secrets"];
-            if (pageSize) {
-                if (!page || page < 1) {
-                    page = 1;
-                }
-                args.push("--page-size", Math.floor(pageSize).toString(), "--page", Math.floor(page).toString());
-            }
-            const result = yield this.runPulumiCmd(args);
-            return JSON.parse(result.stdout, (key, value) => {
-                if (key === "startTime" || key === "endTime") {
-                    return new Date(value);
-                }
-                return value;
-            });
-        });
-    }
-    info() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const history = yield this.history(1 /*pageSize*/);
-            if (!history || history.length === 0) {
-                return undefined;
-            }
-            return history[0];
-        });
-    }
-    /**
-     * Cancel stops a stack's currently running update. It returns an error if no update is currently running.
-     * Note that this operation is _very dangerous_, and may leave the stack in an inconsistent state
-     * if a resource operation was pending when the update was canceled.
-     * This command is not supported for local backends.
-     */
-    cancel() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.workspace.selectStack(this.name);
-            yield this.runPulumiCmd(["cancel", "--yes"]);
-        });
-    }
-    /**
-     * exportStack exports the deployment state of the stack.
-     * This can be combined with Stack.importStack to edit a stack's state (such as recovery from failed deployments).
-     */
-    exportStack() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.workspace.exportStack(this.name);
-        });
-    }
-    /**
-     * importStack imports the specified deployment state into a pre-existing stack.
-     * This can be combined with Stack.exportStack to edit a stack's state (such as recovery from failed deployments).
-     *
-     * @param state the stack state to import.
-     */
-    importStack(state) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.workspace.importStack(this.name, state);
-        });
-    }
-    runPulumiCmd(args, onOutput) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let envs = {
-                "PULUMI_DEBUG_COMMANDS": "true",
-            };
-            const pulumiHome = this.workspace.pulumiHome;
-            if (pulumiHome) {
-                envs["PULUMI_HOME"] = pulumiHome;
-            }
-            envs = Object.assign(Object.assign({}, envs), this.workspace.envVars);
-            const additionalArgs = yield this.workspace.serializeArgsForOp(this.name);
-            args = [...args, ...additionalArgs];
-            const result = yield cmd_1.runPulumiCmd(args, this.workspace.workDir, envs, onOutput);
-            yield this.workspace.postCommandCallback(this.name);
-            return result;
-        });
-    }
-}
-exports.Stack = Stack;
-/**
- * Returns a stack name formatted with the greatest possible specificity:
- * org/project/stack or user/project/stack
- * Using this format avoids ambiguity in stack identity guards creating or selecting the wrong stack.
- * Note that filestate backends (local file, S3, Azure Blob) do not support stack names in this
- * format, and instead only use the stack name without an org/user or project to qualify it.
- * See: https://github.com/pulumi/pulumi/issues/2522
- *
- * @param org The org (or user) that contains the Stack.
- * @param project The project that parents the Stack.
- * @param stack The name of the Stack.
- */
-function fullyQualifiedStackName(org, project, stack) {
-    return `${org}/${project}/${stack}`;
-}
-exports.fullyQualifiedStackName = fullyQualifiedStackName;
-const execKind = {
-    local: "auto.local",
-    inline: "auto.inline",
-};
-const delay = (duration) => new Promise(resolve => setTimeout(resolve, duration));
-const createLogFile = (command) => {
-    const logDir = fs.mkdtempSync(upath.joinSafe(os.tmpdir(), `automation-logs-${command}-`));
-    return upath.joinSafe(logDir, "eventlog.txt");
-};
-const cleanUp = (tail, logFile) => __awaiter(void 0, void 0, void 0, function* () {
-    if (tail) {
-        yield tail.quit();
-    }
-    if (logFile) {
-        fs.rmdir(path.dirname(logFile), { recursive: true }, () => { return; });
-    }
-});
 
 
 /***/ }),
@@ -53909,7 +54095,7 @@ var EE = __nccwpck_require__(8614).EventEmitter
 var path = __nccwpck_require__(5622)
 var assert = __nccwpck_require__(2357)
 var isAbsolute = __nccwpck_require__(8714)
-var globSync = __nccwpck_require__(9010)
+var globSync = __nccwpck_require__(4579)
 var common = __nccwpck_require__(7625)
 var alphasort = common.alphasort
 var alphasorti = common.alphasorti
@@ -54652,7 +54838,7 @@ Glob.prototype._stat2 = function (f, abs, er, stat, cb) {
 
 /***/ }),
 
-/***/ 9010:
+/***/ 4579:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 module.exports = globSync
@@ -112289,6 +112475,14 @@ module.exports = require("v8");;
 
 /***/ }),
 
+/***/ 2184:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("vm");;
+
+/***/ }),
+
 /***/ 8761:
 /***/ ((module) => {
 
@@ -112369,8 +112563,8 @@ var tslib = __nccwpck_require__(4351);
 var external_path_ = __nccwpck_require__(5622);
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2186);
-// EXTERNAL MODULE: ./node_modules/@pulumi/pulumi/x/automation/index.js
-var automation = __nccwpck_require__(5883);
+// EXTERNAL MODULE: ./node_modules/@pulumi/pulumi/automation/index.js
+var automation = __nccwpck_require__(4925);
 // EXTERNAL MODULE: ./node_modules/runtypes/lib/index.js
 var lib = __nccwpck_require__(5568);
 ;// CONCATENATED MODULE: ./src/libs/utils.ts

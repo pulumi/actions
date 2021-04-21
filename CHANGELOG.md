@@ -6,6 +6,20 @@ _(none)_
 
 ---
 
+## 3.0.0 (2021-04-19)
+
+- Upgrade to Pulumi 3.0  
+  **PLEASE NOTE:** This minimum version of the Pulumi CLI to work with this
+  action has been updated to be 3.0.0. If this version requirement is not
+  satisfied then the action will throw an error
+
+## 2.3.0 (2021-04-15)
+
+- Upgrade to v2.25.0 of Pulumi Automation API
+  [#180](https://github.com/pulumi/actions/pull/180)  
+  **PLEASE NOTE:** This minimum version of the Pulumi CLI to work with this
+  action has been updated to be 2.25.0
+
 ## 2.2.0 (2021-03-22)
 
 - Add ability to refresh a stack by passing `refresh: true`
