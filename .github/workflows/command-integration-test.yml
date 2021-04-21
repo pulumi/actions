@@ -1,7 +1,7 @@
 name: Integration Tests
 on:
   repository_dispatch:
-    types: [integration-test-command]
+    types: [run-acceptance-tests-command]
 
 jobs:
   install-and-build:
