@@ -1,10 +1,7 @@
-name: 'Actions Workflow'
+name: Integration Tests
 on:
-  pull_request:
-  push:
-    branches:
-      - main
-      - master
+  repository_dispatch:
+    types: [integration-test-command]
 
 jobs:
   install-and-build:
@@ -50,13 +47,56 @@ jobs:
       - run: echo "::warning::There are no changes to dist files"
         if: steps.changes.outputs.dist != 'true'
 
+      - name: Create URL to the run output
+        id: vars
+        run: echo ::set-output name=run-url::https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+
+      - name: Update with Result
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
+          body: |
+            Please view the results of the PR Build + Acceptance Tests Run [Here][1]
+            [1]: ${{ steps.vars.outputs.run-url }}
+
+  test-output: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.13.1'
+      - name: Install pulumi
+        uses: pulumi/action-install-pulumi-cli@v1.0.1
+      - run: |
+          pulumi login --local
+          pulumi stack init dev
+        working-directory: .github/test-stacks/golang
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - run: yarn install
+      - run: yarn build
+      - uses: ./
+        if: always()
+        id: pulumi
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: up
+          cloud-url: file://~
+          stack-name: dev
+          work-dir: .github/test-stacks/golang
+      - run: echo "The random string is `${{ steps.pulumi.outputs.name }}`"
+
   test-dotnet-stack:
     needs: install-and-build
     runs-on: ${{ matrix.os }}
     name: Dotnet ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [ up, refresh, destroy, preview ]
+        command: [up, refresh, destroy, preview]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
@@ -102,7 +142,7 @@ jobs:
     name: Golang ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [ up, refresh, destroy, preview ]
+        command: [up, refresh, destroy, preview]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
@@ -148,7 +188,7 @@ jobs:
     name: NodeJS ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [ up, refresh, destroy, preview ]
+        command: [up, refresh, destroy, preview]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
@@ -210,7 +250,7 @@ jobs:
     name: Python ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [ up, refresh, destroy, preview ]
+        command: [up, refresh, destroy, preview]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
