@@ -111688,6 +111688,7 @@ const options = lib.Partial({
     replace: lib.Array(lib.String),
     target: lib.Array(lib.String),
     targetDependents: lib.Boolean,
+    editCommentOnPr: lib.Boolean,
 });
 const config = lib.Record({
     // Required options
@@ -111723,6 +111724,7 @@ function makeConfig() {
                 replace: parseArray((0,core.getInput)('replace')),
                 target: parseArray((0,core.getInput)('target')),
                 targetDependents: parseBoolean((0,core.getInput)('target-dependents')),
+                editCommentOnPr: parseBoolean((0,core.getInput)('edit-pr-comment')),
             },
         });
     });
@@ -111745,12 +111747,22 @@ var github = __nccwpck_require__(5438);
 
 
 
-function addPullRequestMessage(body, githubToken) {
+function handlePullRequestMessage(body, githubToken, editCommentOnPr) {
     return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
         const { payload, repo } = github.context;
         invariant(payload.pull_request, 'Missing pull request event data.');
+        const text = `#### :tropical_drink: `;
         const octokit = (0,github.getOctokit)(githubToken);
-        yield octokit.issues.createComment(Object.assign(Object.assign({}, repo), { issue_number: payload.pull_request.number, body }));
+        const { data: comments } = yield octokit.issues.listComments(Object.assign(Object.assign({}, repo), { issue_number: payload.pull_request.number }));
+        const comment = comments.find(comment => comment.body.startsWith(text));
+        if (body && githubToken) {
+            if (comment && editCommentOnPr) {
+                yield octokit.issues.updateComment(Object.assign(Object.assign({}, repo), { comment_id: comment.id, body }));
+            }
+            else {
+                yield octokit.issues.createComment(Object.assign(Object.assign({}, repo), { issue_number: payload.pull_request.number, body }));
+            }
+        }
     });
 }
 
@@ -111865,10 +111877,10 @@ const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
     if (config.commentOnPr) {
         core.debug(`Commenting on pull request`);
         invariant(config.githubToken, 'github-token is missing.');
-        addPullRequestMessage(`#### :tropical_drink: \`${config.command}\`
+        handlePullRequestMessage(`#### :tropical_drink: \`${config.command}\`
 \`\`\`
 ${output}
-\`\`\``, config.githubToken);
+\`\`\``, config.githubToken, config.options.editCommentOnPr);
     }
     core.endGroup();
 });
