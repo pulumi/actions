@@ -20,6 +20,7 @@ export const options = rt.Partial({
   replace: rt.Array(rt.String),
   target: rt.Array(rt.String),
   targetDependents: rt.Boolean,
+  editCommentOnPr: rt.Boolean,
 });
 
 export const config = rt
@@ -61,6 +62,7 @@ export async function makeConfig(): Promise<Config> {
       replace: parseArray(getInput('replace')),
       target: parseArray(getInput('target')),
       targetDependents: parseBoolean(getInput('target-dependents')),
+      editCommentOnPr: parseBoolean(getInput('edit-pr-comment')),
     },
   });
 }

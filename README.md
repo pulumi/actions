@@ -73,6 +73,9 @@ The action can be configured with the following arguments:
 - `expect-no-changes` - (optional) Return an error if any changes occur during
   this update
 
+- `edit-pr-comment` - (optional) Edit previous PR comment instead of posting new
+  one
+
 - `diff` - (optional) Display operation as a rich diff showing the overall
   change
 

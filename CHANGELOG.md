@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-_(none)_
+- Edit previous PR comment instead of posting new one
+  [#128](https://github.com/pulumi/actions/pull/148)
 
 ---
 

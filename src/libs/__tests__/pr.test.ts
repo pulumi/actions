@@ -1,12 +1,16 @@
 import * as gh from '@actions/github';
-import { addPullRequestMessage } from '../pr';
+import { handlePullRequestMessage } from '../pr';
 
+const comments = [{id: 2, body: 'test',}];
+const resp = {data: comments};
 const createComment = jest.fn();
+const listComments = jest.fn(() => resp);
 jest.mock('@actions/github', () => ({
   context: {},
   getOctokit: jest.fn(() => ({
     issues: {
       createComment,
+      listComments,
     },
   })),
 }));
@@ -27,14 +31,16 @@ describe('pr.ts', () => {
 
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
 
-    await addPullRequestMessage('test', 'test');
+    await handlePullRequestMessage('test', 'test');
+    expect(listComments).toHaveBeenCalled();
     expect(createComment).toHaveBeenCalled();
   });
+
   it('should fail if no pull request data', async () => {
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
     // @ts-ignore
     gh.context = { payload: {} };
-    await expect(addPullRequestMessage('test', 'test')).rejects.toThrowError(
+    await expect(handlePullRequestMessage('test', 'test')).rejects.toThrowError(
       'Missing pull request event data',
     );
   });

@@ -3,7 +3,7 @@ import * as core from '@actions/core';
 import { LocalProgramArgs, LocalWorkspace } from '@pulumi/pulumi/automation';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
-import { addPullRequestMessage } from './libs/pr';
+import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
 import { invariant } from './libs/utils';
 
@@ -84,12 +84,13 @@ const main = async () => {
   if (config.commentOnPr) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
-    addPullRequestMessage(
+    handlePullRequestMessage(
       `#### :tropical_drink: \`${config.command}\`
 \`\`\`
 ${output}
 \`\`\``,
       config.githubToken,
+      config.options.editCommentOnPr
     );
   }
 
