@@ -108358,6 +108358,7 @@ function create(validate, A) {
     A.Or = Or;
     A.And = And;
     A.optional = optional;
+    A.nullable = nullable;
     A.withConstraint = withConstraint;
     A.withGuard = withGuard;
     A.withBrand = withBrand;
@@ -108383,6 +108384,9 @@ function create(validate, A) {
     function optional() {
         return index_1.Optional(A);
     }
+    function nullable() {
+        return index_1.Union(A, index_1.Null);
+    }
     function withConstraint(constraint, options) {
         return index_1.Constraint(A, constraint, options);
     }
@@ -108404,7 +108408,9 @@ function VisitedState() {
         if (candidate === null || !(typeof candidate === 'object'))
             return;
         var typeSet = members.get(candidate);
-        members.set(candidate, typeSet ? typeSet.set(type, true) : new WeakMap().set(type, true));
+        members.set(candidate, typeSet
+            ? typeSet.set(type, true)
+            : new WeakMap().set(type, true));
     };
     var has = function (candidate, type) {
         var typeSet = members.get(candidate);
@@ -109027,12 +109033,38 @@ exports.Partial = Partial;
 function withExtraModifierFuncs(A) {
     A.asPartial = asPartial;
     A.asReadonly = asReadonly;
+    A.pick = pick;
+    A.omit = omit;
     return A;
     function asPartial() {
         return InternalRecord(A.fields, true, A.isReadonly);
     }
     function asReadonly() {
         return InternalRecord(A.fields, A.isPartial, true);
+    }
+    function pick() {
+        var keys = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            keys[_i] = arguments[_i];
+        }
+        var result = {};
+        keys.forEach(function (key) {
+            result[key] = A.fields[key];
+        });
+        return InternalRecord(result, A.isPartial, A.isReadonly);
+    }
+    function omit() {
+        var keys = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            keys[_i] = arguments[_i];
+        }
+        var result = {};
+        var existingKeys = util_1.enumerableKeysOf(A.fields);
+        existingKeys.forEach(function (key) {
+            if (!keys.includes(key))
+                result[key] = A.fields[key];
+        });
+        return InternalRecord(result, A.isPartial, A.isReadonly);
     }
 }
 
@@ -109348,7 +109380,8 @@ var typeOf = function (value) {
 exports.typeOf = typeOf;
 var enumerableKeysOf = function (object) {
     return typeof object === 'object' && object !== null
-        ? Reflect.ownKeys(object).filter(function (key) { return object.propertyIsEnumerable(key); })
+        ? // Objects with a null prototype may not have `propertyIsEnumerable`
+            Reflect.ownKeys(object).filter(function (key) { var _a, _b; return (_b = (_a = object.propertyIsEnumerable) === null || _a === void 0 ? void 0 : _a.call(object, key)) !== null && _b !== void 0 ? _b : true; })
         : [];
 };
 exports.enumerableKeysOf = enumerableKeysOf;
@@ -112613,6 +112646,7 @@ const options = lib.Partial({
     replace: lib.Array(lib.String),
     target: lib.Array(lib.String),
     targetDependents: lib.Boolean,
+    editCommentOnPr: lib.Boolean,
 });
 const config = lib.Record({
     // Required options
@@ -112648,6 +112682,7 @@ function makeConfig() {
                 replace: parseArray((0,core.getInput)('replace')),
                 target: parseArray((0,core.getInput)('target')),
                 targetDependents: parseBoolean((0,core.getInput)('target-dependents')),
+                editCommentOnPr: parseBoolean((0,core.getInput)('edit-pr-comment')),
             },
         });
     });
@@ -112670,12 +112705,22 @@ var github = __nccwpck_require__(5438);
 
 
 
-function addPullRequestMessage(body, githubToken) {
+function handlePullRequestMessage(body, githubToken, editCommentOnPr) {
     return (0,tslib.__awaiter)(this, void 0, void 0, function* () {
         const { payload, repo } = github.context;
         invariant(payload.pull_request, 'Missing pull request event data.');
+        const text = `#### :tropical_drink: `;
         const octokit = (0,github.getOctokit)(githubToken);
-        yield octokit.issues.createComment(Object.assign(Object.assign({}, repo), { issue_number: payload.pull_request.number, body }));
+        const { data: comments } = yield octokit.issues.listComments(Object.assign(Object.assign({}, repo), { issue_number: payload.pull_request.number }));
+        const comment = comments.find(comment => comment.body.startsWith(text));
+        if (body && githubToken) {
+            if (comment && editCommentOnPr) {
+                yield octokit.issues.updateComment(Object.assign(Object.assign({}, repo), { comment_id: comment.id, body }));
+            }
+            else {
+                yield octokit.issues.createComment(Object.assign(Object.assign({}, repo), { issue_number: payload.pull_request.number, body }));
+            }
+        }
     });
 }
 
@@ -112790,10 +112835,10 @@ const main = () => (0,tslib.__awaiter)(void 0, void 0, void 0, function* () {
     if (config.commentOnPr) {
         core.debug(`Commenting on pull request`);
         invariant(config.githubToken, 'github-token is missing.');
-        addPullRequestMessage(`#### :tropical_drink: \`${config.command}\`
+        handlePullRequestMessage(`#### :tropical_drink: \`${config.command}\`
 \`\`\`
 ${output}
-\`\`\``, config.githubToken);
+\`\`\``, config.githubToken, config.options.editCommentOnPr);
     }
     core.endGroup();
 });
