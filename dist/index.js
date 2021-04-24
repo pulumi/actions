@@ -15383,8 +15383,7 @@ class LocalWorkspace {
      */
     getConfig(stackName, key) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            const result = yield this.runPulumiCmd(["config", "get", key, "--json"]);
+            const result = yield this.runPulumiCmd(["config", "get", key, "--json", "--stack", stackName]);
             return JSON.parse(result.stdout);
         });
     }
@@ -15396,8 +15395,7 @@ class LocalWorkspace {
      */
     getAllConfig(stackName) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            const result = yield this.runPulumiCmd(["config", "--show-secrets", "--json"]);
+            const result = yield this.runPulumiCmd(["config", "--show-secrets", "--json", "--stack", stackName]);
             return JSON.parse(result.stdout);
         });
     }
@@ -15411,9 +15409,8 @@ class LocalWorkspace {
      */
     setConfig(stackName, key, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
             const secretArg = value.secret ? "--secret" : "--plaintext";
-            yield this.runPulumiCmd(["config", "set", key, value.value, secretArg]);
+            yield this.runPulumiCmd(["config", "set", key, value.value, secretArg, "--stack", stackName]);
         });
     }
     /**
@@ -15442,8 +15439,7 @@ class LocalWorkspace {
      */
     removeConfig(stackName, key) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            yield this.runPulumiCmd(["config", "rm", key]);
+            yield this.runPulumiCmd(["config", "rm", key, "--stack", stackName]);
         });
     }
     /**
@@ -15467,8 +15463,7 @@ class LocalWorkspace {
      */
     refreshConfig(stackName) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            yield this.runPulumiCmd(["config", "refresh", "--force"]);
+            yield this.runPulumiCmd(["config", "refresh", "--force", "--stack", stackName]);
             return this.getAllConfig(stackName);
         });
     }
@@ -15560,8 +15555,7 @@ class LocalWorkspace {
      */
     exportStack(stackName) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
-            const result = yield this.runPulumiCmd(["stack", "export", "--show-secrets"]);
+            const result = yield this.runPulumiCmd(["stack", "export", "--show-secrets", "--stack", stackName]);
             return JSON.parse(result.stdout);
         });
     }
@@ -15574,12 +15568,11 @@ class LocalWorkspace {
      */
     importStack(stackName, state) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.selectStack(stackName);
             const randomSuffix = Math.floor(100000 + Math.random() * 900000);
             const filepath = upath.joinSafe(os.tmpdir(), `automation-${randomSuffix}`);
             const contents = JSON.stringify(state, null, 4);
             fs.writeFileSync(filepath, contents);
-            yield this.runPulumiCmd(["stack", "import", "--file", filepath]);
+            yield this.runPulumiCmd(["stack", "import", "--file", filepath, "--stack", stackName]);
             fs.unlinkSync(filepath);
         });
     }
@@ -15946,8 +15939,7 @@ class Stack {
     }
     /**
      * Selects stack using the given workspace, and stack name.
-     * It returns an error if the given Stack does not exist. All LocalWorkspace operations will call `select`
-     * before running.
+     * It returns an error if the given Stack does not exist.
      *
      * @param name The name identifying the Stack.
      * @param workspace The Workspace the Stack was created from.
@@ -16003,7 +15995,6 @@ class Stack {
             const args = ["up", "--yes", "--skip-preview"];
             let kind = execKind.local;
             let program = this.workspace.program;
-            yield this.workspace.selectStack(this.name);
             if (opts) {
                 if (opts.program) {
                     program = opts.program;
@@ -16109,7 +16100,6 @@ class Stack {
             const args = ["preview"];
             let kind = execKind.local;
             let program = this.workspace.program;
-            yield this.workspace.selectStack(this.name);
             if (opts) {
                 if (opts.program) {
                     program = opts.program;
@@ -16215,7 +16205,6 @@ class Stack {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["refresh", "--yes", "--skip-preview"];
-            yield this.workspace.selectStack(this.name);
             if (opts) {
                 if (opts.message) {
                     args.push("--message", opts.message);
@@ -16265,7 +16254,6 @@ class Stack {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["destroy", "--yes", "--skip-preview"];
-            yield this.workspace.selectStack(this.name);
             if (opts) {
                 if (opts.message) {
                     args.push("--message", opts.message);
@@ -16378,7 +16366,6 @@ class Stack {
      */
     outputs() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.workspace.selectStack(this.name);
             // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
             const maskedResult = yield this.runPulumiCmd(["stack", "output", "--json"]);
             const plaintextResult = yield this.runPulumiCmd(["stack", "output", "--json", "--show-secrets"]);
@@ -16431,7 +16418,6 @@ class Stack {
      */
     cancel() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.workspace.selectStack(this.name);
             yield this.runPulumiCmd(["cancel", "--yes"]);
         });
     }
@@ -16466,7 +16452,7 @@ class Stack {
             }
             envs = Object.assign(Object.assign({}, envs), this.workspace.envVars);
             const additionalArgs = yield this.workspace.serializeArgsForOp(this.name);
-            args = [...args, ...additionalArgs];
+            args = [...args, "--stack", this.name, ...additionalArgs];
             const result = yield cmd_1.runPulumiCmd(args, this.workspace.workDir, envs, onOutput);
             yield this.workspace.postCommandCallback(this.name);
             return result;
@@ -37484,6 +37470,7 @@ exports.mergeOptions = mergeOptions;
 function isPromiseOrOutput(val) {
     return val instanceof Promise || output_1.Output.isInstance(val);
 }
+/** @internal */
 function expandProviders(options) {
     // Move 'provider' up to 'providers' if we have it.
     if (options.provider) {
@@ -37495,6 +37482,7 @@ function expandProviders(options) {
     }
     delete options.provider;
 }
+exports.expandProviders = expandProviders;
 function normalizeProviders(opts) {
     // If we have only 0-1 providers, then merge that back down to the .provider field.
     const providers = opts.providers;
@@ -41493,6 +41481,7 @@ const log = __nccwpck_require__(642);
 const utils = __nccwpck_require__(1888);
 const output_1 = __nccwpck_require__(3037);
 const resource_1 = __nccwpck_require__(796);
+const resource_2 = __nccwpck_require__(796);
 const debuggable_1 = __nccwpck_require__(257);
 const invoke_1 = __nccwpck_require__(4800);
 const rpc_1 = __nccwpck_require__(5158);
@@ -41512,7 +41501,7 @@ function getResource(res, props, custom, urn) {
     const label = `resource:urn=${urn}`;
     log.debug(`Getting resource: urn=${urn}`);
     const monitor = settings_1.getMonitor();
-    const resopAsync = prepareResource(label, res, custom, props, {});
+    const resopAsync = prepareResource(label, res, custom, false, props, {});
     const preallocError = new Error();
     debuggable_1.debuggablePromise(resopAsync.then((resop) => __awaiter(this, void 0, void 0, function* () {
         const inputs = yield rpc_1.serializeProperties(label, { urn });
@@ -41597,7 +41586,7 @@ function readResource(res, t, name, props, opts) {
     const label = `resource:${name}[${t}]#...`;
     log.debug(`Reading resource: id=${output_1.Output.isInstance(id) ? "Output<T>" : id}, t=${t}, name=${name}`);
     const monitor = settings_1.getMonitor();
-    const resopAsync = prepareResource(label, res, true, props, opts);
+    const resopAsync = prepareResource(label, res, true, false, props, opts);
     const preallocError = new Error();
     debuggable_1.debuggablePromise(resopAsync.then((resop) => __awaiter(this, void 0, void 0, function* () {
         const resolvedID = yield rpc_1.serializeProperty(label, id, new Set());
@@ -41644,7 +41633,7 @@ function readResource(res, t, name, props, opts) {
                 }
                 else {
                     // If we aren't attached to the engine, in test mode, mock up a fake response for testing purposes.
-                    const mockurn = yield resource_1.createUrn(req.getName(), req.getType(), req.getParent()).promise();
+                    const mockurn = yield resource_2.createUrn(req.getName(), req.getType(), req.getParent()).promise();
                     resp = {
                         getUrn: () => mockurn,
                         getProperties: () => req.getProperties(),
@@ -41675,7 +41664,7 @@ function registerResource(res, t, name, custom, remote, newDependency, props, op
     const label = `resource:${name}[${t}]`;
     log.debug(`Registering resource: t=${t}, name=${name}, custom=${custom}, remote=${remote}`);
     const monitor = settings_1.getMonitor();
-    const resopAsync = prepareResource(label, res, custom, props, opts);
+    const resopAsync = prepareResource(label, res, custom, remote, props, opts);
     // In order to present a useful stack trace if an error does occur, we preallocate potential
     // errors here. V8 captures a stack trace at the moment an Error is created and this stack
     // trace will lead directly to user code. Throwing in `runAsyncResourceOp` results in an Error
@@ -41717,6 +41706,10 @@ function registerResource(res, t, name, custom, remote, newDependency, props, op
             deps.setUrnsList(Array.from(resourceURNs));
             propertyDependencies.set(key, deps);
         }
+        const providerRefs = req.getProvidersMap();
+        for (const [key, ref] of resop.providerRefs) {
+            providerRefs.set(key, ref);
+        }
         // Now run the operation, serializing the invocation if necessary.
         const opLabel = `monitor.registerResource(${label})`;
         runAsyncResourceOp(opLabel, () => __awaiter(this, void 0, void 0, function* () {
@@ -41749,7 +41742,7 @@ function registerResource(res, t, name, custom, remote, newDependency, props, op
                 }
                 else {
                     // If we aren't attached to the engine, in test mode, mock up a fake response for testing purposes.
-                    const mockurn = yield resource_1.createUrn(req.getName(), req.getType(), req.getParent()).promise();
+                    const mockurn = yield resource_2.createUrn(req.getName(), req.getType(), req.getParent()).promise();
                     resp = {
                         getUrn: () => mockurn,
                         getId: () => undefined,
@@ -41792,7 +41785,7 @@ exports.registerResource = registerResource;
  * Prepares for an RPC that will manufacture a resource, and hence deals with input and output
  * properties.
  */
-function prepareResource(label, res, custom, props, opts) {
+function prepareResource(label, res, custom, remote, props, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         // Simply initialize the URN property and get prepared to resolve it later on.
         // Note: a resource urn will always get a value, and thus the output property
@@ -41868,7 +41861,20 @@ function prepareResource(label, res, custom, props, opts) {
         if (custom) {
             const customOpts = opts;
             importID = customOpts.import;
-            providerRef = yield resource_1.ProviderResource.register(opts.provider);
+            providerRef = yield resource_2.ProviderResource.register(opts.provider);
+        }
+        const providerRefs = new Map();
+        if (remote) {
+            const componentOpts = opts;
+            resource_1.expandProviders(componentOpts);
+            if (componentOpts.providers) {
+                for (const provider of componentOpts.providers) {
+                    const pref = yield resource_2.ProviderResource.register(provider);
+                    if (pref) {
+                        providerRefs.set(provider.getPackage(), pref);
+                    }
+                }
+            }
         }
         // Collect the URNs for explicit/implicit dependencies for the engine so that it can understand
         // the dependency graph and optimize operations accordingly.
@@ -41901,6 +41907,7 @@ function prepareResource(label, res, custom, props, opts) {
             serializedProps: serializedProps,
             parentURN: parentURN,
             providerRef: providerRef,
+            providerRefs: providerRefs,
             allDirectDependencyURNs: allDirectDependencyURNs,
             propertyToDirectDependencyURNs: propertyToDirectDependencyURNs,
             aliases: aliases,
@@ -41935,7 +41942,7 @@ function getAllTransitivelyReferencedCustomResourceURNs(resources) {
         // into custom resources).  In the above picture, if we start with 'Comp1', this will be
         // [Comp1, Cust1, Comp2, Cust2, Cust3]
         const transitivelyReachableResources = yield getTransitivelyReferencedChildResourcesOfComponentResources(resources);
-        const transitivelyReachableCustomResources = [...transitivelyReachableResources].filter(r => resource_1.CustomResource.isInstance(r));
+        const transitivelyReachableCustomResources = [...transitivelyReachableResources].filter(r => resource_2.CustomResource.isInstance(r));
         const promises = transitivelyReachableCustomResources.map(r => r.urn.promise());
         const urns = yield Promise.all(promises);
         return new Set(urns);
@@ -41959,7 +41966,7 @@ function addTransitivelyReferencedChildResourcesOfComponentResources(resources, 
             for (const resource of resources) {
                 if (!result.has(resource)) {
                     result.add(resource);
-                    if (resource_1.ComponentResource.isInstance(resource)) {
+                    if (resource_2.ComponentResource.isInstance(resource)) {
                         // This await is safe even if __isConstructed is undefined. Ensure that the
                         // resource has completely finished construction.  That way all parent/child
                         // relationships will have been setup.
@@ -41996,7 +42003,7 @@ function gatherExplicitDependencies(dependsOn) {
                 return ((urns !== null && urns !== void 0 ? urns : [])).concat(implicits);
             }
             else {
-                if (!resource_1.Resource.isInstance(dependsOn)) {
+                if (!resource_2.Resource.isInstance(dependsOn)) {
                     throw new Error("'dependsOn' was passed a value that was not a Resource.");
                 }
                 return [dependsOn];
