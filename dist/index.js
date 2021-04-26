@@ -108191,7 +108191,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.InstanceOf = exports.Null = exports.Undefined = exports.Literal = void 0;
+exports.InstanceOf = exports.Nullish = exports.Null = exports.Undefined = exports.Literal = void 0;
 __exportStar(__nccwpck_require__(4447), exports);
 __exportStar(__nccwpck_require__(6299), exports);
 __exportStar(__nccwpck_require__(8154), exports);
@@ -108205,6 +108205,7 @@ var literal_1 = __nccwpck_require__(72);
 Object.defineProperty(exports, "Literal", ({ enumerable: true, get: function () { return literal_1.Literal; } }));
 Object.defineProperty(exports, "Undefined", ({ enumerable: true, get: function () { return literal_1.Undefined; } }));
 Object.defineProperty(exports, "Null", ({ enumerable: true, get: function () { return literal_1.Null; } }));
+Object.defineProperty(exports, "Nullish", ({ enumerable: true, get: function () { return literal_1.Nullish; } }));
 __exportStar(__nccwpck_require__(5609), exports);
 __exportStar(__nccwpck_require__(8986), exports);
 __exportStar(__nccwpck_require__(399), exports);
@@ -108841,9 +108842,10 @@ exports.Lazy = Lazy;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Null = exports.Undefined = exports.Literal = void 0;
+exports.Nullish = exports.Null = exports.Undefined = exports.Literal = void 0;
 var runtype_1 = __nccwpck_require__(5601);
 var util_1 = __nccwpck_require__(5571);
+var union_1 = __nccwpck_require__(7898);
 /**
  * Be aware of an Array of Symbols `[Symbol()]` which would throw "TypeError: Cannot convert a Symbol value to a string"
  */
@@ -108874,6 +108876,10 @@ exports.Undefined = Literal(undefined);
  * An alias for Literal(null).
  */
 exports.Null = Literal(null);
+/**
+ * An alias for `Union(Null, Undefined)`.
+ */
+exports.Nullish = union_1.Union(exports.Null, exports.Undefined);
 
 
 /***/ }),
@@ -109035,6 +109041,7 @@ function withExtraModifierFuncs(A) {
     A.asReadonly = asReadonly;
     A.pick = pick;
     A.omit = omit;
+    A.extend = extend;
     return A;
     function asPartial() {
         return InternalRecord(A.fields, true, A.isReadonly);
@@ -109065,6 +109072,9 @@ function withExtraModifierFuncs(A) {
                 result[key] = A.fields[key];
         });
         return InternalRecord(result, A.isPartial, A.isReadonly);
+    }
+    function extend(fields) {
+        return InternalRecord(Object.assign({}, A.fields, fields), A.isPartial, A.isReadonly);
     }
 }
 
