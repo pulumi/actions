@@ -53,22 +53,9 @@ export async function downloadCli(range: string): Promise<void> {
   const downloaded = await tc.downloadTool(downloadUrl);
   core.info(`successfully downloaded ${downloadUrl}`);
 
-  if (platform === 'windows') {
-    await tc.extractZip(downloaded, os.homedir());
-    await io.mv(path.join(os.homedir(), 'Pulumi'), destination);
-  } else {
-    await io.mkdirP(destination);
-    core.info(`Successfully created ${destination}`);
+  const extractedPath = await tc.extractTar(downloaded, destination);
+  core.info(`Successfully extracted ${downloaded} to ${extractedPath}`);
 
-    const extractedPath = await tc.extractTar(downloaded, destination);
-    core.info(`Successfully extracted ${downloaded} to ${extractedPath}`);
-
-    const oldPath = path.join(destination, 'pulumi');
-    const newPath = path.join(destination, 'bin');
-    await io.mv(oldPath, newPath);
-
-    core.info(`Successfully renamed ${oldPath} to ${newPath}`);
-  }
-
-  core.addPath(path.join(destination, 'bin'));
+  const cachedPath = await tc.cacheDir(extractedPath, 'pulumi', version);
+  core.addPath(cachedPath);
 }
