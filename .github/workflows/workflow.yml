@@ -32,17 +32,10 @@ jobs:
 
       - run: yarn build
 
-      # This commit will never be pushed. It only makes dorny/path-filter@v2
-      # notice the change from above.
-      - name: Commit changes
-        run: |
-          git config --global user.email "pulumi-bot@pulumi.com"
-          git config --global user.name "pulumi-bot"
-          git commit -a -m 'add changes'
-
       - uses: dorny/paths-filter@v2
         id: changes
         with:
+          base: HEAD
           filters: |
             dist:
               - 'dist/**'
