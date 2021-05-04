@@ -45,15 +45,17 @@ export async function downloadCli(range: string): Promise<void> {
   const destination = path.join(os.homedir(), '.pulumi');
   core.info(`Install destination is ${destination}`);
 
+  if (fs.existsSync(destination)) {
+    await io.rmRF(destination);
+    core.info(`Successfully deleted pre-existing ${destination}`);
+  }
+
   const downloaded = await tc.downloadTool(downloadUrl);
   core.info(`successfully downloaded ${downloadUrl}`);
 
   if (platform === 'windows') {
     await tc.extractZip(downloaded, os.homedir());
-    fs.renameSync(
-      path.join(os.homedir(), 'Pulumi'),
-      path.join(os.homedir(), '.pulumi'),
-    );
+    fs.renameSync(path.join(os.homedir(), 'Pulumi'), destination);
   } else {
     const destinationPath = await io.mkdirP(destination);
     core.info(`Successfully created ${destinationPath}`);
