@@ -1,5 +1,3 @@
-import * as core from '@actions/core';
-import { getOctokit } from '@actions/github';
 import got from 'got';
 import { maxSatisfying } from 'semver';
 
@@ -22,17 +20,12 @@ export async function getVersion(range: string): Promise<string> {
 export async function getSatisfyingVersion(
   range: string,
 ): Promise<string | null> {
-  const octokit = getOctokit(
-    core.getInput('github-token') || process.env.GITHUB_TOKEN || '',
+  const {
+    body: versions,
+  } = await got(
+    'https://raw.githubusercontent.com/cobraz/docs/add-versions/static/versions.json',
+    { responseType: 'json' },
   );
-
-  const releases = await octokit.paginate(octokit.repos.listTags, {
-    repo: 'pulumi',
-    owner: 'pulumi',
-    per_page: 100,
-  });
-
-  const versions: string[] = releases.map((r) => r.name);
 
   return maxSatisfying(versions, range);
 }
