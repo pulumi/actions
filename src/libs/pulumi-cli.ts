@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as core from '@actions/core';
@@ -36,25 +35,24 @@ export async function downloadCli(range: string): Promise<void> {
   core.info(`Configured range: ${range}`);
 
   const version = await getVersion(range);
-  core.info(`Matched version: ${version}`);
+  core.debug(`Matched version: ${version}`);
 
   const downloadUrl = `https://get.pulumi.com/releases/sdk/pulumi-${version}-${platform}-x64.${
     platform == 'windows' ? 'zip' : 'tar.gz'
   }`;
 
   const destination = path.join(os.homedir(), '.pulumi');
-  core.info(`Install destination is ${destination}`);
+  core.debug(`Install destination is ${destination}`);
 
-  if (fs.existsSync(destination)) {
-    await io.rmRF(destination);
+  await io.rmRF(destination).catch().then(() => {
     core.info(`Successfully deleted pre-existing ${destination}`);
-  }
+  });
 
   const downloaded = await tc.downloadTool(downloadUrl);
-  core.info(`successfully downloaded ${downloadUrl}`);
+  core.debug(`successfully downloaded ${downloadUrl}`);
 
   const extractedPath = await tc.extractTar(downloaded, destination);
-  core.info(`Successfully extracted ${downloaded} to ${extractedPath}`);
+  core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`);
 
   const cachedPath = await tc.cacheDir(extractedPath, 'pulumi', version);
   core.addPath(cachedPath);
