@@ -40,20 +40,18 @@ jobs:
             dist:
               - 'dist/**'
 
-      - name: Check for changes
-        if: steps.changes.outputs.dist != 'true'
-        run: |
-          echo "::warning::There are no changes to dist files. Stopped running the workflow"
-          exit 1
-
       - name: Upload artifacts
+        if: steps.changes.outputs.dist != 'true'
         uses: actions/upload-artifact@v2
         with:
           name: dist-${{ runner.os }}
           path: dist
+    outputs:
+      changed: ${{ steps.changes.outputs.dist }}
 
   test-dotnet-stack:
     needs: install-and-build
+    if: ${{ needs.install-and-build.outputs.changed }}
     runs-on: ${{ matrix.os }}
     name: Dotnet ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -95,6 +93,7 @@ jobs:
 
   test-golang-stack:
     needs: install-and-build
+    if: ${{ needs.install-and-build.outputs.changed }}
     runs-on: ${{ matrix.os }}
     name: Golang ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -136,6 +135,7 @@ jobs:
 
   test-nodejs-stack:
     needs: install-and-build
+    if: ${{ needs.install-and-build.outputs.changed }}
     runs-on: ${{ matrix.os }}
     name: NodeJS ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -193,6 +193,7 @@ jobs:
 
   test-python-stack:
     needs: install-and-build
+    if: ${{ needs.install-and-build.outputs.changed }}
     runs-on: ${{ matrix.os }}
     name: Python ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -261,6 +262,7 @@ jobs:
 
   test-generic-inputs:
     needs: install-and-build
+    if: ${{ needs.install-and-build.outputs.changed }}
     runs-on: ${{ matrix.os }}
     name: Inputs on ${{ matrix.os }}
     strategy:
