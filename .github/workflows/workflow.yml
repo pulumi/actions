@@ -32,8 +32,13 @@ jobs:
 
       - run: yarn build
 
+      # This commit will never be pushed. It only makes dorny/path-filter@v2
+      # notice the change from above.
       - name: Commit changes
-        run: git commit -a -m 'add changes'
+        run: |
+          git config --global user.email "pulumi-bot@pulumi.com"
+          git config --global user.name "pulumi-bot"
+          git commit -a -m 'add changes'
 
       - uses: dorny/paths-filter@v2
         id: changes
@@ -60,7 +65,7 @@ jobs:
     name: Dotnet ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [ up, refresh, destroy, preview ]
+        command: [up, refresh, destroy, preview]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
@@ -101,7 +106,7 @@ jobs:
     name: Golang ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [ up, refresh, destroy, preview ]
+        command: [up, refresh, destroy, preview]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
@@ -142,7 +147,7 @@ jobs:
     name: NodeJS ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [ up, refresh, destroy, preview ]
+        command: [up, refresh, destroy, preview]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
@@ -199,7 +204,7 @@ jobs:
     name: Python ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [ up, refresh, destroy, preview ]
+        command: [up, refresh, destroy, preview]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
