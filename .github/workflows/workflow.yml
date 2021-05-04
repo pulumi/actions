@@ -35,7 +35,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: dist-${{ runner.os }}-${{ github.ref }}
+          name: dist-${{ runner.os }}
           path: dist
 
   test-dotnet-stack:
@@ -53,7 +53,7 @@ jobs:
       - name: Download dist artifact
         uses: actions/download-artifact@v2
         with:
-          name: dist-${{ runner.os }}-${{ github.ref }}
+          name: dist-${{ runner.os }}
 
       - uses: actions/setup-dotnet@v1
         with:
@@ -94,7 +94,7 @@ jobs:
       - name: Download dist artifact
         uses: actions/download-artifact@v2
         with:
-          name: dist-${{ runner.os }}-${{ github.ref }}
+          name: dist-${{ runner.os }}
 
       - uses: actions/setup-go@v2
         with:
@@ -135,7 +135,7 @@ jobs:
       - name: Download dist artifact
         uses: actions/download-artifact@v2
         with:
-          name: dist-${{ runner.os }}-${{ github.ref }}
+          name: dist-${{ runner.os }}
 
       - uses: actions/setup-node@v1
         with:
@@ -192,7 +192,7 @@ jobs:
       - name: Download dist artifact
         uses: actions/download-artifact@v2
         with:
-          name: dist-${{ runner.os }}-${{ github.ref }}
+          name: dist-${{ runner.os }}
 
       - uses: actions/setup-python@v2
         with:
@@ -259,7 +259,7 @@ jobs:
       - name: Download dist artifact
         uses: actions/download-artifact@v2
         with:
-          name: dist-${{ runner.os }}-${{ github.ref }}
+          name: dist-${{ runner.os }}
 
       - name: Get npm cache directory
         id: npm-cache-dir
