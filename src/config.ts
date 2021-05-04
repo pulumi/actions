@@ -31,6 +31,7 @@ export const config = rt
     workDir: rt.String,
     commentOnPr: rt.Boolean,
     options: options,
+    pulumiVersion: rt.String,
   })
   .And(
     rt.Partial({
@@ -54,6 +55,7 @@ export async function makeConfig(): Promise<Config> {
     commentOnPr: parseBoolean(getInput('comment-on-pr')),
     upsert: parseBoolean(getInput('upsert')),
     refresh: parseBoolean(getInput('refresh')),
+    pulumiVersion: getInput('pulumi-version'),
     options: {
       parallel: parseNumber(getInput('parallel')),
       message: getInput('message'),

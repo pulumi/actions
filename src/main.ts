@@ -11,8 +11,7 @@ const main = async () => {
   const config = await makeConfig();
   core.debug('Configuration is loaded');
 
-  invariant(pulumiCli.isAvailable(), 'Pulumi CLI is not available.');
-  core.debug('Pulumi CLI is available');
+  await pulumiCli.downloadCli(config.pulumiVersion);
 
   if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
     core.debug(`Logging into to Pulumi`);
