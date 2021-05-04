@@ -30,14 +30,13 @@ jobs:
 
       - run: yarn install
 
-      - name: Cache dist files
-        id: dist-cache
-        uses: actions/cache@v2.1.5
-        with:
-          path: dist/
-          key: ${{ runner.os }}-build-${{ github.ref }}
-
       - run: yarn build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-${{ runner.os }}-${{ github.ref }}
+          path: dist
 
   test-dotnet-stack:
     needs: install-and-build
@@ -51,15 +50,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get cached dist files
-        id: dist-cache
-        uses: actions/cache@v2.1.5
+      - name: Download dist artifact
+        uses: actions/download-artifact@v2
         with:
-          path: dist/
-          key: ${{ runner.os }}-build-${{ github.ref }}
-
-      - run: exit 1
-        if: steps.dist-cache.outputs.cache-hit != 'true'
+          name: dist-${{ runner.os }}-${{ github.ref }}
 
       - uses: actions/setup-dotnet@v1
         with:
@@ -97,15 +91,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get cached dist files
-        id: dist-cache
-        uses: actions/cache@v2.1.5
+      - name: Download dist artifact
+        uses: actions/download-artifact@v2
         with:
-          path: dist/
-          key: ${{ runner.os }}-build-${{ github.ref }}
-
-      - run: exit 1
-        if: steps.dist-cache.outputs.cache-hit != 'true'
+          name: dist-${{ runner.os }}-${{ github.ref }}
 
       - uses: actions/setup-go@v2
         with:
@@ -143,15 +132,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get cached dist files
-        id: dist-cache
-        uses: actions/cache@v2.1.5
+      - name: Download dist artifact
+        uses: actions/download-artifact@v2
         with:
-          path: dist/
-          key: ${{ runner.os }}-build-${{ github.ref }}
-
-      - run: exit 1
-        if: steps.dist-cache.outputs.cache-hit != 'true'
+          name: dist-${{ runner.os }}-${{ github.ref }}
 
       - uses: actions/setup-node@v1
         with:
@@ -205,15 +189,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get cached dist files
-        id: dist-cache
-        uses: actions/cache@v2.1.5
+      - name: Download dist artifact
+        uses: actions/download-artifact@v2
         with:
-          path: dist/
-          key: ${{ runner.os }}-build-${{ github.ref }}
-
-      - run: exit 1
-        if: steps.dist-cache.outputs.cache-hit != 'true'
+          name: dist-${{ runner.os }}-${{ github.ref }}
 
       - uses: actions/setup-python@v2
         with:
@@ -277,15 +256,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get cached dist files
-        id: dist-cache
-        uses: actions/cache@v2.1.5
+      - name: Download dist artifact
+        uses: actions/download-artifact@v2
         with:
-          path: dist/
-          key: ${{ runner.os }}-build-${{ github.ref }}
-
-      - run: exit 1
-        if: steps.dist-cache.outputs.cache-hit != 'true'
+          name: dist-${{ runner.os }}-${{ github.ref }}
 
       - name: Get npm cache directory
         id: npm-cache-dir
