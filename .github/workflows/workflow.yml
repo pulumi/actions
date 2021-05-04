@@ -32,6 +32,21 @@ jobs:
 
       - run: yarn build
 
+      - run: git add dist/
+
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            dist:
+              - 'dist/**'
+
+      - name: Check for changes
+        if: steps.changes.outputs.dist != 'true'
+        run: |
+          echo "::warning::There are no changes to dist files. Stopped running the workflow"
+          exit 1
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
