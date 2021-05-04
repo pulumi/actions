@@ -41,7 +41,7 @@ jobs:
               - 'dist/**'
 
       - name: Upload artifacts
-        if: steps.changes.outputs.dist != 'true'
+        if: steps.changes.outputs.dist == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: dist-${{ runner.os }}
@@ -51,7 +51,7 @@ jobs:
 
   test-dotnet-stack:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed }}
+    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
     runs-on: ${{ matrix.os }}
     name: Dotnet ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -93,7 +93,7 @@ jobs:
 
   test-golang-stack:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed }}
+    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
     runs-on: ${{ matrix.os }}
     name: Golang ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -135,7 +135,7 @@ jobs:
 
   test-nodejs-stack:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed }}
+    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
     runs-on: ${{ matrix.os }}
     name: NodeJS ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -193,7 +193,7 @@ jobs:
 
   test-python-stack:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed }}
+    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
     runs-on: ${{ matrix.os }}
     name: Python ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -262,7 +262,7 @@ jobs:
 
   test-generic-inputs:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed }}
+    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
     runs-on: ${{ matrix.os }}
     name: Inputs on ${{ matrix.os }}
     strategy:
