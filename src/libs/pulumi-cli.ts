@@ -55,17 +55,17 @@ export async function downloadCli(range: string): Promise<void> {
 
   if (platform === 'windows') {
     await tc.extractZip(downloaded, os.homedir());
-    fs.renameSync(path.join(os.homedir(), 'Pulumi'), destination);
+    await io.mv(path.join(os.homedir(), 'Pulumi'), destination);
   } else {
-    const destinationPath = await io.mkdirP(destination);
-    core.info(`Successfully created ${destinationPath}`);
+    await io.mkdirP(destination);
+    core.info(`Successfully created ${destination}`);
 
     const extractedPath = await tc.extractTar(downloaded, destination);
     core.info(`Successfully extracted ${downloaded} to ${extractedPath}`);
 
     const oldPath = path.join(destination, 'pulumi');
     const newPath = path.join(destination, 'bin');
-    fs.renameSync(oldPath, newPath);
+    await io.mv(oldPath, newPath);
 
     core.info(`Successfully renamed ${oldPath} to ${newPath}`);
   }
