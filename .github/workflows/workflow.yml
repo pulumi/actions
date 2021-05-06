@@ -72,7 +72,7 @@ jobs:
       - run: exit 1
         if: steps.dist-cache.outputs.cache-hit != 'true'
 
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v1.8.0
         with:
           dotnet-version: 3.1
 

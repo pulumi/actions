@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v1.8.0
         with:
           dotnet-version: 3.1
       - name: Install pulumi
