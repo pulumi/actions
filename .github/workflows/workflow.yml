@@ -164,7 +164,7 @@ jobs:
       - run: exit 1
         if: steps.dist-cache.outputs.cache-hit != 'true'
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: 14.x
 
@@ -311,7 +311,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: 14.x
 
