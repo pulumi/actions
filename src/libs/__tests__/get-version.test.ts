@@ -1,5 +1,5 @@
 import * as playback from 'jest-playback';
-import { getVersion } from '../libs/get-version';
+import { getVersionObject } from '../libs/get-version';
 playback.setup(__dirname);
 
 describe('get-version', () => {
@@ -16,8 +16,8 @@ describe('get-version', () => {
       'v2.17.2',
       '2.5.0',
     ] as const)('should match %s versions', async (ver) => {
-      const version = await getVersion(ver);
-      expect(version).toMatchSnapshot();
+      const v = await getVersionObject(ver);
+      expect(v.version).toMatchSnapshot();
     });
   });
 });

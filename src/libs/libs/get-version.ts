@@ -1,31 +1,55 @@
 import got from 'got';
+import * as rt from 'runtypes';
 import { maxSatisfying } from 'semver';
+import { invariant } from '../utils';
 
-export async function getVersion(range: string): Promise<string> {
+const VersionRt = rt.Record({
+  version: rt.String,
+  downloads: rt.Record({
+    'linux-x64': rt.String,
+    'linux-arm64': rt.String,
+    'darwin-x64': rt.String,
+    'darwin-arm64': rt.String,
+    'windows-x64': rt.String,
+  }),
+  checksums: rt.String,
+  latest: rt.Boolean.optional(),
+});
+export type Version = rt.Static<typeof VersionRt>;
+const VersionsRt = rt.Array(VersionRt);
+
+export async function getVersionObject(range: string): Promise<Version> {
+  const result = await got(
+    'https://raw.githubusercontent.com/cobraz/docs/add-versions/data/versions.json',
+    { responseType: 'json' },
+  );
+
+  const versions = VersionsRt.check(result.body);
+
   if (range == 'latest') {
-    const resp = await got('https://www.pulumi.com/latest-version');
-    return `v${await resp.body}`;
+    const latest = versions.find((v) => v.latest);
+    invariant(latest, 'expect a latest version to exists');
+    return latest;
   }
 
-  const resp = await getSatisfyingVersion(range);
+  const resp = maxSatisfying(
+    versions.map((v) => v.version),
+    range,
+  );
+
   if (resp === null) {
     throw new Error(
       'Could not find a version that satisfied the version range',
     );
   }
 
-  return resp;
-}
+  const ver = versions.find((v) => v.version === resp);
 
-export async function getSatisfyingVersion(
-  range: string,
-): Promise<string | null> {
-  const {
-    body: versions,
-  } = await got(
-    'https://raw.githubusercontent.com/cobraz/docs/add-versions/static/versions.json',
-    { responseType: 'json' },
-  );
+  if (!ver) {
+    throw new Error(
+      'Could not find a version that satisfied the version range',
+    );
+  }
 
-  return maxSatisfying(versions, range);
+  return ver;
 }

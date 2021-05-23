@@ -4,7 +4,7 @@ import * as core from '@actions/core';
 import * as io from '@actions/io';
 import * as tc from '@actions/tool-cache';
 import * as exec from './exec';
-import { getVersion } from './libs/get-version';
+import { getVersionObject } from './libs/get-version';
 
 export async function isAvailable(): Promise<boolean> {
   const res = await exec.exec(`pulumi`, [], true);
@@ -17,9 +17,9 @@ export async function run(...args: string[]): Promise<void> {
 
 export async function downloadCli(range: string): Promise<void> {
   const platforms = {
-    linux: 'linux',
-    darwin: 'darwin',
-    win32: 'windows',
+    linux: 'linux-x64',
+    darwin: 'darwin-x64',
+    win32: 'windows-x64',
   };
 
   const runnerPlatform = os.platform();
@@ -34,22 +34,21 @@ export async function downloadCli(range: string): Promise<void> {
 
   core.info(`Configured range: ${range}`);
 
-  const version = await getVersion(range);
+  const { version, downloads } = await getVersionObject(range);
   core.debug(`Matched version: ${version}`);
-
-  const downloadUrl = `https://get.pulumi.com/releases/sdk/pulumi-${version}-${platform}-x64.${
-    platform == 'windows' ? 'zip' : 'tar.gz'
-  }`;
 
   const destination = path.join(os.homedir(), '.pulumi');
   core.debug(`Install destination is ${destination}`);
 
-  await io.rmRF(destination).catch().then(() => {
-    core.info(`Successfully deleted pre-existing ${destination}`);
-  });
+  await io
+    .rmRF(destination)
+    .catch()
+    .then(() => {
+      core.info(`Successfully deleted pre-existing ${destination}`);
+    });
 
-  const downloaded = await tc.downloadTool(downloadUrl);
-  core.debug(`successfully downloaded ${downloadUrl}`);
+  const downloaded = await tc.downloadTool(downloads[platform]);
+  core.debug(`successfully downloaded ${downloads[platform]}`);
 
   const extractedPath = await tc.extractTar(downloaded, destination);
   core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`);
