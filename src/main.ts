@@ -7,11 +7,13 @@ import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
 import { invariant } from './libs/utils';
 
+const pulumiVersion = '^3';
+
 const main = async () => {
   const config = await makeConfig();
   core.debug('Configuration is loaded');
 
-  await pulumiCli.downloadCli(config.pulumiVersion);
+  await pulumiCli.downloadCli(pulumiVersion);
 
   if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
     core.debug(`Logging into to Pulumi`);

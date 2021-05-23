@@ -59,10 +59,6 @@ inputs:
     description: 'Create the stack if it currently does not exist'
     required: false
     default: 'false'
-  pulumi-version:
-    description: 'Select which Pulumi CLI version you would like to run'
-    required: false
-    default: '^3'
 outputs:
   output:
     description: Output from running command
