@@ -1,16 +1,18 @@
 import * as gh from '@actions/github';
 import { handlePullRequestMessage } from '../pr';
 
-const comments = [{id: 2, body: 'test',}];
-const resp = {data: comments};
+const comments = [{ id: 2, body: 'test' }];
+const resp = { data: comments };
 const createComment = jest.fn();
 const listComments = jest.fn(() => resp);
 jest.mock('@actions/github', () => ({
   context: {},
   getOctokit: jest.fn(() => ({
-    issues: {
-      createComment,
-      listComments,
+    rest: {
+      issues: {
+        createComment,
+        listComments,
+      },
     },
   })),
 }));
