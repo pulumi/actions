@@ -1,6 +1,7 @@
 import * as os from 'os';
 import * as path from 'path';
 import * as core from '@actions/core';
+import * as io from '@actions/io';
 import * as tc from '@actions/tool-cache';
 import * as exec from './exec';
 import { getVersionObject } from './libs/get-version';
@@ -37,14 +38,37 @@ export async function downloadCli(range: string): Promise<void> {
   core.debug(`Matched version: ${version}`);
 
   const destination = path.join(os.homedir(), '.pulumi');
-  core.debug(`Install destination is ${destination}`);
+  core.info(`Install destination is ${destination}`)
+
+  await io
+    .rmRF(path.join(destination, 'bin'))
+    .catch()
+    .then(() => {
+      core.info(`Successfully deleted pre-existing ${path.join(destination, "bin")}`);
+    })
 
   const downloaded = await tc.downloadTool(downloads[platform]);
   core.debug(`successfully downloaded ${downloads[platform]}`);
 
-  const extractedPath = await tc.extractTar(downloaded, destination);
-  core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`);
+  switch (platform) {
+    case "windows": {
+      await tc.extractZip(downloaded, os.homedir());
+      await io.mv(path.join(os.homedir(), 'Pulumi'), path.join(os.homedir(), '.pulumi'));
+      break;
+    }
+    default: {
+      const destinationPath = await io.mkdirP(destination);
+      core.info(`Successfully created ${destinationPath}`)
+      const extractedPath = await tc.extractTar(downloaded, destination);
+      core.info(`Successfully extracted ${downloaded} to ${extractedPath}`)
+      const oldPath = path.join(destination, 'pulumi')
+      const newPath = path.join(destination, 'bin')
+      await io.mv(oldPath, newPath);
+      core.info(`Successfully renamed ${oldPath} to ${newPath}`)
+      break;
+    }
+  }
 
-  const cachedPath = await tc.cacheDir(extractedPath, 'pulumi', version);
+  const cachedPath = await tc.cacheDir(path.join(destination, 'bin'), 'pulumi', version);
   core.addPath(cachedPath);
 }
