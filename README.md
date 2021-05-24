@@ -1,5 +1,8 @@
 # Pulumi GitHub Actions
 
+**PLEASE NOTE:** As of v3.1.0 of this GitHub Action, the end user no longer
+needs to install the Pulumi CLI as part of their workflow!
+
 Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice,
 using just your favorite language and GitHub. This includes previewing,
 validating, and collaborating on proposed deployments in the context of Pull

@@ -2,11 +2,16 @@
 
 ## HEAD (Unreleased)
 
+_(none)_
+
+---
+
+## 3.1.0 (2021-05-24)
+
 - Edit previous PR comment instead of posting new one
   [#128](https://github.com/pulumi/actions/pull/148)
 - Embed installation of Pulumi CLI
-
----
+  [#211](https://github.com/pulumi/actions/pull/211)
 
 ## 3.0.0 (2021-04-19)
 
