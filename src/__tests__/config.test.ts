@@ -4,6 +4,7 @@ const defaultConfig: Record<string, string> = {
   'work-dir': './',
   'cloud-url': 'file://~',
   'github-token': 'n/a',
+  'pulumi-version': 'latest',
 };
 
 describe('config.ts', () => {
@@ -25,25 +26,28 @@ describe('config.ts', () => {
 
     const c = await makeConfig();
     expect(c).toBeTruthy();
-    expect(c).toEqual({
-      command: 'up',
-      stackName: 'dev',
-      cloudUrl: 'file://~',
-      githubToken: 'n/a',
-      commentOnPr: false,
-      workDir: './',
-      upsert: undefined,
-      options: {
-        parallel: undefined,
-        message: undefined,
-        diff: undefined,
-        expectNoChanges: undefined,
-        replace: undefined,
-        target: undefined,
-        targetDependents: undefined,
-        editCommentOnPr: undefined,
-      },
-    });
+    expect(c).toMatchInlineSnapshot(`
+      Object {
+        "cloudUrl": "file://~",
+        "command": "up",
+        "commentOnPr": false,
+        "githubToken": "n/a",
+        "options": Object {
+          "diff": undefined,
+          "editCommentOnPr": undefined,
+          "expectNoChanges": undefined,
+          "message": undefined,
+          "parallel": undefined,
+          "replace": undefined,
+          "target": undefined,
+          "targetDependents": undefined,
+        },
+        "refresh": undefined,
+        "stackName": "dev",
+        "upsert": undefined,
+        "workDir": "./",
+      }
+    `);
   });
   it('should fail if configuration are invalid', async () => {
     const config: Record<string, string> = {
@@ -74,24 +78,27 @@ describe('config.ts', () => {
 
     const c = await makeConfig();
     expect(c).toBeTruthy();
-    expect(c).toEqual({
-      command: 'up',
-      stackName: 'dev',
-      cloudUrl: 'file://~',
-      githubToken: 'n/a',
-      commentOnPr: true,
-      workDir: './',
-      upsert: undefined,
-      options: {
-        parallel: undefined,
-        message: undefined,
-        diff: undefined,
-        expectNoChanges: undefined,
-        replace: undefined,
-        target: undefined,
-        targetDependents: undefined,
-        editCommentOnPr: undefined,
-      },
-    });
+    expect(c).toMatchInlineSnapshot(`
+      Object {
+        "cloudUrl": "file://~",
+        "command": "up",
+        "commentOnPr": true,
+        "githubToken": "n/a",
+        "options": Object {
+          "diff": undefined,
+          "editCommentOnPr": undefined,
+          "expectNoChanges": undefined,
+          "message": undefined,
+          "parallel": undefined,
+          "replace": undefined,
+          "target": undefined,
+          "targetDependents": undefined,
+        },
+        "refresh": undefined,
+        "stackName": "dev",
+        "upsert": undefined,
+        "workDir": "./",
+      }
+    `);
   });
 });
