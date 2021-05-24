@@ -20,7 +20,7 @@ const VersionsRt = rt.Array(VersionRt);
 
 export async function getVersionObject(range: string): Promise<Version> {
   const result = await got(
-    'https://raw.githubusercontent.com/cobraz/docs/add-versions/data/versions.json',
+    'https://raw.githubusercontent.com/pulumi/docs/master/data/versions.json',
     { responseType: 'json' },
   );
 
