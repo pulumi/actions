@@ -20,8 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: pulumi/action-install-pulumi-cli@v1
-      - uses: pulumi/actions@v2
+      - uses: pulumi/actions@v3
         with:
           command: preview
           stack-name: dev
@@ -29,20 +28,14 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 ```
 
-This will check out the existing directory and run `pulumi preview`. It's
-important to note that the action requires the `pulumi` binary to be available.
-It will not install it for you. For further reference on installing the Pulumi
-binary as part of GitHub Actions, please use our
-[`action-install-pulumi-cli`](https://github.com/pulumi/action-install-pulumi-cli)
-action.
+This will check out the existing directory and run `pulumi preview`.
 
 ## Configuration
 
 The action can be configured with the following arguments:
 
-- `command` (required) - The command to pass to the Pulumi CLI. Accepted values
-  are `up` (update), `refresh`, `destroy` and `preview`. This command is the
-  equivalent of running `pulumi <command>` if your terminal.
+- `command` (required) - The command to run as part of the action. Accepted
+  values are `up` (update), `refresh`, `destroy` and `preview`.
 
 - `stack-name` (required) - The name of the stack that Pulumi will be operating
   on
@@ -174,14 +167,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
       - run: npm install
-      - uses: pulumi/actions@v2
+      - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
@@ -207,10 +198,8 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
       - run: pip install -r requirements.txt
-      - uses: pulumi/actions@v2
+      - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
@@ -235,10 +224,8 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '1.15'
-      - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
       - run: go mod download
-      - uses: pulumi/actions@v2
+      - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
@@ -264,9 +251,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1
-      - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
-      - uses: pulumi/actions@v2
+      - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
@@ -292,9 +277,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1
-      - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
-      - uses: pulumi/actions@v2
+      - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
@@ -328,9 +311,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_KEY }}
           project_id: ${{ env.PROJECT_ID }}
           export_default_credentials: true
-      - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
-      - uses: pulumi/actions@v2
+      - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
@@ -355,9 +336,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1
-      - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
-      - uses: pulumi/actions@v2
+      - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
@@ -386,16 +365,14 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1
-      - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
-      - uses: pulumi/actions@v2
+      - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
           cloud-url: file://~
 ```
 
-## Migrating from GitHub Action v1?
+## Migrating from GitHub Action v1 (and beyond)?
 
 Here are some pointers when migrating from v1 to v2 of our GitHub Action.
 
