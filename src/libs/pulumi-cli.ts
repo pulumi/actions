@@ -1,7 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
 import * as core from '@actions/core';
-import * as io from '@actions/io';
 import * as tc from '@actions/tool-cache';
 import * as exec from './exec';
 import { getVersionObject } from './libs/get-version';
@@ -39,13 +38,6 @@ export async function downloadCli(range: string): Promise<void> {
 
   const destination = path.join(os.homedir(), '.pulumi');
   core.debug(`Install destination is ${destination}`);
-
-  await io
-    .rmRF(destination)
-    .catch()
-    .then(() => {
-      core.info(`Successfully deleted pre-existing ${destination}`);
-    });
 
   const downloaded = await tc.downloadTool(downloads[platform]);
   core.debug(`successfully downloaded ${downloads[platform]}`);
