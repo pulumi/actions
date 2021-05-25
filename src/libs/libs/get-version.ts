@@ -5,6 +5,7 @@ import { invariant } from '../utils';
 
 const VersionRt = rt.Record({
   version: rt.String,
+  date: rt.String,
   downloads: rt.Record({
     'linux-x64': rt.String,
     'linux-arm64': rt.String,
