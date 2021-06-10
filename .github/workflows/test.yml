@@ -28,7 +28,7 @@ jobs:
         with:
           go-version: '^1.13.1'
       - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1
+        uses: pulumi/setup-pulumi@v2
         with:
           pulumi-version: 3.0.0 # explicitly leaving this in place so that we can test the action uses a newer version
       - run: |
