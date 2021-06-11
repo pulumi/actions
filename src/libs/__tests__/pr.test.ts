@@ -33,7 +33,7 @@ describe('pr.ts', () => {
 
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
 
-    await handlePullRequestMessage('test', 'test');
+    await handlePullRequestMessage('test', 'test', 'test', 'test');
     expect(listComments).toHaveBeenCalled();
     expect(createComment).toHaveBeenCalled();
   });
@@ -42,7 +42,7 @@ describe('pr.ts', () => {
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
     // @ts-ignore
     gh.context = { payload: {} };
-    await expect(handlePullRequestMessage('test', 'test')).rejects.toThrowError(
+    await expect(handlePullRequestMessage('test', 'test', 'test', 'test')).rejects.toThrowError(
       'Missing pull request event data',
     );
   });
