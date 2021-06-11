@@ -86,10 +86,12 @@ const main = async () => {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
     handlePullRequestMessage(
-      `#### :tropical_drink: \`${config.command}\`
+      `#### :tropical_drink: \`${config.command}\` on ${config.stackName}
 \`\`\`
 ${output}
 \`\`\``,
+      config.command,
+      config.stackName,
       config.githubToken,
       config.options.editCommentOnPr
     );

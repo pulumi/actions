@@ -5,11 +5,13 @@ import { invariant } from './utils';
 export async function handlePullRequestMessage(
   body: string,
   githubToken: string,
+  command: string,
+  stackName: string,
   editCommentOnPr?: boolean,
 ): Promise<void> {
   const { payload, repo } = context;
   invariant(payload.pull_request, 'Missing pull request event data.');
-  const text = `#### :tropical_drink: `
+  const text = `#### :tropical_drink: \`${command}\` on ${stackName}`
   const octokit = getOctokit(githubToken);
   const { data: comments} = await octokit.rest.issues.listComments({
     ...repo,
