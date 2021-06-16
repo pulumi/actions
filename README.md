@@ -70,7 +70,9 @@ The action can be configured with the following arguments:
   this update
 
 - `edit-pr-comment` - (optional) Edit previous PR comment instead of posting new
-  one
+  one. **PLEASE NOTE** that as of 3.2.0 of the Action, this now defaults to
+  `true`. This is in an effort to reduce verbosity - if you want to have a
+  comment per PR run, please ensure that you set this to `false`.
 
 - `diff` - (optional) Display operation as a rich diff showing the overall
   change
