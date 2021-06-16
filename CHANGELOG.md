@@ -6,6 +6,14 @@ _(none)_
 
 ---
 
+## 3.2.0 (2021006-16)
+
+- Upgrade to Pulumi v3.4.0 SDK
+- Add ability to `edit-pr-comment` - this value currently defaults to `true`
+  therefore it will always update the same comment to change this behaviour, set
+  this value to false in your action
+- Add `stack_name` and `command` to PR comment output
+
 ## 3.1.0 (2021-05-24)
 
 - Edit previous PR comment instead of posting new one
