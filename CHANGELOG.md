@@ -6,7 +6,7 @@ _(none)_
 
 ---
 
-## 3.2.0 (2021006-16)
+## 3.2.0 (2021-06-16)
 
 - Upgrade to Pulumi v3.4.0 SDK
 - Add ability to `edit-pr-comment` - this value currently defaults to `true`
