@@ -35,7 +35,7 @@ export async function downloadCli(range: string): Promise<void> {
   core.info(`Configured range: ${range}`);
 
   const { version, downloads } = await getVersionObject(range);
-  core.debug(`Matched version: ${version}`);
+  core.info(`Matched version: ${version}`);
 
   const destination = path.join(os.homedir(), '.pulumi');
   core.info(`Install destination is ${destination}`)
@@ -58,13 +58,13 @@ export async function downloadCli(range: string): Promise<void> {
     }
     default: {
       const destinationPath = await io.mkdirP(destination);
-      core.info(`Successfully created ${destinationPath}`)
+      core.debug(`Successfully created ${destinationPath}`)
       const extractedPath = await tc.extractTar(downloaded, destination);
-      core.info(`Successfully extracted ${downloaded} to ${extractedPath}`)
+      core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`)
       const oldPath = path.join(destination, 'pulumi')
       const newPath = path.join(destination, 'bin')
       await io.mv(oldPath, newPath);
-      core.info(`Successfully renamed ${oldPath} to ${newPath}`)
+      core.debug(`Successfully renamed ${oldPath} to ${newPath}`)
       break;
     }
   }
