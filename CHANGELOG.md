@@ -6,6 +6,12 @@ _(none)_
 
 ---
 
+## 3.3.0 (2021-07-01)
+
+- Upgrade to Pulumi v3.6.0 SDK
+- Ensure that `edit-pr-comment` checks to ensure it has a comment to edit before
+  trying to update
+
 ## 3.2.0 (2021-06-16)
 
 - Upgrade to Pulumi v3.4.0 SDK
