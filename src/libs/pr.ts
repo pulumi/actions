@@ -13,25 +13,28 @@ export async function handlePullRequestMessage(
   invariant(payload.pull_request, 'Missing pull request event data.');
   const text = `#### :tropical_drink: \`${command}\` on ${stackName}`
   const octokit = getOctokit(githubToken);
-  const { data: comments} = await octokit.rest.issues.listComments({
-    ...repo,
-    issue_number: payload.pull_request.number
-  })
-  const comment = comments.find(comment => comment.body.startsWith(text));
 
-  if (body && githubToken) {
-    if (comment && editCommentOnPr) {
+  if (editCommentOnPr) {
+    const { data: comments} = await octokit.rest.issues.listComments({
+      ...repo,
+      issue_number: payload.pull_request.number
+    })
+    const comment = comments.find(comment => comment.body.startsWith(text));
+
+    // If comment exists, update it.
+    if (comment) {
       await octokit.rest.issues.updateComment({
         ...repo,
         comment_id: comment.id,
         body,
       });
-    } else {
-      await octokit.rest.issues.createComment({
-        ...repo,
-        issue_number: payload.pull_request.number,
-        body,
-      });
+      return;
     }
   }
+
+  await octokit.rest.issues.createComment({
+    ...repo,
+    issue_number: payload.pull_request.number,
+    body,
+  });
 }
