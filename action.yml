@@ -62,7 +62,7 @@ inputs:
   edit-pr-comment:
     description: 'Edit previous PR comment instead of posting new one'
     required: false
-    default: 'false'
+    default: 'true'
 outputs:
   output:
     description: Output from running command
