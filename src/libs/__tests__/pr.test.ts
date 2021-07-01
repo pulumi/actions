@@ -34,7 +34,6 @@ describe('pr.ts', () => {
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
 
     await handlePullRequestMessage('test', 'test', 'test', 'test');
-    expect(listComments).toHaveBeenCalled();
     expect(createComment).toHaveBeenCalled();
   });
 
