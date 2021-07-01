@@ -21,6 +21,7 @@
     "*.md": "prettier --write"
   },
   "devDependencies": {
+    "@types/dedent": "^0.7.0",
     "@types/faker": "^5.5.6",
     "@types/jest": "~26.0.23",
     "@types/node": "~14.17.4",
@@ -47,6 +48,7 @@
     "@actions/io": "^1.1.1",
     "@actions/tool-cache": "^1.7.1",
     "@pulumi/pulumi": "3.6.0",
+    "dedent": "^0.7.0",
     "envalid": "^7.1.0",
     "got": "^11.8.2",
     "runtypes": "^6.3.1",

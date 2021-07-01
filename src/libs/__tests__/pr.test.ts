@@ -1,4 +1,5 @@
 import * as gh from '@actions/github';
+import { Config } from '../../config';
 import { handlePullRequestMessage } from '../pr';
 
 const comments = [{ id: 2, body: 'test' }];
@@ -33,8 +34,7 @@ describe('pr.ts', () => {
 
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
 
-    await handlePullRequestMessage('test', 'test', 'test', 'test');
-    expect(listComments).toHaveBeenCalled();
+    await handlePullRequestMessage({ options: {} } as Config, 'test');
     expect(createComment).toHaveBeenCalled();
   });
 
@@ -42,8 +42,8 @@ describe('pr.ts', () => {
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
     // @ts-ignore
     gh.context = { payload: {} };
-    await expect(handlePullRequestMessage('test', 'test', 'test', 'test')).rejects.toThrowError(
-      'Missing pull request event data',
-    );
+    await expect(
+      handlePullRequestMessage({ options: {} } as Config, 'test'),
+    ).rejects.toThrowError('Missing pull request event data');
   });
 });
