@@ -27,6 +27,7 @@ export async function handlePullRequestMessage(
   invariant(payload.pull_request, 'Missing pull request event data.');
 
   const octokit = getOctokit(githubToken);
+  core.debug('Octokit constructed');
 
   try {
     if (editCommentOnPr) {
@@ -34,12 +35,15 @@ export async function handlePullRequestMessage(
         ...repo,
         issue_number: payload.pull_request.number,
       });
+      core.debug(`Issues: ${comments}`);
+
       const comment = comments.find((comment) =>
         comment.body.startsWith(heading),
       );
 
       // If comment exists, update it.
       if (comment) {
+        core.debug(`Found an issue: ${comment}`);
         await octokit.rest.issues.updateComment({
           ...repo,
           comment_id: comment.id,
@@ -52,6 +56,7 @@ export async function handlePullRequestMessage(
     core.warning('Not able to edit comment, defaulting to creating a new comment.');
   }
 
+  core.debug('Creating an issue');
   await octokit.rest.issues.createComment({
     ...repo,
     issue_number: payload.pull_request.number,
