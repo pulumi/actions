@@ -57,8 +57,8 @@ export async function downloadCli(range: string): Promise<void> {
       break;
     }
     default: {
-      const destinationPath = await io.mkdirP(destination);
-      core.debug(`Successfully created ${destinationPath}`)
+      await io.mkdirP(destination);
+      core.debug(`Successfully created ${destination}`)
       const extractedPath = await tc.extractTar(downloaded, destination);
       core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`)
       const oldPath = path.join(destination, 'pulumi')
