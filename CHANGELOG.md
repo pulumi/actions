@@ -6,6 +6,10 @@ _(none)_
 
 ---
 
+## 3.4.0 (2021-07-21)
+
+- Upgrade to Pulumi v3.7.1 SDK
+
 ## 3.3.0 (2021-07-01)
 
 - Upgrade to Pulumi v3.6.0 SDK
