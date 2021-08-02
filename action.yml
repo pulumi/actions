@@ -27,6 +27,10 @@ inputs:
     description: 'A cloud URL to log in to'
     required: false
     default: ''
+  secrets-provider:
+    description: 'The type of the provider that should be used to encrypt and decrypt secrets. Possible choices: default, passphrase, awskms, azurekeyvault, gcpkms, hashivault'
+    required: false
+    default: ''
   parallel:
     description: 'Allow P resource operations to run in parallel at once (1 for no parallelism). Defaults to unbounded.'
     required: false

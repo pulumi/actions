@@ -2,7 +2,9 @@
 
 ## HEAD (Unreleased)
 
-_(none)_
+- Add support for passing `secrets-manager` as part of the workspace options
+  when interacting with a stack
+- Upgrade to Pulumi v3.9.1 SDK
 
 ---
 
