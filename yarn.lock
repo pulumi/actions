@@ -4846,10 +4846,10 @@ run-parallel@^1.1.9:
   resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.1.10.tgz#60a51b2ae836636c81377df16cb107351bcd13ef"
   integrity sha512-zb/1OuZ6flOlH6tQyMPUrE3x3Ulxjlo9WIVXR4yVYi4H9UXQaeIsPbLn2R3O3vQCnDKkAl2qHiuocKKX4Tz/Sw==
 
-runtypes@^6.3.1:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/runtypes/-/runtypes-6.3.1.tgz#58566dde275e60d762f3cc0d7036d5cb0b79a8d1"
-  integrity sha512-XMroIPFshQw4A41tfvcpMECESJSydiIGxDtQZxryFZMfL6QGYuoBjixIpQj2vL1MJSIbrcgQnw/1tzfyABmVkg==
+runtypes@^6.3.2:
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/runtypes/-/runtypes-6.3.2.tgz#e10e3e8072f015d96caadca3101b9722e4085fec"
+  integrity sha512-wQMHj5F4yxVIgCTtV+2QaDfeyCUiesHzgkBpUUhL1dZph2ekOcZcttJvk3pTdw/qBhbEdXvXKDHRm6wfoNke0w==
 
 rxjs@^6.6.7:
   version "6.6.7"
