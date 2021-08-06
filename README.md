@@ -59,6 +59,11 @@ The action can be configured with the following arguments:
 - `refresh` - (optional) If `true`, stack is refreshed before running the
   `command`.
 
+- `secrets-provider` - (optional) The type of the provider that should be used
+  to encrypt and decrypt secrets. Possible choices: `default`, `passphrase`,
+  `awskms`, `azurekeyvault`, `gcpkms`, `hashivault`. e.g.
+  `gcpkms://projects//locations/us-west1/keyRings/acmecorpsec/cryptoKeys/payroll `
+
 ### Extra options
 
 - `parallel` - (optional) Allow P resource operations to run in parallel at once
@@ -125,7 +130,7 @@ We can see that `pet-name` is an output. To get the value of this output in the
 action, we would use code similar to the following:
 
 ```yaml
-- uses: pulumi/actions@v2
+- uses: pulumi/actions@v3
   id: pulumi
   env:
     PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
