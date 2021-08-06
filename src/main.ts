@@ -1,6 +1,10 @@
 import { resolve } from 'path';
 import * as core from '@actions/core';
-import { LocalProgramArgs, LocalWorkspace } from '@pulumi/pulumi/automation';
+import {
+  LocalProgramArgs,
+  LocalWorkspace,
+  LocalWorkspaceOptions,
+} from '@pulumi/pulumi/automation';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
@@ -34,9 +38,14 @@ const main = async () => {
     workDir: workDir,
   };
 
+  const stackOpts: LocalWorkspaceOptions = {};
+  if (config.secretsProvider != '') {
+    stackOpts.secretsProvider = config.secretsProvider;
+  }
+
   const stack = await (config.upsert
-    ? LocalWorkspace.createOrSelectStack(stackArgs)
-    : LocalWorkspace.selectStack(stackArgs));
+    ? LocalWorkspace.createOrSelectStack(stackArgs, stackOpts)
+    : LocalWorkspace.selectStack(stackArgs, stackOpts));
 
   const onOutput = (msg: string) => {
     core.debug(msg);

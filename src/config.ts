@@ -40,6 +40,7 @@ export const config = rt
       githubToken: rt.String,
       upsert: rt.Boolean,
       refresh: rt.Boolean,
+      secretsProvider: rt.String,
     }),
   );
 
@@ -50,6 +51,7 @@ export async function makeConfig(): Promise<Config> {
     command: getInput('command', { required: true }),
     stackName: getInput('stack-name', { required: true }),
     workDir: getInput('work-dir') || './',
+    secretsProvider: getInput('secrets-provider'),
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
     commentOnPr: parseBoolean(getInput('comment-on-pr')),
@@ -64,7 +66,7 @@ export async function makeConfig(): Promise<Config> {
       target: parseArray(getInput('target')),
       targetDependents: parseBoolean(getInput('target-dependents')),
       editCommentOnPr: parseBoolean(getInput('edit-pr-comment')),
-      userAgent: "pulumi/actions@v3"
+      userAgent: 'pulumi/actions@v3',
     },
   });
 }
