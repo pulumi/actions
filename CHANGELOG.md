@@ -6,6 +6,10 @@ _(none)_
 
 ---
 
+## 3.7.0 (2021-08-16)
+
+- Upgrade to Pulumi v3.10.1
+
 ## 3.6.0 (2021-08-06)
 
 - Add support for passing `secrets-manager` as part of the workspace options
