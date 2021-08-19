@@ -2,9 +2,13 @@
 
 ## HEAD (Unreleased)
 
-- Upgrade to Pulumi v3.10.3
+_(none)_
 
 ---
+
+## 3.7.1 (2021-08-19)
+
+- Upgrade to Pulumi v3.10.3
 
 ## 3.7.0 (2021-08-16)
 
