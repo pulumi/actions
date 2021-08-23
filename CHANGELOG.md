@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-_(none)_
+- Add support for arm64 architecture
 
 ---
 
