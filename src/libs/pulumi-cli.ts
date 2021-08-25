@@ -15,22 +15,29 @@ export async function run(...args: string[]): Promise<void> {
   await exec.exec(`pulumi`, args, true);
 }
 
-export async function downloadCli(range: string): Promise<void> {
+export function getPlatform(): string | undefined {
   const platforms = {
-    linux: 'linux-x64',
-    darwin: 'darwin-x64',
-    win32: 'windows-x64',
+    'linux-x64': 'linux-x64',
+    'linux-arm64': 'linux-arm64',
+    'darwin-x64': 'darwin-x64',
+    'darwin-arm64': 'darwin-arm64',
+    'win32-x64': 'windows-x64',
   };
 
   const runnerPlatform = os.platform();
+  const runnerArch = os.arch();
 
-  if (!(runnerPlatform in platforms)) {
+  return platforms[`${runnerPlatform}-${runnerArch}`];
+}
+
+export async function downloadCli(range: string): Promise<void> {
+  const platform = getPlatform();
+
+  if (!platform) {
     throw new Error(
-      'Unsupported operating system - Pulumi CLI is only released for Darwin, Linux and Windows',
+      'Unsupported operating system - Pulumi CLI is only released for Darwin (x64, arm64), Linux (x64, arm64) and Windows (x64)',
     );
   }
-
-  const platform = platforms[runnerPlatform];
 
   core.info(`Configured range: ${range}`);
 
