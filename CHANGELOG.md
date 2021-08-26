@@ -2,9 +2,14 @@
 
 ## HEAD (Unreleased)
 
-- Add support for arm64 architecture
+_(none)_
 
 ---
+
+## 3.8.0 (2021-08-26)
+
+- Add support for arm64 architecture
+- Upgrade to Pulumi v3.11.0
 
 ## 3.7.1 (2021-08-19)
 
