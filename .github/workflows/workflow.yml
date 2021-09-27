@@ -6,6 +6,9 @@ on:
     branches:
       - main
       - master
+    paths-ignore:
+      - 'CHANGELOG.md'
+      - 'README.md'
 
 jobs:
   install-and-build:
