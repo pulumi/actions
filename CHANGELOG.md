@@ -6,6 +6,10 @@ _(none)_
 
 ---
 
+## 3.9.0 (2021-09-27)
+
+- Upgrade to Pulumi v3.13.0
+
 ## 3.8.0 (2021-08-26)
 
 - Add support for arm64 architecture
