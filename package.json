@@ -33,7 +33,7 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jest": "~25.2.2",
     "faker": "^5.5.3",
-    "husky": "^7.0.2",
+    "husky": "^7.0.4",
     "jest": "~26.6.3",
     "jest-playback": "^3.0.0",
     "lint-staged": "^11.2.3",
