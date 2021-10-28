@@ -79023,7 +79023,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.match = void 0;
+exports.when = exports.match = void 0;
 function match() {
     var cases = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -79049,6 +79049,10 @@ function match() {
     };
 }
 exports.match = match;
+function when(runtype, transformer) {
+    return [runtype, transformer];
+}
+exports.when = when;
 
 
 /***/ }),
