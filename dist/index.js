@@ -18444,7 +18444,7 @@ __export(__nccwpck_require__(6568));
 
 "use strict";
 
-// Copyright 2016-2020, Pulumi Corporation.
+// Copyright 2016-2021, Pulumi Corporation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18522,8 +18522,13 @@ class LocalWorkspace {
     }
     /**
      * The version of the underlying Pulumi CLI/Engine.
+     *
+     * @returns A string representation of the version, if available. `null` otherwise.
      */
     get pulumiVersion() {
+        if (this._pulumiVersion === undefined) {
+            throw new Error(`Failed to get Pulumi version`);
+        }
         return this._pulumiVersion.toString();
     }
     /**
@@ -19003,10 +19008,11 @@ class LocalWorkspace {
     getPulumiVersion(minVersion) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield this.runPulumiCmd(["version"]);
-            const version = new semver.SemVer(result.stdout.trim());
             const optOut = !!this.envVars[SKIP_VERSION_CHECK_VAR] || !!process.env[SKIP_VERSION_CHECK_VAR];
-            validatePulumiVersion(minVersion, version, optOut);
-            this._pulumiVersion = version;
+            const version = parseAndValidatePulumiVersion(minVersion, result.stdout.trim(), optOut);
+            if (version != null) {
+                this._pulumiVersion = version;
+            }
         });
     }
     runPulumiCmd(args) {
@@ -19065,19 +19071,31 @@ function loadProjectSettings(workDir) {
     }
     throw new Error(`failed to find project settings file in workdir: ${workDir}`);
 }
-/** @internal */
-function validatePulumiVersion(minVersion, currentVersion, optOut) {
+/**
+ * @internal
+ * Throws an error if the Pulumi CLI version is not valid.
+ *
+ * @param minVersion The minimum acceptable version of the Pulumi CLI.
+ * @param currentVersion The currently known version. `null` indicates that the current version is unknown.
+ * @paramoptOut If the user has opted out of the version check.
+ */
+function parseAndValidatePulumiVersion(minVersion, currentVersion, optOut) {
+    const version = semver.parse(currentVersion);
     if (optOut) {
-        return;
+        return version;
     }
-    if (minVersion.major < currentVersion.major) {
+    if (version == null) {
+        throw new Error(`Failed to parse Pulumi CLI version. This is probably an internal error. You can override this by setting "${SKIP_VERSION_CHECK_VAR}" to "true".`);
+    }
+    if (minVersion.major < version.major) {
         throw new Error(`Major version mismatch. You are using Pulumi CLI version ${currentVersion.toString()} with Automation SDK v${minVersion.major}. Please update the SDK.`);
     }
-    if (minVersion.compare(currentVersion) === 1) {
+    if (minVersion.compare(version) === 1) {
         throw new Error(`Minimum version requirement failed. The minimum CLI version requirement is ${minVersion.toString()}, your current CLI version is ${currentVersion.toString()}. Please update the Pulumi CLI.`);
     }
+    return version;
 }
-exports.validatePulumiVersion = validatePulumiVersion;
+exports.parseAndValidatePulumiVersion = parseAndValidatePulumiVersion;
 
 
 /***/ }),
@@ -42807,7 +42825,7 @@ function computeCodePathsWorker(options) {
             // The Asset model does not support a consistent way to embed a file-or-directory into an
             // `AssetArchive`, so we stat the path to figure out which it is and use the appropriate
             // Asset constructor.
-            const stats = fs.lstatSync(normalizedPath);
+            const stats = fs.statSync(normalizedPath);
             if (stats.isDirectory()) {
                 codePaths.set(normalizedPath, new asset.FileArchive(normalizedPath));
             }
@@ -47203,7 +47221,7 @@ function getAllTransitivelyReferencedResourceURNs(resources) {
         // Then the transitively reachable resources of Comp1 will be [Cust1, Cust2, Cust3, Remote1].
         // It will *not* include:
         // * Cust4 because it is a child of a custom resource
-        // * Comp2 because it is a non-remote component resoruce
+        // * Comp2 because it is a non-remote component resource
         // * Comp3 and Cust5 because Comp3 is a child of a remote component resource
         // To do this, first we just get the transitively reachable set of resources (not diving
         // into custom resources).  In the above picture, if we start with 'Comp1', this will be
