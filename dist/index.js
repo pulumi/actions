@@ -18080,7 +18080,7 @@ class RemoteArchive extends Archive {
     }
 }
 exports.RemoteArchive = RemoteArchive;
-
+//# sourceMappingURL=archive.js.map
 
 /***/ }),
 
@@ -18167,7 +18167,7 @@ class RemoteAsset extends Asset {
     }
 }
 exports.RemoteAsset = RemoteAsset;
-
+//# sourceMappingURL=asset.js.map
 
 /***/ }),
 
@@ -18195,7 +18195,7 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 __export(__nccwpck_require__(6892));
 __export(__nccwpck_require__(3886));
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -18276,7 +18276,7 @@ function runPulumiCmd(args, cwd, additionalEnv, onOutput) {
     });
 }
 exports.runPulumiCmd = runPulumiCmd;
-
+//# sourceMappingURL=cmd.js.map
 
 /***/ }),
 
@@ -18357,7 +18357,7 @@ function createCommandError(result) {
                 new CommandError(result));
 }
 exports.createCommandError = createCommandError;
-
+//# sourceMappingURL=errors.js.map
 
 /***/ }),
 
@@ -18395,7 +18395,7 @@ var DiffKind;
     // updateReplace indicates that the property was updated and requires that the resource be replaced.
     DiffKind["updateReplace"] = "update-replace";
 })(DiffKind = exports.DiffKind || (exports.DiffKind = {}));
-
+//# sourceMappingURL=events.js.map
 
 /***/ }),
 
@@ -18427,7 +18427,7 @@ __export(__nccwpck_require__(9010));
 __export(__nccwpck_require__(5973));
 __export(__nccwpck_require__(5142));
 __export(__nccwpck_require__(6568));
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -19088,7 +19088,7 @@ function parseAndValidatePulumiVersion(minVersion, currentVersion, optOut) {
     return version;
 }
 exports.parseAndValidatePulumiVersion = parseAndValidatePulumiVersion;
-
+//# sourceMappingURL=localWorkspace.js.map
 
 /***/ }),
 
@@ -19113,7 +19113,7 @@ exports.parseAndValidatePulumiVersion = parseAndValidatePulumiVersion;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const semver = __nccwpck_require__(7486);
 exports.minimumVersion = new semver.SemVer("v3.2.0-alpha");
-
+//# sourceMappingURL=minimumVersion.js.map
 
 /***/ }),
 
@@ -19266,7 +19266,7 @@ function newUncaughtHandler(errorSet) {
         }
     };
 }
-
+//# sourceMappingURL=server.js.map
 
 /***/ }),
 
@@ -19932,7 +19932,7 @@ const cleanUp = (logFile, rl) => __awaiter(void 0, void 0, void 0, function* () 
         fs.rmdir(path.dirname(logFile), { recursive: true }, () => { return; });
     }
 });
-
+//# sourceMappingURL=stack.js.map
 
 /***/ }),
 
@@ -19961,7 +19961,7 @@ exports.stackSettingsSerDeKeys = [
     ["encryptedkey", "encryptedKey"],
     ["encryptionsalt", "encryptionSalt"],
 ];
-
+//# sourceMappingURL=stackSettings.js.map
 
 /***/ }),
 
@@ -20360,7 +20360,7 @@ class ConfigMissingError extends errors_1.RunError {
         this.key = key;
     }
 }
-
+//# sourceMappingURL=config.js.map
 
 /***/ }),
 
@@ -20427,7 +20427,7 @@ class Resource extends resource.CustomResource {
     }
 }
 exports.Resource = Resource;
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -20509,7 +20509,7 @@ function isGrpcError(err) {
     return code === grpc.status.UNAVAILABLE || code === grpc.status.CANCELLED;
 }
 exports.isGrpcError = isGrpcError;
-
+//# sourceMappingURL=errors.js.map
 
 /***/ }),
 
@@ -20567,7 +20567,7 @@ exports.utils = utils;
 // However, in general, the majority of this API is not safe to use at 'run time' and will fail.
 /** @internal */
 exports.deploymentOnlyModule = true;
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -20655,7 +20655,7 @@ function groupBy(iter, selector) {
     });
 }
 exports.groupBy = groupBy;
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -20786,7 +20786,7 @@ function log(engine, sev, msg, resource, streamId, ephemeral) {
         keepAlive();
     });
 }
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -20825,7 +20825,7 @@ function getStack() {
     return runtime.getStack();
 }
 exports.getStack = getStack;
-
+//# sourceMappingURL=metadata.js.map
 
 /***/ }),
 
@@ -26576,7 +26576,7 @@ function interpolate(literals, ...placeholders) {
     });
 }
 exports.interpolate = interpolate;
-
+//# sourceMappingURL=output.js.map
 
 /***/ }),
 
@@ -41388,7 +41388,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 __export(__nccwpck_require__(1188));
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -41444,7 +41444,7 @@ function parseArgs(args) {
     return { engineAddress: cleanArgs[0] };
 }
 exports.parseArgs = parseArgs;
-
+//# sourceMappingURL=internals.js.map
 
 /***/ }),
 
@@ -41533,6 +41533,7 @@ class Server {
         const resp = new provproto.ConfigureResponse();
         resp.setAcceptsecrets(true);
         resp.setAcceptresources(true);
+        resp.setAcceptoutputs(true);
         callback(undefined, resp);
     }
     // CRUD resource methods
@@ -41817,14 +41818,16 @@ class Server {
                 const args = yield deserializeInputs(req.getArgs(), req.getArgdependenciesMap());
                 const result = yield this.provider.call(req.getTok(), args);
                 const resp = new provproto.CallResponse();
-                const [ret, retDependencies] = yield runtime.serializeResourceProperties(`call(${req.getTok()})`, result.outputs);
-                const returnDependenciesMap = resp.getReturndependenciesMap();
-                for (const [key, resources] of retDependencies) {
-                    const deps = new provproto.CallResponse.ReturnDependencies();
-                    deps.setUrnsList(yield Promise.all(Array.from(resources).map(r => r.urn.promise())));
-                    returnDependenciesMap.set(key, deps);
+                if (result.outputs) {
+                    const [ret, retDependencies] = yield runtime.serializeResourceProperties(`call(${req.getTok()})`, result.outputs);
+                    const returnDependenciesMap = resp.getReturndependenciesMap();
+                    for (const [key, resources] of retDependencies) {
+                        const deps = new provproto.CallResponse.ReturnDependencies();
+                        deps.setUrnsList(yield Promise.all(Array.from(resources).map(r => r.urn.promise())));
+                        returnDependenciesMap.set(key, deps);
+                    }
+                    resp.setReturn(structproto.Struct.fromJavaScript(ret));
                 }
-                resp.setReturn(structproto.Struct.fromJavaScript(ret));
                 if ((result.failures || []).length !== 0) {
                     const failureList = [];
                     for (const f of result.failures) {
@@ -41902,35 +41905,78 @@ function configureRuntime(req, engineAddr) {
     }
     runtime.setAllConfig(pulumiConfig, req.getConfigsecretkeysList());
 }
-// deserializeInputs deserializes the inputs struct and applies appropriate dependencies.
+/**
+ * deserializeInputs deserializes the inputs struct and applies appropriate dependencies.
+ * @internal
+ */
 function deserializeInputs(inputsStruct, inputDependencies) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const result = {};
         const deserializedInputs = runtime.deserializeProperties(inputsStruct);
         for (const k of Object.keys(deserializedInputs)) {
-            const inputDeps = inputDependencies.get(k);
-            const depsUrns = (_b = (_a = inputDeps) === null || _a === void 0 ? void 0 : _a.getUrnsList(), (_b !== null && _b !== void 0 ? _b : []));
-            const deps = depsUrns.map(depUrn => new resource.DependencyResource(depUrn));
             const input = deserializedInputs[k];
             const isSecret = runtime.isRpcSecret(input);
-            const isResourceReference = resource.Resource.isInstance(input)
-                && depsUrns.length === 1
-                && depsUrns[0] === (yield input.urn.promise());
-            if (isResourceReference || (!isSecret && deps.length === 0)) {
-                // If it's a prompt value, return it directly without wrapping it as an output.
+            const depsUrns = (_b = (_a = inputDependencies.get(k)) === null || _a === void 0 ? void 0 : _a.getUrnsList(), (_b !== null && _b !== void 0 ? _b : []));
+            if (!isSecret && (depsUrns.length === 0 || containsOutputs(input) || (yield isResourceReference(input, depsUrns)))) {
+                // If the input isn't a secret and either doesn't have any dependencies, already contains Outputs (from
+                // deserialized output values), or is a resource reference, then we can return it directly without
+                // wrapping it as an output.
                 result[k] = input;
             }
             else {
                 // Otherwise, wrap it in an output so we can handle secrets and/or track dependencies.
                 // Note: If the value is or contains an unknown value, the Output will mark its value as
                 // unknown automatically, so we just pass true for isKnown here.
+                const deps = depsUrns.map(depUrn => new resource.DependencyResource(depUrn));
                 result[k] = new output_1.Output(deps, Promise.resolve(runtime.unwrapRpcSecret(input)), Promise.resolve(true), Promise.resolve(isSecret), Promise.resolve([]));
             }
         }
         return result;
     });
 }
+exports.deserializeInputs = deserializeInputs;
+/**
+ * Returns true if the input is a resource reference.
+ */
+function isResourceReference(input, deps) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return resource.Resource.isInstance(input)
+            && deps.length === 1
+            && deps[0] === (yield input.urn.promise());
+    });
+}
+/**
+ * Returns true if the deserialized input contains Outputs (deeply), excluding properties of Resources.
+ * @internal
+ */
+function containsOutputs(input) {
+    if (Array.isArray(input)) {
+        for (const e of input) {
+            if (containsOutputs(e)) {
+                return true;
+            }
+        }
+    }
+    else if (typeof input === "object") {
+        if (output_1.Output.isInstance(input)) {
+            return true;
+        }
+        else if (resource.Resource.isInstance(input)) {
+            // Do not drill into instances of Resource because they will have properties that are
+            // instances of Output (e.g. urn, id, etc.) and we're only looking for instances of
+            // Output that aren't associated with a Resource.
+            return false;
+        }
+        for (const k of Object.keys(input)) {
+            if (containsOutputs(input[k])) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+exports.containsOutputs = containsOutputs;
 // grpcResponseFromError creates a gRPC response representing an error from a dynamic provider's
 // resource. This is typically either a creation error, in which the API server has (virtually)
 // rejected the resource, or an initialization error, where the API server has accepted the
@@ -42036,7 +42082,7 @@ function createProviderResource(ref) {
     }
     return new resource.DependencyProviderResource(ref);
 }
-
+//# sourceMappingURL=server.js.map
 
 /***/ }),
 
@@ -42636,7 +42682,7 @@ function parseResourceReference(ref) {
     return [urn, id];
 }
 exports.parseResourceReference = parseResourceReference;
-
+//# sourceMappingURL=resource.js.map
 
 /***/ }),
 
@@ -42737,7 +42783,7 @@ class PushableAsyncIterable {
     }
 }
 exports.PushableAsyncIterable = PushableAsyncIterable;
-
+//# sourceMappingURL=asyncIterableUtil.js.map
 
 /***/ }),
 
@@ -42996,7 +43042,7 @@ function findDependency(root, name) {
     }
     return undefined;
 }
-
+//# sourceMappingURL=codePaths.js.map
 
 /***/ }),
 
@@ -44108,7 +44154,7 @@ function getNameOrSymbol(descriptor) {
     }
     return descriptor.symbol || descriptor.name;
 }
-
+//# sourceMappingURL=createClosure.js.map
 
 /***/ }),
 
@@ -44800,7 +44846,7 @@ function isAwaiterCall(node) {
         ts.isFunctionLike(node.arguments[3]);
     return result;
 }
-
+//# sourceMappingURL=parseFunction.js.map
 
 /***/ }),
 
@@ -44899,7 +44945,7 @@ function rewriteSuperReferences(code, isStatic) {
     }
 }
 exports.rewriteSuperReferences = rewriteSuperReferences;
-
+//# sourceMappingURL=rewriteSuper.js.map
 
 /***/ }),
 
@@ -45319,7 +45365,7 @@ function deepContainsObjOrArrayOrRegExp(env) {
 function envObjToString(envObj) {
     return `{ ${Object.keys(envObj).map(k => `${k}: ${envObj[k]}`).join(", ")} }`;
 }
-
+//# sourceMappingURL=serializeClosure.js.map
 
 /***/ }),
 
@@ -45363,7 +45409,7 @@ function isLegalFunctionName(n) {
     return true;
 }
 exports.isLegalFunctionName = isLegalFunctionName;
-
+//# sourceMappingURL=utils.js.map
 
 /***/ }),
 
@@ -45419,7 +45465,7 @@ exports.lookupCapturedVariableValueAsync = versionSpecificV8Module.lookupCapture
  * @internal
  */
 exports.getFunctionLocationAsync = versionSpecificV8Module.getFunctionLocationAsync;
-
+//# sourceMappingURL=v8.js.map
 
 /***/ }),
 
@@ -45518,7 +45564,7 @@ function getScriptUrl(id) {
     return scriptIdToUrlMap.get(id);
 }
 exports.getScriptUrl = getScriptUrl;
-
+//# sourceMappingURL=v8Hooks.js.map
 
 /***/ }),
 
@@ -45662,7 +45708,7 @@ getScript.doNotCapture = true;
 getSourcePosition.doNotCapture = true;
 getFunctionScopeDetails.doNotCapture = true;
 getFunctionScopeCount.doNotCapture = true;
-
+//# sourceMappingURL=v8_v10andLower.js.map
 
 /***/ }),
 
@@ -45882,7 +45928,7 @@ function getValueForObjectId(objectId) {
         return val;
     });
 }
-
+//# sourceMappingURL=v8_v11andHigher.js.map
 
 /***/ }),
 
@@ -46006,7 +46052,7 @@ function cleanKey(key) {
     }
     return key;
 }
-
+//# sourceMappingURL=config.js.map
 
 /***/ }),
 
@@ -46130,7 +46176,7 @@ function errorString(err) {
     return err.toString();
 }
 exports.errorString = errorString;
-
+//# sourceMappingURL=debuggable.js.map
 
 /***/ }),
 
@@ -46171,7 +46217,7 @@ __export(__nccwpck_require__(140));
 __export(__nccwpck_require__(60));
 __export(__nccwpck_require__(4530));
 __export(__nccwpck_require__(6664));
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -46531,7 +46577,7 @@ function createCallRequest(tok, serialized, serializedDeps, provider, version) {
         return req;
     });
 }
-
+//# sourceMappingURL=invoke.js.map
 
 /***/ }),
 
@@ -46695,7 +46741,7 @@ function setMocks(mocks, project, stack, preview) {
     settings_1.setMockOptions(new MockMonitor(mocks), project, stack, preview);
 }
 exports.setMocks = setMocks;
-
+//# sourceMappingURL=mocks.js.map
 
 /***/ }),
 
@@ -47432,7 +47478,7 @@ function runAsyncResourceOp(label, callback, serial) {
         }
     }
 }
-
+//# sourceMappingURL=resource.js.map
 
 /***/ }),
 
@@ -48164,7 +48210,7 @@ function getResourceModule(pkg, mod, version) {
     return getRegistration(resourceModules, key, version);
 }
 exports.getResourceModule = getResourceModule;
-
+//# sourceMappingURL=rpc.js.map
 
 /***/ }),
 
@@ -48706,7 +48752,7 @@ function runSxSCheck() {
             "Use the yarn 'resolutions' field to pin to a single version: https://github.com/pulumi/pulumi/issues/5449.");
     }
 }
-
+//# sourceMappingURL=settings.js.map
 
 /***/ }),
 
@@ -48929,7 +48975,7 @@ function registerStackTransformation(t) {
     stackResource.__transformations = [...(stackResource.__transformations || []), t];
 }
 exports.registerStackTransformation = registerStackTransformation;
-
+//# sourceMappingURL=stack.js.map
 
 /***/ }),
 
@@ -49074,7 +49120,7 @@ function isSecretOutputName(sr, name) {
         return names.includes(yield nameOutput.promise());
     });
 }
-
+//# sourceMappingURL=stackReference.js.map
 
 /***/ }),
 
@@ -49143,7 +49189,7 @@ exports.union = union;
 /** @internal */
 exports.disableResourceReferences = process.env.PULUMI_DISABLE_RESOURCE_REFERENCES === "1" ||
     (_a = process.env.PULUMI_DISABLE_RESOURCE_REFERENCES, (_a !== null && _a !== void 0 ? _a : "")).toUpperCase() === "TRUE";
-
+//# sourceMappingURL=utils.js.map
 
 /***/ }),
 
