@@ -6,6 +6,10 @@ _(none)_
 
 ---
 
+## 3.14.0 (2021-12-22)
+
+- Upgrade to Pulumi v3.20.0
+
 ## 3.13.0 (2021-12-03)
 
 - Upgrade to Pulumi v3.19.0
