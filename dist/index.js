@@ -18242,7 +18242,9 @@ const unknownErrCode = -2;
 function runPulumiCmd(args, cwd, additionalEnv, onOutput) {
     // all commands should be run in non-interactive mode.
     // this causes commands to fail rather than prompting for input (and thus hanging indefinitely)
-    args.push("--non-interactive");
+    if (!args.includes("--non-interactive")) {
+        args.push("--non-interactive");
+    }
     const env = Object.assign(Object.assign({}, process.env), additionalEnv);
     return new Promise((resolve, reject) => {
         const proc = childProcess.spawn("pulumi", args, { env, cwd });
@@ -18789,7 +18791,7 @@ class LocalWorkspace {
     setConfig(stackName, key, value) {
         return __awaiter(this, void 0, void 0, function* () {
             const secretArg = value.secret ? "--secret" : "--plaintext";
-            yield this.runPulumiCmd(["config", "set", key, value.value, secretArg, "--stack", stackName]);
+            yield this.runPulumiCmd(["config", "set", key, "--stack", stackName, secretArg, "--non-interactive", "--", value.value]);
         });
     }
     /**
@@ -31492,7 +31494,8 @@ proto.pulumirpc.InvokeRequest.toObject = function(includeInstance, msg) {
     args: (f = msg.getArgs()) && google_protobuf_struct_pb.Struct.toObject(includeInstance, f),
     provider: jspb.Message.getFieldWithDefault(msg, 3, ""),
     version: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 5, false)
+    acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
+    plugindownloadurl: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -31549,6 +31552,10 @@ proto.pulumirpc.InvokeRequest.deserializeBinaryFromReader = function(msg, reader
     case 5:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setAcceptresources(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPlugindownloadurl(value);
       break;
     default:
       reader.skipField();
@@ -31612,6 +31619,13 @@ proto.pulumirpc.InvokeRequest.serializeBinaryToWriter = function(message, writer
   if (f) {
     writer.writeBool(
       5,
+      f
+    );
+  }
+  f = message.getPlugindownloadurl();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
       f
     );
   }
@@ -31724,6 +31738,24 @@ proto.pulumirpc.InvokeRequest.prototype.getAcceptresources = function() {
  */
 proto.pulumirpc.InvokeRequest.prototype.setAcceptresources = function(value) {
   return jspb.Message.setProto3BooleanField(this, 5, value);
+};
+
+
+/**
+ * optional string pluginDownloadURL = 6;
+ * @return {string}
+ */
+proto.pulumirpc.InvokeRequest.prototype.getPlugindownloadurl = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.InvokeRequest} returns this
+ */
+proto.pulumirpc.InvokeRequest.prototype.setPlugindownloadurl = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
@@ -31982,6 +32014,7 @@ proto.pulumirpc.CallRequest.toObject = function(includeInstance, msg) {
     argdependenciesMap: (f = msg.getArgdependenciesMap()) ? f.toObject(includeInstance, proto.pulumirpc.CallRequest.ArgumentDependencies.toObject) : [],
     provider: jspb.Message.getFieldWithDefault(msg, 4, ""),
     version: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    plugindownloadurl: jspb.Message.getFieldWithDefault(msg, 13, ""),
     project: jspb.Message.getFieldWithDefault(msg, 6, ""),
     stack: jspb.Message.getFieldWithDefault(msg, 7, ""),
     configMap: (f = msg.getConfigMap()) ? f.toObject(includeInstance, undefined) : [],
@@ -32047,6 +32080,10 @@ proto.pulumirpc.CallRequest.deserializeBinaryFromReader = function(msg, reader) 
     case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setVersion(value);
+      break;
+    case 13:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPlugindownloadurl(value);
       break;
     case 6:
       var value = /** @type {string} */ (reader.readString());
@@ -32137,6 +32174,13 @@ proto.pulumirpc.CallRequest.serializeBinaryToWriter = function(message, writer) 
   if (f.length > 0) {
     writer.writeString(
       5,
+      f
+    );
+  }
+  f = message.getPlugindownloadurl();
+  if (f.length > 0) {
+    writer.writeString(
+      13,
       f
     );
   }
@@ -32455,6 +32499,24 @@ proto.pulumirpc.CallRequest.prototype.getVersion = function() {
  */
 proto.pulumirpc.CallRequest.prototype.setVersion = function(value) {
   return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+/**
+ * optional string pluginDownloadURL = 13;
+ * @return {string}
+ */
+proto.pulumirpc.CallRequest.prototype.getPlugindownloadurl = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 13, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.CallRequest} returns this
+ */
+proto.pulumirpc.CallRequest.prototype.setPlugindownloadurl = function(value) {
+  return jspb.Message.setProto3StringField(this, 13, value);
 };
 
 
@@ -38465,7 +38527,8 @@ proto.pulumirpc.ReadResourceRequest.toObject = function(includeInstance, msg) {
     acceptsecrets: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
     additionalsecretoutputsList: (f = jspb.Message.getRepeatedField(msg, 10)) == null ? undefined : f,
     aliasesList: (f = jspb.Message.getRepeatedField(msg, 11)) == null ? undefined : f,
-    acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 12, false)
+    acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 12, false),
+    plugindownloadurl: jspb.Message.getFieldWithDefault(msg, 13, "")
   };
 
   if (includeInstance) {
@@ -38550,6 +38613,10 @@ proto.pulumirpc.ReadResourceRequest.deserializeBinaryFromReader = function(msg, 
     case 12:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setAcceptresources(value);
+      break;
+    case 13:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPlugindownloadurl(value);
       break;
     default:
       reader.skipField();
@@ -38662,6 +38729,13 @@ proto.pulumirpc.ReadResourceRequest.serializeBinaryToWriter = function(message, 
   if (f) {
     writer.writeBool(
       12,
+      f
+    );
+  }
+  f = message.getPlugindownloadurl();
+  if (f.length > 0) {
+    writer.writeString(
+      13,
       f
     );
   }
@@ -38960,6 +39034,24 @@ proto.pulumirpc.ReadResourceRequest.prototype.setAcceptresources = function(valu
 };
 
 
+/**
+ * optional string pluginDownloadURL = 13;
+ * @return {string}
+ */
+proto.pulumirpc.ReadResourceRequest.prototype.getPlugindownloadurl = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 13, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.ReadResourceRequest} returns this
+ */
+proto.pulumirpc.ReadResourceRequest.prototype.setPlugindownloadurl = function(value) {
+  return jspb.Message.setProto3StringField(this, 13, value);
+};
+
+
 
 
 
@@ -39202,7 +39294,8 @@ proto.pulumirpc.RegisterResourceRequest.toObject = function(includeInstance, msg
     remote: jspb.Message.getBooleanFieldWithDefault(msg, 20, false),
     acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 21, false),
     providersMap: (f = msg.getProvidersMap()) ? f.toObject(includeInstance, undefined) : [],
-    replaceonchangesList: (f = jspb.Message.getRepeatedField(msg, 23)) == null ? undefined : f
+    replaceonchangesList: (f = jspb.Message.getRepeatedField(msg, 23)) == null ? undefined : f,
+    plugindownloadurl: jspb.Message.getFieldWithDefault(msg, 24, "")
   };
 
   if (includeInstance) {
@@ -39336,6 +39429,10 @@ proto.pulumirpc.RegisterResourceRequest.deserializeBinaryFromReader = function(m
     case 23:
       var value = /** @type {string} */ (reader.readString());
       msg.addReplaceonchanges(value);
+      break;
+    case 24:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPlugindownloadurl(value);
       break;
     default:
       reader.skipField();
@@ -39520,6 +39617,13 @@ proto.pulumirpc.RegisterResourceRequest.serializeBinaryToWriter = function(messa
   if (f.length > 0) {
     writer.writeRepeatedString(
       23,
+      f
+    );
+  }
+  f = message.getPlugindownloadurl();
+  if (f.length > 0) {
+    writer.writeString(
+      24,
       f
     );
   }
@@ -40424,6 +40528,24 @@ proto.pulumirpc.RegisterResourceRequest.prototype.addReplaceonchanges = function
  */
 proto.pulumirpc.RegisterResourceRequest.prototype.clearReplaceonchangesList = function() {
   return this.setReplaceonchangesList([]);
+};
+
+
+/**
+ * optional string pluginDownloadURL = 24;
+ * @return {string}
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.getPlugindownloadurl = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 24, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.RegisterResourceRequest} returns this
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.setPlugindownloadurl = function(value) {
+  return jspb.Message.setProto3StringField(this, 24, value);
 };
 
 
@@ -42167,6 +42289,38 @@ function inheritedChildAlias(childName, parentName, parentAlias, childType) {
     }
     return createUrn(aliasName, childType, parentAlias);
 }
+// Extract the type and name parts of a URN
+function urnTypeAndName(urn) {
+    const parts = urn.split("::");
+    const typeParts = parts[2].split("$");
+    return {
+        name: parts[3],
+        type: typeParts[typeParts.length - 1],
+    };
+}
+// Make a copy of the aliases array, and add to it any implicit aliases inherited from its parent.
+// If there are N child aliases, and M parent aliases, there will be (M+1)*(N+1)-1 total aliases,
+// or, as calculated in the logic below, N+(M*(1+N)).
+function allAliases(childAliases, childName, childType, parent, parentName) {
+    const aliases = [];
+    for (const childAlias of childAliases) {
+        aliases.push(collapseAliasToUrn(childAlias, childName, childType, parent));
+    }
+    for (const parentAlias of (parent.__aliases || [])) {
+        // For each parent alias, add an alias that uses that base child name and the parent alias
+        aliases.push(inheritedChildAlias(childName, parentName, parentAlias, childType));
+        // Also add an alias for each child alias and the parent alias
+        for (const childAlias of childAliases) {
+            const inheritedAlias = collapseAliasToUrn(childAlias, childName, childType, parent).apply(childAliasURN => {
+                const { name: aliasedChildName, type: aliasedChildType } = urnTypeAndName(childAliasURN);
+                return inheritedChildAlias(aliasedChildName, parentName, parentAlias, aliasedChildType);
+            });
+            aliases.push(inheritedAlias);
+        }
+    }
+    return aliases;
+}
+exports.allAliases = allAliases;
 /**
  * Resource represents a class whose CRUD operations are implemented by a provider plugin.
  */
@@ -42241,13 +42395,8 @@ class Resource {
             if (opts.protect === undefined) {
                 opts.protect = opts.parent.__protect;
             }
-            // Make a copy of the aliases array, and add to it any implicit aliases inherited from its parent
-            opts.aliases = [...(opts.aliases || [])];
-            if (opts.parent.__name) {
-                for (const parentAlias of (opts.parent.__aliases || [])) {
-                    opts.aliases.push(inheritedChildAlias(name, opts.parent.__name, parentAlias, t));
-                }
-            }
+            // Update aliases to include the full set of aliases implied by the child and parent aliases.
+            opts.aliases = allAliases(opts.aliases || [], name, t, opts.parent, opts.parent.__name);
             this.__providers = opts.parent.__providers;
         }
         if (custom) {
