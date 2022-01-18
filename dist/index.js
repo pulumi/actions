@@ -42431,6 +42431,7 @@ class Resource {
         this.__protect = !!opts.protect;
         this.__prov = custom ? opts.provider : undefined;
         this.__version = opts.version;
+        this.__pluginDownloadURL = opts.pluginDownloadURL;
         // Collapse any `Alias`es down to URNs. We have to wait until this point to do so because we do not know the
         // default `name` and `type` to apply until we are inside the resource constructor.
         this.__aliases = [];
@@ -44234,7 +44235,8 @@ function findNormalizedModuleNameAsync(obj) {
         // don't pre-compute this because the require cache will get populated
         // dynamically during execution.
         for (const path of Object.keys(require.cache)) {
-            if (require.cache[path].exports === obj) {
+            const c = require.cache[path];
+            if (c !== undefined && c.exports === obj) {
                 // Rewrite the path to be a local module reference relative to the current working
                 // directory.
                 const modPath = upath.relative(process.cwd(), path);
@@ -46590,11 +46592,13 @@ function call(tok, props, res) {
             // Construct a provider reference from the given provider, if one is available on the resource.
             let provider = undefined;
             let version = undefined;
+            let pluginDownloadUrl = undefined;
             if (res) {
                 if (res.__prov) {
                     provider = yield resource_1.ProviderResource.register(res.__prov);
                 }
                 version = res.__version;
+                pluginDownloadUrl = res.__pluginDownloadURL;
             }
             // We keep output values when serializing inputs for call.
             const [serialized, propertyDepsResources] = yield rpc_1.serializePropertiesReturnDeps(`call:${tok}`, props, {
@@ -46701,7 +46705,7 @@ function createOutput(label) {
     }), `${label}Deps`));
     return [out, resolver];
 }
-function createCallRequest(tok, serialized, serializedDeps, provider, version) {
+function createCallRequest(tok, serialized, serializedDeps, provider, version, pluginDownloadURL) {
     return __awaiter(this, void 0, void 0, function* () {
         if (provider !== undefined && typeof provider !== "string") {
             throw new Error("Incorrect provider type.");
@@ -46712,6 +46716,7 @@ function createCallRequest(tok, serialized, serializedDeps, provider, version) {
         req.setArgs(obj);
         req.setProvider(provider);
         req.setVersion(version || "");
+        req.setPlugindownloadurl(pluginDownloadURL || "");
         const argDependencies = req.getArgdependenciesMap();
         for (const [key, propertyDeps] of serializedDeps) {
             const urns = new Set();
@@ -47049,6 +47054,7 @@ function readResource(res, t, name, props, opts) {
         req.setProperties(gstruct.Struct.fromJavaScript(resop.serializedProps));
         req.setDependenciesList(Array.from(resop.allDirectDependencyURNs));
         req.setVersion(opts.version || "");
+        req.setPlugindownloadurl(opts.pluginDownloadURL || "");
         req.setAcceptsecrets(true);
         req.setAcceptresources(!utils.disableResourceReferences);
         req.setAdditionalsecretoutputsList(opts.additionalSecretOutputs || []);
@@ -47141,6 +47147,7 @@ function registerResource(res, t, name, custom, remote, newDependency, props, op
         req.setSupportspartialvalues(true);
         req.setRemote(remote);
         req.setReplaceonchangesList(opts.replaceOnChanges || []);
+        req.setPlugindownloadurl(opts.pluginDownloadURL || "");
         const customTimeouts = new resproto.RegisterResourceRequest.CustomTimeouts();
         if (opts.customTimeouts != null) {
             customTimeouts.setCreate(opts.customTimeouts.create);
