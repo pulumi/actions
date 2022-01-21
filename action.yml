@@ -19,6 +19,10 @@ inputs:
     description: 'If true, a comment will be created with results'
     required: false
     default: 'false'
+  comment-on-pr-number:
+    description: 'Overrides the PR used to comment on'
+    required: false
+    default: '0'
   github-token:
     description: 'Github Token'
     required: false
