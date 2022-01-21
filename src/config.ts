@@ -41,6 +41,7 @@ export const config = rt
       upsert: rt.Boolean,
       refresh: rt.Boolean,
       secretsProvider: rt.String,
+      commentOnPrNumber: rt.Number,
     }),
   );
 
@@ -55,6 +56,7 @@ export async function makeConfig(): Promise<Config> {
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
     commentOnPr: parseBoolean(getInput('comment-on-pr')),
+    commentOnPrNumber: parseNumber(getInput('comment-on-pr-number')),
     upsert: parseBoolean(getInput('upsert')),
     refresh: parseBoolean(getInput('refresh')),
     options: {
