@@ -19459,6 +19459,9 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.userAgent) {
                     args.push("--exec-agent", opts.userAgent);
                 }
+                if (opts.color) {
+                    args.push("--color", opts.color);
+                }
             }
             let onExit = (hasError) => { return; };
             let didError = false;
@@ -19567,6 +19570,9 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.userAgent) {
                     args.push("--exec-agent", opts.userAgent);
                 }
+                if (opts.color) {
+                    args.push("--color", opts.color);
+                }
             }
             let onExit = (hasError) => { return; };
             let didError = false;
@@ -19661,6 +19667,9 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.userAgent) {
                     args.push("--exec-agent", opts.userAgent);
                 }
+                if (opts.color) {
+                    args.push("--color", opts.color);
+                }
             }
             let logPromise;
             let logFile;
@@ -19712,6 +19721,9 @@ Event: ${line}\n${e.toString()}`);
                 }
                 if (opts.userAgent) {
                     args.push("--exec-agent", opts.userAgent);
+                }
+                if (opts.color) {
+                    args.push("--color", opts.color);
                 }
             }
             let logPromise;
@@ -33103,7 +33115,8 @@ proto.pulumirpc.CheckRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     urn: jspb.Message.getFieldWithDefault(msg, 1, ""),
     olds: (f = msg.getOlds()) && google_protobuf_struct_pb.Struct.toObject(includeInstance, f),
-    news: (f = msg.getNews()) && google_protobuf_struct_pb.Struct.toObject(includeInstance, f)
+    news: (f = msg.getNews()) && google_protobuf_struct_pb.Struct.toObject(includeInstance, f),
+    sequencenumber: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -33153,6 +33166,10 @@ proto.pulumirpc.CheckRequest.deserializeBinaryFromReader = function(msg, reader)
       var value = new google_protobuf_struct_pb.Struct;
       reader.readMessage(value,google_protobuf_struct_pb.Struct.deserializeBinaryFromReader);
       msg.setNews(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setSequencenumber(value);
       break;
     default:
       reader.skipField();
@@ -33204,6 +33221,13 @@ proto.pulumirpc.CheckRequest.serializeBinaryToWriter = function(message, writer)
       3,
       f,
       google_protobuf_struct_pb.Struct.serializeBinaryToWriter
+    );
+  }
+  f = message.getSequencenumber();
+  if (f !== 0) {
+    writer.writeInt32(
+      4,
+      f
     );
   }
 };
@@ -33298,6 +33322,24 @@ proto.pulumirpc.CheckRequest.prototype.clearNews = function() {
  */
 proto.pulumirpc.CheckRequest.prototype.hasNews = function() {
   return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional int32 sequenceNumber = 4;
+ * @return {number}
+ */
+proto.pulumirpc.CheckRequest.prototype.getSequencenumber = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.pulumirpc.CheckRequest} returns this
+ */
+proto.pulumirpc.CheckRequest.prototype.setSequencenumber = function(value) {
+  return jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
@@ -42242,6 +42284,7 @@ const runtime_1 = __nccwpck_require__(5022);
 const resource_1 = __nccwpck_require__(140);
 const settings_1 = __nccwpck_require__(4530);
 const utils = __nccwpck_require__(1888);
+const log = __nccwpck_require__(642);
 /**
  * createUrn computes a URN from the combination of a resource name, resource type, optional parent,
  * optional project and optional stack.
@@ -42340,6 +42383,7 @@ class Resource {
      * @param dependency True if this is a synthetic resource used internally for dependency tracking.
      */
     constructor(t, name, custom, props = {}, opts = {}, remote = false, dependency = false) {
+        var _a;
         /**
          * A private field to help with RTTI that works in SxS scenarios.
          * @internal
@@ -42383,9 +42427,6 @@ class Resource {
         this.__name = name;
         // Make a shallow clone of opts to ensure we don't modify the value passed in.
         opts = Object.assign({}, opts);
-        if (opts.provider && opts.providers) {
-            throw new errors_1.ResourceError("Do not supply both 'provider' and 'providers' options to a ComponentResource.", opts.parent);
-        }
         // Check the parent type if one exists and fill in any default options.
         this.__providers = {};
         if (opts.parent) {
@@ -42399,34 +42440,28 @@ class Resource {
             opts.aliases = allAliases(opts.aliases || [], name, t, opts.parent, opts.parent.__name);
             this.__providers = opts.parent.__providers;
         }
-        if (custom) {
-            const provider = opts.provider;
-            if (provider === undefined) {
-                if (opts.parent) {
-                    // If no provider was given, but we have a parent, then inherit the
-                    // provider from our parent.
-                    opts.provider = opts.parent.getProvider(t);
-                }
+        // providers is found by combining (in ascending order of priority)
+        //      1. provider
+        //      2. self_providers
+        //      3. opts.providers
+        this.__providers = Object.assign(Object.assign(Object.assign({}, this.__providers), convertToProvidersMap(opts.providers)), convertToProvidersMap(opts.provider ? [opts.provider] : {}));
+        // provider is the first option that does not return none
+        // 1. opts.provider
+        // 2. a matching provider in opts.providers
+        // 3. a matching provider inherited from opts.parent
+        if (custom && opts.provider === undefined) {
+            let pkg = undefined;
+            const memComponents = t.split(":");
+            if (memComponents.length === 3) {
+                pkg = memComponents[0];
             }
-            else {
-                // If a provider was specified, add it to the providers map under this type's package so that
-                // any children of this resource inherit its provider.
-                const typeComponents = t.split(":");
-                if (typeComponents.length === 3) {
-                    const pkg = typeComponents[0];
-                    this.__providers = Object.assign(Object.assign({}, this.__providers), { [pkg]: provider });
-                }
+            const parentProvider = (_a = opts.parent) === null || _a === void 0 ? void 0 : _a.getProvider(t);
+            if (pkg && pkg in this.__providers) {
+                opts.provider = this.__providers[pkg];
             }
-        }
-        else {
-            // Note: we checked above that at most one of opts.provider or opts.providers is set.
-            // If opts.provider is set, treat that as if we were given a array of provider with that
-            // single value in it.  Otherwise, take the array or map of providers, convert it to a
-            // map and combine with any providers we've already set from our parent.
-            const providers = opts.provider
-                ? convertToProvidersMap([opts.provider])
-                : convertToProvidersMap(opts.providers);
-            this.__providers = Object.assign(Object.assign({}, this.__providers), providers);
+            else if (parentProvider) {
+                opts.provider = parentProvider;
+            }
         }
         this.__protect = !!opts.protect;
         this.__prov = custom ? opts.provider : undefined;
@@ -42730,26 +42765,26 @@ function isPromiseOrOutput(val) {
 }
 /** @internal */
 function expandProviders(options) {
-    // Move 'provider' up to 'providers' if we have it.
-    if (options.provider) {
-        options.providers = [options.provider];
-    }
     // Convert 'providers' map to array form.
     if (options.providers && !Array.isArray(options.providers)) {
+        for (const k in options.providers) {
+            if (Object.prototype.hasOwnProperty.call(options.providers, k)) {
+                const v = options.providers[k];
+                if (k !== v.getPackage()) {
+                    const message = `provider resource map where key ${k} doesn't match provider ${v.getPackage()}`;
+                    log.warn(message);
+                }
+            }
+        }
         options.providers = utils.values(options.providers);
     }
-    delete options.provider;
 }
 exports.expandProviders = expandProviders;
 function normalizeProviders(opts) {
-    // If we have only 0-1 providers, then merge that back down to the .provider field.
+    // If we have 0 providers, delete providers. Otherwise, convert providers into a map.
     const providers = opts.providers;
     if (providers) {
         if (providers.length === 0) {
-            delete opts.providers;
-        }
-        else if (providers.length === 1) {
-            opts.provider = providers[0];
             delete opts.providers;
         }
         else {
