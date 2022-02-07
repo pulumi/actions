@@ -88041,11 +88041,11 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
     core.debug('Configuration is loaded');
     yield downloadCli(pulumiVersion);
     if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
-        core.debug(`Logging into to Pulumi`);
+        core.debug(`Logging into Pulumi`);
         yield run('login');
     }
     else if (config.cloudUrl) {
-        core.debug(`Logging into to ${config.cloudUrl}`);
+        core.debug(`Logging into ${config.cloudUrl}`);
         yield run('login', config.cloudUrl);
     }
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
