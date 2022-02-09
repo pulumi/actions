@@ -16,11 +16,17 @@ export async function handlePullRequestMessage(
   } = config;
 
   const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
+  const rawBody = output.substring(0, 64_000);
   const body = dedent`
     ${heading}
     \`\`\`
-    ${output}
+    ${rawBody}
     \`\`\`
+    ${
+      rawBody.length === 64_000
+        ? '**Warn**: The output was too long and trimmed.'
+        : ''
+    }
   `;
 
   const { payload, repo } = context;
@@ -49,7 +55,9 @@ export async function handlePullRequestMessage(
       }
     }
   } catch {
-    core.warning('Not able to edit comment, defaulting to creating a new comment.');
+    core.warning(
+      'Not able to edit comment, defaulting to creating a new comment.',
+    );
   }
 
   await octokit.rest.issues.createComment({
