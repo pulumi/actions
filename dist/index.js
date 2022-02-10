@@ -46627,20 +46627,20 @@ function call(tok, props, res) {
             // Construct a provider reference from the given provider, if one is available on the resource.
             let provider = undefined;
             let version = undefined;
-            let pluginDownloadUrl = undefined;
+            let pluginDownloadURL = undefined;
             if (res) {
                 if (res.__prov) {
                     provider = yield resource_1.ProviderResource.register(res.__prov);
                 }
                 version = res.__version;
-                pluginDownloadUrl = res.__pluginDownloadURL;
+                pluginDownloadURL = res.__pluginDownloadURL;
             }
             // We keep output values when serializing inputs for call.
             const [serialized, propertyDepsResources] = yield rpc_1.serializePropertiesReturnDeps(`call:${tok}`, props, {
                 keepOutputValues: true,
             });
             log.debug(`Call RPC prepared: tok=${tok}` + settings_1.excessiveDebugOutput ? `, obj=${JSON.stringify(serialized)}` : ``);
-            const req = yield createCallRequest(tok, serialized, propertyDepsResources, provider, version);
+            const req = yield createCallRequest(tok, serialized, propertyDepsResources, provider, version, pluginDownloadURL);
             const monitor = settings_1.getMonitor();
             const resp = yield debuggable_1.debuggablePromise(new Promise((innerResolve, innerReject) => monitor.call(req, (err, innerResponse) => {
                 log.debug(`Call RPC finished: tok=${tok}; err: ${err}, resp: ${innerResponse}`);
@@ -47276,6 +47276,7 @@ exports.registerResource = registerResource;
  * properties.
  */
 function prepareResource(label, res, custom, remote, props, opts) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         // add an entry to the rpc queue while we prepare the request.
         // automation api inline programs that don't have stack exports can exit quickly. If we don't do this,
@@ -47367,6 +47368,23 @@ function prepareResource(label, res, custom, remote, props, opts) {
             if (remote) {
                 const componentOpts = opts;
                 resource_1.expandProviders(componentOpts);
+                // the <ProviderResource[]> casts are safe because expandProviders
+                // /always/ leaves providers as an array.
+                if (componentOpts.provider !== undefined) {
+                    if (componentOpts.providers === undefined) {
+                        // We still want to do the promotion, so we define providers
+                        componentOpts.providers = [componentOpts.provider];
+                    }
+                    else if (((_a = componentOpts.providers) === null || _a === void 0 ? void 0 : _a.indexOf(componentOpts.provider)) !== -1) {
+                        const pkg = componentOpts.provider.getPackage();
+                        const message = `There is a conflit between the 'provider' field (${pkg}) and a member of the 'providers' map'. `;
+                        const deprecationd = "This will become an error by the end of July 2022. See https://github.com/pulumi/pulumi/issues/8799 for more details";
+                        log.warn(message + deprecationd);
+                    }
+                    else {
+                        componentOpts.providers.push(componentOpts.provider);
+                    }
+                }
                 if (componentOpts.providers) {
                     for (const provider of componentOpts.providers) {
                         const pref = yield resource_2.ProviderResource.register(provider);
