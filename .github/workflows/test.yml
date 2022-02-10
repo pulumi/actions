@@ -17,6 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: yarn
       - run: yarn install
       - run: yarn build
       - run: yarn test
@@ -37,6 +41,10 @@ jobs:
         working-directory: .github/test-stacks/golang
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: yarn
       - run: yarn install
       - run: yarn build
       - uses: ./
