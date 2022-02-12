@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-_(none)_
+- fix: pull request comment body too big. Trims body when above 64k characters.
 
 ---
 
