@@ -87863,11 +87863,15 @@ function handlePullRequestMessage(config, output) {
     return modules_awaiter(this, void 0, void 0, function* () {
         const { githubToken, command, stackName, options: { editCommentOnPr }, } = config;
         const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
+        const rawBody = output.substring(0, 64000);
         const body = dedent `
     ${heading}
     \`\`\`
-    ${output}
+    ${rawBody}
     \`\`\`
+    ${rawBody.length === 64000
+            ? '**Warn**: The output was too long and trimmed.'
+            : ''}
   `;
         const { payload, repo } = github.context;
         invariant(payload.pull_request, 'Missing pull request event data.');
