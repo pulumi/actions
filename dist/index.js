@@ -80854,10 +80854,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AsyncContract = void 0;
@@ -80878,15 +80882,15 @@ function AsyncContract() {
                 args[_i] = arguments[_i];
             }
             if (args.length < argRuntypes.length) {
-                var message = "Expected " + argRuntypes.length + " arguments but only received " + args.length;
+                var message = "Expected ".concat(argRuntypes.length, " arguments but only received ").concat(args.length);
                 var failure = util_1.FAILURE.ARGUMENT_INCORRECT(message);
                 throw new errors_1.ValidationError(failure);
             }
             for (var i = 0; i < argRuntypes.length; i++)
                 argRuntypes[i].check(args[i]);
-            var returnedPromise = f.apply(void 0, __spreadArray([], __read(args)));
+            var returnedPromise = f.apply(void 0, __spreadArray([], __read(args), false));
             if (!(returnedPromise instanceof Promise)) {
-                var message = "Expected function to return a promise, but instead got " + returnedPromise;
+                var message = "Expected function to return a promise, but instead got ".concat(returnedPromise);
                 var failure = util_1.FAILURE.RETURN_INCORRECT(message);
                 throw new errors_1.ValidationError(failure);
             }
@@ -80920,10 +80924,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Contract = void 0;
@@ -80944,13 +80952,13 @@ function Contract() {
                 args[_i] = arguments[_i];
             }
             if (args.length < argRuntypes.length) {
-                var message = "Expected " + argRuntypes.length + " arguments but only received " + args.length;
+                var message = "Expected ".concat(argRuntypes.length, " arguments but only received ").concat(args.length);
                 var failure = util_1.FAILURE.ARGUMENT_INCORRECT(message);
                 throw new errors_1.ValidationError(failure);
             }
             for (var i = 0; i < argRuntypes.length; i++)
                 argRuntypes[i].check(args[i]);
-            return returnRuntype.check(f.apply(void 0, __spreadArray([], __read(args))));
+            return returnRuntype.check(f.apply(void 0, __spreadArray([], __read(args), false)));
         }; },
     };
 }
@@ -81029,7 +81037,7 @@ function checked() {
     return function (target, propertyKey, descriptor) {
         var method = descriptor.value;
         var methodId = (target.name || target.constructor.name + '.prototype') +
-            (typeof propertyKey === 'string' ? "[\"" + propertyKey + "\"]" : "[" + String(propertyKey) + "]");
+            (typeof propertyKey === 'string' ? "[\"".concat(propertyKey, "\"]") : "[".concat(String(propertyKey), "]"));
         var validParameterIndices = getValidParameterIndices(target, propertyKey, runtypes.length);
         if (validParameterIndices.length !== runtypes.length) {
             throw new Error('Number of `@checked` runtypes and @check parameters not matched.');
@@ -81046,7 +81054,7 @@ function checked() {
                 var parameterIndex = validParameterIndices[typeIndex];
                 var result = type.validate(args[parameterIndex]);
                 if (!result.success) {
-                    var message = methodId + ", argument #" + parameterIndex + ": " + result.message;
+                    var message = "".concat(methodId, ", argument #").concat(parameterIndex, ": ").concat(result.message);
                     var failure = util_1.FAILURE.ARGUMENT_INCORRECT(message);
                     throw new errors_1.ValidationError(failure);
                 }
@@ -81277,7 +81285,7 @@ var show_1 = __nccwpck_require__(6045);
 var errors_1 = __nccwpck_require__(3590);
 var util_1 = __nccwpck_require__(5571);
 var RuntypeSymbol = Symbol();
-var isRuntype = function (x) { return util_1.hasKey(RuntypeSymbol, x); };
+var isRuntype = function (x) { return (0, util_1.hasKey)(RuntypeSymbol, x); };
 exports.isRuntype = isRuntype;
 function create(validate, A) {
     A[RuntypeSymbol] = true;
@@ -81285,7 +81293,7 @@ function create(validate, A) {
     A.assert = check;
     A._innerValidate = function (value, visited) {
         if (visited.has(value, A))
-            return util_1.SUCCESS(value);
+            return (0, util_1.SUCCESS)(value);
         return validate(value, visited);
     };
     A.validate = function (value) { return A._innerValidate(value, VisitedState()); };
@@ -81298,7 +81306,7 @@ function create(validate, A) {
     A.withGuard = withGuard;
     A.withBrand = withBrand;
     A.reflect = A;
-    A.toString = function () { return "Runtype<" + show_1.default(A) + ">"; };
+    A.toString = function () { return "Runtype<".concat((0, show_1.default)(A), ">"); };
     return A;
     function check(x) {
         var result = A.validate(x);
@@ -81311,25 +81319,25 @@ function create(validate, A) {
         return A.validate(x).success;
     }
     function Or(B) {
-        return index_1.Union(A, B);
+        return (0, index_1.Union)(A, B);
     }
     function And(B) {
-        return index_1.Intersect(A, B);
+        return (0, index_1.Intersect)(A, B);
     }
     function optional() {
-        return index_1.Optional(A);
+        return (0, index_1.Optional)(A);
     }
     function nullable() {
-        return index_1.Union(A, index_1.Null);
+        return (0, index_1.Union)(A, index_1.Null);
     }
     function withConstraint(constraint, options) {
-        return index_1.Constraint(A, constraint, options);
+        return (0, index_1.Constraint)(A, constraint, options);
     }
     function withGuard(guard, options) {
-        return index_1.Constraint(A, guard, options);
+        return (0, index_1.Constraint)(A, guard, options);
     }
     function withBrand(B) {
-        return index_1.Brand(B, A);
+        return (0, index_1.Brand)(B, A);
     }
 }
 exports.create = create;
@@ -81376,7 +81384,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 var showStringified = function (circular) { return function (refl) {
     switch (refl.tag) {
         case 'literal':
-            return "\"" + String(refl.value) + "\"";
+            return "\"".concat(String(refl.value), "\"");
         case 'string':
             return 'string';
         case 'brand':
@@ -81390,7 +81398,7 @@ var showStringified = function (circular) { return function (refl) {
         default:
             break;
     }
-    return "`${" + show(false, circular)(refl) + "}`";
+    return "`${".concat(show(false, circular)(refl), "}`");
 }; };
 /**
  * Return the display string which is to be embedded into the display string of
@@ -81406,9 +81414,9 @@ var showEmbedded = function (circular) { return function (refl) {
         case 'literal':
             return String(refl.value);
         case 'brand':
-            return "${" + refl.brand + "}";
+            return "${".concat(refl.brand, "}");
         case 'constraint':
-            return refl.name ? "${" + refl.name + "}" : showEmbedded(circular)(refl.underlying);
+            return refl.name ? "${".concat(refl.name, "}") : showEmbedded(circular)(refl.underlying);
         case 'union':
             if (refl.alternatives.length === 1) {
                 var inner = refl.alternatives[0];
@@ -81424,12 +81432,12 @@ var showEmbedded = function (circular) { return function (refl) {
         default:
             break;
     }
-    return "${" + show(false, circular)(refl) + "}";
+    return "${".concat(show(false, circular)(refl), "}");
 }; };
 var show = function (needsParens, circular) { return function (refl) {
-    var parenthesize = function (s) { return (needsParens ? "(" + s + ")" : s); };
+    var parenthesize = function (s) { return (needsParens ? "(".concat(s, ")") : s); };
     if (circular.has(refl))
-        return parenthesize("CIRCULAR " + refl.tag);
+        return parenthesize("CIRCULAR ".concat(refl.tag));
     else
         circular.add(refl);
     try {
@@ -81447,14 +81455,14 @@ var show = function (needsParens, circular) { return function (refl) {
                 return refl.tag;
             case 'literal': {
                 var value = refl.value;
-                return typeof value === 'string' ? "\"" + value + "\"" : String(value);
+                return typeof value === 'string' ? "\"".concat(value, "\"") : String(value);
             }
             // Complex types
             case 'template': {
                 if (refl.strings.length === 0)
                     return '""';
                 else if (refl.strings.length === 1)
-                    return "\"" + refl.strings[0] + "\"";
+                    return "\"".concat(refl.strings[0], "\"");
                 else if (refl.strings.length === 2) {
                     if (refl.strings.every(function (string) { return string === ''; })) {
                         var runtype = refl.runtypes[0];
@@ -81474,30 +81482,30 @@ var show = function (needsParens, circular) { return function (refl) {
                     else
                         return prefix;
                 }, '');
-                return backtick_1 ? "`" + inner + "`" : "\"" + inner + "\"";
+                return backtick_1 ? "`".concat(inner, "`") : "\"".concat(inner, "\"");
             }
             case 'array':
-                return "" + readonlyTag(refl) + show(true, circular)(refl.element) + "[]";
+                return "".concat(readonlyTag(refl)).concat(show(true, circular)(refl.element), "[]");
             case 'dictionary':
-                return "{ [_: " + refl.key + "]: " + show(false, circular)(refl.value) + " }";
+                return "{ [_: ".concat(refl.key, "]: ").concat(show(false, circular)(refl.value), " }");
             case 'record': {
                 var keys = Object.keys(refl.fields);
                 return keys.length
-                    ? "{ " + keys
+                    ? "{ ".concat(keys
                         .map(function (k) {
-                        return "" + readonlyTag(refl) + k + partialTag(refl, k) + ": " + (refl.fields[k].tag === 'optional'
+                        return "".concat(readonlyTag(refl)).concat(k).concat(partialTag(refl, k), ": ").concat(refl.fields[k].tag === 'optional'
                             ? show(false, circular)(refl.fields[k].underlying)
-                            : show(false, circular)(refl.fields[k])) + ";";
+                            : show(false, circular)(refl.fields[k]), ";");
                     })
-                        .join(' ') + " }"
+                        .join(' '), " }")
                     : '{}';
             }
             case 'tuple':
-                return "[" + refl.components.map(show(false, circular)).join(', ') + "]";
+                return "[".concat(refl.components.map(show(false, circular)).join(', '), "]");
             case 'union':
-                return parenthesize("" + refl.alternatives.map(show(true, circular)).join(' | '));
+                return parenthesize("".concat(refl.alternatives.map(show(true, circular)).join(' | ')));
             case 'intersect':
-                return parenthesize("" + refl.intersectees.map(show(true, circular)).join(' & '));
+                return parenthesize("".concat(refl.intersectees.map(show(true, circular)).join(' & ')));
             case 'optional':
                 return show(needsParens, circular)(refl.underlying) + ' | undefined';
             case 'constraint':
@@ -81541,12 +81549,12 @@ var util_1 = __nccwpck_require__(5571);
  */
 function InternalArr(element, isReadonly) {
     var self = { tag: 'array', isReadonly: isReadonly, element: element };
-    return withExtraModifierFuncs(runtype_1.create(function (xs, visited) {
+    return withExtraModifierFuncs((0, runtype_1.create)(function (xs, visited) {
         if (!Array.isArray(xs))
             return util_1.FAILURE.TYPE_INCORRECT(self, xs);
-        var keys = util_1.enumerableKeysOf(xs);
+        var keys = (0, util_1.enumerableKeysOf)(xs);
         var results = keys.map(function (key) {
-            return runtype_1.innerValidate(element, xs[key], visited);
+            return (0, runtype_1.innerValidate)(element, xs[key], visited);
         });
         var details = keys.reduce(function (details, key) {
             var result = results[key];
@@ -81554,10 +81562,10 @@ function InternalArr(element, isReadonly) {
                 details[key] = result.details || result.message;
             return details;
         }, []);
-        if (util_1.enumerableKeysOf(details).length !== 0)
+        if ((0, util_1.enumerableKeysOf)(details).length !== 0)
             return util_1.FAILURE.CONTENT_INCORRECT(self, details);
         else
-            return util_1.SUCCESS(xs);
+            return (0, util_1.SUCCESS)(xs);
     }, self));
 }
 function Arr(element) {
@@ -81588,7 +81596,7 @@ var self = { tag: 'bigint' };
 /**
  * Validates that a value is a bigint.
  */
-exports.BigInt = runtype_1.create(function (value) { return (typeof value === 'bigint' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
+exports.BigInt = (0, runtype_1.create)(function (value) { return (typeof value === 'bigint' ? (0, util_1.SUCCESS)(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -81606,7 +81614,7 @@ var self = { tag: 'boolean' };
 /**
  * Validates that a value is a boolean.
  */
-exports.Boolean = runtype_1.create(function (value) { return (typeof value === 'boolean' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
+exports.Boolean = (0, runtype_1.create)(function (value) { return (typeof value === 'boolean' ? (0, util_1.SUCCESS)(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -81621,7 +81629,7 @@ exports.Brand = void 0;
 var runtype_1 = __nccwpck_require__(5601);
 function Brand(brand, entity) {
     var self = { tag: 'brand', brand: brand, entity: entity };
-    return runtype_1.create(function (value) { return entity.validate(value); }, self);
+    return (0, runtype_1.create)(function (value) { return entity.validate(value); }, self);
 }
 exports.Brand = Brand;
 
@@ -81648,7 +81656,7 @@ function Constraint(underlying, constraint, options) {
         name: name,
         args: args,
     };
-    return runtype_1.create(function (value) {
+    return (0, runtype_1.create)(function (value) {
         var result = underlying.validate(value);
         if (!result.success)
             return result;
@@ -81657,7 +81665,7 @@ function Constraint(underlying, constraint, options) {
             return util_1.FAILURE.CONSTRAINT_FAILED(self, message);
         else if (!message)
             return util_1.FAILURE.CONSTRAINT_FAILED(self);
-        return util_1.SUCCESS(result.value);
+        return (0, util_1.SUCCESS)(result.value);
     }, self);
 }
 exports.Constraint = Constraint;
@@ -81679,7 +81687,7 @@ var string_1 = __nccwpck_require__(1545);
 var constraint_1 = __nccwpck_require__(2928);
 var show_1 = __nccwpck_require__(6045);
 var util_1 = __nccwpck_require__(5571);
-var NumberKey = constraint_1.Constraint(string_1.String, function (s) { return !isNaN(+s); }, { name: 'number' });
+var NumberKey = (0, constraint_1.Constraint)(string_1.String, function (s) { return !isNaN(+s); }, { name: 'number' });
 function Dictionary(value, key) {
     var keyRuntype = key === undefined
         ? string_1.String
@@ -81688,16 +81696,16 @@ function Dictionary(value, key) {
             : key === 'number'
                 ? NumberKey
                 : key;
-    var keyString = show_1.default(keyRuntype);
+    var keyString = (0, show_1.default)(keyRuntype);
     var self = { tag: 'dictionary', key: keyString, value: value };
-    return runtype_1.create(function (x, visited) {
+    return (0, runtype_1.create)(function (x, visited) {
         if (x === null || x === undefined || typeof x !== 'object')
             return util_1.FAILURE.TYPE_INCORRECT(self, x);
         if (Object.getPrototypeOf(x) !== Object.prototype)
             if (!Array.isArray(x) || keyString === 'string')
                 return util_1.FAILURE.TYPE_INCORRECT(self, x);
         var numberString = /^(?:NaN|-?\d+(?:\.\d+)?)$/;
-        var keys = util_1.enumerableKeysOf(x);
+        var keys = (0, util_1.enumerableKeysOf)(x);
         var results = keys.reduce(function (results, key) {
             // We should provide interoperability with `number` and `string` here,
             // as a user would expect JavaScript engines to convert numeric keys to
@@ -81711,7 +81719,7 @@ function Dictionary(value, key) {
                 results[key] = util_1.FAILURE.KEY_INCORRECT(self, keyRuntype.reflect, keyInterop);
             }
             else
-                results[key] = runtype_1.innerValidate(value, x[key], visited);
+                results[key] = (0, runtype_1.innerValidate)(value, x[key], visited);
             return results;
         }, {});
         var details = keys.reduce(function (details, key) {
@@ -81720,10 +81728,10 @@ function Dictionary(value, key) {
                 details[key] = result.details || result.message;
             return details;
         }, {});
-        if (util_1.enumerableKeysOf(details).length !== 0)
+        if ((0, util_1.enumerableKeysOf)(details).length !== 0)
             return util_1.FAILURE.CONTENT_INCORRECT(self, details);
         else
-            return util_1.SUCCESS(x);
+            return (0, util_1.SUCCESS)(x);
     }, self);
 }
 exports.Dictionary = Dictionary;
@@ -81744,7 +81752,7 @@ var self = { tag: 'function' };
 /**
  * Construct a runtype for functions.
  */
-exports.Function = runtype_1.create(function (value) { return (typeof value === 'function' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
+exports.Function = (0, runtype_1.create)(function (value) { return (typeof value === 'function' ? (0, util_1.SUCCESS)(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -81760,7 +81768,7 @@ var runtype_1 = __nccwpck_require__(5601);
 var util_1 = __nccwpck_require__(5571);
 function InstanceOf(ctor) {
     var self = { tag: 'instanceof', ctor: ctor };
-    return runtype_1.create(function (value) { return (value instanceof ctor ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
+    return (0, runtype_1.create)(function (value) { return (value instanceof ctor ? (0, util_1.SUCCESS)(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 }
 exports.InstanceOf = InstanceOf;
 
@@ -81796,12 +81804,12 @@ function Intersect() {
         intersectees[_i] = arguments[_i];
     }
     var self = { tag: 'intersect', intersectees: intersectees };
-    return runtype_1.create(function (value, visited) {
+    return (0, runtype_1.create)(function (value, visited) {
         var e_1, _a;
         try {
             for (var intersectees_1 = __values(intersectees), intersectees_1_1 = intersectees_1.next(); !intersectees_1_1.done; intersectees_1_1 = intersectees_1.next()) {
                 var targetType = intersectees_1_1.value;
-                var result = runtype_1.innerValidate(targetType, value, visited);
+                var result = (0, runtype_1.innerValidate)(targetType, value, visited);
                 if (!result.success)
                     return result;
             }
@@ -81813,7 +81821,7 @@ function Intersect() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        return util_1.SUCCESS(value);
+        return (0, util_1.SUCCESS)(value);
     }, self);
 }
 exports.Intersect = Intersect;
@@ -81848,7 +81856,7 @@ function Lazy(delayed) {
         }
         return cached;
     }
-    return runtype_1.create(function (x) {
+    return (0, runtype_1.create)(function (x) {
         return getWrapped().validate(x);
     }, data);
 }
@@ -81883,10 +81891,10 @@ exports.literal = literal;
  */
 function Literal(valueBase) {
     var self = { tag: 'literal', value: valueBase };
-    return runtype_1.create(function (value) {
+    return (0, runtype_1.create)(function (value) {
         return value === valueBase
-            ? util_1.SUCCESS(value)
-            : util_1.FAILURE.VALUE_INCORRECT('literal', "`" + literal(valueBase) + "`", "`" + literal(value) + "`");
+            ? (0, util_1.SUCCESS)(value)
+            : util_1.FAILURE.VALUE_INCORRECT('literal', "`".concat(literal(valueBase), "`"), "`".concat(literal(value), "`"));
     }, self);
 }
 exports.Literal = Literal;
@@ -81901,7 +81909,7 @@ exports.Null = Literal(null);
 /**
  * An alias for `Union(Null, Undefined)`.
  */
-exports.Nullish = union_1.Union(exports.Null, exports.Undefined);
+exports.Nullish = (0, union_1.Union)(exports.Null, exports.Undefined);
 
 
 /***/ }),
@@ -81919,7 +81927,7 @@ var self = { tag: 'never' };
 /**
  * Validates nothing (unknown fails).
  */
-exports.Never = runtype_1.create(util_1.FAILURE.NOTHING_EXPECTED, self);
+exports.Never = (0, runtype_1.create)(util_1.FAILURE.NOTHING_EXPECTED, self);
 
 
 /***/ }),
@@ -81937,7 +81945,7 @@ var self = { tag: 'number' };
 /**
  * Validates that a value is a number.
  */
-exports.Number = runtype_1.create(function (value) { return (typeof value === 'number' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
+exports.Number = (0, runtype_1.create)(function (value) { return (typeof value === 'number' ? (0, util_1.SUCCESS)(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -81956,7 +81964,7 @@ var util_1 = __nccwpck_require__(5571);
  */
 function Optional(runtype) {
     var self = { tag: 'optional', underlying: runtype };
-    return runtype_1.create(function (value) { return (value === undefined ? util_1.SUCCESS(value) : runtype.validate(value)); }, self);
+    return (0, runtype_1.create)(function (value) { return (value === undefined ? (0, util_1.SUCCESS)(value) : runtype.validate(value)); }, self);
 }
 exports.Optional = Optional;
 
@@ -81984,10 +81992,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Partial = exports.Record = exports.InternalRecord = void 0;
@@ -81998,38 +82010,38 @@ var util_1 = __nccwpck_require__(5571);
  */
 function InternalRecord(fields, isPartial, isReadonly) {
     var self = { tag: 'record', isPartial: isPartial, isReadonly: isReadonly, fields: fields };
-    return withExtraModifierFuncs(runtype_1.create(function (x, visited) {
+    return withExtraModifierFuncs((0, runtype_1.create)(function (x, visited) {
         if (x === null || x === undefined) {
             return util_1.FAILURE.TYPE_INCORRECT(self, x);
         }
-        var keysOfFields = util_1.enumerableKeysOf(fields);
+        var keysOfFields = (0, util_1.enumerableKeysOf)(fields);
         if (keysOfFields.length !== 0 && typeof x !== 'object')
             return util_1.FAILURE.TYPE_INCORRECT(self, x);
-        var keys = __spreadArray([], __read(new Set(__spreadArray(__spreadArray([], __read(keysOfFields)), __read(util_1.enumerableKeysOf(x))))));
+        var keys = __spreadArray([], __read(new Set(__spreadArray(__spreadArray([], __read(keysOfFields), false), __read((0, util_1.enumerableKeysOf)(x)), false))), false);
         var results = keys.reduce(function (results, key) {
-            var fieldsHasKey = util_1.hasKey(key, fields);
-            var xHasKey = util_1.hasKey(key, x);
+            var fieldsHasKey = (0, util_1.hasKey)(key, fields);
+            var xHasKey = (0, util_1.hasKey)(key, x);
             if (fieldsHasKey) {
                 var runtype = fields[key];
                 var isOptional = isPartial || runtype.reflect.tag === 'optional';
                 if (xHasKey) {
                     var value = x[key];
                     if (isOptional && value === undefined)
-                        results[key] = util_1.SUCCESS(value);
+                        results[key] = (0, util_1.SUCCESS)(value);
                     else
-                        results[key] = runtype_1.innerValidate(runtype, value, visited);
+                        results[key] = (0, runtype_1.innerValidate)(runtype, value, visited);
                 }
                 else {
                     if (!isOptional)
                         results[key] = util_1.FAILURE.PROPERTY_MISSING(runtype.reflect);
                     else
-                        results[key] = util_1.SUCCESS(undefined);
+                        results[key] = (0, util_1.SUCCESS)(undefined);
                 }
             }
             else if (xHasKey) {
                 // TODO: exact record validation
                 var value = x[key];
-                results[key] = util_1.SUCCESS(value);
+                results[key] = (0, util_1.SUCCESS)(value);
             }
             else {
                 /* istanbul ignore next */
@@ -82043,10 +82055,10 @@ function InternalRecord(fields, isPartial, isReadonly) {
                 details[key] = result.details || result.message;
             return details;
         }, {});
-        if (util_1.enumerableKeysOf(details).length !== 0)
+        if ((0, util_1.enumerableKeysOf)(details).length !== 0)
             return util_1.FAILURE.CONTENT_INCORRECT(self, details);
         else
-            return util_1.SUCCESS(x);
+            return (0, util_1.SUCCESS)(x);
     }, self));
 }
 exports.InternalRecord = InternalRecord;
@@ -82088,7 +82100,7 @@ function withExtraModifierFuncs(A) {
             keys[_i] = arguments[_i];
         }
         var result = {};
-        var existingKeys = util_1.enumerableKeysOf(A.fields);
+        var existingKeys = (0, util_1.enumerableKeysOf)(A.fields);
         existingKeys.forEach(function (key) {
             if (!keys.includes(key))
                 result[key] = A.fields[key];
@@ -82116,7 +82128,7 @@ var self = { tag: 'string' };
 /**
  * Validates that a value is a string.
  */
-exports.String = runtype_1.create(function (value) { return (typeof value === 'string' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
+exports.String = (0, runtype_1.create)(function (value) { return (typeof value === 'string' ? (0, util_1.SUCCESS)(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, self);
 
 
 /***/ }),
@@ -82132,7 +82144,7 @@ var runtype_1 = __nccwpck_require__(5601);
 var util_1 = __nccwpck_require__(5571);
 var f = function (key) {
     var self = { tag: 'symbol', key: key };
-    return runtype_1.create(function (value) {
+    return (0, runtype_1.create)(function (value) {
         if (typeof value !== 'symbol')
             return util_1.FAILURE.TYPE_INCORRECT(self, value);
         else {
@@ -82140,7 +82152,7 @@ var f = function (key) {
             if (keyForValue !== key)
                 return util_1.FAILURE.VALUE_INCORRECT('symbol key', quoteIfPresent(key), quoteIfPresent(keyForValue));
             else
-                return util_1.SUCCESS(value);
+                return (0, util_1.SUCCESS)(value);
         }
     }, self);
 };
@@ -82148,8 +82160,8 @@ var self = { tag: 'symbol' };
 /**
  * Validates that a value is a symbol, regardless of whether it is keyed or not.
  */
-exports.Symbol = runtype_1.create(function (value) { return (typeof value === 'symbol' ? util_1.SUCCESS(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, Object.assign(f, self));
-var quoteIfPresent = function (key) { return (key === undefined ? 'undefined' : "\"" + key + "\""); };
+exports.Symbol = (0, runtype_1.create)(function (value) { return (typeof value === 'symbol' ? (0, util_1.SUCCESS)(value) : util_1.FAILURE.TYPE_INCORRECT(self, value)); }, Object.assign(f, self));
+var quoteIfPresent = function (key) { return (key === undefined ? 'undefined' : "\"".concat(key, "\"")); };
 
 
 /***/ }),
@@ -82175,10 +82187,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __values = (this && this.__values) || function(o) {
     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -82210,7 +82226,7 @@ var parseArgs = function (args) {
         var convenient = args;
         var strings = convenient.reduce(function (strings, arg) {
             // Concatenate every consecutive literals as strings
-            if (!runtype_1.isRuntype(arg))
+            if (!(0, runtype_1.isRuntype)(arg))
                 strings.push(strings.pop() + String(arg));
             // Skip runtypes
             else
@@ -82236,7 +82252,7 @@ var flattenInnerRuntypes = function (strings, runtypes) {
             }
             case 'template': {
                 var template = runtypes[i];
-                runtypes.splice.apply(runtypes, __spreadArray([i, 1], __read(template.runtypes)));
+                runtypes.splice.apply(runtypes, __spreadArray([i, 1], __read(template.runtypes), false));
                 var innerStrings = template.strings;
                 if (innerStrings.length === 1) {
                     strings.splice(i, 2, strings[i] + innerStrings[0] + strings[i + 1]);
@@ -82245,7 +82261,7 @@ var flattenInnerRuntypes = function (strings, runtypes) {
                     var first = innerStrings[0];
                     var rest = innerStrings.slice(1, -1);
                     var last = innerStrings[innerStrings.length - 1];
-                    strings.splice.apply(strings, __spreadArray(__spreadArray([i, 2, strings[i] + first], __read(rest)), [last + strings[i + 1]]));
+                    strings.splice.apply(strings, __spreadArray(__spreadArray([i, 2, strings[i] + first], __read(rest), false), [last + strings[i + 1]], false));
                 }
                 break;
             }
@@ -82326,7 +82342,7 @@ var revivers = {
         function (s) { return globalThis.Number(s); },
         '[+-]?(?:\\d*\\.\\d+|\\d+\\.\\d*|\\d+)(?:[Ee][+-]?\\d+)?',
         '0[Bb][01]+',
-        '0[Oo][07]+',
+        '0[Oo][0-7]+',
         '0[Xx][0-9A-Fa-f]+',
         // Note: `"NaN"` isn't here, as TS doesn't allow `"NaN"` to be a `` `${number}` ``
     ],
@@ -82338,7 +82354,7 @@ var revivers = {
 var getReviversFor = function (reflect) {
     switch (reflect.tag) {
         case 'literal': {
-            var _a = __read(revivers[util_1.typeOf(reflect.value)] || [identity], 1), reviver_1 = _a[0];
+            var _a = __read(revivers[(0, util_1.typeOf)(reflect.value)] || [identity], 1), reviver_1 = _a[0];
             return reviver_1;
         }
         case 'brand':
@@ -82393,7 +82409,7 @@ var reviveValidate = function (reflect, visited) { return function (value) {
                     }
                     finally { if (e_2) throw e_2.error; }
                 }
-                return util_1.SUCCESS(value);
+                return (0, util_1.SUCCESS)(value);
             default:
                 /* istanbul ignore next */
                 throw Error('impossible');
@@ -82401,10 +82417,10 @@ var reviveValidate = function (reflect, visited) { return function (value) {
     }
     else {
         var reviver = revivers;
-        var validated = runtype_1.innerValidate(reflect, reviver(value), visited);
+        var validated = (0, runtype_1.innerValidate)(reflect, reviver(value), visited);
         if (!validated.success && validated.code === 'VALUE_INCORRECT' && reflect.tag === 'literal')
             // TODO: Temporary fix to show unrevived value in message; needs refactor
-            return util_1.FAILURE.VALUE_INCORRECT('literal', "\"" + literal_1.literal(reflect.value) + "\"", "\"" + value + "\"");
+            return util_1.FAILURE.VALUE_INCORRECT('literal', "\"".concat((0, literal_1.literal)(reflect.value), "\""), "\"".concat(value, "\""));
         return validated;
     }
 }; };
@@ -82423,7 +82439,7 @@ var getRegExpPatternFor = function (reflect) {
                 var prefix = pattern + string;
                 var runtype = reflect.runtypes[i];
                 if (runtype)
-                    return prefix + ("(?:" + getRegExpPatternFor(runtype.reflect) + ")");
+                    return prefix + "(?:".concat(getRegExpPatternFor(runtype.reflect), ")");
                 else
                     return prefix;
             }, '');
@@ -82438,11 +82454,11 @@ var createRegExpForTemplate = function (reflect) {
         var prefix = pattern + string;
         var runtype = reflect.runtypes[i];
         if (runtype)
-            return prefix + ("(" + getRegExpPatternFor(runtype.reflect) + ")");
+            return prefix + "(".concat(getRegExpPatternFor(runtype.reflect), ")");
         else
             return prefix;
     }, '');
-    return new RegExp("^" + pattern + "$", 'su');
+    return new RegExp("^".concat(pattern, "$"), 'su');
 };
 function Template() {
     var args = [];
@@ -82463,26 +82479,26 @@ function Template() {
                 if (!validated.success)
                     return validated;
             }
-            return util_1.SUCCESS(value);
+            return (0, util_1.SUCCESS)(value);
         }
         else {
-            return util_1.FAILURE.VALUE_INCORRECT('string', "" + show_1.default(self), "\"" + literal_1.literal(value) + "\"");
+            return util_1.FAILURE.VALUE_INCORRECT('string', "".concat((0, show_1.default)(self)), "\"".concat((0, literal_1.literal)(value), "\""));
         }
     };
-    return runtype_1.create(function (value, visited) {
+    return (0, runtype_1.create)(function (value, visited) {
         if (typeof value !== 'string')
             return util_1.FAILURE.TYPE_INCORRECT(self, value);
         else {
             var validated = test(value, visited);
             if (!validated.success) {
-                var result = util_1.FAILURE.VALUE_INCORRECT('string', "" + show_1.default(self), "\"" + value + "\"");
+                var result = util_1.FAILURE.VALUE_INCORRECT('string', "".concat((0, show_1.default)(self)), "\"".concat(value, "\""));
                 if (result.message !== validated.message)
                     // TODO: Should use `details` here, but it needs unionizing `string` anew to the definition of `Details`, which is a breaking change
-                    result.message += " (inner: " + validated.message + ")";
+                    result.message += " (inner: ".concat(validated.message, ")");
                 return result;
             }
             else
-                return util_1.SUCCESS(value);
+                return (0, util_1.SUCCESS)(value);
         }
     }, self);
 }
@@ -82509,14 +82525,14 @@ function Tuple() {
         components[_i] = arguments[_i];
     }
     var self = { tag: 'tuple', components: components };
-    return runtype_1.create(function (xs, visited) {
+    return (0, runtype_1.create)(function (xs, visited) {
         if (!Array.isArray(xs))
             return util_1.FAILURE.TYPE_INCORRECT(self, xs);
         if (xs.length !== components.length)
-            return util_1.FAILURE.CONSTRAINT_FAILED(self, "Expected length " + components.length + ", but was " + xs.length);
-        var keys = util_1.enumerableKeysOf(xs);
+            return util_1.FAILURE.CONSTRAINT_FAILED(self, "Expected length ".concat(components.length, ", but was ").concat(xs.length));
+        var keys = (0, util_1.enumerableKeysOf)(xs);
         var results = keys.map(function (key) {
-            return runtype_1.innerValidate(components[key], xs[key], visited);
+            return (0, runtype_1.innerValidate)(components[key], xs[key], visited);
         });
         var details = keys.reduce(function (details, key) {
             var result = results[key];
@@ -82524,10 +82540,10 @@ function Tuple() {
                 details[key] = result.details || result.message;
             return details;
         }, []);
-        if (util_1.enumerableKeysOf(details).length !== 0)
+        if ((0, util_1.enumerableKeysOf)(details).length !== 0)
             return util_1.FAILURE.CONTENT_INCORRECT(self, details);
         else
-            return util_1.SUCCESS(xs);
+            return (0, util_1.SUCCESS)(xs);
     }, self);
 }
 exports.Tuple = Tuple;
@@ -82577,14 +82593,14 @@ function Union() {
         };
     };
     var self = { tag: 'union', alternatives: alternatives, match: match };
-    return runtype_1.create(function (value, visited) {
+    return (0, runtype_1.create)(function (value, visited) {
         var e_1, _a, e_2, _b, e_3, _c, e_4, _d;
         if (typeof value !== 'object' || value === null) {
             try {
                 for (var alternatives_1 = __values(alternatives), alternatives_1_1 = alternatives_1.next(); !alternatives_1_1.done; alternatives_1_1 = alternatives_1.next()) {
                     var alternative = alternatives_1_1.value;
-                    if (runtype_1.innerValidate(alternative, value, visited).success)
-                        return util_1.SUCCESS(value);
+                    if ((0, runtype_1.innerValidate)(alternative, value, visited).success)
+                        return (0, util_1.SUCCESS)(value);
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -82635,9 +82651,9 @@ function Union() {
                         if (alternative.reflect.tag === 'record') {
                             var field = alternative.reflect.fields[fieldName];
                             if (field.tag === 'literal' &&
-                                util_1.hasKey(fieldName, value) &&
+                                (0, util_1.hasKey)(fieldName, value) &&
                                 value[fieldName] === field.value) {
-                                return runtype_1.innerValidate(alternative, value, visited);
+                                return (0, runtype_1.innerValidate)(alternative, value, visited);
                             }
                         }
                     }
@@ -82654,8 +82670,8 @@ function Union() {
         try {
             for (var alternatives_4 = __values(alternatives), alternatives_4_1 = alternatives_4.next(); !alternatives_4_1.done; alternatives_4_1 = alternatives_4.next()) {
                 var targetType = alternatives_4_1.value;
-                if (runtype_1.innerValidate(targetType, value, visited).success)
-                    return util_1.SUCCESS(value);
+                if ((0, runtype_1.innerValidate)(targetType, value, visited).success)
+                    return (0, util_1.SUCCESS)(value);
             }
         }
         catch (e_4_1) { e_4 = { error: e_4_1 }; }
@@ -82686,7 +82702,7 @@ var self = { tag: 'unknown' };
 /**
  * Validates anything, but provides no new type information about it.
  */
-exports.Unknown = runtype_1.create(function (value) { return util_1.SUCCESS(value); }, self);
+exports.Unknown = (0, runtype_1.create)(function (value) { return (0, util_1.SUCCESS)(value); }, self);
 
 
 /***/ }),
@@ -82759,43 +82775,42 @@ function SUCCESS(value) {
     return { success: true, value: value };
 }
 exports.SUCCESS = SUCCESS;
-exports.FAILURE = Object.assign(function (code, message, details) { return (__assign({ success: false, code: code,
-    message: message }, (details ? { details: details } : {}))); }, {
+exports.FAILURE = Object.assign(function (code, message, details) { return (__assign({ success: false, code: code, message: message }, (details ? { details: details } : {}))); }, {
     TYPE_INCORRECT: function (self, value) {
-        var message = "Expected " + (self.tag === 'template' ? "string " + show_1.default(self) : show_1.default(self)) + ", but was " + exports.typeOf(value);
-        return exports.FAILURE(result_1.Failcode.TYPE_INCORRECT, message);
+        var message = "Expected ".concat(self.tag === 'template' ? "string ".concat((0, show_1.default)(self)) : (0, show_1.default)(self), ", but was ").concat((0, exports.typeOf)(value));
+        return (0, exports.FAILURE)(result_1.Failcode.TYPE_INCORRECT, message);
     },
     VALUE_INCORRECT: function (name, expected, received) {
-        return exports.FAILURE(result_1.Failcode.VALUE_INCORRECT, "Expected " + name + " " + String(expected) + ", but was " + String(received));
+        return (0, exports.FAILURE)(result_1.Failcode.VALUE_INCORRECT, "Expected ".concat(name, " ").concat(String(expected), ", but was ").concat(String(received)));
     },
     KEY_INCORRECT: function (self, expected, value) {
-        return exports.FAILURE(result_1.Failcode.KEY_INCORRECT, "Expected " + show_1.default(self) + " key to be " + show_1.default(expected) + ", but was " + exports.typeOf(value));
+        return (0, exports.FAILURE)(result_1.Failcode.KEY_INCORRECT, "Expected ".concat((0, show_1.default)(self), " key to be ").concat((0, show_1.default)(expected), ", but was ").concat((0, exports.typeOf)(value)));
     },
     CONTENT_INCORRECT: function (self, details) {
-        var message = "Expected " + show_1.default(self) + ", but was incompatible";
-        return exports.FAILURE(result_1.Failcode.CONTENT_INCORRECT, message, details);
+        var message = "Expected ".concat((0, show_1.default)(self), ", but was incompatible");
+        return (0, exports.FAILURE)(result_1.Failcode.CONTENT_INCORRECT, message, details);
     },
     ARGUMENT_INCORRECT: function (message) {
-        return exports.FAILURE(result_1.Failcode.ARGUMENT_INCORRECT, message);
+        return (0, exports.FAILURE)(result_1.Failcode.ARGUMENT_INCORRECT, message);
     },
     RETURN_INCORRECT: function (message) {
-        return exports.FAILURE(result_1.Failcode.RETURN_INCORRECT, message);
+        return (0, exports.FAILURE)(result_1.Failcode.RETURN_INCORRECT, message);
     },
     CONSTRAINT_FAILED: function (self, message) {
-        var info = message ? ": " + message : '';
-        return exports.FAILURE(result_1.Failcode.CONSTRAINT_FAILED, "Failed constraint check for " + show_1.default(self) + info);
+        var info = message ? ": ".concat(message) : '';
+        return (0, exports.FAILURE)(result_1.Failcode.CONSTRAINT_FAILED, "Failed constraint check for ".concat((0, show_1.default)(self)).concat(info));
     },
     PROPERTY_MISSING: function (self) {
-        var message = "Expected " + show_1.default(self) + ", but was missing";
-        return exports.FAILURE(result_1.Failcode.PROPERTY_MISSING, message);
+        var message = "Expected ".concat((0, show_1.default)(self), ", but was missing");
+        return (0, exports.FAILURE)(result_1.Failcode.PROPERTY_MISSING, message);
     },
     PROPERTY_PRESENT: function (value) {
-        var message = "Expected nothing, but was " + exports.typeOf(value);
-        return exports.FAILURE(result_1.Failcode.PROPERTY_PRESENT, message);
+        var message = "Expected nothing, but was ".concat((0, exports.typeOf)(value));
+        return (0, exports.FAILURE)(result_1.Failcode.PROPERTY_PRESENT, message);
     },
     NOTHING_EXPECTED: function (value) {
-        var message = "Expected nothing, but was " + exports.typeOf(value);
-        return exports.FAILURE(result_1.Failcode.NOTHING_EXPECTED, message);
+        var message = "Expected nothing, but was ".concat((0, exports.typeOf)(value));
+        return (0, exports.FAILURE)(result_1.Failcode.NOTHING_EXPECTED, message);
     },
 });
 
