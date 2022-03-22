@@ -88162,7 +88162,10 @@ var dedent = __nccwpck_require__(5281);
 function handlePullRequestMessage(config, output) {
     return modules_awaiter(this, void 0, void 0, function* () {
         const { githubToken, command, stackName, options: { editCommentOnPr }, } = config;
-        const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
+        const heading = `#### :tropical_drink: \`${command}\` on ${stackName}
+
+  <details>
+  <summary>Click to expand Pulumi report</summary>`;
         const rawBody = output.substring(0, 64000);
         const body = dedent `
     ${heading}
@@ -88172,6 +88175,7 @@ function handlePullRequestMessage(config, output) {
     ${rawBody.length === 64000
             ? '**Warn**: The output was too long and trimmed.'
             : ''}
+    </details>
   `;
         const { payload, repo } = github.context;
         invariant(payload.pull_request, 'Missing pull request event data.');
