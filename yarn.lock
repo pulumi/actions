@@ -1958,10 +1958,10 @@ enquirer@^2.3.5:
   dependencies:
     ansi-colors "^4.1.1"
 
-envalid@^7.2.2:
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/envalid/-/envalid-7.2.2.tgz#f3219f85e692002dca0f28076740227d30c817e3"
-  integrity sha512-bl/3VF5PhoF26HlDWiE0NRRHUbKT/+UDP/+0JtOFmhUwK3cUPS7JgWYGbE8ArvA61T+SyNquxscLCS6y4Wnpdw==
+envalid@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/envalid/-/envalid-7.3.0.tgz#9d5eda789216cfdd8c55ff0d6fe30ddff38e52d5"
+  integrity sha512-RWAAXLU+s884YwbVQ+D8OYRIspo7hvF9zPTvjToVzqZknHwycAuGiiHG/XiI1UDY/PeYSlMwQvMUGb25n06iwA==
   dependencies:
     tslib "2.3.1"
 
