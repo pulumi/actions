@@ -19943,7 +19943,14 @@ const cleanUp = (logFile, rl) => __awaiter(void 0, void 0, void 0, function* () 
     }
     if (logFile) {
         // remove the logfile
-        fs.rmdir(path.dirname(logFile), { recursive: true }, () => { return; });
+        if (fs.rm) {
+            // remove with Node JS 15.X+
+            fs.rm(path.dirname(logFile), { recursive: true }, () => { return; });
+        }
+        else {
+            // remove with Node JS 14.X
+            fs.rmdir(path.dirname(logFile), { recursive: true }, () => { return; });
+        }
     }
 });
 //# sourceMappingURL=stack.js.map
@@ -54359,26 +54366,26 @@ exports.testOnlySymbol = Symbol('envalid - test only');
 function validateVar(_a) {
     var spec = _a.spec, name = _a.name, rawValue = _a.rawValue;
     if (typeof spec._parse !== 'function') {
-        throw new errors_1.EnvError("Invalid spec for \"" + name + "\"");
+        throw new errors_1.EnvError("Invalid spec for \"".concat(name, "\""));
     }
     var value = spec._parse(rawValue);
     if (spec.choices) {
         if (!Array.isArray(spec.choices)) {
-            throw new TypeError("\"choices\" must be an array (in spec for \"" + name + "\")");
+            throw new TypeError("\"choices\" must be an array (in spec for \"".concat(name, "\")"));
         }
         else if (!spec.choices.includes(value)) {
-            throw new errors_1.EnvError("Value \"" + value + "\" not in choices [" + spec.choices + "]");
+            throw new errors_1.EnvError("Value \"".concat(value, "\" not in choices [").concat(spec.choices, "]"));
         }
     }
     if (value == null)
-        throw new errors_1.EnvError("Invalid value for env var \"" + name + "\"");
+        throw new errors_1.EnvError("Invalid value for env var \"".concat(name, "\""));
     return value;
 }
 // Format a string error message for when a required env var is missing
 function formatSpecDescription(spec) {
-    var egText = spec.example ? " (eg. \"" + spec.example + "\")" : '';
-    var docsText = spec.docs ? ". See " + spec.docs : '';
-    return "" + spec.desc + egText + docsText;
+    var egText = spec.example ? " (eg. \"".concat(spec.example, "\")") : '';
+    var docsText = spec.docs ? ". See ".concat(spec.docs) : '';
+    return "".concat(spec.desc).concat(egText).concat(docsText);
 }
 var readRawEnvValue = function (env, k) {
     return env[k];
@@ -54388,7 +54395,6 @@ var isTestOnlySymbol = function (value) { return value === exports.testOnlySymbo
  * Perform the central validation/sanitization logic on the full environment object
  */
 function getSanitizedEnv(environment, specs, options) {
-    var _a;
     if (options === void 0) { options = {}; }
     var cleanedEnv = {};
     var errors = {};
@@ -54397,23 +54403,31 @@ function getSanitizedEnv(environment, specs, options) {
     for (var _i = 0, varKeys_1 = varKeys; _i < varKeys_1.length; _i++) {
         var k = varKeys_1[_i];
         var spec = specs[k];
-        // Use devDefault values only if NODE_ENV was explicitly set, and isn't 'production'
-        var usingDevDefault = rawNodeEnv && rawNodeEnv !== 'production' && spec.hasOwnProperty('devDefault');
-        var devDefaultValue = usingDevDefault ? spec.devDefault : undefined;
-        var rawValue = (_a = readRawEnvValue(environment, k)) !== null && _a !== void 0 ? _a : (devDefaultValue === undefined ? spec["default"] : devDefaultValue);
-        // Default values can be anything falsy (including an explicitly set undefined), without
-        // triggering validation errors:
-        var usingFalsyDefault = (spec.hasOwnProperty('default') && spec["default"] === rawValue) ||
-            (usingDevDefault && devDefaultValue === rawValue);
+        var rawValue = readRawEnvValue(environment, k);
+        // If no value was given and default/devDefault were provided, return the appropriate default
+        // value without passing it through validation
+        if (rawValue === undefined) {
+            // Use devDefault values only if NODE_ENV was explicitly set, and isn't 'production'
+            var usingDevDefault = rawNodeEnv && rawNodeEnv !== 'production' && spec.hasOwnProperty('devDefault');
+            if (usingDevDefault) {
+                // @ts-expect-error default values can break the rules slightly by being explicitly set to undefined
+                cleanedEnv[k] = spec.devDefault;
+                continue;
+            }
+            if (spec.hasOwnProperty('default')) {
+                // @ts-expect-error default values can break the rules slightly by being explicitly set to undefined
+                cleanedEnv[k] = spec["default"];
+                continue;
+            }
+        }
         try {
             if (isTestOnlySymbol(rawValue)) {
                 throw new errors_1.EnvMissingError(formatSpecDescription(spec));
             }
             if (rawValue === undefined) {
-                if (!usingFalsyDefault)
-                    throw new errors_1.EnvMissingError(formatSpecDescription(spec));
                 // @ts-ignore (fixes #138) Need to figure out why explicitly undefined default/devDefault breaks inference
                 cleanedEnv[k] = undefined;
+                throw new errors_1.EnvMissingError(formatSpecDescription(spec));
             }
             else {
                 cleanedEnv[k] = validateVar({ name: k, spec: spec, rawValue: rawValue });
@@ -54422,7 +54436,8 @@ function getSanitizedEnv(environment, specs, options) {
         catch (err) {
             if ((options === null || options === void 0 ? void 0 : options.reporter) === null)
                 throw err;
-            errors[k] = err;
+            if (err instanceof Error)
+                errors[k] = err;
         }
     }
     var reporter = (options === null || options === void 0 ? void 0 : options.reporter) || reporter_1.defaultReporter;
@@ -54453,8 +54468,8 @@ var middleware_1 = __nccwpck_require__(1639);
  */
 function cleanEnv(environment, specs, options) {
     if (options === void 0) { options = {}; }
-    var cleaned = core_1.getSanitizedEnv(environment, specs, options);
-    return Object.freeze(middleware_1.applyDefaultMiddleware(cleaned, environment));
+    var cleaned = (0, core_1.getSanitizedEnv)(environment, specs, options);
+    return Object.freeze((0, middleware_1.applyDefaultMiddleware)(cleaned, environment));
 }
 exports.cleanEnv = cleanEnv;
 /**
@@ -54469,7 +54484,7 @@ exports.cleanEnv = cleanEnv;
  */
 function customCleanEnv(environment, specs, applyMiddleware, options) {
     if (options === void 0) { options = {}; }
-    var cleaned = core_1.getSanitizedEnv(environment, specs, options);
+    var cleaned = (0, core_1.getSanitizedEnv)(environment, specs, options);
     return Object.freeze(applyMiddleware(cleaned, environment));
 }
 exports.customCleanEnv = customCleanEnv;
@@ -54583,14 +54598,14 @@ var strictProxyMiddleware = function (envObj, rawEnv) {
             var varExists = target.hasOwnProperty(name);
             if (!varExists) {
                 if (typeof rawEnv === 'object' && ((_a = rawEnv === null || rawEnv === void 0 ? void 0 : rawEnv.hasOwnProperty) === null || _a === void 0 ? void 0 : _a.call(rawEnv, name))) {
-                    throw new ReferenceError("[envalid] Env var " + name + " was accessed but not validated. This var is set in the environment; please add an envalid validator for it.");
+                    throw new ReferenceError("[envalid] Env var ".concat(name, " was accessed but not validated. This var is set in the environment; please add an envalid validator for it."));
                 }
-                throw new ReferenceError("[envalid] Env var not found: " + name);
+                throw new ReferenceError("[envalid] Env var not found: ".concat(name));
             }
             return target[name];
         },
         set: function (_target, name) {
-            throw new TypeError("[envalid] Attempt to mutate environment value: " + name);
+            throw new TypeError("[envalid] Attempt to mutate environment value: ".concat(name));
         }
     });
 };
@@ -54617,7 +54632,7 @@ var applyDefaultMiddleware = function (cleanedEnv, rawEnv) {
     // a generic pipe() function. However, a generically typed variadic pipe() appears to not be possible
     // in TypeScript as of 4.x, so we just manually apply them below. See
     // https://github.com/microsoft/TypeScript/pull/39094#issuecomment-647042984
-    return exports.strictProxyMiddleware(exports.accessorMiddleware(cleanedEnv, rawEnv), rawEnv);
+    return (0, exports.strictProxyMiddleware)((0, exports.accessorMiddleware)(cleanedEnv, rawEnv), rawEnv);
 };
 exports.applyDefaultMiddleware = applyDefaultMiddleware;
 //# sourceMappingURL=middleware.js.map
@@ -54638,7 +54653,7 @@ var defaultLogger = console.error.bind(console);
 // Apply ANSI colors to the reporter output only if we detect that we're running in Node
 var isNode = !!(typeof process === 'object' && ((_a = process === null || process === void 0 ? void 0 : process.versions) === null || _a === void 0 ? void 0 : _a.node));
 var colorWith = function (colorCode) { return function (str) {
-    return isNode ? "\u001B[" + colorCode + "m" + str + "\u001B[0m" : str;
+    return isNode ? "\u001B[".concat(colorCode, "m").concat(str, "\u001B[0m") : str;
 }; };
 var colors = {
     blue: colorWith('34'),
@@ -54647,27 +54662,26 @@ var colors = {
 };
 var RULE = colors.white('================================');
 var defaultReporter = function (_a, _b) {
-    var _c;
-    var _d = _a.errors, errors = _d === void 0 ? {} : _d;
-    var _e = _b === void 0 ? { logger: defaultLogger } : _b, onError = _e.onError, logger = _e.logger;
+    var _c = _a.errors, errors = _c === void 0 ? {} : _c;
+    var _d = _b === void 0 ? { logger: defaultLogger } : _b, onError = _d.onError, logger = _d.logger;
     if (!Object.keys(errors).length)
         return;
     var missingVarsOutput = [];
     var invalidVarsOutput = [];
-    for (var _i = 0, _f = Object.entries(errors); _i < _f.length; _i++) {
-        var _g = _f[_i], k = _g[0], err = _g[1];
+    for (var _i = 0, _e = Object.entries(errors); _i < _e.length; _i++) {
+        var _f = _e[_i], k = _f[0], err = _f[1];
         if (err instanceof errors_1.EnvMissingError) {
-            missingVarsOutput.push("    " + colors.blue(k) + ": " + (err.message || '(required)'));
+            missingVarsOutput.push("    ".concat(colors.blue(k), ": ").concat(err.message || '(required)'));
         }
         else
-            invalidVarsOutput.push("    " + colors.blue(k) + ": " + (((_c = err) === null || _c === void 0 ? void 0 : _c.message) || '(invalid format)'));
+            invalidVarsOutput.push("    ".concat(colors.blue(k), ": ").concat((err === null || err === void 0 ? void 0 : err.message) || '(invalid format)'));
     }
     // Prepend "header" output for each section of the output:
     if (invalidVarsOutput.length) {
-        invalidVarsOutput.unshift(" " + colors.yellow('Invalid') + " environment variables:");
+        invalidVarsOutput.unshift(" ".concat(colors.yellow('Invalid'), " environment variables:"));
     }
     if (missingVarsOutput.length) {
-        missingVarsOutput.unshift(" " + colors.yellow('Missing') + " environment variables:");
+        missingVarsOutput.unshift(" ".concat(colors.yellow('Missing'), " environment variables:"));
     }
     var output = [
         RULE,
@@ -54750,7 +54764,7 @@ exports.makeValidator = makeValidator;
 // that enables better type inference. For more context, check out the following PR:
 // https://github.com/af/envalid/pull/118
 function bool(spec) {
-    return exports.makeValidator(function (input) {
+    return (0, exports.makeValidator)(function (input) {
         switch (input) {
             case true:
             case 'true':
@@ -54763,68 +54777,67 @@ function bool(spec) {
             case '0':
                 return false;
             default:
-                throw new errors_1.EnvError("Invalid bool input: \"" + input + "\"");
+                throw new errors_1.EnvError("Invalid bool input: \"".concat(input, "\""));
         }
     })(spec);
 }
 exports.bool = bool;
 function num(spec) {
-    return exports.makeValidator(function (input) {
+    return (0, exports.makeValidator)(function (input) {
         var coerced = parseFloat(input);
         if (Number.isNaN(coerced))
-            throw new errors_1.EnvError("Invalid number input: \"" + input + "\"");
+            throw new errors_1.EnvError("Invalid number input: \"".concat(input, "\""));
         return coerced;
     })(spec);
 }
 exports.num = num;
 function str(spec) {
-    return exports.makeValidator(function (input) {
+    return (0, exports.makeValidator)(function (input) {
         if (typeof input === 'string')
             return input;
-        throw new errors_1.EnvError("Not a string: \"" + input + "\"");
+        throw new errors_1.EnvError("Not a string: \"".concat(input, "\""));
     })(spec);
 }
 exports.str = str;
 function email(spec) {
-    return exports.makeValidator(function (x) {
+    return (0, exports.makeValidator)(function (x) {
         if (EMAIL_REGEX.test(x))
             return x;
-        throw new errors_1.EnvError("Invalid email address: \"" + x + "\"");
+        throw new errors_1.EnvError("Invalid email address: \"".concat(x, "\""));
     })(spec);
 }
 exports.email = email;
 function host(spec) {
-    return exports.makeValidator(function (input) {
+    return (0, exports.makeValidator)(function (input) {
         if (!isFQDN(input) && !isIP(input)) {
-            throw new errors_1.EnvError("Invalid host (domain or ip): \"" + input + "\"");
+            throw new errors_1.EnvError("Invalid host (domain or ip): \"".concat(input, "\""));
         }
         return input;
     })(spec);
 }
 exports.host = host;
 function port(spec) {
-    return exports.makeValidator(function (input) {
+    return (0, exports.makeValidator)(function (input) {
         var coerced = +input;
         if (Number.isNaN(coerced) ||
-            "" + coerced !== "" + input ||
+            "".concat(coerced) !== "".concat(input) ||
             coerced % 1 !== 0 ||
             coerced < 1 ||
             coerced > 65535) {
-            throw new errors_1.EnvError("Invalid port input: \"" + input + "\"");
+            throw new errors_1.EnvError("Invalid port input: \"".concat(input, "\""));
         }
         return coerced;
     })(spec);
 }
 exports.port = port;
 function url(spec) {
-    return exports.makeValidator(function (x) {
+    return (0, exports.makeValidator)(function (x) {
         try {
-            // @ts-expect-error TS doesn't acknowledge this API by default yet
             new URL(x);
             return x;
         }
         catch (e) {
-            throw new errors_1.EnvError("Invalid url: \"" + x + "\"");
+            throw new errors_1.EnvError("Invalid url: \"".concat(x, "\""));
         }
     })(spec);
 }
@@ -54836,12 +54849,12 @@ exports.url = url;
 //   MY_VAR: json<{ foo: number }>({ default: { foo: 123 } }),
 // })
 function json(spec) {
-    return exports.makeValidator(function (x) {
+    return (0, exports.makeValidator)(function (x) {
         try {
             return JSON.parse(x);
         }
         catch (e) {
-            throw new errors_1.EnvError("Invalid json: \"" + x + "\"");
+            throw new errors_1.EnvError("Invalid json: \"".concat(x, "\""));
         }
     })(spec);
 }
