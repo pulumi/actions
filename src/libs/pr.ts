@@ -15,7 +15,11 @@ export async function handlePullRequestMessage(
     options: { editCommentOnPr },
   } = config;
 
-  const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
+  const heading = `#### :tropical_drink: \`${command}\` on ${stackName}
+
+  <details>
+  <summary>Click to expand Pulumi report</summary>`;
+
   const rawBody = output.substring(0, 64_000);
   const body = dedent`
     ${heading}
@@ -27,6 +31,7 @@ export async function handlePullRequestMessage(
         ? '**Warn**: The output was too long and trimmed.'
         : ''
     }
+    </details>
   `;
 
   const { payload, repo } = context;

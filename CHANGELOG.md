@@ -6,6 +6,10 @@
 
 ---
 
+## 3.16.0 (2022-02-09)
+
+- Print the comments as a collapsed `<details>` section
+
 ## 3.15.0 (2022-01-04)
 
 - Upgrade to Pulumi v3.21.0
