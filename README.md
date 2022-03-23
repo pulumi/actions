@@ -316,7 +316,7 @@ jobs:
         uses: actions/setup-nodejs@v2
         with:
           node-version: 14.x
-      - uses: google-github-actions/setup-gcloud@master
+      - uses: google-github-actions/setup-gcloud@v0
         with:
           service_account_key: ${{ secrets.GCP_KEY }}
           project_id: ${{ env.PROJECT_ID }}
