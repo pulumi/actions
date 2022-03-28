@@ -21,8 +21,11 @@ export async function handlePullRequestMessage(
   <summary>Click to expand Pulumi report</summary>`;
 
   const rawBody = output.substring(0, 64_000);
+  // a line break between heading and rawBody is needed
+  // otherwise the backticks won't work as intended
   const body = dedent`
     ${heading}
+
     \`\`\`
     ${rawBody}
     \`\`\`
