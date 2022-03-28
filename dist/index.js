@@ -87111,8 +87111,11 @@ function handlePullRequestMessage(config, output) {
   <details>
   <summary>Click to expand Pulumi report</summary>`;
         const rawBody = output.substring(0, 64000);
+        // a line break between heading and rawBody is needed
+        // otherwise the backticks won't work as intended
         const body = dedent `
     ${heading}
+
     \`\`\`
     ${rawBody}
     \`\`\`
