@@ -12,7 +12,7 @@ export async function handlePullRequestMessage(
     githubToken,
     command,
     stackName,
-    options: { editCommentOnPr },
+    options: { editCommentOnPr, prNumber },
   } = config;
 
   const heading = `#### :tropical_drink: \`${command}\` on ${stackName}
@@ -37,8 +37,12 @@ export async function handlePullRequestMessage(
     </details>
   `;
 
-  const { payload, repo } = context;
-  invariant(payload.pull_request, 'Missing pull request event data.');
+  const {
+    payload: { pull_request: pullRequest = { number: 0 } },
+    repo,
+  } = context;
+  pullRequest.number ||= prNumber;
+  invariant(pullRequest.number, 'Missing pull request event data.');
 
   const octokit = getOctokit(githubToken);
 
@@ -46,7 +50,7 @@ export async function handlePullRequestMessage(
     if (editCommentOnPr) {
       const { data: comments } = await octokit.rest.issues.listComments({
         ...repo,
-        issue_number: payload.pull_request.number,
+        issue_number: pullRequest.number,
       });
       const comment = comments.find((comment) =>
         comment.body.startsWith(heading),
@@ -70,7 +74,7 @@ export async function handlePullRequestMessage(
 
   await octokit.rest.issues.createComment({
     ...repo,
-    issue_number: payload.pull_request.number,
+    issue_number: pullRequest.number,
     body,
   });
 }
