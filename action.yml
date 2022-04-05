@@ -1,8 +1,6 @@
 name: 'Pulumi CLI Action'
 author: Pulumi
-description:
-  Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of
-  choice, using just your favorite language and GitHub.
+description: Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice, using just your favorite language and GitHub.
 branding:
   icon: upload-cloud
   color: purple
@@ -30,16 +28,11 @@ inputs:
     required: false
     default: ''
   secrets-provider:
-    description:
-      'The type of the provider that should be used to encrypt and decrypt
-      secrets. Possible choices: default, passphrase, awskms, azurekeyvault,
-      gcpkms, hashivault'
+    description: 'The type of the provider that should be used to encrypt and decrypt secrets. Possible choices: default, passphrase, awskms, azurekeyvault, gcpkms, hashivault'
     required: false
     default: ''
   parallel:
-    description:
-      'Allow P resource operations to run in parallel at once (1 for no
-      parallelism). Defaults to unbounded.'
+    description: 'Allow P resource operations to run in parallel at once (1 for no parallelism). Defaults to unbounded.'
     required: false
     default: '2147483647'
   message:
@@ -53,19 +46,13 @@ inputs:
     description: 'Display operation as a rich diff showing the overall change'
     required: false
   replace:
-    description:
-      'Specify resources to replace. Multiple resources can be specified one per
-      line'
+    description: 'Specify resources to replace. Multiple resources can be specified one per line'
     required: false
   target:
-    description:
-      'Specify a single resource URN to update. Other resources will not be
-      updated. Multiple resources can be specified one per line'
+    description: 'Specify a single resource URN to update. Other resources will not be updated. Multiple resources can be specified one per line'
     required: false
   target-dependents:
-    description:
-      'Allows updating of dependent targets discovered but not specified in
-      target.'
+    description: 'Allows updating of dependent targets discovered but not specified in target.'
     required: false
     default: 'false'
   refresh:
