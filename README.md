@@ -79,6 +79,9 @@ The action can be configured with the following arguments:
   `true`. This is in an effort to reduce verbosity - if you want to have a
   comment per PR run, please ensure that you set this to `false`.
 
+- `pr-number` - (optional) The number of the pull request in which to create a
+  comment.
+
 - `diff` - (optional) Display operation as a rich diff showing the overall
   change
 
