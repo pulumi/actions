@@ -36,7 +36,7 @@ jobs:
 
       - name: Upload artifacts
         if: steps.changes.outputs.dist == 'true'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist
