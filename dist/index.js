@@ -53622,7 +53622,7 @@ exports.applyDefaultMiddleware = applyDefaultMiddleware;
 
 var _a;
 exports.__esModule = true;
-exports.defaultReporter = void 0;
+exports.defaultReporter = exports.envalidErrorFormatter = void 0;
 /* eslint-disable no-console */
 var errors_1 = __nccwpck_require__(9150);
 var defaultLogger = console.error.bind(console);
@@ -53637,15 +53637,16 @@ var colors = {
     yellow: colorWith('33')
 };
 var RULE = colors.white('================================');
-var defaultReporter = function (_a, _b) {
-    var _c = _a.errors, errors = _c === void 0 ? {} : _c;
-    var _d = _b === void 0 ? { logger: defaultLogger } : _b, onError = _d.onError, logger = _d.logger;
-    if (!Object.keys(errors).length)
-        return;
+// Takes the provided errors, formats them all to an output string, and passes that string output to the
+// provided "logger" function.
+//
+// This is exposed in the public API so third-party reporters can leverage this logic if desired
+var envalidErrorFormatter = function (errors, logger) {
+    if (logger === void 0) { logger = defaultLogger; }
     var missingVarsOutput = [];
     var invalidVarsOutput = [];
-    for (var _i = 0, _e = Object.entries(errors); _i < _e.length; _i++) {
-        var _f = _e[_i], k = _f[0], err = _f[1];
+    for (var _i = 0, _a = Object.entries(errors); _i < _a.length; _i++) {
+        var _b = _a[_i], k = _b[0], err = _b[1];
         if (err instanceof errors_1.EnvMissingError) {
             missingVarsOutput.push("    ".concat(colors.blue(k), ": ").concat(err.message || '(required)'));
         }
@@ -53663,16 +53664,24 @@ var defaultReporter = function (_a, _b) {
         RULE,
         invalidVarsOutput.sort().join('\n'),
         missingVarsOutput.sort().join('\n'),
-        colors.yellow('\n Exiting with error code 1'),
         RULE,
     ]
         .filter(function (x) { return !!x; })
         .join('\n');
     logger(output);
+};
+exports.envalidErrorFormatter = envalidErrorFormatter;
+var defaultReporter = function (_a, _b) {
+    var _c = _a.errors, errors = _c === void 0 ? {} : _c;
+    var _d = _b === void 0 ? { logger: defaultLogger } : _b, onError = _d.onError, logger = _d.logger;
+    if (!Object.keys(errors).length)
+        return;
+    (0, exports.envalidErrorFormatter)(errors, logger);
     if (onError) {
         onError(errors);
     }
     else if (isNode) {
+        logger(colors.yellow('\n Exiting with error code 1'));
         process.exit(1);
     }
     else {
