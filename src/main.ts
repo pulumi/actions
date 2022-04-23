@@ -4,12 +4,14 @@ import {
   LocalProgramArgs,
   LocalWorkspace,
   LocalWorkspaceOptions,
+  ConfigMap,
 } from '@pulumi/pulumi/automation';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
 import { invariant } from './libs/utils';
+import YAML from 'yaml';
 
 const pulumiVersion = '^3';
 
@@ -51,6 +53,12 @@ const main = async () => {
     core.debug(msg);
     core.info(msg);
   };
+
+  if (config.configMap != '') {
+    core.debug(`Attempt to parse configMap`);
+    const configMap: ConfigMap = YAML.parse(config.configMap);
+    await stack.setAllConfig(configMap);
+  }
 
   if (config.refresh) {
     core.startGroup(`Refresh stack on ${config.stackName}`);

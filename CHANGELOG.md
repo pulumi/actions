@@ -6,6 +6,10 @@
 
 ---
 
+## 3.17.0 (2022-04-24)
+
+- Add configuration of Pulumi stack by `configMap` field
+
 ## 3.16.0 (2022-02-09)
 
 - Print the comments as a collapsed `<details>` section

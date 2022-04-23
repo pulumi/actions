@@ -31,6 +31,7 @@ describe('config.ts', () => {
         "cloudUrl": "file://~",
         "command": "up",
         "commentOnPr": false,
+        "configMap": undefined,
         "githubToken": "n/a",
         "options": Object {
           "diff": undefined,
@@ -85,6 +86,7 @@ describe('config.ts', () => {
         "cloudUrl": "file://~",
         "command": "up",
         "commentOnPr": true,
+        "configMap": undefined,
         "githubToken": "n/a",
         "options": Object {
           "diff": undefined,

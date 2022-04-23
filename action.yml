@@ -39,6 +39,10 @@ inputs:
     description: 'Optional message to associate with the update operation'
     required: false
     default: ''
+  configMap:
+    description: 'Config to use during the operations'
+    required: false
+    default: ''
   expect-no-changes:
     description: 'Return an error if any changes occur during this update'
     required: false

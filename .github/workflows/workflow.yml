@@ -86,6 +86,7 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           work-dir: .github/test-stacks/dotnet
+          configMap: "{name: {value: my-pet, secret: false}}"
 
   test-golang-stack:
     needs: install-and-build
@@ -129,6 +130,7 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           work-dir: .github/test-stacks/golang
+          configMap: "{name: {value: my-user-name, secret: false}}"
 
   test-nodejs-stack:
     needs: install-and-build
@@ -188,6 +190,7 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           work-dir: .github/test-stacks/nodejs
+          configMap: "{name: {value: hostname, secret: false}}"
 
   test-python-stack:
     needs: install-and-build
@@ -258,6 +261,7 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           work-dir: .github/test-stacks/python
+          configMap: "{name: {value: hostname, secret: false}}"
 
   test-generic-inputs:
     needs: install-and-build
@@ -317,3 +321,4 @@ jobs:
           work-dir: .github/test-stacks/nodejs
           upsert: true
           refresh: true
+          configMap: "{name: {value: hostname, secret: false}}"

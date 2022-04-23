@@ -37,6 +37,7 @@ export const config = rt
     rt.Partial({
       // Optional options
       cloudUrl: rt.String,
+      configMap: rt.String,
       githubToken: rt.String,
       upsert: rt.Boolean,
       refresh: rt.Boolean,
@@ -57,6 +58,7 @@ export async function makeConfig(): Promise<Config> {
     commentOnPr: parseBoolean(getInput('comment-on-pr')),
     upsert: parseBoolean(getInput('upsert')),
     refresh: parseBoolean(getInput('refresh')),
+    configMap: getInput('configMap'),
     options: {
       parallel: parseNumber(getInput('parallel')),
       message: getInput('message'),

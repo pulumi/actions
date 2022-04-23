@@ -81,16 +81,19 @@ The action can be configured with the following arguments:
   comment per PR run, please ensure that you set this to `false`.
 
 - `diff` - (optional) Display operation as a rich diff showing the overall
-  change
+  change.
 
 - `replace` - (optional) Specify resources to replace. Multiple resources can be
-  specified one per line
+  specified one per line (example: `<value | string>,...`).
 
 - `target` - (optional) Specify a single resource URN to update. Other resources
-  will not be updated. Multiple resources can be specified one per line
+  will not be updated. Multiple resources can be specified one per line (example: `<value | string>,...`).
 
 - `target-dependents` - (optional) Allows updating of dependent targets
   discovered but not specified in target.
+
+- `configMap` - (optional) Configuration of the stack. Format Yaml string: `{<key | string>: {value: <value | string>, secret: <is_secret | boolean> },}`.
+
 - `upsert` - (optional) Allows the creation of the specified stack if it
   currently doesn't exist.  
   **PLEASE NOTE:** This will create a `Pulumi.<stack-name>.yaml` file that you
