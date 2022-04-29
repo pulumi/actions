@@ -69,10 +69,10 @@ The action can be configured with the following arguments:
 - `parallel` - (optional) Allow P resource operations to run in parallel at once
   (1 for no parallelism). Defaults to unbounded.
 
-- `message` - (optional) Optional message to associate with the update operation
+- `message` - (optional) Optional message to associate with the update operation.
 
 - `expect-no-changes` - (optional) Return an error if any changes occur during
-  this update
+  this update.
 
 - `edit-pr-comment` - (optional) Edit previous PR comment instead of posting new
   one.  

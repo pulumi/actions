@@ -55,7 +55,6 @@ const main = async () => {
   };
 
   if (config.configMap != '') {
-    core.debug(`Attempt to parse configMap`);
     const configMap: ConfigMap = YAML.parse(config.configMap);
     await stack.setAllConfig(configMap);
   }
