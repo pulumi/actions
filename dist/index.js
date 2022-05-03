@@ -18733,6 +18733,9 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.color) {
                     args.push("--color", opts.color);
                 }
+                if (opts.plan) {
+                    args.push("--plan", opts.plan);
+                }
             }
             let onExit = (hasError) => { return; };
             let didError = false;
@@ -18841,6 +18844,9 @@ Event: ${line}\n${e.toString()}`);
                 }
                 if (opts.color) {
                     args.push("--color", opts.color);
+                }
+                if (opts.plan) {
+                    args.push("--save-plan", opts.plan);
                 }
             }
             let onExit = (hasError) => { return; };
