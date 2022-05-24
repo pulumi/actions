@@ -45517,9 +45517,17 @@ const semver = __nccwpck_require__(7486);
 // happening through a supported API.  Pre-11 we can just call into % intrinsics for the same data.
 /** @internal */
 exports.isNodeAtLeastV11 = semver.gte(process.version, "11.0.0");
-const session = exports.isNodeAtLeastV11
-    ? createInspectorSessionAsync()
-    : Promise.resolve(undefined);
+let session = undefined;
+function getSession() {
+    if (session !== undefined) {
+        return session;
+    }
+    if (!exports.isNodeAtLeastV11) {
+        return Promise.resolve(undefined);
+    }
+    session = createInspectorSessionAsync();
+    return session;
+}
 const scriptIdToUrlMap = new Map();
 function createInspectorSessionAsync() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -45550,7 +45558,7 @@ function getSessionAsync() {
         if (!exports.isNodeAtLeastV11) {
             throw new Error("Should not call getSessionAsync unless on Node11 or above.");
         }
-        return session;
+        return getSession();
     });
 }
 exports.getSessionAsync = getSessionAsync;
@@ -45561,7 +45569,7 @@ exports.getSessionAsync = getSessionAsync;
  */
 function isInitializedAsync() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield session;
+        yield getSession();
     });
 }
 exports.isInitializedAsync = isInitializedAsync;
