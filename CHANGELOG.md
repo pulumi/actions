@@ -2,9 +2,13 @@
 
 ## HEAD (Unreleased)
 
-- fix: pull request comment body too big. Trims body when above 64k characters.
+_(none)_
 
 ---
+
+## 3.17.0 (2022-05-25)
+
+- Fixes errors when pull request comment body is too large by trimming the body when above 64k characters
 
 ## 3.16.0 (2022-02-09)
 
