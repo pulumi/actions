@@ -50,7 +50,7 @@
     "@pulumi/pulumi": "3.33.1",
     "dedent": "^0.7.0",
     "envalid": "^7.3.1",
-    "got": "^11.8.3",
+    "got": "^12.1.0",
     "runtypes": "^6.5.1",
     "semver": "^7.3.7",
     "typescript": "~4.1.3"
