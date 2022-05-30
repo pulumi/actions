@@ -29042,7 +29042,11 @@ construct: {
     responseSerialize: serialize_pulumirpc_ConstructResponse,
     responseDeserialize: deserialize_pulumirpc_ConstructResponse,
   },
-  // Cancel signals the provider to abort all outstanding resource operations.
+  // Cancel signals the provider to gracefully shut down and abort any ongoing resource operations.
+// Operations aborted in this way will return an error (e.g., `Update` and `Create` will either return a
+// creation error or an initialization error). Since Cancel is advisory and non-blocking, it is up
+// to the host to decide how long to wait after Cancel is called before (e.g.)
+// hard-closing any gRPC connection.
 cancel: {
     path: '/pulumirpc.ResourceProvider/Cancel',
     requestStream: false,
@@ -45828,7 +45832,14 @@ function lookupCapturedVariableValueAsync(func, freeVariable, throwOnFailure) {
 exports.lookupCapturedVariableValueAsync = lookupCapturedVariableValueAsync;
 // Isolated singleton context accessible from the inspector.
 // Used instead of `global` object to support executions with multiple V8 vm contexts as, e.g., done by Jest.
-const inflightContext = createContext();
+let inflightContextCache;
+function inflightContext() {
+    if (inflightContextCache) {
+        return inflightContextCache;
+    }
+    inflightContextCache = createContext();
+    return inflightContextCache;
+}
 function createContext() {
     return __awaiter(this, void 0, void 0, function* () {
         const context = {
@@ -45869,7 +45880,7 @@ function getRuntimeIdForFunctionAsync(func) {
         const session = yield v8Hooks.getSessionAsync();
         const post = util.promisify(session.post);
         // Place the function in a unique location
-        const context = yield inflightContext;
+        const context = yield inflightContext();
         const currentFunctionName = "id" + context.currentFunctionId++;
         context.functions[currentFunctionName] = func;
         const contextId = context.contextId;
@@ -45917,7 +45928,7 @@ function getValueForObjectId(objectId) {
         // the unique-id is to prevent any issues with multiple in-flight asynchronous calls.
         const session = yield v8Hooks.getSessionAsync();
         const post = util.promisify(session.post);
-        const context = yield inflightContext;
+        const context = yield inflightContext();
         // Get an id for an unused location in the global table.
         const tableId = "id" + context.currentCallId++;
         // Now, ask the runtime to call a fictitious method on the scopes-array object.  When it
