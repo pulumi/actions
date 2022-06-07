@@ -2,13 +2,15 @@
 
 ## HEAD (Unreleased)
 
-_(none)_
+- fix: update PR comments correctly when `edit-pr-comment` is true (fixes
+  [#633](https://github.com/pulumi/actions/issues/633))
 
 ---
 
 ## 3.17.0 (2022-05-25)
 
-- Fixes errors when pull request comment body is too large by trimming the body when above 64k characters
+- Fixes errors when pull request comment body is too large by trimming the body
+  when above 64k characters
 
 ## 3.16.0 (2022-02-09)
 
