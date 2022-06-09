@@ -2,17 +2,19 @@
 
 ## HEAD (Unreleased)
 
-- fix: pull request comment body too big. Trims body when above 64k characters.
+- fix: update PR comments correctly when `edit-pr-comment` is true (fixes
+  [#633](https://github.com/pulumi/actions/issues/633))
 
 ---
 
-## 3.17.0 (2022-04-24)
+## 3.18.0 (2022-06-09)
 
 - Add configuration of Pulumi stack by `configMap` field
 
-## 3.16.0 (2022-02-09)
+## 3.17.0 (2022-05-25)
 
-- Print the comments as a collapsed `<details>` section
+- Fixes errors when pull request comment body is too large by trimming the body
+  when above 64k characters
 
 ## 3.15.0 (2022-01-04)
 
