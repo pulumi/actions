@@ -42,7 +42,7 @@ jobs:
           path: dist
 
     outputs:
-      changed: ${{ steps.changes.outputs.dist }}
+      changed: true
 
   test-dotnet-stack:
     needs: install-and-build
