@@ -69,8 +69,6 @@ jobs:
 
       - name: Install pulumi
         uses: pulumi/setup-pulumi@v2
-        with:
-          pulumi-version: 3.30.0
 
       - name: Create local stack
         run: |
@@ -213,7 +211,7 @@ jobs:
           name: dist
           path: dist
 
-      - uses: actions/setup-python@v3.1.2
+      - uses: actions/setup-python@v4.0.0
         with:
           python-version: 3.9
 
