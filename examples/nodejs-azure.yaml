@@ -1,0 +1,24 @@
+name: Pulumi
+on:
+  push:
+    branches:
+      - master
+jobs:
+  up:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup DotNet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1
+      - uses: pulumi/actions@v3
+        with:
+          command: up
+          stack-name: dev
+          cloud-url: azblob://my-blob-name-and-path
+        env:
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+          AZURE_KEYVAULT_AUTH_VIA_CLI: true
