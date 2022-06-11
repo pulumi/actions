@@ -55,7 +55,7 @@ export async function downloadCli(range: string): Promise<void> {
     })
 
   const downloaded = await tc.downloadTool(downloads[platform]);
-  core.info(`Successfully downloaded ${downloads[platform]}`);
+  core.debug(`Successfully downloaded ${downloads[platform]}`);
 
   switch (platform) {
     case "windows": {
@@ -77,6 +77,5 @@ export async function downloadCli(range: string): Promise<void> {
   }
 
   const cachedPath = await tc.cacheDir(path.join(destination, 'bin'), 'pulumi', version);
-  core.info(`Cache path ${cachedPath}`)
   core.addPath(cachedPath);
 }
