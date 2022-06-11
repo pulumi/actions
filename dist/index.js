@@ -97676,7 +97676,7 @@ function downloadCli(range) {
             core.info(`Successfully deleted pre-existing ${external_path_.join(destination, "bin")}`);
         });
         const downloaded = yield tool_cache.downloadTool(downloads[platform]);
-        core.debug(`successfully downloaded ${downloads[platform]}`);
+        core.info(`Successfully downloaded ${downloads[platform]}`);
         switch (platform) {
             case "windows": {
                 yield tool_cache.extractZip(downloaded, external_os_.homedir());
@@ -97696,6 +97696,7 @@ function downloadCli(range) {
             }
         }
         const cachedPath = yield tool_cache.cacheDir(external_path_.join(destination, 'bin'), 'pulumi', version);
+        core.info(`Cache path ${cachedPath}`);
         core.addPath(cachedPath);
     });
 }
