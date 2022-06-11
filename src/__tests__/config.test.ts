@@ -20,6 +20,12 @@ describe('config.ts', () => {
       getInput: jest.fn((name: string) => {
         return config[name];
       }),
+      getBooleanInput: jest.fn((name: string) => {
+        return Boolean(config[name] === 'true');
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return config[name] ? config[name].split(/\r?\n/) : undefined;
+      }),
     }));
     jest.mock('@actions/github', () => ({
       context: {},
@@ -27,7 +33,7 @@ describe('config.ts', () => {
 
     const { makeConfig } = require('../config');
 
-    const c = await makeConfig();
+    const c = makeConfig();
     expect(c).toBeTruthy();
     expect(c).toMatchInlineSnapshot(`
       Object {
@@ -39,22 +45,20 @@ describe('config.ts', () => {
         "isPullRequest": false,
         "options": Object {
           "color": undefined,
-          "diff": undefined,
-          "editCommentOnPr": undefined,
-          "expectNoChanges": undefined,
+          "diff": false,
+          "editCommentOnPr": false,
+          "expectNoChanges": false,
           "message": undefined,
           "parallel": undefined,
-          "policyPackConfigs": undefined,
-          "policyPacks": undefined,
           "replace": undefined,
           "target": undefined,
-          "targetDependents": undefined,
+          "targetDependents": false,
           "userAgent": "pulumi/actions@v3",
         },
-        "refresh": undefined,
+        "refresh": false,
         "secretsProvider": undefined,
         "stackName": "dev",
-        "upsert": undefined,
+        "upsert": false,
         "workDir": "./",
       }
     `);
@@ -67,6 +71,12 @@ describe('config.ts', () => {
       getInput: jest.fn((name: string) => {
         return config[name];
       }),
+      getBooleanInput: jest.fn((name: string) => {
+        return Boolean(config[name] === 'true');
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return config[name] ? config[name].split(/\r?\n/) : undefined;
+      }),
     }));
     jest.mock('@actions/github', () => ({
       context: {},
@@ -74,7 +84,9 @@ describe('config.ts', () => {
 
     const { makeConfig } = require('../config');
 
-    await expect(makeConfig()).rejects.toThrow();
+    await expect(makeConfig).toThrowErrorMatchingInlineSnapshot(
+      `"Expected { command: \\"up\\" | \\"update\\" | \\"refresh\\" | \\"destroy\\" | \\"preview\\"; stackName: string; workDir: string; commentOnPr: boolean; options: { parallel?: number; message?: string; expectNoChanges?: boolean; diff?: boolean; replace?: string[]; target?: string[]; policyPacks?: string[]; policyPackConfigs?: string[]; targetDependents?: boolean; editCommentOnPr?: boolean; userAgent?: \\"pulumi/actions@v3\\"; }; configMap?: string; cloudUrl?: string; githubToken?: string; upsert?: boolean; refresh?: boolean; secretsProvider?: string; }, but was incompatible"`,
+    );
   });
   it('should validate a configuration with commentOnPr eq true', async () => {
     const config = {
@@ -85,11 +97,17 @@ describe('config.ts', () => {
       getInput: jest.fn((name: string) => {
         return config[name];
       }),
+      getBooleanInput: jest.fn((name: string) => {
+        return Boolean(config[name] === 'true');
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return config[name] ? config[name].split(/\r?\n/) : undefined;
+      }),
     }));
 
     const { makeConfig } = require('../config');
 
-    const c = await makeConfig();
+    const c = makeConfig();
     expect(c).toBeTruthy();
     expect(c).toMatchInlineSnapshot(`
       Object {
@@ -101,22 +119,20 @@ describe('config.ts', () => {
         "isPullRequest": false,
         "options": Object {
           "color": undefined,
-          "diff": undefined,
-          "editCommentOnPr": undefined,
-          "expectNoChanges": undefined,
+          "diff": false,
+          "editCommentOnPr": false,
+          "expectNoChanges": false,
           "message": undefined,
           "parallel": undefined,
-          "policyPackConfigs": undefined,
-          "policyPacks": undefined,
           "replace": undefined,
           "target": undefined,
-          "targetDependents": undefined,
+          "targetDependents": false,
           "userAgent": "pulumi/actions@v3",
         },
-        "refresh": undefined,
+        "refresh": false,
         "secretsProvider": undefined,
         "stackName": "dev",
-        "upsert": undefined,
+        "upsert": false,
         "workDir": "./",
       }
     `);
@@ -164,13 +180,13 @@ describe('config.ts', () => {
           "policyPacks": undefined,
           "replace": undefined,
           "target": undefined,
-          "targetDependents": undefined,
+          "targetDependents": false,
           "userAgent": "pulumi/actions@v3",
         },
-        "refresh": undefined,
+        "refresh": false,
         "secretsProvider": undefined,
         "stackName": "dev",
-        "upsert": undefined,
+        "upsert": false,
         "workDir": "./",
       }
     `);

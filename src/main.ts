@@ -16,7 +16,7 @@ import * as pulumiCli from './libs/pulumi-cli';
 const pulumiVersion = '^3';
 
 const main = async () => {
-  const config = await makeConfig();
+  const config = makeConfig();
   core.debug('Configuration is loaded');
 
   await pulumiCli.downloadCli(pulumiVersion);
