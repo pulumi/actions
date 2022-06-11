@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import * as dedent from 'dedent';
+import invariant from 'ts-invariant';
 import { Config } from '../config';
-import { invariant } from './utils';
 
 export async function handlePullRequestMessage(
   config: Config,
