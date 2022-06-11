@@ -67,9 +67,6 @@ jobs:
         with:
           dotnet-version: 3.1
 
-      - name: Install pulumi
-        uses: pulumi/setup-pulumi@v2
-
       - name: Create local stack
         run: |
           pulumi login --local
@@ -110,9 +107,6 @@ jobs:
         with:
           go-version: 1.15.x
 
-      - name: Install pulumi
-        uses: pulumi/setup-pulumi@v2
-
       - name: Create local stack
         run: |
           pulumi login --local
@@ -152,9 +146,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 14.x
-
-      - name: Install pulumi
-        uses: pulumi/setup-pulumi@v2
 
       - name: Create local stack
         run: |
@@ -211,9 +202,6 @@ jobs:
       - uses: actions/setup-python@v4.0.0
         with:
           python-version: 3.9
-
-      - name: Install pulumi
-        uses: pulumi/setup-pulumi@v2
 
       - name: Create local stack
         run: |
@@ -293,9 +281,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 14.x
-
-      - name: Install pulumi
-        uses: pulumi/setup-pulumi@v2
 
       - name: Create local stack
         run: |
