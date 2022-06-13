@@ -47,7 +47,7 @@
     "@actions/github": "^5.0.3",
     "@actions/io": "^1.1.2",
     "@actions/tool-cache": "^2.0.1",
-    "@pulumi/pulumi": "3.33.2",
+    "@pulumi/pulumi": "3.34.1",
     "dedent": "^0.7.0",
     "envalid": "^7.3.1",
     "got": "^11.8.3",
