@@ -87831,6 +87831,7 @@ const options = lib.Partial({
     targetDependents: lib.Boolean,
     editCommentOnPr: lib.Boolean,
     userAgent: lib.Literal('pulumi/actions@v3'),
+    pulumiVersion: lib.String,
 });
 const config = lib.Record({
     // Required options
@@ -87870,6 +87871,7 @@ function makeConfig() {
                 targetDependents: parseBoolean((0,core.getInput)('target-dependents')),
                 editCommentOnPr: parseBoolean((0,core.getInput)('edit-pr-comment')),
                 userAgent: 'pulumi/actions@v3',
+                pulumiVersion: (0,core.getInput)('pulumi-version') || "^3",
             },
         });
     });
@@ -88102,11 +88104,10 @@ function downloadCli(range) {
 
 
 
-const pulumiVersion = '^3';
 const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
     const config = yield makeConfig();
     core.debug('Configuration is loaded');
-    yield downloadCli(pulumiVersion);
+    yield downloadCli(config.options.pulumiVersion);
     if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
         core.debug(`Logging into Pulumi`);
         yield run('login');
