@@ -75,10 +75,9 @@ The action can be configured with the following arguments:
   this update
 
 - `edit-pr-comment` - (optional) Edit previous PR comment instead of posting new
-  one.  
-  **PLEASE NOTE:** that as of 3.2.0 of the Action, this now defaults to `true`.
-  This is in an effort to reduce verbosity - if you want to have a comment per
-  PR run, please ensure that you set this to `false`.
+  one. **PLEASE NOTE:** that as of 3.2.0 of the Action, this now defaults to
+  `true`. This is in an effort to reduce verbosity - if you want to have a
+  comment per PR run, please ensure that you set this to `false`.
 
 - `diff` - (optional) Display operation as a rich diff showing the overall
   change
@@ -92,10 +91,12 @@ The action can be configured with the following arguments:
 - `target-dependents` - (optional) Allows updating of dependent targets
   discovered but not specified in target.
 - `upsert` - (optional) Allows the creation of the specified stack if it
-  currently doesn't exist.  
-  **PLEASE NOTE:** This will create a `Pulumi.<stack-name>.yaml` file that you
-  will need to add back to source control as part of the action if you wish to
-  perform any further tasks with that stack.
+  currently doesn't exist. **PLEASE NOTE:** This will create a
+  `Pulumi.<stack-name>.yaml` file that you will need to add back to source
+  control as part of the action if you wish to perform any further tasks with
+  that stack.
+- `pulumi-version` - (optional) Install a specific version of the Pulumi CLI.
+  Defaults to "^3"
 
 By default, this action will try to authenticate Pulumi with the
 [Pulumi SaaS](https://app.pulumi.com/). If you have not specified a

@@ -22,6 +22,7 @@ export const options = rt.Partial({
   targetDependents: rt.Boolean,
   editCommentOnPr: rt.Boolean,
   userAgent: rt.Literal('pulumi/actions@v3'),
+  pulumiVersion: rt.String,
 });
 
 export const config = rt
@@ -67,6 +68,7 @@ export async function makeConfig(): Promise<Config> {
       targetDependents: parseBoolean(getInput('target-dependents')),
       editCommentOnPr: parseBoolean(getInput('edit-pr-comment')),
       userAgent: 'pulumi/actions@v3',
+      pulumiVersion: getInput('pulumi-version'),
     },
   });
 }
