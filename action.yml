@@ -67,6 +67,10 @@ inputs:
     description: 'Edit previous PR comment instead of posting new one'
     required: false
     default: 'true'
+  pulumi-version:
+    description: 'Install a specific version of the Pulumi CLI'
+    required: false
+    default: '^3'
 outputs:
   output:
     description: Output from running command
