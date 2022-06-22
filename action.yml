@@ -67,6 +67,10 @@ inputs:
     description: 'Edit previous PR comment instead of posting new one'
     required: false
     default: 'true'
+  color:
+    description: 'Colorize output. Choices are: always, never, raw, auto'
+    required: false
+    default: 'auto'
 outputs:
   output:
     description: Output from running command

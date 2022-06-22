@@ -8,6 +8,10 @@
 
 ---
 
+## 3.17.1 (2022-06-22)
+- Add support for colorized output
+  [#662](https://github.com/pulumi/actions/pull/662)
+
 ## 3.17.0 (2022-05-25)
 
 - Fixes errors when pull request comment body is too large by trimming the body

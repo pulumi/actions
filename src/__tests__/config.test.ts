@@ -33,6 +33,7 @@ describe('config.ts', () => {
         "commentOnPr": false,
         "githubToken": "n/a",
         "options": Object {
+          "color": undefined,
           "diff": undefined,
           "editCommentOnPr": undefined,
           "expectNoChanges": undefined,
@@ -87,6 +88,7 @@ describe('config.ts', () => {
         "commentOnPr": true,
         "githubToken": "n/a",
         "options": Object {
+          "color": undefined,
           "diff": undefined,
           "editCommentOnPr": undefined,
           "expectNoChanges": undefined,

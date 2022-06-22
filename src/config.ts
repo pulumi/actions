@@ -67,6 +67,7 @@ export async function makeConfig(): Promise<Config> {
       targetDependents: parseBoolean(getInput('target-dependents')),
       editCommentOnPr: parseBoolean(getInput('edit-pr-comment')),
       userAgent: 'pulumi/actions@v3',
+      color: getInput('color'),
     },
   });
 }
