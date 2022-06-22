@@ -55,6 +55,12 @@ inputs:
     description: 'Allows updating of dependent targets discovered but not specified in target.'
     required: false
     default: 'false'
+  policyPacks:
+    description: 'Run one or more policy packs as part of this update.'
+    required: false
+  policyPackConfigs:
+    description: 'Path to JSON file containing the config for the policy pack of the corresponding "--policy-pack" flag.'
+    required: false
   refresh:
     description: 'Perform a stack refresh as part of the operation'
     required: false
