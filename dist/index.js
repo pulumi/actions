@@ -97426,7 +97426,7 @@ function parseNumber(input) {
 
 
 
-const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'));
+const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'), lib.Literal('rm'));
 const options = lib.Partial({
     parallel: lib.Number,
     message: lib.String,
@@ -97762,6 +97762,10 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
             onOutput(stderr);
             return stdout;
         }),
+        rm: () => {
+            stack.workspace.removeStack(stack.name);
+            return new Promise(() => 'Stack has deleted');
+        },
     };
     core.debug(`Running action ${config.command}`);
     const output = yield actions[config.command]();
