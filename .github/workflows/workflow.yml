@@ -33,6 +33,7 @@ jobs:
           filters: |
             dist:
               - 'dist/**'
+              - .github/workflows/**
 
       - name: Upload artifacts
         if: steps.changes.outputs.dist == 'true'
