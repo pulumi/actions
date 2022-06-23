@@ -97764,7 +97764,9 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
         }),
         rm: () => {
             stack.workspace.removeStack(stack.name);
-            return new Promise(() => 'Stack has deleted');
+            const stdout = 'Stack has deleted';
+            onOutput(stdout);
+            return new Promise(() => stdout);
         },
     };
     core.debug(`Running action ${config.command}`);
