@@ -82,8 +82,10 @@ const main = async () => {
       return stdout;
     },
     rm: () => {
-      stack.workspace.removeStack(stack.name)
-      return new Promise<string>(() => 'Stack has deleted');
+      stack.workspace.removeStack(stack.name);
+      const stdout = new Promise<string>(() => 'Stack has deleted');
+      onOutput(stdout);
+      return stdout;
     },
   };
 
