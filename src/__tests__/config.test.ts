@@ -2,33 +2,34 @@ const defaultConfig: Record<string, string> = {
   command: 'up',
   'stack-name': 'dev',
   'work-dir': './',
+  'version': '^3',
   'cloud-url': 'file://~',
   'github-token': 'n/a',
-  'pulumi-version': 'latest',
-};
+}
 
 describe('config.ts', () => {
   beforeEach(() => {
-    jest.resetModules();
-  });
+    jest.resetModules()
+  })
   it('should validate a configuration', async () => {
     const config = {
       ...defaultConfig,
       'comment-on-pr': 'false',
-    };
+    }
     jest.mock('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
-        return config[name];
+        return config[name]
       }),
-    }));
+    }))
 
-    const { makeConfig } = require('../config');
+    const { makeConfig } = require('../config')
 
-    const c = await makeConfig();
-    expect(c).toBeTruthy();
+    const c = await makeConfig()
+    expect(c).toBeTruthy()
     expect(c).toMatchInlineSnapshot(`
       Object {
         "cloudUrl": "file://~",
+        "version": "^3",
         "command": "up",
         "commentOnPr": false,
         "configMap": undefined,
@@ -48,43 +49,45 @@ describe('config.ts', () => {
         "secretsProvider": undefined,
         "stackName": "dev",
         "upsert": undefined,
+        "downsert": undefined,
         "workDir": "./",
       }
-    `);
-  });
+    `)
+  })
   it('should fail if configuration are invalid', async () => {
     const config: Record<string, string> = {
       command: 'sideways',
-    };
+    }
     jest.mock('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
-        return config[name];
+        return config[name]
       }),
-    }));
+    }))
 
-    const { makeConfig } = require('../config');
+    const { makeConfig } = require('../config')
 
-    await expect(makeConfig()).rejects.toThrow();
-  });
+    await expect(makeConfig()).rejects.toThrow()
+  })
   it('should validate a configuration with commentOnPr eq true', async () => {
     const config = {
       ...defaultConfig,
       'comment-on-pr': 'true',
-    };
+    }
     jest.mock('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
-        return config[name];
+        return config[name]
       }),
-    }));
+    }))
 
-    const { makeConfig } = require('../config');
+    const { makeConfig } = require('../config')
 
-    const c = await makeConfig();
-    expect(c).toBeTruthy();
+    const c = await makeConfig()
+    expect(c).toBeTruthy()
     expect(c).toMatchInlineSnapshot(`
       Object {
         "cloudUrl": "file://~",
         "command": "up",
+        "version": "^3",
         "commentOnPr": true,
         "configMap": undefined,
         "githubToken": "n/a",
@@ -103,8 +106,9 @@ describe('config.ts', () => {
         "secretsProvider": undefined,
         "stackName": "dev",
         "upsert": undefined,
+        "downsert": undefined,
         "workDir": "./",
       }
-    `);
-  });
-});
+    `)
+  })
+})

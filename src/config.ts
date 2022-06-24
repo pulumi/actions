@@ -1,6 +1,6 @@
-import { getInput } from '@actions/core';
-import * as rt from 'runtypes';
-import { parseArray, parseBoolean, parseNumber } from './libs/utils';
+import { getInput } from '@actions/core'
+import * as rt from 'runtypes'
+import { parseArray, parseBoolean, parseNumber } from './libs/utils'
 
 export const command = rt.Union(
   rt.Literal('up'),
@@ -8,10 +8,9 @@ export const command = rt.Union(
   rt.Literal('refresh'),
   rt.Literal('destroy'),
   rt.Literal('preview'),
-  rt.Literal('rm'),
-);
+)
 
-export type Commands = rt.Static<typeof command>;
+export type Commands = rt.Static<typeof command>
 
 export const options = rt.Partial({
   parallel: rt.Number,
@@ -23,13 +22,14 @@ export const options = rt.Partial({
   targetDependents: rt.Boolean,
   editCommentOnPr: rt.Boolean,
   userAgent: rt.Literal('pulumi/actions@v3'),
-});
+})
 
 export const config = rt
   .Record({
     // Required options
     command: command,
     stackName: rt.String,
+    version: rt.String,
     workDir: rt.String,
     commentOnPr: rt.Boolean,
     options: options,
@@ -41,23 +41,26 @@ export const config = rt
       configMap: rt.String,
       githubToken: rt.String,
       upsert: rt.Boolean,
+      downsert: rt.Boolean,
       refresh: rt.Boolean,
       secretsProvider: rt.String,
     }),
-  );
+  )
 
-export type Config = rt.Static<typeof config>;
+export type Config = rt.Static<typeof config>
 
 export async function makeConfig(): Promise<Config> {
   return config.check({
     command: getInput('command', { required: true }),
     stackName: getInput('stack-name', { required: true }),
+    version: getInput('version'),
     workDir: getInput('work-dir') || './',
     secretsProvider: getInput('secrets-provider'),
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
     commentOnPr: parseBoolean(getInput('comment-on-pr')),
     upsert: parseBoolean(getInput('upsert')),
+    downsert: parseBoolean(getInput('downsert')),
     refresh: parseBoolean(getInput('refresh')),
     configMap: getInput('configMap'),
     options: {
@@ -71,5 +74,5 @@ export async function makeConfig(): Promise<Config> {
       editCommentOnPr: parseBoolean(getInput('edit-pr-comment')),
       userAgent: 'pulumi/actions@v3',
     },
-  });
+  })
 }
