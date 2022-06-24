@@ -65,14 +65,7 @@ const main = async () => {
     up: () => stack.up({ onOutput, ...config.options }).then(r => r.stdout),
     update: () => stack.up({ onOutput, ...config.options }).then(r => r.stdout),
     refresh: () => stack.refresh({ onOutput, ...config.options }).then(r => r.stdout),
-    destroy: async () => {
-      const stdout = stack.destroy({ onOutput, ...config.options }).then(r => r.stdout)
-      if (config.downsert) {
-        stack.workspace.removeStack(stack.name)
-        return `${stdout}\nStack has deleted`
-      }
-      return stdout
-    },
+    destroy: () => stack.destroy({ onOutput, ...config.options }).then(r => r.stdout),
     preview: async () => {
       const { stdout, stderr } = await stack.preview(config.options)
       onOutput(stdout)
@@ -102,9 +95,12 @@ const main = async () => {
     handlePullRequestMessage(config, output)
   }
 
+  if (config.downsert && config.command === 'destroy') {
+    stack.workspace.removeStack(stack.name)
+  }
+
   core.endGroup()
 }
-
 ;(async () => {
   try {
     await main()

@@ -1,10 +1,10 @@
 const defaultConfig: Record<string, string> = {
-  command: 'up',
-  'stack-name': 'dev',
-  'work-dir': './',
-  'version': '^3',
   'cloud-url': 'file://~',
+  'command': 'up',
   'github-token': 'n/a',
+  'stack-name': 'dev',
+  'version': '^3',
+  'work-dir': './',
 }
 
 describe('config.ts', () => {
@@ -29,10 +29,10 @@ describe('config.ts', () => {
     expect(c).toMatchInlineSnapshot(`
       Object {
         "cloudUrl": "file://~",
-        "version": "^3",
         "command": "up",
         "commentOnPr": false,
         "configMap": undefined,
+        "downsert": undefined,
         "githubToken": "n/a",
         "options": Object {
           "diff": undefined,
@@ -49,7 +49,7 @@ describe('config.ts', () => {
         "secretsProvider": undefined,
         "stackName": "dev",
         "upsert": undefined,
-        "downsert": undefined,
+        "version": "^3",
         "workDir": "./",
       }
     `)
@@ -87,9 +87,9 @@ describe('config.ts', () => {
       Object {
         "cloudUrl": "file://~",
         "command": "up",
-        "version": "^3",
         "commentOnPr": true,
         "configMap": undefined,
+        "downsert": undefined,
         "githubToken": "n/a",
         "options": Object {
           "diff": undefined,
@@ -106,7 +106,7 @@ describe('config.ts', () => {
         "secretsProvider": undefined,
         "stackName": "dev",
         "upsert": undefined,
-        "downsert": undefined,
+        "version": "^3",
         "workDir": "./",
       }
     `)
