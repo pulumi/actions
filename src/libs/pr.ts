@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import { context, getOctokit } from '@actions/github'
-import dedent from 'dedent'
+import * as dedent from 'dedent'
 import { Config } from '../config'
 import { invariant } from './utils'
 
