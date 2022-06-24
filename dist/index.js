@@ -97407,8 +97407,8 @@ function parseArray(input) {
     return parseUndefined(input)
         ? input.split(/\r?\n/).reduce((acc, line) => acc
             .concat(line.split(','))
-            .filter((pat) => pat)
-            .map((pat) => pat.trim()), [])
+            .filter(pat => pat)
+            .map(pat => pat.trim()), [])
         : undefined;
 }
 function parseUndefined(input) {
@@ -97426,7 +97426,7 @@ function parseNumber(input) {
 
 
 
-const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'), lib.Literal('rm'));
+const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'));
 const options = lib.Partial({
     parallel: lib.Number,
     message: lib.String,
@@ -97442,6 +97442,7 @@ const config = lib.Record({
     // Required options
     command: command,
     stackName: lib.String,
+    version: lib.String,
     workDir: lib.String,
     commentOnPr: lib.Boolean,
     options: options,
@@ -97452,6 +97453,7 @@ const config = lib.Record({
     configMap: lib.String,
     githubToken: lib.String,
     upsert: lib.Boolean,
+    downsert: lib.Boolean,
     refresh: lib.Boolean,
     secretsProvider: lib.String,
 }));
@@ -97460,12 +97462,14 @@ function makeConfig() {
         return config.check({
             command: (0,core.getInput)('command', { required: true }),
             stackName: (0,core.getInput)('stack-name', { required: true }),
+            version: (0,core.getInput)('version'),
             workDir: (0,core.getInput)('work-dir') || './',
             secretsProvider: (0,core.getInput)('secrets-provider'),
             cloudUrl: (0,core.getInput)('cloud-url'),
             githubToken: (0,core.getInput)('github-token'),
             commentOnPr: parseBoolean((0,core.getInput)('comment-on-pr')),
             upsert: parseBoolean((0,core.getInput)('upsert')),
+            downsert: parseBoolean((0,core.getInput)('downsert')),
             refresh: parseBoolean((0,core.getInput)('refresh')),
             configMap: (0,core.getInput)('configMap'),
             options: {
@@ -97521,9 +97525,7 @@ function handlePullRequestMessage(config, output) {
     \`\`\`
     ${rawBody}
     \`\`\`
-    ${rawBody.length === 64000
-            ? '**Warn**: The output was too long and trimmed.'
-            : ''}
+    ${rawBody.length === 64000 ? '**Warn**: The output was too long and trimmed.' : ''}
     </details>
   `;
         const { payload, repo } = github.context;
@@ -97532,7 +97534,7 @@ function handlePullRequestMessage(config, output) {
         try {
             if (editCommentOnPr) {
                 const { data: comments } = yield octokit.rest.issues.listComments(Object.assign(Object.assign({}, repo), { issue_number: payload.pull_request.number }));
-                const comment = comments.find((comment) => comment.body.startsWith(heading) && comment.body.includes(summary));
+                const comment = comments.find(comment => comment.body.startsWith(heading) && comment.body.includes(summary));
                 // If comment exists, update it.
                 if (comment) {
                     yield octokit.rest.issues.updateComment(Object.assign(Object.assign({}, repo), { comment_id: comment.id, body }));
@@ -97611,15 +97613,15 @@ function getVersionObject(range) {
         const result = yield source_default()('https://raw.githubusercontent.com/pulumi/docs/master/data/versions.json', { responseType: 'json' });
         const versions = VersionsRt.check(result.body);
         if (range == 'latest') {
-            const latest = versions.find((v) => v.latest);
+            const latest = versions.find(v => v.latest);
             invariant(latest, 'expect a latest version to exists');
             return latest;
         }
-        const resp = (0,semver.maxSatisfying)(versions.map((v) => v.version), range);
+        const resp = (0,semver.maxSatisfying)(versions.map(v => v.version), range);
         if (resp === null) {
             throw new Error('Could not find a version that satisfied the version range');
         }
-        const ver = versions.find((v) => v.version === resp);
+        const ver = versions.find(v => v.version === resp);
         if (!ver) {
             throw new Error('Could not find a version that satisfied the version range');
         }
@@ -97673,12 +97675,12 @@ function downloadCli(range) {
         yield io.rmRF(external_path_.join(destination, 'bin'))
             .catch()
             .then(() => {
-            core.info(`Successfully deleted pre-existing ${external_path_.join(destination, "bin")}`);
+            core.info(`Successfully deleted pre-existing ${external_path_.join(destination, 'bin')}`);
         });
         const downloaded = yield tool_cache.downloadTool(downloads[platform]);
         core.debug(`Successfully downloaded ${downloads[platform]}`);
         switch (platform) {
-            case "windows": {
+            case 'windows': {
                 yield tool_cache.extractZip(downloaded, external_os_.homedir());
                 yield io.mv(external_path_.join(external_os_.homedir(), 'Pulumi'), external_path_.join(external_os_.homedir(), '.pulumi'));
                 break;
@@ -97711,11 +97713,10 @@ function downloadCli(range) {
 
 
 
-const pulumiVersion = '^3';
 const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
     const config = yield makeConfig();
     core.debug('Configuration is loaded');
-    yield downloadCli(pulumiVersion);
+    yield downloadCli(config.version);
     if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
         core.debug(`Logging into Pulumi`);
         yield run('login');
@@ -97752,22 +97753,16 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
     }
     core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
     const actions = {
-        up: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
-        update: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
-        refresh: () => stack.refresh(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
-        destroy: () => stack.destroy(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
+        up: () => stack.up(Object.assign({ onOutput }, config.options)).then(r => r.stdout),
+        update: () => stack.up(Object.assign({ onOutput }, config.options)).then(r => r.stdout),
+        refresh: () => stack.refresh(Object.assign({ onOutput }, config.options)).then(r => r.stdout),
+        destroy: () => stack.destroy(Object.assign({ onOutput }, config.options)).then(r => r.stdout),
         preview: () => modules_awaiter(void 0, void 0, void 0, function* () {
             const { stdout, stderr } = yield stack.preview(config.options);
             onOutput(stdout);
             onOutput(stderr);
             return stdout;
         }),
-        rm: () => {
-            stack.workspace.removeStack(stack.name);
-            const stdout = 'Stack has deleted';
-            onOutput(stdout);
-            return new Promise(() => stdout);
-        },
     };
     core.debug(`Running action ${config.command}`);
     const output = yield actions[config.command]();
@@ -97784,6 +97779,9 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
         core.debug(`Commenting on pull request`);
         invariant(config.githubToken, 'github-token is missing.');
         handlePullRequestMessage(config, output);
+    }
+    if (config.downsert && config.command === 'destroy') {
+        stack.workspace.removeStack(stack.name);
     }
     core.endGroup();
 });
