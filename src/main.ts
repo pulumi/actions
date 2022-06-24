@@ -5,11 +5,11 @@ import {
   LocalWorkspace,
   LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
+import invariant from 'ts-invariant';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
-import { invariant } from './libs/utils';
 
 const pulumiVersion = '^3';
 

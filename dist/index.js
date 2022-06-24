@@ -87581,6 +87581,75 @@ module.exports = require("zlib");
 
 /***/ }),
 
+/***/ 7371:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+var __webpack_unused_export__;
+
+
+__webpack_unused_export__ = ({ value: true });
+
+var tslib = __nccwpck_require__(4351);
+
+var genericMessage = "Invariant Violation";
+var _a = Object.setPrototypeOf, setPrototypeOf = _a === void 0 ? function (obj, proto) {
+    obj.__proto__ = proto;
+    return obj;
+} : _a;
+var InvariantError = /** @class */ (function (_super) {
+    tslib.__extends(InvariantError, _super);
+    function InvariantError(message) {
+        if (message === void 0) { message = genericMessage; }
+        var _this = _super.call(this, typeof message === "number"
+            ? genericMessage + ": " + message + " (see https://github.com/apollographql/invariant-packages)"
+            : message) || this;
+        _this.framesToPop = 1;
+        _this.name = genericMessage;
+        setPrototypeOf(_this, InvariantError.prototype);
+        return _this;
+    }
+    return InvariantError;
+}(Error));
+function invariant(condition, message) {
+    if (!condition) {
+        throw new InvariantError(message);
+    }
+}
+var verbosityLevels = ["debug", "log", "warn", "error", "silent"];
+var verbosityLevel = verbosityLevels.indexOf("log");
+function wrapConsoleMethod(name) {
+    return function () {
+        if (verbosityLevels.indexOf(name) >= verbosityLevel) {
+            // Default to console.log if this host environment happens not to provide
+            // all the console.* methods we need.
+            var method = console[name] || console.log;
+            return method.apply(console, arguments);
+        }
+    };
+}
+(function (invariant) {
+    invariant.debug = wrapConsoleMethod("debug");
+    invariant.log = wrapConsoleMethod("log");
+    invariant.warn = wrapConsoleMethod("warn");
+    invariant.error = wrapConsoleMethod("error");
+})(invariant || (invariant = {}));
+function setVerbosity(level) {
+    var old = verbosityLevels[verbosityLevel];
+    verbosityLevel = Math.max(0, verbosityLevels.indexOf(level));
+    return old;
+}
+var invariant$1 = invariant;
+
+__webpack_unused_export__ = InvariantError;
+exports.ZP = invariant$1;
+__webpack_unused_export__ = invariant;
+__webpack_unused_export__ = setVerbosity;
+//# sourceMappingURL=invariant.cjs.map
+
+
+/***/ }),
+
 /***/ 6569:
 /***/ ((module) => {
 
@@ -87788,15 +87857,11 @@ var external_path_ = __nccwpck_require__(1017);
 var core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@pulumi/pulumi/automation/index.js
 var automation = __nccwpck_require__(4925);
+// EXTERNAL MODULE: ./node_modules/ts-invariant/lib/invariant.cjs
+var invariant = __nccwpck_require__(7371);
 // EXTERNAL MODULE: ./node_modules/runtypes/lib/index.js
 var lib = __nccwpck_require__(5568);
 ;// CONCATENATED MODULE: ./src/libs/utils.ts
-/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
-function invariant(condition, message) {
-    if (!condition) {
-        throw new Error(message);
-    }
-}
 function parseArray(input) {
     return parseUndefined(input)
         ? input.split(/\r?\n/).reduce((acc, line) => acc
@@ -87919,7 +87984,7 @@ function handlePullRequestMessage(config, output) {
     </details>
   `;
         const { payload, repo } = github.context;
-        invariant(payload.pull_request, 'Missing pull request event data.');
+        (0,invariant/* default */.ZP)(payload.pull_request, 'Missing pull request event data.');
         const octokit = (0,github.getOctokit)(githubToken);
         try {
             if (editCommentOnPr) {
@@ -88004,7 +88069,7 @@ function getVersionObject(range) {
         const versions = VersionsRt.check(result.body);
         if (range == 'latest') {
             const latest = versions.find((v) => v.latest);
-            invariant(latest, 'expect a latest version to exists');
+            (0,invariant/* default */.ZP)(latest, 'expect a latest version to exists');
             return latest;
         }
         const resp = (0,semver.maxSatisfying)(versions.map((v) => v.version), range);
@@ -88163,7 +88228,7 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
     }
     if (config.commentOnPr) {
         core.debug(`Commenting on pull request`);
-        invariant(config.githubToken, 'github-token is missing.');
+        (0,invariant/* default */.ZP)(config.githubToken, 'github-token is missing.');
         handlePullRequestMessage(config, output);
     }
     core.endGroup();
