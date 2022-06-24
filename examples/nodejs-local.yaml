@@ -1,0 +1,20 @@
+name: Pulumi
+on:
+  push:
+    branches:
+      - master
+jobs:
+  up:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup DotNet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1
+      - uses: pulumi/actions@v3
+        with:
+          command: up
+          stack-name: dev
+          cloud-url: file://~

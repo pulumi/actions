@@ -4,7 +4,10 @@
 
 - fix: update PR comments correctly when `edit-pr-comment` is true (fixes
   [#633](https://github.com/pulumi/actions/issues/633))
+
 - feat: add configuration of Pulumi stack by `configMap` field
+
+- bump to runtime to node 16
 
 ---
 
