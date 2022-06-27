@@ -18136,7 +18136,7 @@ Event: ${line}\n${e.toString()}`);
      * @param opts Options to customize the behavior of the update.
      */
     up(opts) {
-        var _a, _b;
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["up", "--yes", "--skip-preview"];
             let kind = execKind.local;
@@ -18162,6 +18162,16 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.target) {
                     for (const tURN of opts.target) {
                         args.push("--target", tURN);
+                    }
+                }
+                if (opts.policyPacks) {
+                    for (const pack of opts.policyPacks) {
+                        args.push("--policy-pack", pack);
+                    }
+                }
+                if (opts.policyPackConfigs) {
+                    for (const packConfig of opts.policyPackConfigs) {
+                        args.push("--policy-pack-config", packConfig);
                     }
                 }
                 if (opts.targetDependents) {
@@ -18232,7 +18242,7 @@ Event: ${line}\n${e.toString()}`);
             }
             // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
             const outputs = yield this.outputs();
-            const summary = yield this.info();
+            const summary = yield this.info((_c = opts) === null || _c === void 0 ? void 0 : _c.showSecrets);
             return {
                 stdout: upResult.stdout,
                 stderr: upResult.stderr,
@@ -18274,6 +18284,16 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.target) {
                     for (const tURN of opts.target) {
                         args.push("--target", tURN);
+                    }
+                }
+                if (opts.policyPacks) {
+                    for (const pack of opts.policyPacks) {
+                        args.push("--policy-pack", pack);
+                    }
+                }
+                if (opts.policyPackConfigs) {
+                    for (const packConfig of opts.policyPackConfigs) {
+                        args.push("--policy-pack-config", packConfig);
                     }
                 }
                 if (opts.targetDependents) {
@@ -18362,7 +18382,7 @@ Event: ${line}\n${e.toString()}`);
      * @param opts Options to customize the behavior of the refresh.
      */
     refresh(opts) {
-        var _a, _b;
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["refresh", "--yes", "--skip-preview"];
             if (opts) {
@@ -18403,7 +18423,7 @@ Event: ${line}\n${e.toString()}`);
             const refPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
             const [refResult, logResult] = yield Promise.all([refPromise, logPromise]);
             yield cleanUp(logFile, logResult);
-            const summary = yield this.info();
+            const summary = yield this.info((_c = opts) === null || _c === void 0 ? void 0 : _c.showSecrets);
             return {
                 stdout: refResult.stdout,
                 stderr: refResult.stderr,
@@ -18417,7 +18437,7 @@ Event: ${line}\n${e.toString()}`);
      * @param opts Options to customize the behavior of the destroy.
      */
     destroy(opts) {
-        var _a, _b;
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["destroy", "--yes", "--skip-preview"];
             if (opts) {
@@ -18458,7 +18478,7 @@ Event: ${line}\n${e.toString()}`);
             const desPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
             const [desResult, logResult] = yield Promise.all([desPromise, logPromise]);
             yield cleanUp(logFile, logResult);
-            const summary = yield this.info();
+            const summary = yield this.info((_c = opts) === null || _c === void 0 ? void 0 : _c.showSecrets);
             return {
                 stdout: desResult.stdout,
                 stderr: desResult.stderr,
@@ -18545,9 +18565,12 @@ Event: ${line}\n${e.toString()}`);
      * Returns a list summarizing all previous and current results from Stack lifecycle operations
      * (up/preview/refresh/destroy).
      */
-    history(pageSize, page) {
+    history(pageSize, page, showSecrets) {
         return __awaiter(this, void 0, void 0, function* () {
-            const args = ["stack", "history", "--json", "--show-secrets"];
+            const args = ["stack", "history", "--json"];
+            if ((showSecrets !== null && showSecrets !== void 0 ? showSecrets : true)) {
+                args.push("--show-secrets");
+            }
             if (pageSize) {
                 if (!page || page < 1) {
                     page = 1;
@@ -18563,9 +18586,9 @@ Event: ${line}\n${e.toString()}`);
             });
         });
     }
-    info() {
+    info(showSecrets) {
         return __awaiter(this, void 0, void 0, function* () {
-            const history = yield this.history(1 /*pageSize*/);
+            const history = yield this.history(1 /*pageSize*/, undefined, showSecrets);
             if (!history || history.length === 0) {
                 return undefined;
             }
@@ -18642,7 +18665,6 @@ const execKind = {
     local: "auto.local",
     inline: "auto.inline",
 };
-const delay = (duration) => new Promise(resolve => setTimeout(resolve, duration));
 const createLogFile = (command) => {
     const logDir = fs.mkdtempSync(upath.joinSafe(os.tmpdir(), `automation-logs-${command}-`));
     const logFile = upath.joinSafe(logDir, "eventlog.txt");
@@ -25465,11 +25487,14 @@ exports.EngineClient = grpc.makeGenericClientConstructor(EngineService);
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = __nccwpck_require__(9917);
 var goog = jspb;
@@ -26496,11 +26521,14 @@ exports.LanguageRuntimeClient = grpc.makeGenericClientConstructor(LanguageRuntim
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = __nccwpck_require__(9917);
 var goog = jspb;
@@ -28010,11 +28038,14 @@ goog.object.extend(exports, proto.pulumirpc);
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = __nccwpck_require__(9917);
 var goog = jspb;
@@ -29096,11 +29127,14 @@ exports.ResourceProviderClient = grpc.makeGenericClientConstructor(ResourceProvi
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = __nccwpck_require__(9917);
 var goog = jspb;
@@ -37251,11 +37285,14 @@ exports.ResourceMonitorClient = grpc.makeGenericClientConstructor(ResourceMonito
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = __nccwpck_require__(9917);
 var goog = jspb;
@@ -37267,6 +37304,10 @@ var google_protobuf_struct_pb = __nccwpck_require__(8152);
 goog.object.extend(proto, google_protobuf_struct_pb);
 var provider_pb = __nccwpck_require__(8870);
 goog.object.extend(proto, provider_pb);
+goog.exportSymbol('proto.pulumirpc.Alias', null, global);
+goog.exportSymbol('proto.pulumirpc.Alias.AliasCase', null, global);
+goog.exportSymbol('proto.pulumirpc.Alias.Spec', null, global);
+goog.exportSymbol('proto.pulumirpc.Alias.Spec.ParentCase', null, global);
 goog.exportSymbol('proto.pulumirpc.ReadResourceRequest', null, global);
 goog.exportSymbol('proto.pulumirpc.ReadResourceResponse', null, global);
 goog.exportSymbol('proto.pulumirpc.RegisterResourceOutputsRequest', null, global);
@@ -37319,6 +37360,48 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.pulumirpc.SupportsFeatureResponse.displayName = 'proto.pulumirpc.SupportsFeatureResponse';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.pulumirpc.Alias = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.pulumirpc.Alias.oneofGroups_);
+};
+goog.inherits(proto.pulumirpc.Alias, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.pulumirpc.Alias.displayName = 'proto.pulumirpc.Alias';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.pulumirpc.Alias.Spec = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.pulumirpc.Alias.Spec.oneofGroups_);
+};
+goog.inherits(proto.pulumirpc.Alias.Spec, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.pulumirpc.Alias.Spec.displayName = 'proto.pulumirpc.Alias.Spec';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -37771,11 +37854,578 @@ proto.pulumirpc.SupportsFeatureResponse.prototype.setHassupport = function(value
 
 
 /**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.pulumirpc.Alias.oneofGroups_ = [[1,2]];
+
+/**
+ * @enum {number}
+ */
+proto.pulumirpc.Alias.AliasCase = {
+  ALIAS_NOT_SET: 0,
+  URN: 1,
+  SPEC: 2
+};
+
+/**
+ * @return {proto.pulumirpc.Alias.AliasCase}
+ */
+proto.pulumirpc.Alias.prototype.getAliasCase = function() {
+  return /** @type {proto.pulumirpc.Alias.AliasCase} */(jspb.Message.computeOneofCase(this, proto.pulumirpc.Alias.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.pulumirpc.Alias.prototype.toObject = function(opt_includeInstance) {
+  return proto.pulumirpc.Alias.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.pulumirpc.Alias} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.Alias.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    urn: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    spec: (f = msg.getSpec()) && proto.pulumirpc.Alias.Spec.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.pulumirpc.Alias}
+ */
+proto.pulumirpc.Alias.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.pulumirpc.Alias;
+  return proto.pulumirpc.Alias.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.pulumirpc.Alias} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.pulumirpc.Alias}
+ */
+proto.pulumirpc.Alias.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUrn(value);
+      break;
+    case 2:
+      var value = new proto.pulumirpc.Alias.Spec;
+      reader.readMessage(value,proto.pulumirpc.Alias.Spec.deserializeBinaryFromReader);
+      msg.setSpec(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.pulumirpc.Alias.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.pulumirpc.Alias.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.pulumirpc.Alias} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.Alias.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getSpec();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      proto.pulumirpc.Alias.Spec.serializeBinaryToWriter
+    );
+  }
+};
+
+
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.pulumirpc.Alias.Spec.oneofGroups_ = [[5,6]];
+
+/**
+ * @enum {number}
+ */
+proto.pulumirpc.Alias.Spec.ParentCase = {
+  PARENT_NOT_SET: 0,
+  PARENTURN: 5,
+  NOPARENT: 6
+};
+
+/**
+ * @return {proto.pulumirpc.Alias.Spec.ParentCase}
+ */
+proto.pulumirpc.Alias.Spec.prototype.getParentCase = function() {
+  return /** @type {proto.pulumirpc.Alias.Spec.ParentCase} */(jspb.Message.computeOneofCase(this, proto.pulumirpc.Alias.Spec.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.pulumirpc.Alias.Spec.prototype.toObject = function(opt_includeInstance) {
+  return proto.pulumirpc.Alias.Spec.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.pulumirpc.Alias.Spec} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.Alias.Spec.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    name: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    type: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    stack: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    project: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    parenturn: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    noparent: jspb.Message.getBooleanFieldWithDefault(msg, 6, false)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.pulumirpc.Alias.Spec}
+ */
+proto.pulumirpc.Alias.Spec.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.pulumirpc.Alias.Spec;
+  return proto.pulumirpc.Alias.Spec.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.pulumirpc.Alias.Spec} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.pulumirpc.Alias.Spec}
+ */
+proto.pulumirpc.Alias.Spec.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setName(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setType(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setStack(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setProject(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setParenturn(value);
+      break;
+    case 6:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setNoparent(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.pulumirpc.Alias.Spec.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.pulumirpc.Alias.Spec.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.pulumirpc.Alias.Spec} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.Alias.Spec.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getName();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getType();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = message.getStack();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = message.getProject();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
+  if (f != null) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+  f = /** @type {boolean} */ (jspb.Message.getField(message, 6));
+  if (f != null) {
+    writer.writeBool(
+      6,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string name = 1;
+ * @return {string}
+ */
+proto.pulumirpc.Alias.Spec.prototype.getName = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.Alias.Spec} returns this
+ */
+proto.pulumirpc.Alias.Spec.prototype.setName = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string type = 2;
+ * @return {string}
+ */
+proto.pulumirpc.Alias.Spec.prototype.getType = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.Alias.Spec} returns this
+ */
+proto.pulumirpc.Alias.Spec.prototype.setType = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string stack = 3;
+ * @return {string}
+ */
+proto.pulumirpc.Alias.Spec.prototype.getStack = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.Alias.Spec} returns this
+ */
+proto.pulumirpc.Alias.Spec.prototype.setStack = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string project = 4;
+ * @return {string}
+ */
+proto.pulumirpc.Alias.Spec.prototype.getProject = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.Alias.Spec} returns this
+ */
+proto.pulumirpc.Alias.Spec.prototype.setProject = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional string parentUrn = 5;
+ * @return {string}
+ */
+proto.pulumirpc.Alias.Spec.prototype.getParenturn = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.Alias.Spec} returns this
+ */
+proto.pulumirpc.Alias.Spec.prototype.setParenturn = function(value) {
+  return jspb.Message.setOneofField(this, 5, proto.pulumirpc.Alias.Spec.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.pulumirpc.Alias.Spec} returns this
+ */
+proto.pulumirpc.Alias.Spec.prototype.clearParenturn = function() {
+  return jspb.Message.setOneofField(this, 5, proto.pulumirpc.Alias.Spec.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.pulumirpc.Alias.Spec.prototype.hasParenturn = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional bool noParent = 6;
+ * @return {boolean}
+ */
+proto.pulumirpc.Alias.Spec.prototype.getNoparent = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.Alias.Spec} returns this
+ */
+proto.pulumirpc.Alias.Spec.prototype.setNoparent = function(value) {
+  return jspb.Message.setOneofField(this, 6, proto.pulumirpc.Alias.Spec.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.pulumirpc.Alias.Spec} returns this
+ */
+proto.pulumirpc.Alias.Spec.prototype.clearNoparent = function() {
+  return jspb.Message.setOneofField(this, 6, proto.pulumirpc.Alias.Spec.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.pulumirpc.Alias.Spec.prototype.hasNoparent = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional string urn = 1;
+ * @return {string}
+ */
+proto.pulumirpc.Alias.prototype.getUrn = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.Alias} returns this
+ */
+proto.pulumirpc.Alias.prototype.setUrn = function(value) {
+  return jspb.Message.setOneofField(this, 1, proto.pulumirpc.Alias.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.pulumirpc.Alias} returns this
+ */
+proto.pulumirpc.Alias.prototype.clearUrn = function() {
+  return jspb.Message.setOneofField(this, 1, proto.pulumirpc.Alias.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.pulumirpc.Alias.prototype.hasUrn = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional Spec spec = 2;
+ * @return {?proto.pulumirpc.Alias.Spec}
+ */
+proto.pulumirpc.Alias.prototype.getSpec = function() {
+  return /** @type{?proto.pulumirpc.Alias.Spec} */ (
+    jspb.Message.getWrapperField(this, proto.pulumirpc.Alias.Spec, 2));
+};
+
+
+/**
+ * @param {?proto.pulumirpc.Alias.Spec|undefined} value
+ * @return {!proto.pulumirpc.Alias} returns this
+*/
+proto.pulumirpc.Alias.prototype.setSpec = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.pulumirpc.Alias.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.pulumirpc.Alias} returns this
+ */
+proto.pulumirpc.Alias.prototype.clearSpec = function() {
+  return this.setSpec(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.pulumirpc.Alias.prototype.hasSpec = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+
+/**
  * List of repeated fields within this message type.
  * @private {!Array<number>}
  * @const
  */
-proto.pulumirpc.ReadResourceRequest.repeatedFields_ = [6,10,11];
+proto.pulumirpc.ReadResourceRequest.repeatedFields_ = [6,10];
 
 
 
@@ -37818,7 +38468,6 @@ proto.pulumirpc.ReadResourceRequest.toObject = function(includeInstance, msg) {
     version: jspb.Message.getFieldWithDefault(msg, 8, ""),
     acceptsecrets: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
     additionalsecretoutputsList: (f = jspb.Message.getRepeatedField(msg, 10)) == null ? undefined : f,
-    aliasesList: (f = jspb.Message.getRepeatedField(msg, 11)) == null ? undefined : f,
     acceptresources: jspb.Message.getBooleanFieldWithDefault(msg, 12, false),
     plugindownloadurl: jspb.Message.getFieldWithDefault(msg, 13, "")
   };
@@ -37897,10 +38546,6 @@ proto.pulumirpc.ReadResourceRequest.deserializeBinaryFromReader = function(msg, 
     case 10:
       var value = /** @type {string} */ (reader.readString());
       msg.addAdditionalsecretoutputs(value);
-      break;
-    case 11:
-      var value = /** @type {string} */ (reader.readString());
-      msg.addAliases(value);
       break;
     case 12:
       var value = /** @type {boolean} */ (reader.readBool());
@@ -38007,13 +38652,6 @@ proto.pulumirpc.ReadResourceRequest.serializeBinaryToWriter = function(message, 
   if (f.length > 0) {
     writer.writeRepeatedString(
       10,
-      f
-    );
-  }
-  f = message.getAliasesList();
-  if (f.length > 0) {
-    writer.writeRepeatedString(
-      11,
       f
     );
   }
@@ -38272,43 +38910,6 @@ proto.pulumirpc.ReadResourceRequest.prototype.clearAdditionalsecretoutputsList =
 
 
 /**
- * repeated string aliases = 11;
- * @return {!Array<string>}
- */
-proto.pulumirpc.ReadResourceRequest.prototype.getAliasesList = function() {
-  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 11));
-};
-
-
-/**
- * @param {!Array<string>} value
- * @return {!proto.pulumirpc.ReadResourceRequest} returns this
- */
-proto.pulumirpc.ReadResourceRequest.prototype.setAliasesList = function(value) {
-  return jspb.Message.setField(this, 11, value || []);
-};
-
-
-/**
- * @param {string} value
- * @param {number=} opt_index
- * @return {!proto.pulumirpc.ReadResourceRequest} returns this
- */
-proto.pulumirpc.ReadResourceRequest.prototype.addAliases = function(value, opt_index) {
-  return jspb.Message.addToRepeatedField(this, 11, value, opt_index);
-};
-
-
-/**
- * Clears the list making it empty but non-null.
- * @return {!proto.pulumirpc.ReadResourceRequest} returns this
- */
-proto.pulumirpc.ReadResourceRequest.prototype.clearAliasesList = function() {
-  return this.setAliasesList([]);
-};
-
-
-/**
  * optional bool acceptResources = 12;
  * @return {boolean}
  */
@@ -38531,7 +39132,7 @@ proto.pulumirpc.ReadResourceResponse.prototype.hasProperties = function() {
  * @private {!Array<number>}
  * @const
  */
-proto.pulumirpc.RegisterResourceRequest.repeatedFields_ = [7,12,14,15,23];
+proto.pulumirpc.RegisterResourceRequest.repeatedFields_ = [7,12,14,15,23,26];
 
 
 
@@ -38578,7 +39179,7 @@ proto.pulumirpc.RegisterResourceRequest.toObject = function(includeInstance, msg
     ignorechangesList: (f = jspb.Message.getRepeatedField(msg, 12)) == null ? undefined : f,
     acceptsecrets: jspb.Message.getBooleanFieldWithDefault(msg, 13, false),
     additionalsecretoutputsList: (f = jspb.Message.getRepeatedField(msg, 14)) == null ? undefined : f,
-    aliasesList: (f = jspb.Message.getRepeatedField(msg, 15)) == null ? undefined : f,
+    urnaliasesList: (f = jspb.Message.getRepeatedField(msg, 15)) == null ? undefined : f,
     importid: jspb.Message.getFieldWithDefault(msg, 16, ""),
     customtimeouts: (f = msg.getCustomtimeouts()) && proto.pulumirpc.RegisterResourceRequest.CustomTimeouts.toObject(includeInstance, f),
     deletebeforereplacedefined: jspb.Message.getBooleanFieldWithDefault(msg, 18, false),
@@ -38588,7 +39189,9 @@ proto.pulumirpc.RegisterResourceRequest.toObject = function(includeInstance, msg
     providersMap: (f = msg.getProvidersMap()) ? f.toObject(includeInstance, undefined) : [],
     replaceonchangesList: (f = jspb.Message.getRepeatedField(msg, 23)) == null ? undefined : f,
     plugindownloadurl: jspb.Message.getFieldWithDefault(msg, 24, ""),
-    retainondelete: jspb.Message.getBooleanFieldWithDefault(msg, 25, false)
+    retainondelete: jspb.Message.getBooleanFieldWithDefault(msg, 25, false),
+    aliasesList: jspb.Message.toObjectList(msg.getAliasesList(),
+    proto.pulumirpc.Alias.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -38686,7 +39289,7 @@ proto.pulumirpc.RegisterResourceRequest.deserializeBinaryFromReader = function(m
       break;
     case 15:
       var value = /** @type {string} */ (reader.readString());
-      msg.addAliases(value);
+      msg.addUrnaliases(value);
       break;
     case 16:
       var value = /** @type {string} */ (reader.readString());
@@ -38730,6 +39333,11 @@ proto.pulumirpc.RegisterResourceRequest.deserializeBinaryFromReader = function(m
     case 25:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setRetainondelete(value);
+      break;
+    case 26:
+      var value = new proto.pulumirpc.Alias;
+      reader.readMessage(value,proto.pulumirpc.Alias.deserializeBinaryFromReader);
+      msg.addAliases(value);
       break;
     default:
       reader.skipField();
@@ -38856,7 +39464,7 @@ proto.pulumirpc.RegisterResourceRequest.serializeBinaryToWriter = function(messa
       f
     );
   }
-  f = message.getAliasesList();
+  f = message.getUrnaliasesList();
   if (f.length > 0) {
     writer.writeRepeatedString(
       15,
@@ -38929,6 +39537,14 @@ proto.pulumirpc.RegisterResourceRequest.serializeBinaryToWriter = function(messa
     writer.writeBool(
       25,
       f
+    );
+  }
+  f = message.getAliasesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      26,
+      f,
+      proto.pulumirpc.Alias.serializeBinaryToWriter
     );
   }
 };
@@ -39613,10 +40229,10 @@ proto.pulumirpc.RegisterResourceRequest.prototype.clearAdditionalsecretoutputsLi
 
 
 /**
- * repeated string aliases = 15;
+ * repeated string urnAliases = 15;
  * @return {!Array<string>}
  */
-proto.pulumirpc.RegisterResourceRequest.prototype.getAliasesList = function() {
+proto.pulumirpc.RegisterResourceRequest.prototype.getUrnaliasesList = function() {
   return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 15));
 };
 
@@ -39625,7 +40241,7 @@ proto.pulumirpc.RegisterResourceRequest.prototype.getAliasesList = function() {
  * @param {!Array<string>} value
  * @return {!proto.pulumirpc.RegisterResourceRequest} returns this
  */
-proto.pulumirpc.RegisterResourceRequest.prototype.setAliasesList = function(value) {
+proto.pulumirpc.RegisterResourceRequest.prototype.setUrnaliasesList = function(value) {
   return jspb.Message.setField(this, 15, value || []);
 };
 
@@ -39635,7 +40251,7 @@ proto.pulumirpc.RegisterResourceRequest.prototype.setAliasesList = function(valu
  * @param {number=} opt_index
  * @return {!proto.pulumirpc.RegisterResourceRequest} returns this
  */
-proto.pulumirpc.RegisterResourceRequest.prototype.addAliases = function(value, opt_index) {
+proto.pulumirpc.RegisterResourceRequest.prototype.addUrnaliases = function(value, opt_index) {
   return jspb.Message.addToRepeatedField(this, 15, value, opt_index);
 };
 
@@ -39644,8 +40260,8 @@ proto.pulumirpc.RegisterResourceRequest.prototype.addAliases = function(value, o
  * Clears the list making it empty but non-null.
  * @return {!proto.pulumirpc.RegisterResourceRequest} returns this
  */
-proto.pulumirpc.RegisterResourceRequest.prototype.clearAliasesList = function() {
-  return this.setAliasesList([]);
+proto.pulumirpc.RegisterResourceRequest.prototype.clearUrnaliasesList = function() {
+  return this.setUrnaliasesList([]);
 };
 
 
@@ -39868,6 +40484,44 @@ proto.pulumirpc.RegisterResourceRequest.prototype.getRetainondelete = function()
  */
 proto.pulumirpc.RegisterResourceRequest.prototype.setRetainondelete = function(value) {
   return jspb.Message.setProto3BooleanField(this, 25, value);
+};
+
+
+/**
+ * repeated Alias aliases = 26;
+ * @return {!Array<!proto.pulumirpc.Alias>}
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.getAliasesList = function() {
+  return /** @type{!Array<!proto.pulumirpc.Alias>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.pulumirpc.Alias, 26));
+};
+
+
+/**
+ * @param {!Array<!proto.pulumirpc.Alias>} value
+ * @return {!proto.pulumirpc.RegisterResourceRequest} returns this
+*/
+proto.pulumirpc.RegisterResourceRequest.prototype.setAliasesList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 26, value);
+};
+
+
+/**
+ * @param {!proto.pulumirpc.Alias=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.pulumirpc.Alias}
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.addAliases = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 26, opt_value, proto.pulumirpc.Alias, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.pulumirpc.RegisterResourceRequest} returns this
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.clearAliasesList = function() {
+  return this.setAliasesList([]);
 };
 
 
@@ -40851,15 +41505,18 @@ goog.object.extend(exports, proto.pulumirpc);
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = __nccwpck_require__(9917);
 var goog = jspb;
-var global = Function('return this')();
+var global = (function() { return this || window || global || self || Function('return this')(); }).call(null);
 
 var google_protobuf_any_pb = __nccwpck_require__(6432);
 goog.object.extend(proto, google_protobuf_any_pb);
@@ -41227,7 +41884,6 @@ const output_1 = __nccwpck_require__(3037);
 const resource = __nccwpck_require__(796);
 const runtime = __nccwpck_require__(5022);
 const internals_1 = __nccwpck_require__(1795);
-const requireFromString = __nccwpck_require__(4176);
 const anyproto = __nccwpck_require__(6432);
 const emptyproto = __nccwpck_require__(291);
 const structproto = __nccwpck_require__(8152);
@@ -41819,7 +42475,7 @@ exports.main = main;
  * otherwise return an instance of DependencyProviderResource.
  */
 function createProviderResource(ref) {
-    const [urn, _] = resource.parseResourceReference(ref);
+    const [urn] = resource.parseResourceReference(ref);
     const urnParts = urn.split("::");
     const qualifiedType = urnParts[2];
     const urnName = urnParts[3];
@@ -43794,11 +44450,6 @@ function getOrCreateEntryAsync(obj, capturedObjectProperties, context, serialize
         }
     });
 }
-function isOutputAsync(obj) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return output_1.Output.isInstance(obj);
-    });
-}
 // Is this a constructor derived from a noCapture constructor.  if so, we don't want to
 // emit it.  We would be unable to actually hook up the "super()" call as one of the base
 // constructors was set to not be captured.
@@ -45320,12 +45971,10 @@ function serializeJavaScriptText(outerClosure, exportName, isFactoryFunction) {
             // Walk the names of the array properties directly. This ensures we work efficiently
             // with sparse arrays.  i.e. if the array has length 1k, but only has one value in it
             // set, we can just set htat value, instead of setting 999 undefineds.
-            let length = 0;
             for (const key of Object.getOwnPropertyNames(arr)) {
                 if (key !== "length") {
                     const entryString = envEntryToString(arr[key], `${varName}_${key}`);
                     environmentText += `${envVar}${isNumeric(key) ? `[${key}]` : `.${key}`} = ${entryString};\n`;
-                    length++;
                 }
             }
         }
@@ -46521,7 +47170,7 @@ function call(tok, props, res) {
             const rpcDeps = resp.getReturndependenciesMap();
             if (rpcDeps) {
                 const urns = new Set();
-                for (const [k, returnDeps] of rpcDeps.entries()) {
+                for (const [, returnDeps] of rpcDeps.entries()) {
                     for (const urn of returnDeps.getUrnsList()) {
                         urns.add(urn);
                     }
@@ -46817,7 +47466,6 @@ const invoke_1 = __nccwpck_require__(4800);
 const rpc_1 = __nccwpck_require__(60);
 const settings_1 = __nccwpck_require__(4530);
 const gstruct = __nccwpck_require__(8152);
-const providerproto = __nccwpck_require__(8870);
 const resproto = __nccwpck_require__(2480);
 /**
  * Get an existing resource's state from the engine.
@@ -47020,7 +47668,7 @@ function registerResource(res, t, name, custom, remote, newDependency, props, op
         req.setAcceptsecrets(true);
         req.setAcceptresources(!utils.disableResourceReferences);
         req.setAdditionalsecretoutputsList(opts.additionalSecretOutputs || []);
-        req.setAliasesList(resop.aliases);
+        req.setUrnaliasesList(resop.aliases);
         req.setImportid(resop.import || "");
         req.setSupportspartialvalues(true);
         req.setRemote(remote);
@@ -47242,11 +47890,12 @@ function prepareResource(label, res, custom, remote, props, opts) {
             // the dependency graph and optimize operations accordingly.
             // The list of all dependencies (implicit or explicit).
             const allDirectDependencies = new Set(explicitDirectDependencies);
-            const allDirectDependencyURNs = yield getAllTransitivelyReferencedResourceURNs(explicitDirectDependencies);
+            const exclude = new Set([res]);
+            const allDirectDependencyURNs = yield getAllTransitivelyReferencedResourceURNs(explicitDirectDependencies, exclude);
             const propertyToDirectDependencyURNs = new Map();
             for (const [propertyName, directDependencies] of propertyToDirectDependencies) {
                 addAll(allDirectDependencies, directDependencies);
-                const urns = yield getAllTransitivelyReferencedResourceURNs(directDependencies);
+                const urns = yield getAllTransitivelyReferencedResourceURNs(directDependencies, exclude);
                 addAll(allDirectDependencyURNs, urns);
                 propertyToDirectDependencyURNs.set(propertyName, urns);
             }
@@ -47288,7 +47937,7 @@ function addAll(to, from) {
     }
 }
 /** @internal */
-function getAllTransitivelyReferencedResourceURNs(resources) {
+function getAllTransitivelyReferencedResourceURNs(resources, exclude) {
     return __awaiter(this, void 0, void 0, function* () {
         // Go through 'resources', but transitively walk through **Component** resources, collecting any
         // of their child resources.  This way, a Component acts as an aggregation really of all the
@@ -47320,7 +47969,7 @@ function getAllTransitivelyReferencedResourceURNs(resources) {
         const transitivelyReachableResources = yield getTransitivelyReferencedChildResourcesOfComponentResources(resources);
         // Then we filter to only include Custom and Remote resources.
         const transitivelyReachableCustomResources = [...transitivelyReachableResources]
-            .filter(r => resource_2.CustomResource.isInstance(r) || r.__remote);
+            .filter(r => (resource_2.CustomResource.isInstance(r) || r.__remote) && !exclude.has(r));
         const promises = transitivelyReachableCustomResources.map(r => r.urn.promise());
         const urns = yield Promise.all(promises);
         return new Set(urns);
@@ -47572,7 +48221,6 @@ const debuggable_1 = __nccwpck_require__(257);
 const settings_1 = __nccwpck_require__(4530);
 const resource_2 = __nccwpck_require__(140);
 const semver = __nccwpck_require__(7486);
-const gstruct = __nccwpck_require__(8152);
 /**
  * transferProperties mutates the 'onto' resource so that it has Promise-valued properties for all
  * the 'props' input/output props.  *Importantly* all these promises are completely unresolved. This
@@ -47875,7 +48523,7 @@ function serializeProperty(ctx, prop, dependentResources, opts) {
                     propResources.add(resource);
                     dependentResources.add(resource);
                 }
-                const dependencies = yield resource_2.getAllTransitivelyReferencedResourceURNs(propResources);
+                const dependencies = yield resource_2.getAllTransitivelyReferencedResourceURNs(propResources, new Set());
                 const obj = {
                     [exports.specialSigKey]: exports.specialOutputValueSig,
                 };
@@ -48301,10 +48949,8 @@ const path = __nccwpck_require__(1017);
 const debuggable_1 = __nccwpck_require__(257);
 const engrpc = __nccwpck_require__(5053);
 const engproto = __nccwpck_require__(986);
-const provproto = __nccwpck_require__(8870);
 const resrpc = __nccwpck_require__(5815);
 const resproto = __nccwpck_require__(2480);
-const structproto = __nccwpck_require__(8152);
 // maxRPCMessageSize raises the gRPC Max Message size from `4194304` (4mb) to `419430400` (400mb)
 exports.maxRPCMessageSize = 1024 * 1024 * 400;
 const grpcChannelOptions = { "grpc.max_receive_message_length": exports.maxRPCMessageSize };
@@ -48358,9 +49004,9 @@ function _setIsDryRun(val) {
 }
 exports._setIsDryRun = _setIsDryRun;
 /**
- * Returns true if we're currently performing a dry-run, or false if this is a true update. Note that we
- * always consider executions in test mode to be "dry-runs", since we will never actually carry out an update,
- * and therefore certain output properties will never be resolved.
+ * Returns whether or not we are currently doing a preview.
+ *
+ * When writing unit tests, you can set this flag via either `setMocks` or `_setIsDryRun`.
  */
 function isDryRun() {
     return options().dryRun === true;
@@ -48383,6 +49029,10 @@ function _setFeatureSupport(key, val) {
 exports._setFeatureSupport = _setFeatureSupport;
 /**
  * Returns true if test mode is enabled (PULUMI_TEST_MODE).
+ *
+ * NB: this test mode has nothing to do with preview/dryRun modality, and it is not automatically
+ * enabled by calling `setMocks`. It is a vestigial mechanism related to testing the runtime itself,
+ * and is not relevant to writing or running unit tests for a Pulumi project.
  */
 function isTestModeEnabled() {
     return options().testModeEnabled === true;
@@ -79937,49 +80587,6 @@ function readScopesSync (root, kids) {
 
 /***/ }),
 
-/***/ 4176:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-/* module decorator */ module = __nccwpck_require__.nmd(module);
-
-
-var Module = __nccwpck_require__(8188);
-var path = __nccwpck_require__(1017);
-
-module.exports = function requireFromString(code, filename, opts) {
-	if (typeof filename === 'object') {
-		opts = filename;
-		filename = undefined;
-	}
-
-	opts = opts || {};
-	filename = filename || '';
-
-	opts.appendPaths = opts.appendPaths || [];
-	opts.prependPaths = opts.prependPaths || [];
-
-	if (typeof code !== 'string') {
-		throw new Error('code must be a string, not ' + typeof code);
-	}
-
-	var paths = Module._nodeModulePaths(path.dirname(filename));
-
-	var parent = module.parent;
-	var m = new Module(filename, parent);
-	m.filename = filename;
-	m.paths = [].concat(opts.prependPaths).concat(paths).concat(opts.appendPaths);
-	m._compile(code, filename);
-
-	var exports = m.exports;
-	parent && parent.children && parent.children.splice(parent.children.indexOf(m), 1);
-
-	return exports;
-};
-
-
-/***/ }),
-
 /***/ 6624:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -87736,8 +88343,8 @@ module.exports = JSON.parse('["0BSD","AAL","ADSL","AFL-1.1","AFL-1.2","AFL-2.0",
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			id: moduleId,
-/******/ 			loaded: false,
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
 /******/ 	
@@ -87749,9 +88356,6 @@ module.exports = JSON.parse('["0BSD","AAL","ADSL","AFL-1.1","AFL-1.2","AFL-2.0",
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
-/******/ 	
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
@@ -87795,15 +88399,6 @@ module.exports = JSON.parse('["0BSD","AAL","ADSL","AFL-1.1","AFL-1.2","AFL-2.0",
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/node module decorator */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.nmd = (module) => {
-/******/ 			module.paths = [];
-/******/ 			if (!module.children) module.children = [];
-/******/ 			return module;
 /******/ 		};
 /******/ 	})();
 /******/ 	
