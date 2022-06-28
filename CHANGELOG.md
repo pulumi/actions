@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- feat: add support for local policy packs
+  [#658](https://github.com/pulumi/actions/pull/658)
+
 - fix: update PR comments correctly when `edit-pr-comment` is true (fixes
   [#633](https://github.com/pulumi/actions/issues/633))
 - bump to runtime to node 16
