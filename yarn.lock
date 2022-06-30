@@ -697,10 +697,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@pulumi/pulumi@3.35.1":
-  version "3.35.1"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.35.1.tgz#63df2cb48b54832beac005c0d1aaa76057515f34"
-  integrity sha512-seWHsBB8gCLgYjhoHFfclYVWPjz0k4lwHkMUr278yoxlD0WT20NDfnEy+0fD7zsBm0XcJrltaYKLrbOCvF2LGw==
+"@pulumi/pulumi@3.35.2":
+  version "3.35.2"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.35.2.tgz#317a73c57089c7e8ef9b4e5d515aa48519021a9c"
+  integrity sha512-HI17rHJw0N8GrHeuqV2H3n1fnSuGPKR1ckjPq2YF6ijePa3cfqXSrMQu/Zj0SXgMDhElY6nqmJwoS2W3pLeW5w==
   dependencies:
     "@grpc/grpc-js" "~1.3.8"
     "@logdna/tail-file" "^2.0.6"
@@ -713,7 +713,7 @@
     read-package-tree "^5.3.1"
     require-from-string "^2.0.1"
     semver "^6.1.0"
-    source-map-support "^0.4.16"
+    source-map-support "^0.5.6"
     ts-node "^7.0.1"
     typescript "~3.7.3"
     upath "^1.1.0"
@@ -4948,13 +4948,6 @@ source-map-resolve@^0.5.0:
     resolve-url "^0.2.1"
     source-map-url "^0.4.0"
     urix "^0.1.0"
-
-source-map-support@^0.4.16:
-  version "0.4.18"
-  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.18.tgz#0286a6de8be42641338594e97ccea75f0a2c585f"
-  integrity sha512-try0/JqxPLF9nOjvSta7tVondkP5dwgyLDjVoyMDlmjugT2lRZ1OfsrYTkCd2hkDnJTKRbO/Rl3orm8vlsUzbA==
-  dependencies:
-    source-map "^0.5.6"
 
 source-map-support@^0.5.6:
   version "0.5.19"
