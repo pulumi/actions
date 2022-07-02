@@ -16,7 +16,7 @@ export async function handlePullRequestMessage(
   } = config;
 
   const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
-  const summary = '<summary>Click to expand Pulumi report</summary>';
+  const summary = '<summary>Pulumi report</summary>';
 
   const rawBody = output.substring(0, 64_000);
   // a line break between heading and rawBody is needed
