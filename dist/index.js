@@ -38335,7 +38335,14 @@ function createUrn(name, type, parent, project, stack) {
         else {
             parentUrn = output_1.output(parent);
         }
-        parentPrefix = parentUrn.apply(parentUrnString => parentUrnString.substring(0, parentUrnString.lastIndexOf("::")) + "$");
+        parentPrefix = parentUrn.apply(parentUrnString => {
+            const prefix = parentUrnString.substring(0, parentUrnString.lastIndexOf("::")) + "$";
+            if (prefix.endsWith("::pulumi:pulumi:Stack$")) {
+                // Don't prefix the stack type as a parent type
+                return `urn:pulumi:${stack || settings_1.getStack()}::${project || settings_1.getProject()}::`;
+            }
+            return prefix;
+        });
     }
     else {
         parentPrefix = output_1.output(`urn:pulumi:${stack || settings_1.getStack()}::${project || settings_1.getProject()}::`);
@@ -38419,7 +38426,7 @@ class Resource {
      * @param dependency True if this is a synthetic resource used internally for dependency tracking.
      */
     constructor(t, name, custom, props = {}, opts = {}, remote = false, dependency = false) {
-        var _a;
+        var _a, _b;
         /**
          * A private field to help with RTTI that works in SxS scenarios.
          * @internal
@@ -38442,8 +38449,8 @@ class Resource {
         }
         // Before anything else - if there are transformations registered, invoke them in order to transform the properties and
         // options assigned to this resource.
-        const parent = opts.parent || runtime_1.getStackResource() || { __transformations: undefined };
-        this.__transformations = [...(opts.transformations || []), ...(parent.__transformations || [])];
+        const parent = opts.parent || runtime_1.getStackResource();
+        this.__transformations = [...(opts.transformations || []), ...(((_a = parent) === null || _a === void 0 ? void 0 : _a.__transformations) || [])];
         for (const transformation of this.__transformations) {
             const tres = transformation({ resource: this, type: t, name, props, opts });
             if (tres) {
@@ -38465,16 +38472,16 @@ class Resource {
         opts = Object.assign({}, opts);
         // Check the parent type if one exists and fill in any default options.
         this.__providers = {};
-        if (opts.parent) {
-            this.__parentResource = opts.parent;
+        if (parent) {
+            this.__parentResource = parent;
             this.__parentResource.__childResources = this.__parentResource.__childResources || new Set();
             this.__parentResource.__childResources.add(this);
             if (opts.protect === undefined) {
-                opts.protect = opts.parent.__protect;
+                opts.protect = parent.__protect;
             }
             // Update aliases to include the full set of aliases implied by the child and parent aliases.
-            opts.aliases = allAliases(opts.aliases || [], name, t, opts.parent, opts.parent.__name);
-            this.__providers = opts.parent.__providers;
+            opts.aliases = allAliases(opts.aliases || [], name, t, parent, parent.__name);
+            this.__providers = parent.__providers;
         }
         // providers is found by combining (in ascending order of priority)
         //      1. provider
@@ -38491,7 +38498,7 @@ class Resource {
             if (memComponents.length === 3) {
                 pkg = memComponents[0];
             }
-            const parentProvider = (_a = opts.parent) === null || _a === void 0 ? void 0 : _a.getProvider(t);
+            const parentProvider = (_b = parent) === null || _b === void 0 ? void 0 : _b.getProvider(t);
             if (pkg && pkg in this.__providers) {
                 opts.provider = this.__providers[pkg];
             }
@@ -38508,26 +38515,26 @@ class Resource {
         this.__aliases = [];
         if (opts.aliases) {
             for (const alias of opts.aliases) {
-                this.__aliases.push(collapseAliasToUrn(alias, name, t, opts.parent));
+                this.__aliases.push(collapseAliasToUrn(alias, name, t, parent));
             }
         }
         if (opts.urn) {
             // This is a resource that already exists. Read its state from the engine.
-            resource_1.getResource(this, props, custom, opts.urn);
+            resource_1.getResource(this, parent, props, custom, opts.urn);
         }
         else if (opts.id) {
             // If this is a custom resource that already exists, read its state from the provider.
             if (!custom) {
                 throw new errors_1.ResourceError("Cannot read an existing resource unless it has a custom provider", opts.parent);
             }
-            resource_1.readResource(this, t, name, props, opts);
+            resource_1.readResource(this, parent, t, name, props, opts);
         }
         else {
             // Kick off the resource registration.  If we are actually performing a deployment, this
             // resource's properties will be resolved asynchronously after the operation completes, so
             // that dependent computations resolve normally.  If we are just planning, on the other
             // hand, values will never resolve.
-            resource_1.registerResource(this, t, name, custom, remote, urn => new DependencyResource(urn), props, opts);
+            resource_1.registerResource(this, parent, t, name, custom, remote, urn => new DependencyResource(urn), props, opts);
         }
     }
     static isInstance(obj) {
@@ -43264,7 +43271,7 @@ const resproto = __nccwpck_require__(2480);
 /**
  * Get an existing resource's state from the engine.
  */
-function getResource(res, props, custom, urn) {
+function getResource(res, parent, props, custom, urn) {
     // Extract the resource type from the URN.
     const urnParts = urn.split("::");
     const qualifiedType = urnParts[2];
@@ -43273,7 +43280,7 @@ function getResource(res, props, custom, urn) {
     const label = `resource:urn=${urn}`;
     log.debug(`Getting resource: urn=${urn}`);
     const monitor = settings_1.getMonitor();
-    const resopAsync = prepareResource(label, res, custom, false, props, {});
+    const resopAsync = prepareResource(label, res, parent, custom, false, props, {});
     const preallocError = new Error();
     debuggable_1.debuggablePromise(resopAsync.then((resop) => __awaiter(this, void 0, void 0, function* () {
         const inputs = yield rpc_1.serializeProperties(label, { urn });
@@ -43350,7 +43357,7 @@ exports.getResource = getResource;
  * Reads an existing custom resource's state from the resource monitor.  Note that resources read in this way
  * will not be part of the resulting stack's state, as they are presumed to belong to another.
  */
-function readResource(res, t, name, props, opts) {
+function readResource(res, parent, t, name, props, opts) {
     const id = opts.id;
     if (!id) {
         throw new Error("Cannot read resource whose options are lacking an ID value");
@@ -43358,7 +43365,7 @@ function readResource(res, t, name, props, opts) {
     const label = `resource:${name}[${t}]#...`;
     log.debug(`Reading resource: id=${output_1.Output.isInstance(id) ? "Output<T>" : id}, t=${t}, name=${name}`);
     const monitor = settings_1.getMonitor();
-    const resopAsync = prepareResource(label, res, true, false, props, opts);
+    const resopAsync = prepareResource(label, res, parent, true, false, props, opts);
     const preallocError = new Error();
     debuggable_1.debuggablePromise(resopAsync.then((resop) => __awaiter(this, void 0, void 0, function* () {
         const resolvedID = yield rpc_1.serializeProperty(label, id, new Set(), { keepOutputValues: false });
@@ -43433,11 +43440,11 @@ exports.readResource = readResource;
  * URN and the ID that will resolve after the deployment has completed.  All properties will be initialized to property
  * objects that the registration operation will resolve at the right time (or remain unresolved for deployments).
  */
-function registerResource(res, t, name, custom, remote, newDependency, props, opts) {
+function registerResource(res, parent, t, name, custom, remote, newDependency, props, opts) {
     const label = `resource:${name}[${t}]`;
     log.debug(`Registering resource: t=${t}, name=${name}, custom=${custom}, remote=${remote}`);
     const monitor = settings_1.getMonitor();
-    const resopAsync = prepareResource(label, res, custom, remote, props, opts);
+    const resopAsync = prepareResource(label, res, parent, custom, remote, props, opts);
     // In order to present a useful stack trace if an error does occur, we preallocate potential
     // errors here. V8 captures a stack trace at the moment an Error is created and this stack
     // trace will lead directly to user code. Throwing in `runAsyncResourceOp` results in an Error
@@ -43561,7 +43568,7 @@ exports.registerResource = registerResource;
  * Prepares for an RPC that will manufacture a resource, and hence deals with input and output
  * properties.
  */
-function prepareResource(label, res, custom, remote, props, opts) {
+function prepareResource(label, res, parent, custom, remote, props, opts) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         // add an entry to the rpc queue while we prepare the request.
@@ -43640,9 +43647,7 @@ function prepareResource(label, res, custom, remote, props, opts) {
             });
             // Wait for the parent to complete.
             // If no parent was provided, parent to the root resource.
-            const parentURN = opts.parent
-                ? yield opts.parent.urn.promise()
-                : yield settings_1.getRootResource();
+            const parentURN = parent ? yield parent.urn.promise() : undefined;
             let providerRef;
             let importID;
             if (custom) {
@@ -44773,7 +44778,6 @@ const pulumiEnvKeys = {
 function resetOptions(project, stack, parallel, engineAddr, monitorAddr, preview) {
     monitor = undefined;
     engine = undefined;
-    rootResource = undefined;
     rpcDone = Promise.resolve();
     featureSupport = {};
     // reset node specific environment variables in the process
@@ -45093,40 +45097,6 @@ function rpcKeepAlive() {
     return done;
 }
 exports.rpcKeepAlive = rpcKeepAlive;
-let rootResource;
-/**
- * getRootResource returns a root resource URN that will automatically become the default parent of all resources.  This
- * can be used to ensure that all resources without explicit parents are parented to a common parent resource.
- */
-function getRootResource() {
-    const engineRef = getEngine();
-    if (!engineRef) {
-        return Promise.resolve(undefined);
-    }
-    const req = new engproto.GetRootResourceRequest();
-    return new Promise((resolve, reject) => {
-        engineRef.getRootResource(req, (err, resp) => {
-            // Back-compat case - if the engine we're speaking to isn't aware that it can save and load root resources,
-            // fall back to the old behavior.
-            if (err && err.code === grpc.status.UNIMPLEMENTED) {
-                if (rootResource) {
-                    rootResource.then(resolve);
-                    return;
-                }
-                resolve(undefined);
-            }
-            if (err) {
-                return reject(err);
-            }
-            const urn = resp.getUrn();
-            if (urn) {
-                return resolve(urn);
-            }
-            return resolve(undefined);
-        });
-    });
-}
-exports.getRootResource = getRootResource;
 /**
  * setRootResource registers a resource that will become the default parent for all resources without explicit parents.
  */
@@ -45136,15 +45106,16 @@ function setRootResource(res) {
         if (!engineRef) {
             return Promise.resolve();
         }
+        // Back-compat case - Try to set the root URN for SxS old SDKs that expect the engine to roundtrip the
+        // stack URN.
         const req = new engproto.SetRootResourceRequest();
         const urn = yield res.urn.promise();
         req.setUrn(urn);
         return new Promise((resolve, reject) => {
             engineRef.setRootResource(req, (err, resp) => {
-                // Back-compat case - if the engine we're speaking to isn't aware that it can save and load root resources,
-                // fall back to the old behavior.
+                // Back-compat case - if the engine we're speaking to isn't aware that it can save and load root
+                // resources, just ignore there's nothing we can do.
                 if (err && err.code === grpc.status.UNIMPLEMENTED) {
-                    rootResource = res.urn.promise();
                     return resolve();
                 }
                 if (err) {
@@ -45292,10 +45263,9 @@ const settings_1 = __nccwpck_require__(4530);
  * `github.com/pulumi/pulumi/sdk/v3/go/common/resource/stack.RootStackType`.
  */
 exports.rootPulumiStackTypeName = "pulumi:pulumi:Stack";
-let stackResource;
 // Get the root stack resource for the current stack deployment
 function getStackResource() {
-    return stackResource;
+    return globalThis.stackResource;
 }
 exports.getStackResource = getStackResource;
 /**
@@ -45318,6 +45288,10 @@ exports.runInPulumiStack = runInPulumiStack;
  */
 class Stack extends resource_1.ComponentResource {
     constructor(init) {
+        // Clear the stackResource so that when the Resource constructor runs it gives us no parent, we'll
+        // then set this to ourselves in init before calling the user code that will then create other
+        // resources.
+        globalThis.stackResource = undefined;
         super(exports.rootPulumiStackTypeName, `${metadata_1.getProject()}-${metadata_1.getStack()}`, { init });
         const data = this.getData();
         this.outputs = output_1.output(data);
@@ -45333,13 +45307,9 @@ class Stack extends resource_1.ComponentResource {
             registerOutputs: { get: () => super.registerOutputs }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            const parent = yield settings_1.getRootResource();
-            if (parent) {
-                throw new Error("Only one root Pulumi Stack may be active at once");
-            }
             yield settings_1.setRootResource(this);
             // Set the global reference to the stack resource before invoking this init() function
-            stackResource = this;
+            globalThis.stackResource = this;
             let outputs;
             try {
                 const inputs = yield args.init();
@@ -45466,10 +45436,10 @@ function massageComplex(prop, objectStack) {
  * Add a transformation to all future resources constructed in this Pulumi stack.
  */
 function registerStackTransformation(t) {
-    if (!stackResource) {
+    if (!globalThis.stackResource) {
         throw new Error("The root stack resource was referenced before it was initialized.");
     }
-    stackResource.__transformations = [...(stackResource.__transformations || []), t];
+    globalThis.stackResource.__transformations = [...(globalThis.stackResource.__transformations || []), t];
 }
 exports.registerStackTransformation = registerStackTransformation;
 //# sourceMappingURL=stack.js.map
