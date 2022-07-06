@@ -71,6 +71,7 @@ export async function makeConfig(): Promise<Config> {
       policyPackConfigs: parseArray(getInput('policyPackConfigs')),
       editCommentOnPr: parseBoolean(getInput('edit-pr-comment')),
       userAgent: 'pulumi/actions@v3',
+      color: getInput('color'),
     },
   });
 }

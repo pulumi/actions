@@ -64,6 +64,8 @@ The action can be configured with the following arguments:
   `awskms`, `azurekeyvault`, `gcpkms`, `hashivault`. e.g.
   `gcpkms://projects//locations/us-west1/keyRings/acmecorpsec/cryptoKeys/payroll `
 
+- `color` - (optional) Colorize output. Choices are: always, never, raw, auto (default "auto").
+
 ### Extra options
 
 - `parallel` - (optional) Allow P resource operations to run in parallel at once
