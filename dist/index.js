@@ -88188,6 +88188,7 @@ function makeConfig() {
                 policyPackConfigs: parseArray((0,core.getInput)('policyPackConfigs')),
                 editCommentOnPr: parseBoolean((0,core.getInput)('edit-pr-comment')),
                 userAgent: 'pulumi/actions@v3',
+                color: (0,core.getInput)('color'),
             },
         });
     });
