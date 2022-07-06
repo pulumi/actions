@@ -209,3 +209,7 @@ with:
 - run: pip install -r requirements
   working-directory: infra
 ```
+
+## Release Cadence
+
+As of `v3.18`, we are intending to move to a monthly cadence for minor releases. Minor releases will be published around the beginning of the month. We may cut a patch release instead, if the changes are small enough not to warrant a minor release. We will also cut patch releases periodically as needed to address bugs.
