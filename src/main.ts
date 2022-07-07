@@ -91,7 +91,7 @@ const main = async () => {
     }
   }
 
-  if (config.commentOnPr && config.is_pull_request) {
+  if (config.commentOnPr && config.isPullRequest) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
     handlePullRequestMessage(config, output);
