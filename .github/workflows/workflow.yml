@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 14.x
           cache: yarn
 
       - run: yarn install
@@ -132,7 +132,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 14.x
 
       - name: Get npm cache directory
         id: npm-cache-dir
@@ -253,7 +253,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 14.x
 
       - run: npm install
         working-directory: .github/test-stacks/nodejs
