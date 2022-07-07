@@ -4,6 +4,9 @@
 
 - revert runtime requirement from node 16 to node 12
 
+- bug: Resolves a panic when using `comment-on-pr: true` when not running on an
+  event of type `pull_request`.
+  [#679](https://github.com/pulumi/actions/issues/679)
 
 ---
 
