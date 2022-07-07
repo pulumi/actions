@@ -81,5 +81,12 @@ outputs:
   output:
     description: Output from running command
 runs:
-  using: 'node16'
+  # TODO upgrade to node16 by 1 Nov 2022.
+  #
+  # We will retain node12 requirement 6 months after its EOL (30 Apr
+  # 2022), unless something forces us to upgrade.
+  #
+  # Trying to upgrade in July 2022 broke our users that depend on
+  # GitHub Enterprise versions < 3.4
+  using: 'node12'
   main: 'dist/index.js'
