@@ -1,4 +1,5 @@
 import { getInput } from '@actions/core';
+import { context } from '@actions/github';
 import * as rt from 'runtypes';
 import { parseArray, parseBoolean, parseNumber } from './libs/utils';
 
@@ -34,6 +35,8 @@ export const config = rt
     workDir: rt.String,
     commentOnPr: rt.Boolean,
     options: options,
+    // Information inferred from the environment that must be present
+    isPullRequest: rt.Boolean,
   })
   .And(
     rt.Partial({
@@ -59,6 +62,7 @@ export async function makeConfig(): Promise<Config> {
     commentOnPr: parseBoolean(getInput('comment-on-pr')),
     upsert: parseBoolean(getInput('upsert')),
     refresh: parseBoolean(getInput('refresh')),
+    isPullRequest: context?.payload?.pull_request !== undefined,
     options: {
       parallel: parseNumber(getInput('parallel')),
       message: getInput('message'),
