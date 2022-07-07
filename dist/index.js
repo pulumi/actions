@@ -88108,6 +88108,8 @@ var core = __nccwpck_require__(2186);
 var automation = __nccwpck_require__(4925);
 // EXTERNAL MODULE: ./node_modules/ts-invariant/lib/invariant.cjs
 var invariant = __nccwpck_require__(7371);
+// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
+var github = __nccwpck_require__(5438);
 // EXTERNAL MODULE: ./node_modules/runtypes/lib/index.js
 var lib = __nccwpck_require__(5568);
 ;// CONCATENATED MODULE: ./src/libs/utils.ts
@@ -88134,6 +88136,7 @@ function parseNumber(input) {
 
 
 
+
 const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'));
 const options = lib.Partial({
     parallel: lib.Number,
@@ -88155,6 +88158,8 @@ const config = lib.Record({
     workDir: lib.String,
     commentOnPr: lib.Boolean,
     options: options,
+    // Information inferred from the environment that must be present
+    isPullRequest: lib.Boolean,
 })
     .And(lib.Partial({
     // Optional options
@@ -88165,6 +88170,7 @@ const config = lib.Record({
     secretsProvider: lib.String,
 }));
 function makeConfig() {
+    var _a;
     return modules_awaiter(this, void 0, void 0, function* () {
         return config.check({
             command: (0,core.getInput)('command', { required: true }),
@@ -88176,6 +88182,7 @@ function makeConfig() {
             commentOnPr: parseBoolean((0,core.getInput)('comment-on-pr')),
             upsert: parseBoolean((0,core.getInput)('upsert')),
             refresh: parseBoolean((0,core.getInput)('refresh')),
+            isPullRequest: ((_a = github.context === null || github.context === void 0 ? void 0 : github.context.payload) === null || _a === void 0 ? void 0 : _a.pull_request) !== undefined,
             options: {
                 parallel: parseNumber((0,core.getInput)('parallel')),
                 message: (0,core.getInput)('message'),
@@ -88205,8 +88212,6 @@ const environmentVariables = dist.cleanEnv(process.env, {
     }),
 });
 
-// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
-var github = __nccwpck_require__(5438);
 // EXTERNAL MODULE: ./node_modules/dedent/dist/dedent.js
 var dedent = __nccwpck_require__(5281);
 ;// CONCATENATED MODULE: ./src/libs/pr.ts
@@ -88480,7 +88485,7 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
             core.setSecret(outExport.value);
         }
     }
-    if (config.commentOnPr) {
+    if (config.commentOnPr && config.isPullRequest) {
         core.debug(`Commenting on pull request`);
         (0,invariant/* default */.ZP)(config.githubToken, 'github-token is missing.');
         handlePullRequestMessage(config, output);
