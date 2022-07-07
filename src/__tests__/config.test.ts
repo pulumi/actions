@@ -21,6 +21,9 @@ describe('config.ts', () => {
         return config[name];
       }),
     }));
+    jest.mock('@actions/github', () => ({
+      context: {},
+    }));
 
     const { makeConfig } = require('../config');
 
@@ -63,6 +66,9 @@ describe('config.ts', () => {
       getInput: jest.fn((name: string) => {
         return config[name];
       }),
+    }));
+    jest.mock('@actions/github', () => ({
+      context: {},
     }));
 
     const { makeConfig } = require('../config');
