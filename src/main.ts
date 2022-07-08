@@ -1,10 +1,12 @@
 import { resolve } from 'path';
 import * as core from '@actions/core';
 import {
+  ConfigMap,
   LocalProgramArgs,
   LocalWorkspace,
   LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
+import YAML from 'yaml';
 import invariant from 'ts-invariant';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
@@ -51,6 +53,11 @@ const main = async () => {
     core.debug(msg);
     core.info(msg);
   };
+
+  if (config.configMap != '') {
+    const configMap: ConfigMap = YAML.parse(config.configMap);
+    await stack.setAllConfig(configMap);
+  }
 
   if (config.refresh) {
     core.startGroup(`Refresh stack on ${config.stackName}`);
