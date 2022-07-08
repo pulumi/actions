@@ -150,6 +150,7 @@ describe('config.ts', () => {
         "cloudUrl": "file://~",
         "command": "up",
         "commentOnPr": false,
+        "configMap": undefined,
         "githubToken": "n/a",
         "isPullRequest": true,
         "options": Object {
