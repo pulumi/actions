@@ -1,7 +1,7 @@
-import got from 'got'
-import * as rt from 'runtypes'
-import { maxSatisfying } from 'semver'
-import { invariant } from '../utils'
+import got from 'got';
+import * as rt from 'runtypes';
+import { maxSatisfying } from 'semver';
+import invariant from 'ts-invariant';
 
 const VersionRt = rt.Record({
   version: rt.String,

@@ -2,11 +2,30 @@
 
 ## HEAD (Unreleased)
 
-- fix: update PR comments correctly when `edit-pr-comment` is true (fixes
-  [#633](https://github.com/pulumi/actions/issues/633))
-- bump to runtime to node 16
+- feat: add configuration of Pulumi stack by `configMap` field
 
 ---
+
+## 3.18.1 (2022-07-07)
+
+- bug: Resolves a panic when using `comment-on-pr: true` when not running on an
+  event of type `pull_request`.
+  [#679](https://github.com/pulumi/actions/issues/679)
+
+- revert runtime requirement from node 16 to node 12
+
+## 3.18.0 (2022-07-01)
+
+- Add support for colorized output
+  [#662](https://github.com/pulumi/actions/pull/662)
+
+- feat: add support for local policy packs
+  [#658](https://github.com/pulumi/actions/pull/658)
+
+- fix: update PR comments correctly when `edit-pr-comment` is true (fixes
+  [#633](https://github.com/pulumi/actions/issues/633))
+
+- bump to runtime to node 16
 
 ## 3.18.0 (2022-06-09)
 
@@ -103,17 +122,16 @@
 
 ## 3.0.0 (2021-04-19)
 
-- Upgrade to Pulumi 3.0  
-  **PLEASE NOTE:** This minimum version of the Pulumi CLI to work with this
-  action has been updated to be 3.0.0. If this version requirement is not
-  satisfied then the action will throw an error
+- Upgrade to Pulumi 3.0 **PLEASE NOTE:** This minimum version of the Pulumi CLI
+  to work with this action has been updated to be 3.0.0. If this version
+  requirement is not satisfied then the action will throw an error
 
 ## 2.3.0 (2021-04-15)
 
 - Upgrade to v2.25.0 of Pulumi Automation API
-  [#180](https://github.com/pulumi/actions/pull/180)  
-  **PLEASE NOTE:** This minimum version of the Pulumi CLI to work with this
-  action has been updated to be 2.25.0
+  [#180](https://github.com/pulumi/actions/pull/180) **PLEASE NOTE:** This
+  minimum version of the Pulumi CLI to work with this action has been updated to
+  be 2.25.0
 
 ## 2.2.0 (2021-03-22)
 
