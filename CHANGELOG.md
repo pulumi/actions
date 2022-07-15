@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-- feat: add configuration of Pulumi stack by `configMap` field
+- feat: add configuration of Pulumi stack by `config-map` field
 
 ---
 
