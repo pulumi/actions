@@ -85,7 +85,7 @@ describe('config.ts', () => {
     const { makeConfig } = require('../config');
 
     await expect(makeConfig).toThrowErrorMatchingInlineSnapshot(
-      `"Expected { command: \\"up\\" | \\"update\\" | \\"refresh\\" | \\"destroy\\" | \\"preview\\"; stackName: string; workDir: string; commentOnPr: boolean; options: { parallel?: number; message?: string; expectNoChanges?: boolean; diff?: boolean; replace?: string[]; target?: string[]; policyPacks?: string[]; policyPackConfigs?: string[]; targetDependents?: boolean; editCommentOnPr?: boolean; userAgent?: \\"pulumi/actions@v3\\"; }; configMap?: string; cloudUrl?: string; githubToken?: string; upsert?: boolean; refresh?: boolean; secretsProvider?: string; }, but was incompatible"`,
+      `"Expected { command: \\"up\\" | \\"update\\" | \\"refresh\\" | \\"destroy\\" | \\"preview\\"; stackName: string; workDir: string; commentOnPr: boolean; options: { parallel?: number; message?: string; expectNoChanges?: boolean; diff?: boolean; replace?: string[]; target?: string[]; policyPacks?: string[]; policyPackConfigs?: string[]; targetDependents?: boolean; editCommentOnPr?: boolean; userAgent?: \\"pulumi/actions@v3\\"; }; isPullRequest: boolean; configMap?: string; cloudUrl?: string; githubToken?: string; upsert?: boolean; refresh?: boolean; secretsProvider?: string; }, but was incompatible"`,
     );
   });
   it('should validate a configuration with commentOnPr eq true', async () => {

@@ -33,6 +33,7 @@ export const config = rt.Record({
   workDir: rt.String,
   commentOnPr: rt.Boolean,
   options: options,
+  isPullRequest: rt.Boolean,
   configMap: rt.String.optional(),
   cloudUrl: rt.String.optional(),
   githubToken: rt.String.optional(),
