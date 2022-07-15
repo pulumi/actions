@@ -146,6 +146,12 @@ describe('config.ts', () => {
       getInput: jest.fn((name: string) => {
         return config[name];
       }),
+      getBooleanInput: jest.fn((name: string) => {
+        return Boolean(config[name] === 'true');
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return config[name] ? config[name].split(/\r?\n/) : undefined;
+      }),
     }));
     jest.mock('@actions/github', () => ({
       context: {
@@ -171,13 +177,11 @@ describe('config.ts', () => {
         "isPullRequest": true,
         "options": Object {
           "color": undefined,
-          "diff": undefined,
-          "editCommentOnPr": undefined,
-          "expectNoChanges": undefined,
+          "diff": false,
+          "editCommentOnPr": false,
+          "expectNoChanges": false,
           "message": undefined,
           "parallel": undefined,
-          "policyPackConfigs": undefined,
-          "policyPacks": undefined,
           "replace": undefined,
           "target": undefined,
           "targetDependents": false,
