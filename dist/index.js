@@ -98353,7 +98353,7 @@ function makeConfig() {
             commentOnPr: parseBoolean((0,core.getInput)('comment-on-pr')),
             upsert: parseBoolean((0,core.getInput)('upsert')),
             refresh: parseBoolean((0,core.getInput)('refresh')),
-            configMap: (0,core.getInput)('configMap'),
+            configMap: (0,core.getInput)('config-map'),
             isPullRequest: ((_a = github.context === null || github.context === void 0 ? void 0 : github.context.payload) === null || _a === void 0 ? void 0 : _a.pull_request) !== undefined,
             options: {
                 parallel: parseNumber((0,core.getInput)('parallel')),
