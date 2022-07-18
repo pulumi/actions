@@ -5,7 +5,8 @@
 - fix: update PR comments correctly when `edit-pr-comment` is true (fixes
   [#633](https://github.com/pulumi/actions/issues/633))
 
-- Add `pulumi-version` option to allow pinning the version of the CLI
+- enhancement: Add `pulumi-version` option to allow pinning the version of the CLI
+   [PR](https://github.com/pulumi/actions/pull/661) fixes [#437 ](https://github.com/pulumi/actions/issues/437)
 
 ---
 
