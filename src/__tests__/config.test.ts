@@ -21,6 +21,9 @@ describe('config.ts', () => {
         return config[name];
       }),
     }));
+    jest.mock('@actions/github', () => ({
+      context: {},
+    }));
 
     const { makeConfig } = require('../config');
 
@@ -31,13 +34,18 @@ describe('config.ts', () => {
         "cloudUrl": "file://~",
         "command": "up",
         "commentOnPr": false,
+        "configMap": undefined,
         "githubToken": "n/a",
+        "isPullRequest": false,
         "options": Object {
+          "color": undefined,
           "diff": undefined,
           "editCommentOnPr": undefined,
           "expectNoChanges": undefined,
           "message": undefined,
           "parallel": undefined,
+          "policyPackConfigs": undefined,
+          "policyPacks": undefined,
           "replace": undefined,
           "target": undefined,
           "targetDependents": undefined,
@@ -59,6 +67,9 @@ describe('config.ts', () => {
       getInput: jest.fn((name: string) => {
         return config[name];
       }),
+    }));
+    jest.mock('@actions/github', () => ({
+      context: {},
     }));
 
     const { makeConfig } = require('../config');
@@ -85,13 +96,72 @@ describe('config.ts', () => {
         "cloudUrl": "file://~",
         "command": "up",
         "commentOnPr": true,
+        "configMap": undefined,
         "githubToken": "n/a",
+        "isPullRequest": false,
         "options": Object {
+          "color": undefined,
           "diff": undefined,
           "editCommentOnPr": undefined,
           "expectNoChanges": undefined,
           "message": undefined,
           "parallel": undefined,
+          "policyPackConfigs": undefined,
+          "policyPacks": undefined,
+          "replace": undefined,
+          "target": undefined,
+          "targetDependents": undefined,
+          "userAgent": "pulumi/actions@v3",
+        },
+        "refresh": undefined,
+        "secretsProvider": undefined,
+        "stackName": "dev",
+        "upsert": undefined,
+        "workDir": "./",
+      }
+    `);
+  });
+  it('should determine when in a PR', async () => {
+    const config = {
+      ...defaultConfig,
+      'comment-on-pr': 'false',
+    };
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        return config[name];
+      }),
+    }));
+    jest.mock('@actions/github', () => ({
+      context: {
+        payload: {
+          pull_request: {
+            number: 5678,
+          },
+        },
+      },
+    }));
+
+    const { makeConfig } = require('../config');
+
+    const c = await makeConfig();
+    expect(c).toBeTruthy();
+    expect(c).toMatchInlineSnapshot(`
+      Object {
+        "cloudUrl": "file://~",
+        "command": "up",
+        "commentOnPr": false,
+        "configMap": undefined,
+        "githubToken": "n/a",
+        "isPullRequest": true,
+        "options": Object {
+          "color": undefined,
+          "diff": undefined,
+          "editCommentOnPr": undefined,
+          "expectNoChanges": undefined,
+          "message": undefined,
+          "parallel": undefined,
+          "policyPackConfigs": undefined,
+          "policyPacks": undefined,
           "replace": undefined,
           "target": undefined,
           "targetDependents": undefined,
