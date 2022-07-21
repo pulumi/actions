@@ -43,6 +43,8 @@ The action can be configured with the following arguments:
 - `stack-name` (required) - The name of the stack that Pulumi will be operating
   on
 
+- `version` (optional) - The version of the Pulumi tool. Defaults to `^3`.
+
 - `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`.
 
 - `cloud-url` - (optional) - the Pulumi backend to login to. This would be the
@@ -89,7 +91,8 @@ The action can be configured with the following arguments:
   specified one per line (example: `<value | string>,...`).
 
 - `target` - (optional) Specify a single resource URN to update. Other resources
-  will not be updated. Multiple resources can be specified one per line (example: `<value | string>,...`).
+  will not be updated. Multiple resources can be specified one per line
+  (example: `<value | string>,...`).
 
 - `target-dependents` - (optional) Allows updating of dependent targets
   discovered but not specified in target.
@@ -101,6 +104,9 @@ The action can be configured with the following arguments:
   **PLEASE NOTE:** This will create a `Pulumi.<stack-name>.yaml` file that you
   will need to add back to source control as part of the action if you wish to
   perform any further tasks with that stack.
+
+- `downsert` - (optional) Remove the exist stack if all resources are deleted.
+  Used only with `destroy` command.
 
 By default, this action will try to authenticate Pulumi with the
 [Pulumi SaaS](https://app.pulumi.com/). If you have not specified a

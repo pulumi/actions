@@ -10,6 +10,9 @@ on:
       - 'CHANGELOG.md'
       - 'README.md'
 
+env:
+  PULUMI_VERSION: '^3'
+
 jobs:
   install-and-build:
     name: Install and Build GHA
@@ -74,7 +77,9 @@ jobs:
         with:
           command: ${{ matrix.command }}
           cloud-url: file://~
+          version: ${{ env.PULUMI_VERSION }}
           upsert: true
+          downsert: true
           stack-name: dev
           work-dir: .github/test-stacks/dotnet
           config-map: "{name: {value: my-pet, secret: false}}"
@@ -100,7 +105,7 @@ jobs:
 
       - uses: actions/setup-go@v3
         with:
-          go-version: 1.15.x
+          go-version: 1.17.x
 
       - uses: ./
         env:
@@ -108,8 +113,10 @@ jobs:
         with:
           command: ${{ matrix.command }}
           cloud-url: file://~
+          version: ${{ env.PULUMI_VERSION }}
           stack-name: dev
           upsert: true
+          downsert: true
           work-dir: .github/test-stacks/golang
           config-map: "{name: {value: my-user-name, secret: false}}"
 
@@ -158,8 +165,10 @@ jobs:
         with:
           command: ${{ matrix.command }}
           cloud-url: file://~
+          version: ${{ env.PULUMI_VERSION }}
           stack-name: dev
           upsert: true
+          downsert: true
           work-dir: .github/test-stacks/nodejs
           config-map: "{name: {value: hostname, secret: false}}"
 
@@ -219,8 +228,10 @@ jobs:
         with:
           command: ${{ matrix.command }}
           cloud-url: file://~
+          version: ${{ env.PULUMI_VERSION }}
           stack-name: dev
           upsert: true
+          downsert: true
           work-dir: .github/test-stacks/python
           config-map: "{name: {value: hostname, secret: false}}"
 
@@ -268,8 +279,10 @@ jobs:
         with:
           command: up
           cloud-url: file://~
+          version: ${{ env.PULUMI_VERSION }}
           stack-name: dev
           work-dir: .github/test-stacks/nodejs
           upsert: true
+          downsert: true
           refresh: true
           config-map: "{name: {value: hostname, secret: false}}"

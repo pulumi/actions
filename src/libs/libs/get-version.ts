@@ -15,42 +15,42 @@ const VersionRt = rt.Record({
   }),
   checksums: rt.String,
   latest: rt.Boolean.optional(),
-});
-export type Version = rt.Static<typeof VersionRt>;
-const VersionsRt = rt.Array(VersionRt);
+})
+export type Version = rt.Static<typeof VersionRt>
+const VersionsRt = rt.Array(VersionRt)
 
 export async function getVersionObject(range: string): Promise<Version> {
   const result = await got(
     'https://raw.githubusercontent.com/pulumi/docs/master/data/versions.json',
     { responseType: 'json' },
-  );
+  )
 
-  const versions = VersionsRt.check(result.body);
+  const versions = VersionsRt.check(result.body)
 
   if (range == 'latest') {
-    const latest = versions.find((v) => v.latest);
-    invariant(latest, 'expect a latest version to exists');
-    return latest;
+    const latest = versions.find(v => v.latest)
+    invariant(latest, 'expect a latest version to exists')
+    return latest
   }
 
   const resp = maxSatisfying(
-    versions.map((v) => v.version),
+    versions.map(v => v.version),
     range,
-  );
+  )
 
   if (resp === null) {
     throw new Error(
       'Could not find a version that satisfied the version range',
-    );
+    )
   }
 
-  const ver = versions.find((v) => v.version === resp);
+  const ver = versions.find(v => v.version === resp)
 
   if (!ver) {
     throw new Error(
       'Could not find a version that satisfied the version range',
-    );
+    )
   }
 
-  return ver;
+  return ver
 }

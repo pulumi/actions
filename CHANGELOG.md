@@ -27,14 +27,14 @@
 
 - bump to runtime to node 16
 
+## 3.18.0 (2022-06-09)
+
+- Add configuration of Pulumi stack by `configMap` field
+
 ## 3.17.0 (2022-05-25)
 
 - Fixes errors when pull request comment body is too large by trimming the body
   when above 64k characters
-
-## 3.16.0 (2022-02-09)
-
-- Print the comments as a collapsed `<details>` section
 
 ## 3.15.0 (2022-01-04)
 

@@ -1,18 +1,18 @@
-import * as os from 'os';
-import * as path from 'path';
-import * as core from '@actions/core';
-import * as io from '@actions/io';
-import * as tc from '@actions/tool-cache';
-import * as exec from './exec';
-import { getVersionObject } from './libs/get-version';
+import * as os from 'os'
+import * as path from 'path'
+import * as core from '@actions/core'
+import * as io from '@actions/io'
+import * as tc from '@actions/tool-cache'
+import * as exec from './exec'
+import { getVersionObject } from './libs/get-version'
 
 export async function isAvailable(): Promise<boolean> {
-  const res = await exec.exec(`pulumi`, [], true);
-  return res.stderr != '' && !res.success ? false : res.success;
+  const res = await exec.exec(`pulumi`, [], true)
+  return res.stderr != '' && !res.success ? false : res.success
 }
 
 export async function run(...args: string[]): Promise<void> {
-  await exec.exec(`pulumi`, args, true);
+  await exec.exec(`pulumi`, args, true)
 }
 
 export function getPlatform(): string | undefined {
@@ -22,60 +22,60 @@ export function getPlatform(): string | undefined {
     'darwin-x64': 'darwin-x64',
     'darwin-arm64': 'darwin-arm64',
     'win32-x64': 'windows-x64',
-  };
+  }
 
-  const runnerPlatform = os.platform();
-  const runnerArch = os.arch();
+  const runnerPlatform = os.platform()
+  const runnerArch = os.arch()
 
-  return platforms[`${runnerPlatform}-${runnerArch}`];
+  return platforms[`${runnerPlatform}-${runnerArch}`]
 }
 
 export async function downloadCli(range: string): Promise<void> {
-  const platform = getPlatform();
+  const platform = getPlatform()
 
   if (!platform) {
     throw new Error(
       'Unsupported operating system - Pulumi CLI is only released for Darwin (x64, arm64), Linux (x64, arm64) and Windows (x64)',
-    );
+    )
   }
 
-  core.info(`Configured range: ${range}`);
+  core.info(`Configured range: ${range}`)
 
-  const { version, downloads } = await getVersionObject(range);
-  core.info(`Matched version: ${version}`);
+  const { version, downloads } = await getVersionObject(range)
+  core.info(`Matched version: ${version}`)
 
-  const destination = path.join(os.homedir(), '.pulumi');
+  const destination = path.join(os.homedir(), '.pulumi')
   core.info(`Install destination is ${destination}`)
 
   await io
     .rmRF(path.join(destination, 'bin'))
     .catch()
     .then(() => {
-      core.info(`Successfully deleted pre-existing ${path.join(destination, "bin")}`);
+      core.info(`Successfully deleted pre-existing ${path.join(destination, 'bin')}`)
     })
 
-  const downloaded = await tc.downloadTool(downloads[platform]);
-  core.debug(`successfully downloaded ${downloads[platform]}`);
+  const downloaded = await tc.downloadTool(downloads[platform])
+  core.debug(`Successfully downloaded ${downloads[platform]}`)
 
   switch (platform) {
-    case "windows": {
-      await tc.extractZip(downloaded, os.homedir());
-      await io.mv(path.join(os.homedir(), 'Pulumi'), path.join(os.homedir(), '.pulumi'));
-      break;
+    case 'windows': {
+      await tc.extractZip(downloaded, os.homedir())
+      await io.mv(path.join(os.homedir(), 'Pulumi'), path.join(os.homedir(), '.pulumi'))
+      break
     }
     default: {
-      await io.mkdirP(destination);
+      await io.mkdirP(destination)
       core.debug(`Successfully created ${destination}`)
-      const extractedPath = await tc.extractTar(downloaded, destination);
+      const extractedPath = await tc.extractTar(downloaded, destination)
       core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`)
       const oldPath = path.join(destination, 'pulumi')
       const newPath = path.join(destination, 'bin')
-      await io.mv(oldPath, newPath);
+      await io.mv(oldPath, newPath)
       core.debug(`Successfully renamed ${oldPath} to ${newPath}`)
-      break;
+      break
     }
   }
 
-  const cachedPath = await tc.cacheDir(path.join(destination, 'bin'), 'pulumi', version);
-  core.addPath(cachedPath);
+  const cachedPath = await tc.cacheDir(path.join(destination, 'bin'), 'pulumi', version)
+  core.addPath(cachedPath)
 }
