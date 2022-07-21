@@ -1,15 +1,17 @@
 import { resolve } from 'path';
 import * as core from '@actions/core';
 import {
+  ConfigMap,
   LocalProgramArgs,
   LocalWorkspace,
   LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
+import invariant from 'ts-invariant';
+import YAML from 'yaml';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
-import { invariant } from './libs/utils';
 
 const main = async () => {
   const config = await makeConfig();
@@ -50,6 +52,11 @@ const main = async () => {
     core.info(msg);
   };
 
+  if (config.configMap != '') {
+    const configMap: ConfigMap = YAML.parse(config.configMap);
+    await stack.setAllConfig(configMap);
+  }
+
   if (config.refresh) {
     core.startGroup(`Refresh stack on ${config.stackName}`);
     await stack.refresh({ onOutput });
@@ -89,7 +96,7 @@ const main = async () => {
     }
   }
 
-  if (config.commentOnPr) {
+  if (config.commentOnPr && config.isPullRequest) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
     handlePullRequestMessage(config, output);

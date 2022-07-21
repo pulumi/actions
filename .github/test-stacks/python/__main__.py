@@ -1,6 +1,8 @@
+import pulumi
 import pulumi_random as random
-from pulumi import export
 
-random_host_name = random.RandomPet("hostname")
+config = pulumi.Config()
+name = config.require("name")
+random_host_name = random.RandomPet(name)
 
-export('name', random_host_name.id)
+pulumi.export("name", random_host_name.id)

@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
           cache: yarn
 
       - run: yarn install
@@ -33,6 +33,7 @@ jobs:
           filters: |
             dist:
               - 'dist/**'
+              - .github/workflows/**
 
       - name: Upload artifacts
         if: steps.changes.outputs.dist == 'true'
@@ -67,22 +68,16 @@ jobs:
         with:
           dotnet-version: 3.1
 
-      - name: Create local stack
-        run: |
-          pulumi login --local
-          pulumi stack init dev
-        working-directory: .github/test-stacks/dotnet
-        env:
-          PULUMI_CONFIG_PASSPHRASE: not-a-secret
-
       - uses: ./
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
         with:
           command: ${{ matrix.command }}
           cloud-url: file://~
+          upsert: true
           stack-name: dev
           work-dir: .github/test-stacks/dotnet
+          config-map: "{name: {value: my-pet, secret: false}}"
 
   test-golang-stack:
     needs: install-and-build
@@ -107,14 +102,6 @@ jobs:
         with:
           go-version: 1.15.x
 
-      - name: Create local stack
-        run: |
-          pulumi login --local
-          pulumi stack init dev
-        working-directory: .github/test-stacks/golang
-        env:
-          PULUMI_CONFIG_PASSPHRASE: not-a-secret
-
       - uses: ./
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
@@ -122,7 +109,9 @@ jobs:
           command: ${{ matrix.command }}
           cloud-url: file://~
           stack-name: dev
+          upsert: true
           work-dir: .github/test-stacks/golang
+          config-map: "{name: {value: my-user-name, secret: false}}"
 
   test-nodejs-stack:
     needs: install-and-build
@@ -145,15 +134,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
-
-      - name: Create local stack
-        run: |
-          pulumi login --local
-          pulumi stack init dev
-        working-directory: .github/test-stacks/nodejs
-        env:
-          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+          node-version: 16.x
 
       - name: Get npm cache directory
         id: npm-cache-dir
@@ -178,7 +159,9 @@ jobs:
           command: ${{ matrix.command }}
           cloud-url: file://~
           stack-name: dev
+          upsert: true
           work-dir: .github/test-stacks/nodejs
+          config-map: "{name: {value: hostname, secret: false}}"
 
   test-python-stack:
     needs: install-and-build
@@ -199,17 +182,9 @@ jobs:
           name: dist
           path: dist
 
-      - uses: actions/setup-python@v4.0.0
+      - uses: actions/setup-python@v4.1.0
         with:
           python-version: 3.9
-
-      - name: Create local stack
-        run: |
-          pulumi login --local
-          pulumi stack init dev
-        working-directory: .github/test-stacks/golang
-        env:
-          PULUMI_CONFIG_PASSPHRASE: not-a-secret
 
       - uses: actions/cache@v3
         if: startsWith(runner.os, 'Linux')
@@ -245,7 +220,9 @@ jobs:
           command: ${{ matrix.command }}
           cloud-url: file://~
           stack-name: dev
+          upsert: true
           work-dir: .github/test-stacks/python
+          config-map: "{name: {value: hostname, secret: false}}"
 
   test-generic-inputs:
     needs: install-and-build
@@ -280,14 +257,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
-
-      - name: Create local stack
-        run: |
-          pulumi login --local
-        working-directory: .github/test-stacks/nodejs
-        env:
-          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+          node-version: 16.x
 
       - run: npm install
         working-directory: .github/test-stacks/nodejs
@@ -302,3 +272,4 @@ jobs:
           work-dir: .github/test-stacks/nodejs
           upsert: true
           refresh: true
+          config-map: "{name: {value: hostname, secret: false}}"

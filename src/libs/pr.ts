@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import * as dedent from 'dedent';
+import invariant from 'ts-invariant';
 import { Config } from '../config';
-import { invariant } from './utils';
 
 export async function handlePullRequestMessage(
   config: Config,
@@ -16,7 +16,7 @@ export async function handlePullRequestMessage(
   } = config;
 
   const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
-  const summary = '<summary>Click to expand Pulumi report</summary>';
+  const summary = '<summary>Pulumi report</summary>';
 
   const rawBody = output.substring(0, 64_000);
   // a line break between heading and rawBody is needed

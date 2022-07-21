@@ -10,7 +10,9 @@ class MyStack : Stack
 {
     public MyStack()
     {
-        var pet = new RandomPet("my-pet", new RandomPetArgs{});
+        var config = new Pulumi.Config();
+        var name = config.Require("name");
+        var pet = new RandomPet(name, new RandomPetArgs{});
 
         this.PetName = pet.Id;
     }
