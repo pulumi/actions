@@ -97,8 +97,7 @@ The action can be configured with the following arguments:
 - `target-dependents` - (optional) Allows updating of dependent targets
   discovered but not specified in target.
 
-- `configMap` - (optional) Configuration of the stack. Format Yaml string:
-  `{<key | string>: {value: <value | string>, secret: <is_secret | boolean> },}`.
+- `config-map` - (optional) Configuration of the stack. Format Yaml string: `{<key | string>: {value: <value | string>, secret: <is_secret | boolean> },}`.
 
 - `upsert` - (optional) Allows the creation of the specified stack if it
   currently doesn't exist.  

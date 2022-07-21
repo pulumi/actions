@@ -82,7 +82,7 @@ jobs:
           downsert: true
           stack-name: dev
           work-dir: .github/test-stacks/dotnet
-          configMap: "{name: {value: my-pet, secret: false}}"
+          config-map: "{name: {value: my-pet, secret: false}}"
 
   test-golang-stack:
     needs: install-and-build
@@ -118,7 +118,7 @@ jobs:
           upsert: true
           downsert: true
           work-dir: .github/test-stacks/golang
-          configMap: "{name: {value: my-user-name, secret: false}}"
+          config-map: "{name: {value: my-user-name, secret: false}}"
 
   test-nodejs-stack:
     needs: install-and-build
@@ -170,7 +170,7 @@ jobs:
           upsert: true
           downsert: true
           work-dir: .github/test-stacks/nodejs
-          configMap: "{name: {value: hostname, secret: false}}"
+          config-map: "{name: {value: hostname, secret: false}}"
 
   test-python-stack:
     needs: install-and-build
@@ -191,7 +191,7 @@ jobs:
           name: dist
           path: dist
 
-      - uses: actions/setup-python@v4.0.0
+      - uses: actions/setup-python@v4.1.0
         with:
           python-version: 3.9
 
@@ -233,7 +233,7 @@ jobs:
           upsert: true
           downsert: true
           work-dir: .github/test-stacks/python
-          configMap: "{name: {value: hostname, secret: false}}"
+          config-map: "{name: {value: hostname, secret: false}}"
 
   test-generic-inputs:
     needs: install-and-build
@@ -285,4 +285,4 @@ jobs:
           upsert: true
           downsert: true
           refresh: true
-          configMap: "{name: {value: hostname, secret: false}}"
+          config-map: "{name: {value: hostname, secret: false}}"

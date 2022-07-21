@@ -67,7 +67,7 @@ export async function makeConfig(): Promise<Config> {
     upsert: parseBoolean(getInput('upsert')),
     downsert: parseBoolean(getInput('downsert')),
     refresh: parseBoolean(getInput('refresh')),
-    configMap: getInput('configMap'),
+    configMap: getInput('config-map'),
     isPullRequest: context?.payload?.pull_request !== undefined,
     options: {
       parallel: parseNumber(getInput('parallel')),
