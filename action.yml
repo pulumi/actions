@@ -43,7 +43,7 @@ inputs:
     description: 'Optional message to associate with the update operation'
     required: false
     default: ''
-  configMap:
+  config-map:
     description: 'Config to use during the operations'
     required: false
     default: ''
