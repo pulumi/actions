@@ -49,7 +49,7 @@ export async function downloadCli(range: string): Promise<void> {
   const isUnsupportedVersion = semver.lt(version, '3.0.0');
 
   if (isUnsupportedVersion) {
-    core.warning(`Using Pulumi CLI version less than 3.0.0 may cause unexpected behaviour. Please use version 3.0.0 or higher.`);
+    core.warning(`Using Pulumi CLI version less than 3.0.0 may cause unexpected behavior. Please consider migrating to 3.0.0 or higher. You can find our migration guide at https://www.pulumi.com/docs/get-started/install/migrating-3.0/`);
   }
 
   const destination = path.join(os.homedir(), '.pulumi');
