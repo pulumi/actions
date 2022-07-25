@@ -64,23 +64,24 @@ The action can be configured with the following arguments:
   `awskms`, `azurekeyvault`, `gcpkms`, `hashivault`. e.g.
   `gcpkms://projects//locations/us-west1/keyRings/acmecorpsec/cryptoKeys/payroll `
 
-- `color` - (optional) Colorize output. Choices are: always, never, raw, auto (default "auto").
+- `color` - (optional) Colorize output. Choices are: always, never, raw, auto
+  (default "auto").
 
 ### Extra options
 
 - `parallel` - (optional) Allow P resource operations to run in parallel at once
   (1 for no parallelism). Defaults to unbounded.
 
-- `message` - (optional) Optional message to associate with the update operation.
+- `message` - (optional) Optional message to associate with the update
+  operation.
 
 - `expect-no-changes` - (optional) Return an error if any changes occur during
   this update.
 
 - `edit-pr-comment` - (optional) Edit previous PR comment instead of posting new
-  one.  
-  **PLEASE NOTE:** that as of 3.2.0 of the Action, this now defaults to `true`.
-  This is in an effort to reduce verbosity - if you want to have a comment per
-  PR run, please ensure that you set this to `false`.
+  one. **PLEASE NOTE:** that as of 3.2.0 of the Action, this now defaults to
+  `true`. This is in an effort to reduce verbosity - if you want to have a
+  comment per PR run, please ensure that you set this to `false`.
 
 - `diff` - (optional) Display operation as a rich diff showing the overall
   change.
@@ -89,18 +90,22 @@ The action can be configured with the following arguments:
   specified one per line (example: `<value | string>,...`).
 
 - `target` - (optional) Specify a single resource URN to update. Other resources
-  will not be updated. Multiple resources can be specified one per line (example: `<value | string>,...`).
+  will not be updated. Multiple resources can be specified one per line
+  (example: `<value | string>,...`).
 
 - `target-dependents` - (optional) Allows updating of dependent targets
   discovered but not specified in target.
 
-- `config-map` - (optional) Configuration of the stack. Format Yaml string: `{<key | string>: {value: <value | string>, secret: <is_secret | boolean> },}`.
+- `config-map` - (optional) Configuration of the stack. Format Yaml string:
+  `{<key | string>: {value: <value | string>, secret: <is_secret | boolean> },}`.
 
 - `upsert` - (optional) Allows the creation of the specified stack if it
-  currently doesn't exist.  
-  **PLEASE NOTE:** This will create a `Pulumi.<stack-name>.yaml` file that you
-  will need to add back to source control as part of the action if you wish to
-  perform any further tasks with that stack.
+  currently doesn't exist. **PLEASE NOTE:** This will create a
+  `Pulumi.<stack-name>.yaml` file that you will need to add back to source
+  control as part of the action if you wish to perform any further tasks with
+  that stack.
+- `pulumi-version` - (optional) Install a specific version of the Pulumi CLI.
+  Defaults to "^3"
 
 By default, this action will try to authenticate Pulumi with the
 [Pulumi SaaS](https://app.pulumi.com/). If you have not specified a
@@ -212,6 +217,10 @@ with:
 - run: pip install -r requirements
   working-directory: infra
 ```
+
 ## Release Cadence
 
-As of `v3.18`, we are intending to move to a monthly cadence for minor releases. Minor releases will be published around the beginning of the month. We may cut a patch release instead, if the changes are small enough not to warrant a minor release. We will also cut patch releases periodically as needed to address bugs.
+As of `v3.18`, we are intending to move to a monthly cadence for minor releases.
+Minor releases will be published around the beginning of the month. We may cut a
+patch release instead, if the changes are small enough not to warrant a minor
+release. We will also cut patch releases periodically as needed to address bugs.

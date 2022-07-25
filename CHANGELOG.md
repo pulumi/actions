@@ -4,6 +4,10 @@
 
 - feat: add configuration of Pulumi stack by `config-map` field
 
+- enhancement: Add `pulumi-version` option to allow pinning the version of the
+  CLI [PR](https://github.com/pulumi/actions/pull/661) fixes
+  [#437 ](https://github.com/pulumi/actions/issues/437)
+
 ---
 
 ## 3.18.1 (2022-07-07)
@@ -25,7 +29,7 @@
 - fix: update PR comments correctly when `edit-pr-comment` is true (fixes
   [#633](https://github.com/pulumi/actions/issues/633))
 
-- bump to runtime to node 16
+- bump runtime to node 16
 
 ## 3.17.0 (2022-05-25)
 

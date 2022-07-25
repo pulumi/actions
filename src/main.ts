@@ -6,20 +6,18 @@ import {
   LocalWorkspace,
   LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
-import YAML from 'yaml';
 import invariant from 'ts-invariant';
+import YAML from 'yaml';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
 
-const pulumiVersion = '^3';
-
 const main = async () => {
   const config = await makeConfig();
   core.debug('Configuration is loaded');
 
-  await pulumiCli.downloadCli(pulumiVersion);
+  await pulumiCli.downloadCli(config.options.pulumiVersion);
 
   if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
     core.debug(`Logging into Pulumi`);

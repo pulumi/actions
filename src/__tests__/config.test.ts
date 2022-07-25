@@ -4,7 +4,7 @@ const defaultConfig: Record<string, string> = {
   'work-dir': './',
   'cloud-url': 'file://~',
   'github-token': 'n/a',
-  'pulumi-version': 'latest',
+  'pulumi-version': '^3',
 };
 
 describe('config.ts', () => {
@@ -46,6 +46,7 @@ describe('config.ts', () => {
           "parallel": undefined,
           "policyPackConfigs": undefined,
           "policyPacks": undefined,
+          "pulumiVersion": "^3",
           "replace": undefined,
           "target": undefined,
           "targetDependents": undefined,
@@ -108,6 +109,7 @@ describe('config.ts', () => {
           "parallel": undefined,
           "policyPackConfigs": undefined,
           "policyPacks": undefined,
+          "pulumiVersion": "^3",
           "replace": undefined,
           "target": undefined,
           "targetDependents": undefined,
@@ -162,6 +164,7 @@ describe('config.ts', () => {
           "parallel": undefined,
           "policyPackConfigs": undefined,
           "policyPacks": undefined,
+          "pulumiVersion": "^3",
           "replace": undefined,
           "target": undefined,
           "targetDependents": undefined,
