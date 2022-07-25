@@ -98274,10 +98274,10 @@ var external_path_ = __nccwpck_require__(71017);
 var core = __nccwpck_require__(42186);
 // EXTERNAL MODULE: ./node_modules/@pulumi/pulumi/automation/index.js
 var automation = __nccwpck_require__(34925);
-// EXTERNAL MODULE: ./node_modules/yaml/dist/index.js
-var dist = __nccwpck_require__(44083);
 // EXTERNAL MODULE: ./node_modules/ts-invariant/lib/invariant.cjs
 var invariant = __nccwpck_require__(47371);
+// EXTERNAL MODULE: ./node_modules/yaml/dist/index.js
+var dist = __nccwpck_require__(44083);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(95438);
 // EXTERNAL MODULE: ./node_modules/runtypes/lib/index.js
@@ -98320,6 +98320,7 @@ const options = lib.Partial({
     targetDependents: lib.Boolean,
     editCommentOnPr: lib.Boolean,
     userAgent: lib.Literal('pulumi/actions@v3'),
+    pulumiVersion: lib.String,
 });
 const config = lib.Record({
     // Required options
@@ -98367,6 +98368,7 @@ function makeConfig() {
                 policyPackConfigs: parseArray((0,core.getInput)('policyPackConfigs')),
                 editCommentOnPr: parseBoolean((0,core.getInput)('edit-pr-comment')),
                 userAgent: 'pulumi/actions@v3',
+                pulumiVersion: (0,core.getInput)('pulumi-version') || "^3",
                 color: (0,core.getInput)('color'),
             },
         });
@@ -98441,6 +98443,8 @@ var external_os_ = __nccwpck_require__(22037);
 var io = __nccwpck_require__(47351);
 // EXTERNAL MODULE: ./node_modules/@actions/tool-cache/lib/tool-cache.js
 var tool_cache = __nccwpck_require__(27784);
+// EXTERNAL MODULE: ./node_modules/semver/index.js
+var semver = __nccwpck_require__(11383);
 // EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
 var lib_exec = __nccwpck_require__(71514);
 ;// CONCATENATED MODULE: ./src/libs/exec.ts
@@ -98472,8 +98476,6 @@ const exec_exec = (command, args = [], silent) => modules_awaiter(void 0, void 0
 // EXTERNAL MODULE: ./node_modules/got/dist/source/index.js
 var source = __nccwpck_require__(93061);
 var source_default = /*#__PURE__*/__nccwpck_require__.n(source);
-// EXTERNAL MODULE: ./node_modules/semver/index.js
-var semver = __nccwpck_require__(11383);
 ;// CONCATENATED MODULE: ./src/libs/libs/get-version.ts
 
 
@@ -98524,6 +98526,7 @@ function getVersionObject(range) {
 
 
 
+
 function isAvailable() {
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield exec.exec(`pulumi`, [], true);
@@ -98556,6 +98559,10 @@ function downloadCli(range) {
         core.info(`Configured range: ${range}`);
         const { version, downloads } = yield getVersionObject(range);
         core.info(`Matched version: ${version}`);
+        const isUnsupportedVersion = semver.lt(version, '3.0.0');
+        if (isUnsupportedVersion) {
+            core.warning(`Using Pulumi CLI version less than 3.0.0 may cause unexpected behavior. Please consider migrating to 3.0.0 or higher. You can find our migration guide at https://www.pulumi.com/docs/get-started/install/migrating-3.0/`);
+        }
         const destination = external_path_.join(external_os_.homedir(), '.pulumi');
         core.info(`Install destination is ${destination}`);
         yield io.rmRF(external_path_.join(destination, 'bin'))
@@ -98599,11 +98606,10 @@ function downloadCli(range) {
 
 
 
-const pulumiVersion = '^3';
 const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
     const config = yield makeConfig();
     core.debug('Configuration is loaded');
-    yield downloadCli(pulumiVersion);
+    yield downloadCli(config.options.pulumiVersion);
     if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
         core.debug(`Logging into Pulumi`);
         yield run('login');
