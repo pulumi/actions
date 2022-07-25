@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as core from '@actions/core';
 import * as io from '@actions/io';
 import * as tc from '@actions/tool-cache';
+import * as semver from 'semver'
 import * as exec from './exec';
 import { getVersionObject } from './libs/get-version';
 
@@ -42,7 +43,14 @@ export async function downloadCli(range: string): Promise<void> {
   core.info(`Configured range: ${range}`);
 
   const { version, downloads } = await getVersionObject(range);
+
   core.info(`Matched version: ${version}`);
+
+  const isUnsupportedVersion = semver.lt(version, '3.0.0');
+
+  if (isUnsupportedVersion) {
+    core.warning(`Pulumi CLI version ${version} is not supported. Please use version 3.0.0 or higher.`);
+  }
 
   const destination = path.join(os.homedir(), '.pulumi');
   core.info(`Install destination is ${destination}`)
