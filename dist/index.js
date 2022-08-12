@@ -63738,7 +63738,8 @@ exports.FAILURE = Object.assign(function (code, message, details) { return (__as
         return (0, exports.FAILURE)(result_1.Failcode.KEY_INCORRECT, "Expected ".concat((0, show_1.default)(self), " key to be ").concat((0, show_1.default)(expected), ", but was ").concat((0, exports.typeOf)(value)));
     },
     CONTENT_INCORRECT: function (self, details) {
-        var message = "Expected ".concat((0, show_1.default)(self), ", but was incompatible");
+        var formattedDetails = JSON.stringify(details, null, 2).replace(/^ *null,\n/gm, '');
+        var message = "Validation failed:\n".concat(formattedDetails, ".\nObject should match ").concat((0, show_1.default)(self));
         return (0, exports.FAILURE)(result_1.Failcode.CONTENT_INCORRECT, message, details);
     },
     ARGUMENT_INCORRECT: function (message) {
