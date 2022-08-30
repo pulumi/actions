@@ -18333,12 +18333,10 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.userAgent) {
                     args.push("--exec-agent", opts.userAgent);
                 }
-                if (opts.color) {
-                    args.push("--color", opts.color);
-                }
                 if (opts.plan) {
                     args.push("--plan", opts.plan);
                 }
+                applyGlobalOpts(opts, args);
             }
             let onExit = (hasError) => { return; };
             let didError = false;
@@ -18455,12 +18453,10 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.userAgent) {
                     args.push("--exec-agent", opts.userAgent);
                 }
-                if (opts.color) {
-                    args.push("--color", opts.color);
-                }
                 if (opts.plan) {
                     args.push("--save-plan", opts.plan);
                 }
+                applyGlobalOpts(opts, args);
             }
             let onExit = (hasError) => { return; };
             let didError = false;
@@ -18553,9 +18549,7 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.userAgent) {
                     args.push("--exec-agent", opts.userAgent);
                 }
-                if (opts.color) {
-                    args.push("--color", opts.color);
-                }
+                applyGlobalOpts(opts, args);
             }
             let logPromise;
             let logFile;
@@ -18608,9 +18602,7 @@ Event: ${line}\n${e.toString()}`);
                 if (opts.userAgent) {
                     args.push("--exec-agent", opts.userAgent);
                 }
-                if (opts.color) {
-                    args.push("--color", opts.color);
-                }
+                applyGlobalOpts(opts, args);
             }
             let logPromise;
             let logFile;
@@ -18795,6 +18787,26 @@ Event: ${line}\n${e.toString()}`);
     }
 }
 exports.Stack = Stack;
+function applyGlobalOpts(opts, args) {
+    if (opts.color) {
+        args.push("--color", opts.color);
+    }
+    if (opts.logFlow) {
+        args.push("--logflow");
+    }
+    if (opts.logVerbosity) {
+        args.push("--verbose", opts.logVerbosity.toString());
+    }
+    if (opts.logToStdErr) {
+        args.push("--logtostderr");
+    }
+    if (opts.tracing) {
+        args.push("--tracing", opts.tracing);
+    }
+    if (opts.debug) {
+        args.push("--debug");
+    }
+}
 /**
  * Returns a stack name formatted with the greatest possible specificity:
  * org/project/stack or user/project/stack
@@ -40103,7 +40115,6 @@ const nodeEnvKeys = {
     cacheDynamicProviders: "PULUMI_NODEJS_CACHE_DYNAMIC_PROVIDERS",
 };
 const pulumiEnvKeys = {
-    testMode: "PULUMI_TEST_MODE",
     legacyApply: "PULUMI_ENABLE_LEGACY_APPLY",
 };
 // reset options resets nodejs runtime global state (such as rpc clients),
@@ -40149,34 +40160,10 @@ function _reset() {
 }
 exports._reset = _reset;
 /** @internal Used only for testing purposes */
-function _setTestModeEnabled(val) {
-    process.env[pulumiEnvKeys.testMode] = val.toString();
-}
-exports._setTestModeEnabled = _setTestModeEnabled;
-/** @internal Used only for testing purposes */
 function _setFeatureSupport(key, val) {
     featureSupport[key] = val;
 }
 exports._setFeatureSupport = _setFeatureSupport;
-/**
- * Returns true if test mode is enabled (PULUMI_TEST_MODE).
- *
- * NB: this test mode has nothing to do with preview/dryRun modality, and it is not automatically
- * enabled by calling `setMocks`. It is a vestigial mechanism related to testing the runtime itself,
- * and is not relevant to writing or running unit tests for a Pulumi project.
- */
-function isTestModeEnabled() {
-    return options().testModeEnabled === true;
-}
-exports.isTestModeEnabled = isTestModeEnabled;
-/**
- * Checks that test mode is enabled and, if not, throws an error.
- */
-function requireTestModeEnabled() {
-    if (!isTestModeEnabled()) {
-        throw new Error("Program run without the Pulumi engine available; re-run using the `pulumi` CLI");
-    }
-}
 /** @internal Used only for testing purposes. */
 function _setQueryMode(val) {
     process.env[nodeEnvKeys.queryMode] = val.toString();
@@ -40211,9 +40198,8 @@ function getProject() {
     if (project) {
         return project;
     }
-    // If the project is missing, specialize the error. First, if test mode is disabled:
-    requireTestModeEnabled();
-    // And now an error if test mode is enabled, instructing how to manually configure the project:
+    // If the project is missing, specialize the error.
+    // Throw an error if test mode is enabled, instructing how to manually configure the project:
     throw new Error("Missing project name; for test mode, please call `pulumi.runtime.setMocks`");
 }
 exports.getProject = getProject;
@@ -40230,10 +40216,9 @@ function getStack() {
     if (stack) {
         return stack;
     }
-    // If the stack is missing, specialize the error. First, if test mode is disabled:
-    requireTestModeEnabled();
-    // And now an error if test mode is enabled, instructing how to manually configure the stack:
-    throw new Error("Missing stack name; for test mode, please set PULUMI_NODEJS_STACK");
+    // If the stack is missing, specialize the error.
+    // Throw an error if test mode is enabled, instructing how to manually configure the stack:
+    throw new Error("Missing stack name; for test mode, please call `pulumi.runtime.setMocks` and provide a `stack` argument");
 }
 exports.getStack = getStack;
 /** @internal Used only for testing purposes. */
@@ -40264,10 +40249,6 @@ function getMonitor() {
         if (addr) {
             // Lazily initialize the RPC connection to the monitor.
             monitor = new resrpc.ResourceMonitorClient(addr, grpc.credentials.createInsecure(), grpcChannelOptions);
-        }
-        else {
-            // If test mode isn't enabled, we can't run the program without an engine.
-            requireTestModeEnabled();
         }
     }
     return monitor;
@@ -40360,7 +40341,6 @@ function options() {
         syncDir: process.env[nodeEnvKeys.syncDir],
         cacheDynamicProviders: process.env[nodeEnvKeys.cacheDynamicProviders] !== "false",
         // pulumi specific
-        testModeEnabled: (process.env[pulumiEnvKeys.testMode] === "true"),
         legacyApply: (process.env[pulumiEnvKeys.legacyApply] === "true"),
     };
 }
@@ -40468,9 +40448,7 @@ function monitorSupportsFeature(feature) {
     return __awaiter(this, void 0, void 0, function* () {
         const monitorRef = getMonitor();
         if (!monitorRef) {
-            // If there's no monitor and test mode is disabled, just return false. Otherwise, return whatever is present in
-            // the featureSupport map.
-            return isTestModeEnabled() && featureSupport[feature];
+            return featureSupport[feature];
         }
         if (featureSupport[feature] === undefined) {
             const req = new resproto.SupportsFeatureRequest();
