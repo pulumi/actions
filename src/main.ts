@@ -26,7 +26,7 @@ const main = async () => {
     core.debug(`Logging into Pulumi`);
     await pulumiCli.run('login');
   }
-  
+
   const workDir = resolve(
     environmentVariables.GITHUB_WORKSPACE,
     config.workDir,
