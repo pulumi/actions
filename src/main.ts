@@ -19,14 +19,14 @@ const main = async () => {
 
   await pulumiCli.downloadCli(config.options.pulumiVersion);
 
-  if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
-    core.debug(`Logging into Pulumi`);
-    await pulumiCli.run('login');
-  } else if (config.cloudUrl) {
+  if (config.cloudUrl) {
     core.debug(`Logging into ${config.cloudUrl}`);
     await pulumiCli.run('login', config.cloudUrl);
+  } else {
+    core.debug(`Logging into Pulumi`);
+    await pulumiCli.run('login');
   }
-
+  
   const workDir = resolve(
     environmentVariables.GITHUB_WORKSPACE,
     config.workDir,
