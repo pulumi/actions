@@ -6,6 +6,11 @@ _(none)_
 
 ---
 
+## 3.19.1 (2022-09-01)
+
+- bug: Support logging into self-hosted Pulumi (i.e. Business Critical)
+  [#717](https://github.com/pulumi/actions/pull/717)
+
 ## 3.19.0 (2022-08-10)
 
 - feat: add configuration of Pulumi stack by `config-map` field
