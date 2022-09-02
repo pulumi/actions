@@ -15,9 +15,16 @@ import * as pulumiCli from './libs/pulumi-cli';
 
 const main = async () => {
   const config = await makeConfig();
+  const usingPulumiBackend = config.cloudUrl == '' || config.cloudUrl.startsWith('https');
+
   core.debug('Configuration is loaded');
+  core.debug(`Backend is ${config.cloudUrl || "Pulumi"}`);
 
   await pulumiCli.downloadCli(config.options.pulumiVersion);
+
+  if (usingPulumiBackend && environmentVariables.PULUMI_ACCESS_TOKEN == '') {
+    throw new Error('PULUMI_ACCESS_TOKEN must be set to login to the Pulumi backend');
+  }
 
   if (config.cloudUrl) {
     core.debug(`Logging into ${config.cloudUrl}`);
