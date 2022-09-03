@@ -77032,7 +77032,23 @@ function downloadCli(range) {
     });
 }
 
+;// CONCATENATED MODULE: ./src/login.ts
+
+
+
+const login = (cloudUrl, accessToken) => modules_awaiter(void 0, void 0, void 0, function* () {
+    if (cloudUrl) {
+        core.debug(`Logging into ${cloudUrl}`);
+        yield run('--non-interactive', 'login', cloudUrl);
+    }
+    else if (accessToken !== '') {
+        core.debug("Logging into the Pulumi Service backend.");
+        yield run('--non-interactive', 'login');
+    }
+});
+
 ;// CONCATENATED MODULE: ./src/main.ts
+
 
 
 
@@ -77047,14 +77063,7 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
     const config = yield makeConfig();
     core.debug('Configuration is loaded');
     yield downloadCli(config.options.pulumiVersion);
-    if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
-        core.debug(`Logging into Pulumi`);
-        yield run('login');
-    }
-    else if (config.cloudUrl) {
-        core.debug(`Logging into ${config.cloudUrl}`);
-        yield run('login', config.cloudUrl);
-    }
+    yield login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
     core.debug(`Working directory resolved at ${workDir}`);
     const stackArgs = {
