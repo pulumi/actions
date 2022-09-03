@@ -12,20 +12,14 @@ import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
+import { login } from './login';
 
 const main = async () => {
   const config = await makeConfig();
   core.debug('Configuration is loaded');
 
   await pulumiCli.downloadCli(config.options.pulumiVersion);
-
-  if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
-    core.debug(`Logging into Pulumi`);
-    await pulumiCli.run('login');
-  } else if (config.cloudUrl) {
-    core.debug(`Logging into ${config.cloudUrl}`);
-    await pulumiCli.run('login', config.cloudUrl);
-  }
+  await login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
 
   const workDir = resolve(
     environmentVariables.GITHUB_WORKSPACE,
