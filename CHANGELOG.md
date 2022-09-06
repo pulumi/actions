@@ -2,11 +2,13 @@
 
 ## HEAD (Unreleased)
 
+---
+
+## 3.19.1 (2022-09-06)
+
 - bug: Fix bug where `cloud-url` option was not respected. This change also
   enables using self-hosted Pulumi (_e.g._ an S3 bucket or Pulumi Business
   Critical self-hosted) [#719](https://github.com/pulumi/actions/pull/719)
-
----
 
 ## 3.19.0 (2022-08-10)
 
