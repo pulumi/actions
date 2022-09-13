@@ -17123,6 +17123,9 @@ function runPulumiCmd(args, cwd, additionalEnv, onOutput) {
             if (exitCode !== 0) {
                 throw errors_1.createCommandError(commandResult);
             }
+            if (onOutput) {
+                onOutput(stdout);
+            }
             return commandResult;
         }
         catch (err) {
@@ -18279,7 +18282,6 @@ Event: ${line}\n${e.toString()}`);
      * @param opts Options to customize the behavior of the update.
      */
     up(opts) {
-        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["up", "--yes", "--skip-preview"];
             let kind = execKind.local;
@@ -18361,7 +18363,7 @@ Event: ${line}\n${e.toString()}`);
             let logPromise;
             let logFile;
             // Set up event log tailing
-            if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
+            if (opts === null || opts === void 0 ? void 0 : opts.onEvent) {
                 const onEvent = opts.onEvent;
                 logFile = createLogFile("up");
                 args.push("--event-log", logFile);
@@ -18371,7 +18373,7 @@ Event: ${line}\n${e.toString()}`);
             }
             let upResult;
             try {
-                upResult = yield this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
+                upResult = yield this.runPulumiCmd(args, opts === null || opts === void 0 ? void 0 : opts.onOutput);
             }
             catch (e) {
                 didError = true;
@@ -18383,7 +18385,7 @@ Event: ${line}\n${e.toString()}`);
             }
             // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
             const outputs = yield this.outputs();
-            const summary = yield this.info((_c = opts) === null || _c === void 0 ? void 0 : _c.showSecrets);
+            const summary = yield this.info(opts === null || opts === void 0 ? void 0 : opts.showSecrets);
             return {
                 stdout: upResult.stdout,
                 stderr: upResult.stderr,
@@ -18399,7 +18401,6 @@ Event: ${line}\n${e.toString()}`);
      * @param opts Options to customize the behavior of the preview.
      */
     preview(opts) {
-        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["preview"];
             let kind = execKind.local;
@@ -18483,18 +18484,17 @@ Event: ${line}\n${e.toString()}`);
             args.push("--event-log", logFile);
             let summaryEvent;
             const logPromise = this.readLines(logFile, (event) => {
-                var _a;
                 if (event.summaryEvent) {
                     summaryEvent = event.summaryEvent;
                 }
-                if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
+                if (opts === null || opts === void 0 ? void 0 : opts.onEvent) {
                     const onEvent = opts.onEvent;
                     onEvent(event);
                 }
             });
             let previewResult;
             try {
-                previewResult = yield this.runPulumiCmd(args, (_a = opts) === null || _a === void 0 ? void 0 : _a.onOutput);
+                previewResult = yield this.runPulumiCmd(args, opts === null || opts === void 0 ? void 0 : opts.onOutput);
             }
             catch (e) {
                 didError = true;
@@ -18510,7 +18510,7 @@ Event: ${line}\n${e.toString()}`);
             return {
                 stdout: previewResult.stdout,
                 stderr: previewResult.stderr,
-                changeSummary: ((_b = summaryEvent) === null || _b === void 0 ? void 0 : _b.resourceChanges) || {},
+                changeSummary: (summaryEvent === null || summaryEvent === void 0 ? void 0 : summaryEvent.resourceChanges) || {},
             };
         });
     }
@@ -18521,7 +18521,6 @@ Event: ${line}\n${e.toString()}`);
      * @param opts Options to customize the behavior of the refresh.
      */
     refresh(opts) {
-        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["refresh", "--yes", "--skip-preview"];
             if (opts) {
@@ -18547,7 +18546,7 @@ Event: ${line}\n${e.toString()}`);
             let logPromise;
             let logFile;
             // Set up event log tailing
-            if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
+            if (opts === null || opts === void 0 ? void 0 : opts.onEvent) {
                 const onEvent = opts.onEvent;
                 logFile = createLogFile("refresh");
                 args.push("--event-log", logFile);
@@ -18557,10 +18556,10 @@ Event: ${line}\n${e.toString()}`);
             }
             const kind = this.workspace.program ? execKind.inline : execKind.local;
             args.push("--exec-kind", kind);
-            const refPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
+            const refPromise = this.runPulumiCmd(args, opts === null || opts === void 0 ? void 0 : opts.onOutput);
             const [refResult, logResult] = yield Promise.all([refPromise, logPromise]);
             yield cleanUp(logFile, logResult);
-            const summary = yield this.info((_c = opts) === null || _c === void 0 ? void 0 : _c.showSecrets);
+            const summary = yield this.info(opts === null || opts === void 0 ? void 0 : opts.showSecrets);
             return {
                 stdout: refResult.stdout,
                 stderr: refResult.stderr,
@@ -18574,7 +18573,6 @@ Event: ${line}\n${e.toString()}`);
      * @param opts Options to customize the behavior of the destroy.
      */
     destroy(opts) {
-        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["destroy", "--yes", "--skip-preview"];
             if (opts) {
@@ -18600,7 +18598,7 @@ Event: ${line}\n${e.toString()}`);
             let logPromise;
             let logFile;
             // Set up event log tailing
-            if ((_a = opts) === null || _a === void 0 ? void 0 : _a.onEvent) {
+            if (opts === null || opts === void 0 ? void 0 : opts.onEvent) {
                 const onEvent = opts.onEvent;
                 logFile = createLogFile("destroy");
                 args.push("--event-log", logFile);
@@ -18610,10 +18608,10 @@ Event: ${line}\n${e.toString()}`);
             }
             const kind = this.workspace.program ? execKind.inline : execKind.local;
             args.push("--exec-kind", kind);
-            const desPromise = this.runPulumiCmd(args, (_b = opts) === null || _b === void 0 ? void 0 : _b.onOutput);
+            const desPromise = this.runPulumiCmd(args, opts === null || opts === void 0 ? void 0 : opts.onOutput);
             const [desResult, logResult] = yield Promise.all([desPromise, logPromise]);
             yield cleanUp(logFile, logResult);
-            const summary = yield this.info((_c = opts) === null || _c === void 0 ? void 0 : _c.showSecrets);
+            const summary = yield this.info(opts === null || opts === void 0 ? void 0 : opts.showSecrets);
             return {
                 stdout: desResult.stdout,
                 stderr: desResult.stderr,
@@ -18703,7 +18701,7 @@ Event: ${line}\n${e.toString()}`);
     history(pageSize, page, showSecrets) {
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["stack", "history", "--json"];
-            if ((showSecrets !== null && showSecrets !== void 0 ? showSecrets : true)) {
+            if (showSecrets !== null && showSecrets !== void 0 ? showSecrets : true) {
                 args.push("--show-secrets");
             }
             if (pageSize) {
@@ -37456,7 +37454,6 @@ class Resource {
      * @param dependency True if this is a synthetic resource used internally for dependency tracking.
      */
     constructor(t, name, custom, props = {}, opts = {}, remote = false, dependency = false) {
-        var _a, _b;
         /**
          * A private field to help with RTTI that works in SxS scenarios.
          * @internal
@@ -37480,7 +37477,7 @@ class Resource {
         // Before anything else - if there are transformations registered, invoke them in order to transform the properties and
         // options assigned to this resource.
         const parent = opts.parent || getStackResource();
-        this.__transformations = [...(opts.transformations || []), ...(((_a = parent) === null || _a === void 0 ? void 0 : _a.__transformations) || [])];
+        this.__transformations = [...(opts.transformations || []), ...((parent === null || parent === void 0 ? void 0 : parent.__transformations) || [])];
         for (const transformation of this.__transformations) {
             const tres = transformation({ resource: this, type: t, name, props, opts });
             if (tres) {
@@ -37528,7 +37525,7 @@ class Resource {
             if (memComponents.length === 3) {
                 pkg = memComponents[0];
             }
-            const parentProvider = (_b = parent) === null || _b === void 0 ? void 0 : _b.getProvider(t);
+            const parentProvider = parent === null || parent === void 0 ? void 0 : parent.getProvider(t);
             if (pkg && pkg in this.__providers) {
                 opts.provider = this.__providers[pkg];
             }
@@ -37727,7 +37724,6 @@ class ComponentResource extends Resource {
      * @param remote True if this is a remote component resource.
      */
     constructor(type, name, args = {}, opts = {}, remote = false) {
-        var _a, _b, _c;
         // Explicitly ignore the props passed in.  We allow them for back compat reasons.  However,
         // we explicitly do not want to pass them along to the engine.  The ComponentResource acts
         // only as a container for other resources.  Another way to think about this is that a normal
@@ -37736,7 +37732,7 @@ class ComponentResource extends Resource {
         // for a component resource.  The component is just used for organizational purposes and does
         // not correspond to a real piece of cloud infrastructure.  As such, changes to it *itself*
         // do not have any effect on the cloud side of things at all.
-        super(type, name, /*custom:*/ false, /*props:*/ remote || ((_a = opts) === null || _a === void 0 ? void 0 : _a.urn) ? args : {}, opts, remote);
+        super(type, name, /*custom:*/ false, /*props:*/ remote || (opts === null || opts === void 0 ? void 0 : opts.urn) ? args : {}, opts, remote);
         /**
          * A private field to help with RTTI that works in SxS scenarios.
          * @internal
@@ -37747,8 +37743,8 @@ class ComponentResource extends Resource {
         // eslint-disable-next-line @typescript-eslint/naming-convention,no-underscore-dangle,id-blacklist,id-match
         this.__registered = false;
         this.__remote = remote;
-        this.__registered = remote || !!((_b = opts) === null || _b === void 0 ? void 0 : _b.urn);
-        this.__data = remote || ((_c = opts) === null || _c === void 0 ? void 0 : _c.urn) ? Promise.resolve({}) : this.initializeAndRegisterOutputs(args);
+        this.__registered = remote || !!(opts === null || opts === void 0 ? void 0 : opts.urn);
+        this.__data = remote || (opts === null || opts === void 0 ? void 0 : opts.urn) ? Promise.resolve({}) : this.initializeAndRegisterOutputs(args);
     }
     /**
      * Returns true if the given object is an instance of CustomResource.  This is designed to work even when
@@ -39262,7 +39258,7 @@ function gatherExplicitDependencies(dependsOn) {
                 const urns = yield dos.promise();
                 const dosResources = yield output_1.getAllResources(dos);
                 const implicits = yield gatherExplicitDependencies([...dosResources]);
-                return ((urns !== null && urns !== void 0 ? urns : [])).concat(implicits);
+                return (urns !== null && urns !== void 0 ? urns : []).concat(implicits);
             }
             else {
                 if (!resource_2.Resource.isInstance(dependsOn)) {
@@ -39687,7 +39683,6 @@ exports.specialOutputValueSig = "d0e6a833031e9bbcd3f4e8bde6ca49a4";
  * appropriate, in addition to translating certain "special" values so that they are ready to go on the wire.
  */
 function serializeProperty(ctx, prop, dependentResources, opts) {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         // IMPORTANT:
         // IMPORTANT: Keep this in sync with serializePropertiesSync in invoke.ts
@@ -39746,7 +39741,7 @@ function serializeProperty(ctx, prop, dependentResources, opts) {
                 propResources.add(resource);
                 dependentResources.add(resource);
             }
-            if (((_a = opts) === null || _a === void 0 ? void 0 : _a.keepOutputValues) && (yield settings_1.monitorSupportsOutputValues())) {
+            if ((opts === null || opts === void 0 ? void 0 : opts.keepOutputValues) && (yield settings_1.monitorSupportsOutputValues())) {
                 const urnDeps = new Set();
                 for (const resource of propResources) {
                     yield serializeProperty(`${ctx} dependency`, resource.urn, urnDeps, {
@@ -40091,7 +40086,7 @@ function getRegistration(source, key, version) {
     const ver = version ? new semver.SemVer(version) : undefined;
     let bestMatch = undefined;
     let bestMatchVersion = undefined;
-    for (const existing of (_a = source.get(key), (_a !== null && _a !== void 0 ? _a : []))) {
+    for (const existing of (_a = source.get(key)) !== null && _a !== void 0 ? _a : []) {
         const existingVersion = existing.version !== undefined ? new semver.SemVer(existing.version) : undefined;
         if (!checkVersion(ver, existingVersion)) {
             continue;
@@ -40932,7 +40927,7 @@ function union(set1, set2) {
 exports.union = union;
 /** @internal */
 exports.disableResourceReferences = process.env.PULUMI_DISABLE_RESOURCE_REFERENCES === "1" ||
-    (_a = process.env.PULUMI_DISABLE_RESOURCE_REFERENCES, (_a !== null && _a !== void 0 ? _a : "")).toUpperCase() === "TRUE";
+    ((_a = process.env.PULUMI_DISABLE_RESOURCE_REFERENCES) !== null && _a !== void 0 ? _a : "").toUpperCase() === "TRUE";
 //# sourceMappingURL=utils.js.map
 
 /***/ }),
