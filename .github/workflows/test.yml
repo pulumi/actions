@@ -31,10 +31,6 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: '^1.13.1'
-      - name: Install pulumi
-        uses: pulumi/setup-pulumi@v2
-        with:
-          pulumi-version: 3.0.0 # explicitly leaving this in place so that we can test the action uses a newer version
       - run: |
           pulumi login --local
           pulumi stack init dev
@@ -58,4 +54,5 @@ jobs:
           stack-name: dev
           upsert: true
           work-dir: .github/test-stacks/golang
-      - run: echo "The random string is `${{ steps.pulumi.outputs.name }}`"
+          config-map: "{name: {value: test, secret: false}}"
+      - run: echo 'The random string is `${{ steps.pulumi.outputs.name }}`'

@@ -1,4 +1,5 @@
 import { getInput } from '@actions/core';
+import { context } from '@actions/github';
 import * as rt from 'runtypes';
 import { parseArray, parseBoolean, parseNumber } from './libs/utils';
 
@@ -19,9 +20,12 @@ export const options = rt.Partial({
   diff: rt.Boolean,
   replace: rt.Array(rt.String),
   target: rt.Array(rt.String),
+  policyPacks: rt.Array(rt.String),
+  policyPackConfigs: rt.Array(rt.String),
   targetDependents: rt.Boolean,
   editCommentOnPr: rt.Boolean,
   userAgent: rt.Literal('pulumi/actions@v3'),
+  pulumiVersion: rt.String,
 });
 
 export const config = rt
@@ -32,11 +36,14 @@ export const config = rt
     workDir: rt.String,
     commentOnPr: rt.Boolean,
     options: options,
+    // Information inferred from the environment that must be present
+    isPullRequest: rt.Boolean,
   })
   .And(
     rt.Partial({
       // Optional options
       cloudUrl: rt.String,
+      configMap: rt.String,
       githubToken: rt.String,
       upsert: rt.Boolean,
       refresh: rt.Boolean,
@@ -59,6 +66,8 @@ export async function makeConfig(): Promise<Config> {
     commentOnPrNumber: parseNumber(getInput('comment-on-pr-number')),
     upsert: parseBoolean(getInput('upsert')),
     refresh: parseBoolean(getInput('refresh')),
+    configMap: getInput('config-map'),
+    isPullRequest: context?.payload?.pull_request !== undefined,
     options: {
       parallel: parseNumber(getInput('parallel')),
       message: getInput('message'),
@@ -67,8 +76,12 @@ export async function makeConfig(): Promise<Config> {
       replace: parseArray(getInput('replace')),
       target: parseArray(getInput('target')),
       targetDependents: parseBoolean(getInput('target-dependents')),
+      policyPacks: parseArray(getInput('policyPacks')),
+      policyPackConfigs: parseArray(getInput('policyPackConfigs')),
       editCommentOnPr: parseBoolean(getInput('edit-pr-comment')),
       userAgent: 'pulumi/actions@v3',
+      pulumiVersion: getInput('pulumi-version') || "^3",
+      color: getInput('color'),
     },
   });
 }

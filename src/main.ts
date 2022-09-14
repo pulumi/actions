@@ -1,31 +1,25 @@
 import { resolve } from 'path';
 import * as core from '@actions/core';
 import {
+  ConfigMap,
   LocalProgramArgs,
   LocalWorkspace,
   LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
+import invariant from 'ts-invariant';
+import YAML from 'yaml';
 import { Commands, makeConfig } from './config';
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
-import { invariant } from './libs/utils';
-
-const pulumiVersion = '^3';
+import { login } from './login';
 
 const main = async () => {
   const config = await makeConfig();
   core.debug('Configuration is loaded');
 
-  await pulumiCli.downloadCli(pulumiVersion);
-
-  if (environmentVariables.PULUMI_ACCESS_TOKEN !== '') {
-    core.debug(`Logging into Pulumi`);
-    await pulumiCli.run('login');
-  } else if (config.cloudUrl) {
-    core.debug(`Logging into ${config.cloudUrl}`);
-    await pulumiCli.run('login', config.cloudUrl);
-  }
+  await pulumiCli.downloadCli(config.options.pulumiVersion);
+  await login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
 
   const workDir = resolve(
     environmentVariables.GITHUB_WORKSPACE,
@@ -51,6 +45,11 @@ const main = async () => {
     core.debug(msg);
     core.info(msg);
   };
+
+  if (config.configMap != '') {
+    const configMap: ConfigMap = YAML.parse(config.configMap);
+    await stack.setAllConfig(configMap);
+  }
 
   if (config.refresh) {
     core.startGroup(`Refresh stack on ${config.stackName}`);
@@ -91,7 +90,7 @@ const main = async () => {
     }
   }
 
-  if (config.commentOnPr) {
+  if (config.commentOnPr && config.isPullRequest) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
     handlePullRequestMessage(config, output);

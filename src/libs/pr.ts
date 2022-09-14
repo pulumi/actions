@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import * as dedent from 'dedent';
+import invariant from 'ts-invariant';
 import { Config } from '../config';
-import { invariant } from './utils';
 
 export async function handlePullRequestMessage(
   config: Config,
@@ -15,16 +15,17 @@ export async function handlePullRequestMessage(
     options: { editCommentOnPr },
   } = config;
 
-  const heading = `#### :tropical_drink: \`${command}\` on ${stackName}
-
-  <details>
-  <summary>Click to expand Pulumi report</summary>`;
+  const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
+  const summary = '<summary>Pulumi report</summary>';
 
   const rawBody = output.substring(0, 64_000);
   // a line break between heading and rawBody is needed
   // otherwise the backticks won't work as intended
   const body = dedent`
     ${heading}
+
+    <details>
+    ${summary}
 
     \`\`\`
     ${rawBody}
@@ -50,7 +51,7 @@ export async function handlePullRequestMessage(
         issue_number: nr,
       });
       const comment = comments.find((comment) =>
-        comment.body.startsWith(heading),
+        comment.body.startsWith(heading) && comment.body.includes(summary),
       );
 
       // If comment exists, update it.

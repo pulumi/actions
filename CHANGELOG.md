@@ -2,11 +2,51 @@
 
 ## HEAD (Unreleased)
 
-- fix: pull request comment body too big. Trims body when above 64k characters.
+- fix: The body of a pull request will be trimmed when 64k characters.
 - Support for setting `comment-on-pr-number` when building
   [Reused Workflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows).
 
 ---
+
+## 3.19.1 (2022-09-06)
+
+- bug: Fix bug where `cloud-url` option was not respected. This change also
+  enables using self-hosted Pulumi (_e.g._ an S3 bucket or Pulumi Business
+  Critical self-hosted) [#719](https://github.com/pulumi/actions/pull/719)
+
+## 3.19.0 (2022-08-10)
+
+- feat: add configuration of Pulumi stack by `config-map` field
+
+- enhancement: Add `pulumi-version` option to allow pinning the version of the
+  CLI [PR](https://github.com/pulumi/actions/pull/661) fixes
+  [#437 ](https://github.com/pulumi/actions/issues/437)
+
+## 3.18.1 (2022-07-07)
+
+- bug: Resolves a panic when using `comment-on-pr: true` when not running on an
+  event of type `pull_request`.
+  [#679](https://github.com/pulumi/actions/issues/679)
+
+- revert runtime requirement from node 16 to node 12
+
+## 3.18.0 (2022-07-01)
+
+- Add support for colorized output
+  [#662](https://github.com/pulumi/actions/pull/662)
+
+- feat: add support for local policy packs
+  [#658](https://github.com/pulumi/actions/pull/658)
+
+- fix: update PR comments correctly when `edit-pr-comment` is true (fixes
+  [#633](https://github.com/pulumi/actions/issues/633))
+
+- bump runtime to node 16
+
+## 3.17.0 (2022-05-25)
+
+- Fixes errors when pull request comment body is too large by trimming the body
+  when above 64k characters
 
 ## 3.16.0 (2022-02-09)
 
@@ -98,17 +138,16 @@
 
 ## 3.0.0 (2021-04-19)
 
-- Upgrade to Pulumi 3.0  
-  **PLEASE NOTE:** This minimum version of the Pulumi CLI to work with this
-  action has been updated to be 3.0.0. If this version requirement is not
-  satisfied then the action will throw an error
+- Upgrade to Pulumi 3.0 **PLEASE NOTE:** This minimum version of the Pulumi CLI
+  to work with this action has been updated to be 3.0.0. If this version
+  requirement is not satisfied then the action will throw an error
 
 ## 2.3.0 (2021-04-15)
 
 - Upgrade to v2.25.0 of Pulumi Automation API
-  [#180](https://github.com/pulumi/actions/pull/180)  
-  **PLEASE NOTE:** This minimum version of the Pulumi CLI to work with this
-  action has been updated to be 2.25.0
+  [#180](https://github.com/pulumi/actions/pull/180) **PLEASE NOTE:** This
+  minimum version of the Pulumi CLI to work with this action has been updated to
+  be 2.25.0
 
 ## 2.2.0 (2021-03-22)
 

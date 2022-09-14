@@ -43,6 +43,10 @@ inputs:
     description: 'Optional message to associate with the update operation'
     required: false
     default: ''
+  config-map:
+    description: 'Config to use during the operations'
+    required: false
+    default: ''
   expect-no-changes:
     description: 'Return an error if any changes occur during this update'
     required: false
@@ -59,6 +63,12 @@ inputs:
     description: 'Allows updating of dependent targets discovered but not specified in target.'
     required: false
     default: 'false'
+  policyPacks:
+    description: 'Run one or more policy packs as part of this update.'
+    required: false
+  policyPackConfigs:
+    description: 'Path to JSON file containing the config for the policy pack of the corresponding "--policy-pack" flag.'
+    required: false
   refresh:
     description: 'Perform a stack refresh as part of the operation'
     required: false
@@ -71,9 +81,24 @@ inputs:
     description: 'Edit previous PR comment instead of posting new one'
     required: false
     default: 'true'
+  pulumi-version:
+    description: 'Install a specific version of the Pulumi CLI'
+    required: false
+    default: '^3'
+  color:
+    description: 'Colorize output. Choices are: always, never, raw, auto'
+    required: false
+    default: 'auto'
 outputs:
   output:
     description: Output from running command
 runs:
+  # TODO upgrade to node16 by 1 Nov 2022.
+  #
+  # We will retain node12 requirement 6 months after its EOL (30 Apr
+  # 2022), unless something forces us to upgrade.
+  #
+  # Trying to upgrade in July 2022 broke our users that depend on
+  # GitHub Enterprise versions < 3.4
   using: 'node12'
   main: 'dist/index.js'
