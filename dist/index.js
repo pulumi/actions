@@ -17118,13 +17118,19 @@ function runPulumiCmd(args, cwd, additionalEnv, onOutput) {
         }
         const env = Object.assign(Object.assign({}, process.env), additionalEnv);
         try {
-            const { stdout, stderr, exitCode } = yield execa("pulumi", args, { env, cwd });
+            const proc = execa("pulumi", args, { env, cwd });
+            if (onOutput && proc.stdout) {
+                proc.stdout.on("data", (data) => {
+                    if (data && data.toString) {
+                        data = data.toString();
+                    }
+                    onOutput(data);
+                });
+            }
+            const { stdout, stderr, exitCode } = yield proc;
             const commandResult = new CommandResult(stdout, stderr, exitCode);
             if (exitCode !== 0) {
                 throw errors_1.createCommandError(commandResult);
-            }
-            if (onOutput) {
-                onOutput(stdout);
             }
             return commandResult;
         }
