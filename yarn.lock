@@ -716,10 +716,10 @@
   dependencies:
     "@octokit/openapi-types" "^12.7.0"
 
-"@pulumi/pulumi@3.39.3":
-  version "3.39.3"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.39.3.tgz#beb51a9be88783ac74b39c3d103b0cd51d210f28"
-  integrity sha512-KmlSUOy96BqmYYKYuAyj2pCA6wfYDir47YmqUO+EXZCCFHjmNEeo3cRdzCDX9mbLufNgGHGHcd5WtSAbRAkgsg==
+"@pulumi/pulumi@3.40.0":
+  version "3.40.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.40.0.tgz#a7372975467cbdd2ca45aa5e04f8dff9e65a4565"
+  integrity sha512-RJ6BmdRauvNBZMVYoMHw1XUs50L0PtFG4uefb7WFj/0BMpLOCjM2pMtw7huz2xDYNHof11bzWttxvygLoxYAdQ==
   dependencies:
     "@grpc/grpc-js" "~1.3.8"
     "@logdna/tail-file" "^2.0.6"
