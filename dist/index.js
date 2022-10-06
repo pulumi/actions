@@ -79735,11 +79735,11 @@ function downloadCli(range) {
 
 const login = (cloudUrl, accessToken) => modules_awaiter(void 0, void 0, void 0, function* () {
     if (cloudUrl) {
-        core.debug(`Logging into ${cloudUrl}`);
+        core.info(`Logging into ${cloudUrl}`);
         yield run('--non-interactive', 'login', cloudUrl);
     }
     else if (accessToken !== '') {
-        core.debug("Logging into the Pulumi Service backend.");
+        core.info("Logging into the Pulumi Service backend.");
         yield run('--non-interactive', 'login');
     }
 });
