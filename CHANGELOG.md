@@ -7,7 +7,9 @@
 - Support for setting `comment-on-pr-number` when building
   [Reused Workflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows).
 
----
+- feat: Always show login information
+
+--
 
 ## 3.19.1 (2022-09-06)
 
