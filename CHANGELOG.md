@@ -1,6 +1,7 @@
 # CHANGELOG
 
 - feat: Always show login information
+- fix: no output when applying
 
 - fix: pull request comment body too big. Trims body when above 64k characters.
 
