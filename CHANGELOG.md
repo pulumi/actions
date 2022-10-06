@@ -2,6 +2,8 @@
 
 ## HEAD (Unreleased)
 
+- feat: Always show login information
+
 ---
 
 ## 3.19.1 (2022-09-06)
