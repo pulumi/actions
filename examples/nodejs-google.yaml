@@ -2,23 +2,33 @@ name: Pulumi
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   up:
     name: Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node
-        uses: actions/setup-nodejs@v2
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup Node LTS ✨
+        uses: actions/setup-nodejs@v3
         with:
-          node-version: 14.x
-      - uses: google-github-actions/setup-gcloud@v0
+          node-version: lts/*
+          cache: yarn
+
+      - name: Installing dependencies 📦️
+        run: yarn install
+
+      - name: Authenticate with Google 🔑
+        uses: google-github-actions/setup-gcloud@v0
         with:
           service_account_key: ${{ secrets.GCP_KEY }}
           project_id: ${{ env.PROJECT_ID }}
           export_default_credentials: true
-      - uses: pulumi/actions@v3
+
+      - name: Applying infrastructure 🚀
+        uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
