@@ -1825,8 +1825,9 @@ exports.context = new Context.Context();
  * @param     token    the repo PAT or GITHUB_TOKEN
  * @param     options  other options to set
  */
-function getOctokit(token, options) {
-    return new utils_1.GitHub(utils_1.getOctokitOptions(token, options));
+function getOctokit(token, options, ...additionalPlugins) {
+    const GitHubWithPlugins = utils_1.GitHub.plugin(...additionalPlugins);
+    return new GitHubWithPlugins(utils_1.getOctokitOptions(token, options));
 }
 exports.getOctokit = getOctokit;
 //# sourceMappingURL=github.js.map
@@ -1908,7 +1909,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getOctokitOptions = exports.GitHub = exports.context = void 0;
+exports.getOctokitOptions = exports.GitHub = exports.defaults = exports.context = void 0;
 const Context = __importStar(__nccwpck_require__(4087));
 const Utils = __importStar(__nccwpck_require__(7914));
 // octokit + plugins
@@ -1917,13 +1918,13 @@ const plugin_rest_endpoint_methods_1 = __nccwpck_require__(3044);
 const plugin_paginate_rest_1 = __nccwpck_require__(4193);
 exports.context = new Context.Context();
 const baseUrl = Utils.getApiBaseUrl();
-const defaults = {
+exports.defaults = {
     baseUrl,
     request: {
         agent: Utils.getProxyAgent(baseUrl)
     }
 };
-exports.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(defaults);
+exports.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(exports.defaults);
 /**
  * Convience function to correctly format Octokit Options to pass into the constructor.
  *
@@ -16883,7 +16884,7 @@ exports.isPlainObject = isPlainObject;
 /***/ }),
 
 /***/ 6892:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -16900,8 +16901,15 @@ exports.isPlainObject = isPlainObject;
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const utils = __nccwpck_require__(1888);
+const utils = __importStar(__nccwpck_require__(1888));
 /**
  * An Archive represents a collection of named assets.
  */
@@ -16961,7 +16969,7 @@ exports.RemoteArchive = RemoteArchive;
 /***/ }),
 
 /***/ 3886:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -16978,8 +16986,15 @@ exports.RemoteArchive = RemoteArchive;
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const utils = __nccwpck_require__(1888);
+const utils = __importStar(__nccwpck_require__(1888));
 /**
  * Asset represents a single blob of text or data that is managed as a first class entity.
  */
@@ -17102,8 +17117,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const execa = __nccwpck_require__(5447);
+const execa_1 = __importDefault(__nccwpck_require__(5447));
 const errors_1 = __nccwpck_require__(1369);
 /** @internal */
 class CommandResult {
@@ -17133,7 +17151,7 @@ function runPulumiCmd(args, cwd, additionalEnv, onOutput) {
         }
         const env = Object.assign(Object.assign({}, process.env), additionalEnv);
         try {
-            const proc = execa("pulumi", args, { env, cwd });
+            const proc = execa_1.default("pulumi", args, { env, cwd });
             if (onOutput && proc.stdout) {
                 proc.stdout.on("data", (data) => {
                     if (data && data.toString) {
@@ -17338,12 +17356,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const fs = __nccwpck_require__(7147);
-const yaml = __nccwpck_require__(1917);
-const os = __nccwpck_require__(2037);
-const semver = __nccwpck_require__(7486);
-const upath = __nccwpck_require__(8004);
+const fs = __importStar(__nccwpck_require__(7147));
+const yaml = __importStar(__nccwpck_require__(1917));
+const os = __importStar(__nccwpck_require__(2037));
+const semver = __importStar(__nccwpck_require__(7486));
+const upath = __importStar(__nccwpck_require__(8004));
 const cmd_1 = __nccwpck_require__(9586);
 const minimumVersion_1 = __nccwpck_require__(8410);
 const stack_1 = __nccwpck_require__(9010);
@@ -17973,7 +17998,7 @@ exports.parseAndValidatePulumiVersion = parseAndValidatePulumiVersion;
 /***/ }),
 
 /***/ 8410:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -17990,8 +18015,16 @@ exports.parseAndValidatePulumiVersion = parseAndValidatePulumiVersion;
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const semver = __nccwpck_require__(7486);
+const semver = __importStar(__nccwpck_require__(7486));
+/** @internal */
 exports.minimumVersion = new semver.SemVer("v3.2.0-alpha");
 //# sourceMappingURL=minimumVersion.js.map
 
@@ -18024,13 +18057,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const errors_1 = __nccwpck_require__(9693);
-const log = __nccwpck_require__(642);
-const settings = __nccwpck_require__(4530);
-const stack = __nccwpck_require__(6664);
-const runtimeConfig = __nccwpck_require__(7146);
-const debuggable = __nccwpck_require__(257);
+const log = __importStar(__nccwpck_require__(642));
+const settings = __importStar(__nccwpck_require__(4530));
+const stack = __importStar(__nccwpck_require__(6664));
+const runtimeConfig = __importStar(__nccwpck_require__(7146));
+const debuggable = __importStar(__nccwpck_require__(257));
 const langproto = __nccwpck_require__(3979);
 const plugproto = __nccwpck_require__(8008);
 // maxRPCMessageSize raises the gRPC Max Message size from `4194304` (4mb) to `419430400` (400mb)
@@ -18180,15 +18220,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const fs = __nccwpck_require__(7147);
-const os = __nccwpck_require__(2037);
-const path = __nccwpck_require__(1017);
-const readline = __nccwpck_require__(4521);
-const upath = __nccwpck_require__(8004);
-const grpc = __nccwpck_require__(7025);
-const TailFile = __nccwpck_require__(725);
-const log = __nccwpck_require__(642);
+const fs = __importStar(__nccwpck_require__(7147));
+const os = __importStar(__nccwpck_require__(2037));
+const path = __importStar(__nccwpck_require__(1017));
+const readline = __importStar(__nccwpck_require__(4521));
+const upath = __importStar(__nccwpck_require__(8004));
+const grpc = __importStar(__nccwpck_require__(7025));
+const tail_file_1 = __importDefault(__nccwpck_require__(725));
+const log = __importStar(__nccwpck_require__(642));
 const cmd_1 = __nccwpck_require__(9586);
 const errors_1 = __nccwpck_require__(1369);
 const server_1 = __nccwpck_require__(3621);
@@ -18270,7 +18320,7 @@ class Stack {
     }
     readLines(logPath, callback) {
         return __awaiter(this, void 0, void 0, function* () {
-            const eventLogTail = new TailFile(logPath, { startPos: 0, pollFileIntervalMs: 200 })
+            const eventLogTail = new tail_file_1.default(logPath, { startPos: 0, pollFileIntervalMs: 200 })
                 .on("tail_error", (err) => {
                 throw err;
             });
@@ -18899,7 +18949,7 @@ exports.stackSettingsSerDeKeys = [
 /***/ }),
 
 /***/ 9693:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -18916,9 +18966,16 @@ exports.stackSettingsSerDeKeys = [
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const grpc = __nccwpck_require__(7025);
-const utils = __nccwpck_require__(1888);
+const grpc = __importStar(__nccwpck_require__(7025));
+const utils = __importStar(__nccwpck_require__(1888));
 /**
  * RunError can be used for terminating a program abruptly, but resulting in a clean exit rather
  * than the usual verbose unhandled error logic which emits the source program text and complete
@@ -19112,7 +19169,7 @@ function log(engine, sev, msg, resource, streamId, ephemeral) {
 /***/ }),
 
 /***/ 8085:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -19129,25 +19186,32 @@ function log(engine, sev, msg, resource, streamId, ephemeral) {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 // This file exports metadata about the context in which a program is being run.
-const settings = __nccwpck_require__(4530);
+const settings = __importStar(__nccwpck_require__(4530));
 /**
- * getOrganization returns the current organization name.  It throws an exception if none is registered.
+ * getOrganization returns the current organization name.
  */
 function getOrganization() {
     return settings.getOrganization();
 }
 exports.getOrganization = getOrganization;
 /**
- * getProject returns the current project name.  It throws an exception if none is registered.
+ * getProject returns the current project name. It throws an exception if none is registered.
  */
 function getProject() {
     return settings.getProject();
 }
 exports.getProject = getProject;
 /**
- * getStack returns the current stack name.  It throws an exception if none is registered.
+ * getStack returns the current stack name. It throws an exception if none is registered.
  */
 function getStack() {
     return settings.getStack();
@@ -20787,10 +20851,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const resource_1 = __nccwpck_require__(796);
-const settings = __nccwpck_require__(4530);
-const utils = __nccwpck_require__(1888);
+const settings = __importStar(__nccwpck_require__(4530));
+const utils = __importStar(__nccwpck_require__(1888));
 /* eslint-disable no-shadow, @typescript-eslint/no-shadow */
 /**
  * Output helps encode the relationship between Resources in a Pulumi application. Specifically an
@@ -37362,14 +37433,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const errors_1 = __nccwpck_require__(9693);
 const output_1 = __nccwpck_require__(3037);
 const resource_1 = __nccwpck_require__(140);
 const settings_1 = __nccwpck_require__(4530);
 const rpc_1 = __nccwpck_require__(60);
-const utils = __nccwpck_require__(1888);
-const log = __nccwpck_require__(642);
+const utils = __importStar(__nccwpck_require__(1888));
+const log = __importStar(__nccwpck_require__(642));
 /**
  * createUrn computes a URN from the combination of a resource name, resource type, optional parent,
  * optional project and optional stack.
@@ -38192,7 +38270,7 @@ function cleanKey(key) {
 /***/ }),
 
 /***/ 257:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -38209,8 +38287,15 @@ function cleanKey(key) {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const log = __nccwpck_require__(642);
+const log = __importStar(__nccwpck_require__(642));
 /**
  * debugPromiseLeaks can be set to enable promises leaks debugging.
  */
@@ -38223,6 +38308,7 @@ let leakDetectorScheduled = false;
  * leakCandidates tracks the list of potential leak candidates.
  */
 let leakCandidates = new Set();
+/** @internal */
 function leakedPromises() {
     const leaked = leakCandidates;
     const promisePlural = leaked.size === 0 ? "promise was" : "promises were";
@@ -38248,6 +38334,7 @@ function leakedPromises() {
     return [leaked, message];
 }
 exports.leakedPromises = leakedPromises;
+/** @internal */
 function promiseDebugString(p) {
     return `CONTEXT(${p._debugId}): ${p._debugCtx}\n` +
         `STACK_TRACE:\n` +
@@ -38342,15 +38429,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const grpc = __nccwpck_require__(7025);
-const log = __nccwpck_require__(642);
+const grpc = __importStar(__nccwpck_require__(7025));
+const log = __importStar(__nccwpck_require__(642));
 const output_1 = __nccwpck_require__(3037);
 const debuggable_1 = __nccwpck_require__(257);
 const rpc_1 = __nccwpck_require__(60);
 const settings_1 = __nccwpck_require__(4530);
 const resource_1 = __nccwpck_require__(796);
-const utils = __nccwpck_require__(1888);
+const utils = __importStar(__nccwpck_require__(1888));
 const asyncIterableUtil_1 = __nccwpck_require__(6358);
 const gstruct = __nccwpck_require__(8152);
 const providerproto = __nccwpck_require__(8870);
@@ -38706,11 +38800,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const grpc = __nccwpck_require__(7025);
-const query = __nccwpck_require__(9160);
-const log = __nccwpck_require__(642);
-const utils = __nccwpck_require__(1888);
+const grpc = __importStar(__nccwpck_require__(7025));
+const query = __importStar(__nccwpck_require__(9160));
+const log = __importStar(__nccwpck_require__(642));
+const utils = __importStar(__nccwpck_require__(1888));
 const output_1 = __nccwpck_require__(3037);
 const resource_1 = __nccwpck_require__(796);
 const resource_2 = __nccwpck_require__(796);
@@ -39462,16 +39563,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const asset = __nccwpck_require__(3031);
+const asset = __importStar(__nccwpck_require__(3031));
 const errors_1 = __nccwpck_require__(9693);
-const log = __nccwpck_require__(642);
+const log = __importStar(__nccwpck_require__(642));
 const output_1 = __nccwpck_require__(3037);
 const resource_1 = __nccwpck_require__(796);
 const debuggable_1 = __nccwpck_require__(257);
 const settings_1 = __nccwpck_require__(4530);
 const resource_2 = __nccwpck_require__(140);
-const semver = __nccwpck_require__(7486);
+const semver = __importStar(__nccwpck_require__(7486));
 /**
  * transferProperties mutates the 'onto' resource so that it has Promise-valued properties for all
  * the 'props' input/output props.  *Importantly* all these promises are completely unresolved. This
@@ -40192,16 +40300,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const grpc = __nccwpck_require__(7025);
-const fs = __nccwpck_require__(7147);
-const path = __nccwpck_require__(1017);
+const grpc = __importStar(__nccwpck_require__(7025));
+const fs = __importStar(__nccwpck_require__(7147));
+const path = __importStar(__nccwpck_require__(1017));
 const debuggable_1 = __nccwpck_require__(257);
 const engrpc = __nccwpck_require__(5053);
 const engproto = __nccwpck_require__(986);
 const resrpc = __nccwpck_require__(5815);
 const resproto = __nccwpck_require__(2480);
 // maxRPCMessageSize raises the gRPC Max Message size from `4194304` (4mb) to `419430400` (400mb)
+/** @internal */
 exports.maxRPCMessageSize = 1024 * 1024 * 400;
 const grpcChannelOptions = { "grpc.max_receive_message_length": exports.maxRPCMessageSize };
 /**
@@ -40239,7 +40355,7 @@ function resetOptions(project, stack, parallel, engineAddr, monitorAddr, preview
     process.env[nodeEnvKeys.parallel] = parallel.toString();
     process.env[nodeEnvKeys.monitorAddr] = monitorAddr;
     process.env[nodeEnvKeys.engineAddr] = engineAddr;
-    process.env[nodeEnvKeys.organization] = organization;
+    process.env[nodeEnvKeys.organization] = organization === "" ? "organization" : organization;
 }
 exports.resetOptions = resetOptions;
 function setMockOptions(mockMonitor, project, stack, preview, organization) {
@@ -40307,7 +40423,7 @@ function getOrganization() {
         return organization;
     }
     // If the organization is missing, specialize the error.
-    // Throw an error if test mode is enabled, instructing how to manually configure the project:
+    // Throw an error if test mode is enabled, instructing how to manually configure the organization:
     throw new Error("Missing organization name; for test mode, please call `pulumi.runtime.setMocks`");
 }
 exports.getOrganization = getOrganization;
@@ -40689,8 +40805,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const asset = __nccwpck_require__(3031);
+const asset = __importStar(__nccwpck_require__(3031));
 const metadata_1 = __nccwpck_require__(8085);
 const output_1 = __nccwpck_require__(3037);
 const resource_1 = __nccwpck_require__(796);
@@ -66382,6 +66505,7 @@ const isX = id => !id || id.toLowerCase() === 'x' || id === '*'
 // ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0
 // ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0
 // ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0
+// ~0.0.1 --> >=0.0.1 <0.1.0-0
 const replaceTildes = (comp, options) =>
   comp.trim().split(/\s+/).map((c) => {
     return replaceTilde(c, options)
@@ -66421,6 +66545,8 @@ const replaceTilde = (comp, options) => {
 // ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0
 // ^1.2.3 --> >=1.2.3 <2.0.0-0
 // ^1.2.0 --> >=1.2.0 <2.0.0-0
+// ^0.0.1 --> >=0.0.1 <0.0.2-0
+// ^0.1.0 --> >=0.1.0 <0.2.0-0
 const replaceCarets = (comp, options) =>
   comp.trim().split(/\s+/).map((c) => {
     return replaceCaret(c, options)
@@ -67375,51 +67501,91 @@ module.exports = valid
 
 // just pre-load all the stuff that index.js lazily exports
 const internalRe = __nccwpck_require__(2566)
+const constants = __nccwpck_require__(2293)
+const SemVer = __nccwpck_require__(8088)
+const identifiers = __nccwpck_require__(5865)
+const parse = __nccwpck_require__(5925)
+const valid = __nccwpck_require__(9601)
+const clean = __nccwpck_require__(8848)
+const inc = __nccwpck_require__(900)
+const diff = __nccwpck_require__(4297)
+const major = __nccwpck_require__(6688)
+const minor = __nccwpck_require__(8447)
+const patch = __nccwpck_require__(2866)
+const prerelease = __nccwpck_require__(4016)
+const compare = __nccwpck_require__(4309)
+const rcompare = __nccwpck_require__(6417)
+const compareLoose = __nccwpck_require__(2804)
+const compareBuild = __nccwpck_require__(2156)
+const sort = __nccwpck_require__(8489)
+const rsort = __nccwpck_require__(8701)
+const gt = __nccwpck_require__(4123)
+const lt = __nccwpck_require__(194)
+const eq = __nccwpck_require__(1898)
+const neq = __nccwpck_require__(6017)
+const gte = __nccwpck_require__(5522)
+const lte = __nccwpck_require__(7520)
+const cmp = __nccwpck_require__(5098)
+const coerce = __nccwpck_require__(5280)
+const Comparator = __nccwpck_require__(1532)
+const Range = __nccwpck_require__(9828)
+const satisfies = __nccwpck_require__(6055)
+const toComparators = __nccwpck_require__(2706)
+const maxSatisfying = __nccwpck_require__(579)
+const minSatisfying = __nccwpck_require__(832)
+const minVersion = __nccwpck_require__(4179)
+const validRange = __nccwpck_require__(2098)
+const outside = __nccwpck_require__(420)
+const gtr = __nccwpck_require__(9380)
+const ltr = __nccwpck_require__(8726)
+const intersects = __nccwpck_require__(7008)
+const simplifyRange = __nccwpck_require__(5297)
+const subset = __nccwpck_require__(7863)
 module.exports = {
+  parse,
+  valid,
+  clean,
+  inc,
+  diff,
+  major,
+  minor,
+  patch,
+  prerelease,
+  compare,
+  rcompare,
+  compareLoose,
+  compareBuild,
+  sort,
+  rsort,
+  gt,
+  lt,
+  eq,
+  neq,
+  gte,
+  lte,
+  cmp,
+  coerce,
+  Comparator,
+  Range,
+  satisfies,
+  toComparators,
+  maxSatisfying,
+  minSatisfying,
+  minVersion,
+  validRange,
+  outside,
+  gtr,
+  ltr,
+  intersects,
+  simplifyRange,
+  subset,
+  SemVer,
   re: internalRe.re,
   src: internalRe.src,
   tokens: internalRe.t,
-  SEMVER_SPEC_VERSION: (__nccwpck_require__(2293).SEMVER_SPEC_VERSION),
-  SemVer: __nccwpck_require__(8088),
-  compareIdentifiers: (__nccwpck_require__(5865).compareIdentifiers),
-  rcompareIdentifiers: (__nccwpck_require__(5865).rcompareIdentifiers),
-  parse: __nccwpck_require__(5925),
-  valid: __nccwpck_require__(9601),
-  clean: __nccwpck_require__(8848),
-  inc: __nccwpck_require__(900),
-  diff: __nccwpck_require__(4297),
-  major: __nccwpck_require__(6688),
-  minor: __nccwpck_require__(8447),
-  patch: __nccwpck_require__(2866),
-  prerelease: __nccwpck_require__(4016),
-  compare: __nccwpck_require__(4309),
-  rcompare: __nccwpck_require__(6417),
-  compareLoose: __nccwpck_require__(2804),
-  compareBuild: __nccwpck_require__(2156),
-  sort: __nccwpck_require__(8489),
-  rsort: __nccwpck_require__(8701),
-  gt: __nccwpck_require__(4123),
-  lt: __nccwpck_require__(194),
-  eq: __nccwpck_require__(1898),
-  neq: __nccwpck_require__(6017),
-  gte: __nccwpck_require__(5522),
-  lte: __nccwpck_require__(7520),
-  cmp: __nccwpck_require__(5098),
-  coerce: __nccwpck_require__(5280),
-  Comparator: __nccwpck_require__(1532),
-  Range: __nccwpck_require__(9828),
-  satisfies: __nccwpck_require__(6055),
-  toComparators: __nccwpck_require__(2706),
-  maxSatisfying: __nccwpck_require__(579),
-  minSatisfying: __nccwpck_require__(832),
-  minVersion: __nccwpck_require__(4179),
-  validRange: __nccwpck_require__(2098),
-  outside: __nccwpck_require__(420),
-  gtr: __nccwpck_require__(9380),
-  ltr: __nccwpck_require__(8726),
-  intersects: __nccwpck_require__(7008),
-  simplifyRange: __nccwpck_require__(5297),
-  subset: __nccwpck_require__(7863),
+  SEMVER_SPEC_VERSION: constants.SEMVER_SPEC_VERSION,
+  compareIdentifiers: identifiers.compareIdentifiers,
+  rcompareIdentifiers: identifiers.rcompareIdentifiers,
 }
 
 
