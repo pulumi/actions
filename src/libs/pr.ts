@@ -39,7 +39,8 @@ export async function handlePullRequestMessage(
   `;
 
   const { payload, repo } = context;
-  const nr = config.commentOnPrNumber ?? payload.pull_request.number;
+  // Assumes PR numbers are always positive.
+  const nr = config.commentOnPrNumber || payload.pull_request?.number;
   invariant(nr, 'Missing pull request event data.');
 
   const octokit = getOctokit(githubToken);
