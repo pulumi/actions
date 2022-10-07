@@ -45,7 +45,7 @@ describe('pr.ts', () => {
     gh.context = { payload: {} };
     await expect(
       handlePullRequestMessage({ options: {} } as Config, 'test'),
-    ).rejects.toThrowError('Missing pull request event data');
+    ).rejects.toThrow('Missing pull request event data');
   });
 
   it('should trim the output when the output is larger than 64k characters', async () => {
