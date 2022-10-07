@@ -44,7 +44,7 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/exec": "^1.1.0",
-    "@actions/github": "^5.0.3",
+    "@actions/github": "^5.1.1",
     "@actions/io": "^1.1.2",
     "@actions/tool-cache": "^2.0.1",
     "@pulumi/pulumi": "3.41.1",
