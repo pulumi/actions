@@ -2,18 +2,25 @@ name: Pulumi
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   up:
     name: Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup Go ✨
+        uses: actions/setup-go@v3
         with:
           go-version: '1.15'
-      - run: go mod download
-      - uses: pulumi/actions@v3
+
+      - name: Downloading dependencies 📦
+        run: go mod download
+
+      - name: Applying infrastructure 🚀
+        uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev

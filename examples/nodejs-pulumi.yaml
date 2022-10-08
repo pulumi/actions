@@ -2,19 +2,26 @@ name: Pulumi
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   up:
     name: Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node
-        uses: actions/setup-node@v1
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup Node LTS ✨
+        uses: actions/setup-nodejs@v3
         with:
-          node-version: 14.x
-      - run: npm install
-      - uses: pulumi/actions@v3
+          node-version: lts/*
+          cache: yarn
+
+      - name: Installing dependencies 📦️
+        run: yarn install
+
+      - name: Applying infrastructure 🚀
+        uses: pulumi/actions@v3
         with:
           command: up
           stack-name: dev
