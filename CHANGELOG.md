@@ -1,10 +1,15 @@
 # CHANGELOG
 
-## HEAD (Unreleased)
+- feat: Always show login information
+
+- fix: pull request comment body too big. Trims body when above 64k characters.
+
+- Support for setting `comment-on-pr-number` when building
+  [Reused Workflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows).
 
 - feat: Always show login information
 
----
+--
 
 ## 3.19.1 (2022-09-06)
 

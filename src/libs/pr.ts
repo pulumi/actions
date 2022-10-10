@@ -39,7 +39,9 @@ export async function handlePullRequestMessage(
   `;
 
   const { payload, repo } = context;
-  invariant(payload.pull_request, 'Missing pull request event data.');
+  // Assumes PR numbers are always positive.
+  const nr = config.commentOnPrNumber || payload.pull_request?.number;
+  invariant(nr, 'Missing pull request event data.');
 
   const octokit = getOctokit(githubToken);
 
@@ -47,7 +49,7 @@ export async function handlePullRequestMessage(
     if (editCommentOnPr) {
       const { data: comments } = await octokit.rest.issues.listComments({
         ...repo,
-        issue_number: payload.pull_request.number,
+        issue_number: nr,
       });
       const comment = comments.find((comment) =>
         comment.body.startsWith(heading) && comment.body.includes(summary),
@@ -71,7 +73,7 @@ export async function handlePullRequestMessage(
 
   await octokit.rest.issues.createComment({
     ...repo,
-    issue_number: payload.pull_request.number,
+    issue_number: nr,
     body,
   });
 }
