@@ -28,7 +28,7 @@ jobs:
           export_default_credentials: true
 
       - name: Applying infrastructure 🚀
-        uses: pulumi/actions@v3
+        uses: pulumi/actions@v4
         with:
           command: up
           stack-name: dev

@@ -22,8 +22,8 @@ jobs:
     name: Preview
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: pulumi/actions@v3
+      - uses: actions/checkout@v3
+      - uses: pulumi/actions@v4
         with:
           command: preview
           stack-name: org-name/stack-name
@@ -152,7 +152,7 @@ We can see that `pet-name` is an output. To get the value of this output in the
 action, we would use code similar to the following:
 
 ```yaml
-- uses: pulumi/actions@v3
+- uses: pulumi/actions@v4
   id: pulumi
   env:
     PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
