@@ -104,5 +104,5 @@ runs:
   #
   # Trying to upgrade in July 2022 broke our users that depend on
   # GitHub Enterprise versions < 3.4
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
