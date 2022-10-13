@@ -24,7 +24,7 @@ export const options = rt.Partial({
   policyPackConfigs: rt.Array(rt.String),
   targetDependents: rt.Boolean,
   editCommentOnPr: rt.Boolean,
-  userAgent: rt.Literal('pulumi/actions@v3'),
+  userAgent: rt.Literal('pulumi/actions@v4'),
   pulumiVersion: rt.String,
 });
 
@@ -81,7 +81,7 @@ export async function makeConfig(): Promise<Config> {
       policyPacks: parseArray(getInput('policyPacks')),
       policyPackConfigs: parseArray(getInput('policyPackConfigs')),
       editCommentOnPr: parseBoolean(getInput('edit-pr-comment')),
-      userAgent: 'pulumi/actions@v3',
+      userAgent: 'pulumi/actions@v4',
       pulumiVersion: getInput('pulumi-version') || "^3",
       color: getInput('color'),
     },
