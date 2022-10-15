@@ -2,9 +2,15 @@ import * as gh from '@actions/github';
 import { Config } from '../../config';
 import { handlePullRequestMessage } from '../pr';
 
-const comments = [{ id: 2, body: 'test' }];
+const comments = [{ id: 2, body: '#### :tropical_drink: `preview` on staging. <summary>Pulumi report</summary>' }];
 const resp = { data: comments };
+const defaultOptions = {
+  command: 'preview',
+  stackName: 'staging',
+  options: {},
+} as Config;
 const createComment = jest.fn();
+const updateComment = jest.fn();
 const listComments = jest.fn(() => resp);
 jest.mock('@actions/github', () => ({
   context: {},
@@ -13,6 +19,7 @@ jest.mock('@actions/github', () => ({
       issues: {
         createComment,
         listComments,
+        updateComment,
       },
     },
   })),
@@ -35,8 +42,11 @@ describe('pr.ts', () => {
 
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
 
-    await handlePullRequestMessage({ options: {} } as Config, 'test');
-    expect(createComment).toHaveBeenCalled();
+    await handlePullRequestMessage(defaultOptions, 'test');
+    expect(createComment).toHaveBeenCalledWith({
+      body: '#### :tropical_drink: `preview` on staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      issue_number: 123
+    });
   });
 
   it('should fail if no pull request data', async () => {
@@ -44,7 +54,7 @@ describe('pr.ts', () => {
     // @ts-ignore
     gh.context = { payload: {} };
     await expect(
-      handlePullRequestMessage({ options: {} } as Config, 'test'),
+      handlePullRequestMessage(defaultOptions, 'test'),
     ).rejects.toThrow('Missing pull request event data');
   });
 
@@ -60,12 +70,48 @@ describe('pr.ts', () => {
     };
 
     await handlePullRequestMessage(
-      { options: {} } as Config,
+      defaultOptions,
       'a'.repeat(65_000),
     );
 
     const call = createComment.mock.calls[0][0];
     expect(call.body.length).toBeLessThan(65_536);
     expect(call.body).toContain('The output was too long and trimmed');
+  });
+
+  it('should add the project name to the comment if it is provided', async () => {
+    const options = {
+      command: 'preview',
+      stackName: 'staging',
+      projectName: 'myFirstProject',
+      commentOnPrNumber: 123,
+      options: {},
+    } as Config;
+
+    await handlePullRequestMessage(options, 'test');
+
+    expect(createComment).toHaveBeenCalledWith({
+      body: '#### :tropical_drink: `preview` on staging for project myFirstProject\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      issue_number: 123,
+    });
+  });
+
+  it('should edit the comment if it finds a previous created one', async () => {
+    // @ts-ignore
+    gh.context = { repo: {} };
+
+    const options = {
+      command: 'preview',
+      stackName: 'staging',
+      commentOnPrNumber: 123,
+      options: { editCommentOnPr: true },
+    } as Config;
+
+
+    await handlePullRequestMessage(options, 'test');
+    expect(updateComment).toHaveBeenCalledWith({
+      comment_id: 2,
+      body: '#### :tropical_drink: `preview` on staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>'
+    });
   });
 });

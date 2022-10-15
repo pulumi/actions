@@ -10,6 +10,8 @@
 
 - feat: Always show login information
 
+- feat: Add project name to avoid having unintended edited comments
+
 --
 
 ## 3.19.1 (2022-09-06)

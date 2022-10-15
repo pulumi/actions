@@ -12,10 +12,14 @@ export async function handlePullRequestMessage(
     githubToken,
     command,
     stackName,
+    projectName,
     options: { editCommentOnPr },
   } = config;
 
-  const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
+  let heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
+  if (projectName) {
+    heading = `${heading} for project ${projectName}`
+  }
   const summary = '<summary>Pulumi report</summary>';
 
   const rawBody = output.substring(0, 64_000);
