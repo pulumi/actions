@@ -26,7 +26,7 @@ jobs:
       - uses: pulumi/actions@v3
         with:
           command: preview
-          stack-name: dev
+          stack-name: org-name/stack-name
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 ```
@@ -41,7 +41,8 @@ The action can be configured with the following arguments:
   values are `up` (update), `refresh`, `destroy` and `preview`.
 
 - `stack-name` (required) - The name of the stack that Pulumi will be operating
-  on
+  on. Use the fully quaified org-name/stack-name when operating on a stack outside
+  of your individual account.
 
 - `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`.
 
@@ -148,7 +149,7 @@ action, we would use code similar to the following:
   with:
     command: up
     cloud-url: gs://my-bucket
-    stack-name: dev
+    stack-name: org-name/stack-name
 - run: echo "My pet name is ${{ steps.pulumi.outputs.pet-name }}"
 ```
 
