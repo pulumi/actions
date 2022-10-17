@@ -2,11 +2,12 @@ import * as gh from '@actions/github';
 import { Config } from '../../config';
 import { handlePullRequestMessage } from '../pr';
 
-const comments = [{ id: 2, body: '#### :tropical_drink: `preview` on staging. <summary>Pulumi report</summary>' }];
+const comments = [{ id: 2, body: '#### :tropical_drink: `preview` on myFirstProject/staging. <summary>Pulumi report</summary>' }];
 const resp = { data: comments };
 const defaultOptions = {
   command: 'preview',
   stackName: 'staging',
+  projectName: 'myFirstProject',
   options: {},
 } as Config;
 const createComment = jest.fn();
@@ -44,7 +45,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(defaultOptions, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
       issue_number: 123
     });
   });
@@ -79,23 +80,6 @@ describe('pr.ts', () => {
     expect(call.body).toContain('The output was too long and trimmed');
   });
 
-  it('should add the project name to the comment if it is provided', async () => {
-    const options = {
-      command: 'preview',
-      stackName: 'staging',
-      projectName: 'myFirstProject',
-      commentOnPrNumber: 123,
-      options: {},
-    } as Config;
-
-    await handlePullRequestMessage(options, 'test');
-
-    expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on staging for project myFirstProject\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
-      issue_number: 123,
-    });
-  });
-
   it('should edit the comment if it finds a previous created one', async () => {
     // @ts-ignore
     gh.context = { repo: {} };
@@ -103,6 +87,7 @@ describe('pr.ts', () => {
     const options = {
       command: 'preview',
       stackName: 'staging',
+      projectName: 'myFirstProject',
       commentOnPrNumber: 123,
       options: { editCommentOnPr: true },
     } as Config;
@@ -111,7 +96,7 @@ describe('pr.ts', () => {
     await handlePullRequestMessage(options, 'test');
     expect(updateComment).toHaveBeenCalledWith({
       comment_id: 2,
-      body: '#### :tropical_drink: `preview` on staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>'
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>'
     });
   });
 });

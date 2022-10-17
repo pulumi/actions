@@ -41,6 +41,8 @@ const main = async () => {
     ? LocalWorkspace.createOrSelectStack(stackArgs, stackOpts)
     : LocalWorkspace.selectStack(stackArgs, stackOpts));
 
+  config.projectName = (await stack.workspace.projectSettings()).name;
+
   const onOutput = (msg: string) => {
     core.debug(msg);
     core.info(msg);

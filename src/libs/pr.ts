@@ -16,10 +16,8 @@ export async function handlePullRequestMessage(
     options: { editCommentOnPr },
   } = config;
 
-  let heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
-  if (projectName) {
-    heading = `${heading} for project ${projectName}`
-  }
+  const heading = `#### :tropical_drink: \`${command}\` on ${projectName}/${stackName}`;
+
   const summary = '<summary>Pulumi report</summary>';
 
   const rawBody = output.substring(0, 64_000);

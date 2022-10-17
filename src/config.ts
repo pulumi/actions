@@ -60,7 +60,7 @@ export async function makeConfig(): Promise<Config> {
     command: getInput('command', { required: true }),
     stackName: getInput('stack-name', { required: true }),
     workDir: getInput('work-dir') || './',
-    projectName: getInput('project-name') || '',
+    projectName: '',
     secretsProvider: getInput('secrets-provider'),
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),

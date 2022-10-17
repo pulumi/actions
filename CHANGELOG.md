@@ -10,7 +10,9 @@
 
 - feat: Always show login information
 
-- feat: Add project name to avoid having unintended edited comments
+- feat: Includes the project name in comments, eliminating conflicts when
+  working with multiple projects in the same repository.
+  ([#563](https://github.com/pulumi/actions/issues/563))
 
 --
 

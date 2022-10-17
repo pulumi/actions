@@ -45,9 +45,6 @@ The action can be configured with the following arguments:
 
 - `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`.
 
-- `project-name` (optional) - The name of the Pulumi project in which the
-  command will be ran
-
 - `cloud-url` - (optional) - the Pulumi backend to login to. This would be the
   equivalent of what would be passed to the `pulumi login` command. The action
   will login to the appropriate backend on your behalf provided it is configured
