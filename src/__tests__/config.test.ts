@@ -36,6 +36,7 @@ describe('config.ts', () => {
         "commentOnPr": false,
         "commentOnPrNumber": undefined,
         "configMap": undefined,
+        "downsert": undefined,
         "githubToken": "n/a",
         "isPullRequest": false,
         "options": Object {
@@ -100,6 +101,7 @@ describe('config.ts', () => {
         "commentOnPr": true,
         "commentOnPrNumber": undefined,
         "configMap": undefined,
+        "downsert": undefined,
         "githubToken": "n/a",
         "isPullRequest": false,
         "options": Object {
@@ -156,6 +158,7 @@ describe('config.ts', () => {
         "commentOnPr": false,
         "commentOnPrNumber": undefined,
         "configMap": undefined,
+        "downsert": undefined,
         "githubToken": "n/a",
         "isPullRequest": true,
         "options": Object {
