@@ -53,6 +53,7 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           upsert: true
+          downsert: true
           work-dir: .github/test-stacks/golang
           config-map: "{name: {value: test, secret: false}}"
       - run: echo 'The random string is `${{ steps.pulumi.outputs.name }}`'
