@@ -75,7 +75,6 @@ jobs:
           command: ${{ matrix.command }}
           cloud-url: file://~
           upsert: true
-          downsert: true
           stack-name: dev
           work-dir: .github/test-stacks/dotnet
           config-map: "{name: {value: my-pet, secret: false}}"
@@ -111,7 +110,6 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           upsert: true
-          downsert: true
           work-dir: .github/test-stacks/golang
           config-map: "{name: {value: my-user-name, secret: false}}"
 
@@ -162,7 +160,6 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           upsert: true
-          downsert: true
           work-dir: .github/test-stacks/nodejs
           config-map: "{name: {value: hostname, secret: false}}"
 
@@ -224,7 +221,6 @@ jobs:
           cloud-url: file://~
           stack-name: dev
           upsert: true
-          downsert: true
           work-dir: .github/test-stacks/python
           config-map: "{name: {value: hostname, secret: false}}"
 
@@ -275,6 +271,5 @@ jobs:
           stack-name: dev
           work-dir: .github/test-stacks/nodejs
           upsert: true
-          downsert: true
           refresh: true
           config-map: "{name: {value: hostname, secret: false}}"
