@@ -105,8 +105,8 @@ The action can be configured with the following arguments:
   `Pulumi.<stack-name>.yaml` file that you will need to add back to source
   control as part of the action if you wish to perform any further tasks with
   that stack.
-- `downsert` - (optional) Remove the exist stack if all resources are deleted.
-  Used only with `destroy` command.
+- `downsert` - (optional) Removes the target stack if all resources are
+  destroyed. Used only with `destroy` command.
 - `pulumi-version` - (optional) Install a specific version of the Pulumi CLI.
   Defaults to "^3"
 

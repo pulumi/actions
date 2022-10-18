@@ -78,7 +78,7 @@ inputs:
     required: false
     default: 'false'
   downsert:
-    description: 'Delete the stack which already exists'
+    description: 'Delete the stack after a destroy operation'
     required: false
     default: 'false'
   edit-pr-comment:
