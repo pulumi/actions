@@ -35,3 +35,6 @@ jobs:
           command: up
           stack-name: dev
           cloud-url: gs://my-bucket-name
+        env:
+          # You can elide PULUMI_CONFIG_PASSPHRASE below if you're using Google KMS
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
