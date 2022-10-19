@@ -34,7 +34,6 @@ export const config = rt
     command: command,
     stackName: rt.String,
     workDir: rt.String,
-    projectName: rt.String,
     commentOnPr: rt.Boolean,
     options: options,
     // Information inferred from the environment that must be present
@@ -60,7 +59,6 @@ export async function makeConfig(): Promise<Config> {
     command: getInput('command', { required: true }),
     stackName: getInput('stack-name', { required: true }),
     workDir: getInput('work-dir') || './',
-    projectName: '',
     secretsProvider: getInput('secrets-provider'),
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),

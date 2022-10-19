@@ -6,13 +6,13 @@ import { Config } from '../config';
 
 export async function handlePullRequestMessage(
   config: Config,
+  projectName: string,
   output: string,
 ): Promise<void> {
   const {
     githubToken,
     command,
     stackName,
-    projectName,
     options: { editCommentOnPr },
   } = config;
 

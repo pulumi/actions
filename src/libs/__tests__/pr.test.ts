@@ -4,10 +4,10 @@ import { handlePullRequestMessage } from '../pr';
 
 const comments = [{ id: 2, body: '#### :tropical_drink: `preview` on myFirstProject/staging. <summary>Pulumi report</summary>' }];
 const resp = { data: comments };
+const projectName = 'myFirstProject';
 const defaultOptions = {
   command: 'preview',
   stackName: 'staging',
-  projectName: 'myFirstProject',
   options: {},
 } as Config;
 const createComment = jest.fn();
@@ -43,7 +43,7 @@ describe('pr.ts', () => {
 
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
 
-    await handlePullRequestMessage(defaultOptions, 'test');
+    await handlePullRequestMessage(defaultOptions, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
       body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
       issue_number: 123
@@ -55,7 +55,7 @@ describe('pr.ts', () => {
     // @ts-ignore
     gh.context = { payload: {} };
     await expect(
-      handlePullRequestMessage(defaultOptions, 'test'),
+      handlePullRequestMessage(defaultOptions, projectName, 'test'),
     ).rejects.toThrow('Missing pull request event data');
   });
 
@@ -72,6 +72,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(
       defaultOptions,
+      projectName,
       'a'.repeat(65_000),
     );
 
@@ -87,13 +88,12 @@ describe('pr.ts', () => {
     const options = {
       command: 'preview',
       stackName: 'staging',
-      projectName: 'myFirstProject',
       commentOnPrNumber: 123,
       options: { editCommentOnPr: true },
     } as Config;
 
 
-    await handlePullRequestMessage(options, 'test');
+    await handlePullRequestMessage(options, projectName, 'test');
     expect(updateComment).toHaveBeenCalledWith({
       comment_id: 2,
       body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>'
