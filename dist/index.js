@@ -17804,6 +17804,19 @@ class LocalWorkspace {
         });
     }
     /**
+     * Installs a plugin in the Workspace, from a third party server.
+     *
+     * @param name the name of the plugin.
+     * @param version the version of the plugin e.g. "v1.0.0".
+     * @param kind the kind of plugin, defaults to "resource"
+     * @param server the server to install the plugin from
+     */
+    installPluginFromServer(name, version, server) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.runPulumiCmd(["plugin", "install", "resource", name, version, "--server", server]);
+        });
+    }
+    /**
      * Removes a plugin from the Workspace matching the specified name and version.
      *
      * @param name the optional name of the plugin.
@@ -39856,13 +39869,13 @@ function prepareResource(label, res, parent, custom, remote, props, opts) {
             const parentURN = parent ? yield parent.urn.promise() : undefined;
             let providerRef;
             let importID;
-            if (custom) {
+            if (custom || remote) {
                 const customOpts = opts;
                 importID = customOpts.import;
                 providerRef = yield resource_1.ProviderResource.register(opts.provider);
             }
             const providerRefs = new Map();
-            if (remote) {
+            if (remote || !custom) {
                 const componentOpts = opts;
                 resource_1.expandProviders(componentOpts);
                 // the <ProviderResource[]> casts are safe because expandProviders
