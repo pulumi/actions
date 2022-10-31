@@ -17250,13 +17250,15 @@ exports.StackAlreadyExistsError = StackAlreadyExistsError;
 const notFoundRegex = new RegExp("no stack named.*found");
 const alreadyExistsRegex = new RegExp("stack.*already exists");
 const conflictText = "[409] Conflict: Another update is currently in progress.";
+const localBackendConflictText = "the stack is currently locked by";
 /** @internal */
 function createCommandError(result) {
     const stderr = result.stderr;
-    return (notFoundRegex.test(stderr) ? new StackNotFoundError(result) :
-        alreadyExistsRegex.test(stderr) ? new StackAlreadyExistsError(result) :
-            stderr.indexOf(conflictText) >= 0 ? new ConcurrentUpdateError(result) :
-                new CommandError(result));
+    return (notFoundRegex.test(stderr) ? new StackNotFoundError(result)
+        : alreadyExistsRegex.test(stderr) ? new StackAlreadyExistsError(result)
+            : stderr.indexOf(conflictText) >= 0 ? new ConcurrentUpdateError(result)
+                : stderr.indexOf(localBackendConflictText) >= 0 ? new ConcurrentUpdateError(result)
+                    : new CommandError(result));
 }
 exports.createCommandError = createCommandError;
 //# sourceMappingURL=errors.js.map
