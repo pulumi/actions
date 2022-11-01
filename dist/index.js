@@ -17308,7 +17308,7 @@ var DiffKind;
 
 "use strict";
 
-// Copyright 2016-2020, Pulumi Corporation.
+// Copyright 2016-2022, Pulumi Corporation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17331,6 +17331,8 @@ __export(__nccwpck_require__(9010));
 __export(__nccwpck_require__(5973));
 __export(__nccwpck_require__(5142));
 __export(__nccwpck_require__(6568));
+__export(__nccwpck_require__(5740));
+__export(__nccwpck_require__(8106));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -17340,7 +17342,7 @@ __export(__nccwpck_require__(6568));
 
 "use strict";
 
-// Copyright 2016-2021, Pulumi Corporation.
+// Copyright 2016-2022, Pulumi Corporation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17401,13 +17403,17 @@ class LocalWorkspace {
         const store = new localState.LocalStore();
         localState.asyncLocalStorage.enterWith(store);
         if (opts) {
-            const { workDir, pulumiHome, program, envVars, secretsProvider } = opts;
+            const { workDir, pulumiHome, program, envVars, secretsProvider, remote, remoteGitProgramArgs, remotePreRunCommands, remoteEnvVars } = opts;
             if (workDir) {
                 dir = workDir;
             }
             this.pulumiHome = pulumiHome;
             this.program = program;
             this.secretsProvider = secretsProvider;
+            this.remote = remote;
+            this.remoteGitProgramArgs = remoteGitProgramArgs;
+            this.remotePreRunCommands = remotePreRunCommands;
+            this.remoteEnvVars = Object.assign({}, remoteEnvVars);
             envs = Object.assign({}, envVars);
         }
         if (!dir) {
@@ -17644,6 +17650,9 @@ class LocalWorkspace {
             if (this.secretsProvider) {
                 args.push("--secrets-provider", this.secretsProvider);
             }
+            if (this.isRemote) {
+                args.push("--no-select");
+            }
             yield this.runPulumiCmd(args);
         });
     }
@@ -17654,7 +17663,14 @@ class LocalWorkspace {
      */
     selectStack(stackName) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.runPulumiCmd(["stack", "select", stackName]);
+            // If this is a remote workspace, we don't want to actually select the stack (which would modify global state);
+            // but we will ensure the stack exists by calling `pulumi stack`.
+            const args = ["stack"];
+            if (!this.isRemote) {
+                args.push("select");
+            }
+            args.push("--stack", stackName);
+            yield this.runPulumiCmd(args);
         });
     }
     /**
@@ -17932,6 +17948,15 @@ class LocalWorkspace {
             if (version != null) {
                 this._pulumiVersion = version;
             }
+            // If remote was specified, ensure the CLI supports it.
+            if (!optOut && this.isRemote) {
+                // See if `--remote` is present in `pulumi preview --help`'s output.
+                const previewResult = yield this.runPulumiCmd(["preview", "--help"]);
+                const previewOutput = previewResult.stdout.trim();
+                if (!previewOutput.includes("--remote")) {
+                    throw new Error("The Pulumi CLI does not support remote operations. Please upgrade.");
+                }
+            }
         });
     }
     runPulumiCmd(args) {
@@ -17940,9 +17965,74 @@ class LocalWorkspace {
             if (this.pulumiHome) {
                 envs["PULUMI_HOME"] = this.pulumiHome;
             }
+            if (this.isRemote) {
+                envs["PULUMI_EXPERIMENTAL"] = "true";
+            }
             envs = Object.assign(Object.assign({}, envs), this.envVars);
             return cmd_1.runPulumiCmd(args, this.workDir, envs);
         });
+    }
+    /** @internal */
+    get isRemote() {
+        return !!this.remote;
+    }
+    /** @internal */
+    remoteArgs() {
+        var _a, _b;
+        const args = [];
+        if (!this.isRemote) {
+            return args;
+        }
+        args.push("--remote");
+        if (this.remoteGitProgramArgs) {
+            const { url, projectPath, branch, commitHash, auth } = this.remoteGitProgramArgs;
+            if (url) {
+                args.push(url);
+            }
+            if (projectPath) {
+                args.push("--remote-git-repo-dir", projectPath);
+            }
+            if (branch) {
+                args.push("--remote-git-branch", branch);
+            }
+            if (commitHash) {
+                args.push("--remote-git-commit", commitHash);
+            }
+            if (auth) {
+                const { personalAccessToken, sshPrivateKey, sshPrivateKeyPath, password, username } = auth;
+                if (personalAccessToken) {
+                    args.push("--remote-git-auth-access-token", personalAccessToken);
+                }
+                if (sshPrivateKey) {
+                    args.push("--remote-git-auth-ssh-private-key", sshPrivateKey);
+                }
+                if (sshPrivateKeyPath) {
+                    args.push("--remote-git-auth-ssh-private-key-path", sshPrivateKeyPath);
+                }
+                if (password) {
+                    args.push("--remote-git-auth-password", password);
+                }
+                if (username) {
+                    args.push("--remote-git-username", username);
+                }
+            }
+        }
+        for (const key of Object.keys((_a = this.remoteEnvVars) !== null && _a !== void 0 ? _a : {})) {
+            const val = this.remoteEnvVars[key];
+            if (typeof val === "string") {
+                args.push("--remote-env", `${key}=${val}`);
+            }
+            else if ("secret" in val) {
+                args.push("--remote-env-secret", `${key}=${val.secret}`);
+            }
+            else {
+                throw new Error(`unexpected env value '${val}' for key '${key}'`);
+            }
+        }
+        for (const command of (_b = this.remotePreRunCommands) !== null && _b !== void 0 ? _b : []) {
+            args.push("--remote-pre-run-command", command);
+        }
+        return args;
     }
 }
 exports.LocalWorkspace = LocalWorkspace;
@@ -18049,6 +18139,253 @@ const semver = __importStar(__nccwpck_require__(7486));
 /** @internal */
 exports.minimumVersion = new semver.SemVer("v3.2.0-alpha");
 //# sourceMappingURL=minimumVersion.js.map
+
+/***/ }),
+
+/***/ 5740:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+// Copyright 2016-2022, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const localWorkspace_1 = __nccwpck_require__(5142);
+/**
+ * RemoteStack is an isolated, independencly configurable instance of a Pulumi program that is
+ * operated on remotely (up/preview/refresh/destroy).
+ */
+class RemoteStack {
+    constructor(stack) {
+        this.stack = stack;
+        const ws = stack.workspace;
+        if (!(ws instanceof localWorkspace_1.LocalWorkspace)) {
+            throw new Error("expected workspace to be an instance of LocalWorkspace");
+        }
+    }
+    /** @internal */
+    static create(stack) {
+        return new RemoteStack(stack);
+    }
+    /**
+     * The name identifying the Stack.
+     */
+    get name() {
+        return this.stack.name;
+    }
+    /**
+     * Creates or updates the resources in a stack by executing the program in the Workspace.
+     * https://www.pulumi.com/docs/reference/cli/pulumi_up/
+     * This operation runs remotely.
+     *
+     * @param opts Options to customize the behavior of the update.
+     */
+    up(opts) {
+        return this.stack.up(opts);
+    }
+    /**
+     * Performs a dry-run update to a stack, returning pending changes.
+     * https://www.pulumi.com/docs/reference/cli/pulumi_preview/
+     * This operation runs remotely.
+     *
+     * @param opts Options to customize the behavior of the preview.
+     */
+    preview(opts) {
+        return this.stack.preview(opts);
+    }
+    /**
+     * Compares the current stack’s resource state with the state known to exist in the actual
+     * cloud provider. Any such changes are adopted into the current stack.
+     * This operation runs remotely.
+     *
+     * @param opts Options to customize the behavior of the refresh.
+     */
+    refresh(opts) {
+        return this.stack.refresh(opts);
+    }
+    /**
+     * Destroy deletes all resources in a stack, leaving all history and configuration intact.
+     * This operation runs remotely.
+     *
+     * @param opts Options to customize the behavior of the destroy.
+     */
+    destroy(opts) {
+        return this.stack.destroy(opts);
+    }
+    /**
+     * Gets the current set of Stack outputs from the last Stack.up().
+     */
+    outputs() {
+        return this.stack.outputs();
+    }
+    /**
+     * Returns a list summarizing all previous and current results from Stack lifecycle operations
+     * (up/preview/refresh/destroy).
+     */
+    history(pageSize, page) {
+        // TODO: Find a way to allow showSecrets as an option that doesn't require loading the project.
+        return this.stack.history(pageSize, page, false);
+    }
+    /**
+     * Cancel stops a stack's currently running update. It returns an error if no update is currently running.
+     * Note that this operation is _very dangerous_, and may leave the stack in an inconsistent state
+     * if a resource operation was pending when the update was canceled.
+     * This command is not supported for local backends.
+     */
+    cancel() {
+        return this.stack.cancel();
+    }
+    /**
+     * exportStack exports the deployment state of the stack.
+     * This can be combined with Stack.importStack to edit a stack's state (such as recovery from failed deployments).
+     */
+    exportStack() {
+        return this.stack.exportStack();
+    }
+    /**
+     * importStack imports the specified deployment state into a pre-existing stack.
+     * This can be combined with Stack.exportStack to edit a stack's state (such as recovery from failed deployments).
+     *
+     * @param state the stack state to import.
+     */
+    importStack(state) {
+        return this.stack.importStack(state);
+    }
+}
+exports.RemoteStack = RemoteStack;
+//# sourceMappingURL=remoteStack.js.map
+
+/***/ }),
+
+/***/ 8106:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// Copyright 2016-2022, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const localWorkspace_1 = __nccwpck_require__(5142);
+const remoteStack_1 = __nccwpck_require__(5740);
+const stack_1 = __nccwpck_require__(9010);
+/**
+ * RemoteWorkspace is the execution context containing a single remote Pulumi project.
+ */
+class RemoteWorkspace {
+    /**
+     * PREVIEW: Creates a Stack backed by a RemoteWorkspace with source code from the specified Git repository.
+     * Pulumi operations on the stack (Preview, Update, Refresh, and Destroy) are performed remotely.
+     *
+     * @param args A set of arguments to initialize a RemoteStack with a remote Pulumi program from a Git repository.
+     * @param opts Additional customizations to be applied to the Workspace.
+     */
+    static createStack(args, opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const ws = yield createLocalWorkspace(args, opts);
+            const stack = yield stack_1.Stack.create(args.stackName, ws);
+            return remoteStack_1.RemoteStack.create(stack);
+        });
+    }
+    /**
+     * PREVIEW: Selects an existing Stack backed by a RemoteWorkspace with source code from the specified Git
+     * repository. Pulumi operations on the stack (Preview, Update, Refresh, and Destroy) are performed remotely.
+     *
+     * @param args A set of arguments to initialize a RemoteStack with a remote Pulumi program from a Git repository.
+     * @param opts Additional customizations to be applied to the Workspace.
+     */
+    static selectStack(args, opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const ws = yield createLocalWorkspace(args, opts);
+            const stack = yield stack_1.Stack.select(args.stackName, ws);
+            return remoteStack_1.RemoteStack.create(stack);
+        });
+    }
+    /**
+     * PREVIEW: Creates or selects an existing Stack backed by a RemoteWorkspace with source code from the specified
+     * Git repository. Pulumi operations on the stack (Preview, Update, Refresh, and Destroy) are performed remotely.
+     *
+     * @param args A set of arguments to initialize a RemoteStack with a remote Pulumi program from a Git repository.
+     * @param opts Additional customizations to be applied to the Workspace.
+     */
+    static createOrSelectStack(args, opts) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const ws = yield createLocalWorkspace(args, opts);
+            const stack = yield stack_1.Stack.createOrSelect(args.stackName, ws);
+            return remoteStack_1.RemoteStack.create(stack);
+        });
+    }
+    constructor() { } // eslint-disable-line @typescript-eslint/no-empty-function
+}
+exports.RemoteWorkspace = RemoteWorkspace;
+function createLocalWorkspace(args, opts) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!isFullyQualifiedStackName(args.stackName)) {
+            throw new Error(`"${args.stackName}" stack name must be fully qualified`);
+        }
+        if (!args.url) {
+            throw new Error("url is required.");
+        }
+        if (args.commitHash && args.branch) {
+            throw new Error("commitHash and branch cannot both be specified.");
+        }
+        if (!args.commitHash && !args.branch) {
+            throw new Error("at least commitHash or branch are required.");
+        }
+        if (args.auth) {
+            if (args.auth.sshPrivateKey && args.auth.sshPrivateKeyPath) {
+                throw new Error("sshPrivateKey and sshPrivateKeyPath cannot both be specified.");
+            }
+        }
+        const localOpts = {
+            remote: true,
+            remoteGitProgramArgs: args,
+            remoteEnvVars: opts === null || opts === void 0 ? void 0 : opts.envVars,
+            remotePreRunCommands: opts === null || opts === void 0 ? void 0 : opts.preRunCommands,
+        };
+        return yield localWorkspace_1.LocalWorkspace.create(localOpts);
+    });
+}
+/** @internal exported only so it can be tested */
+function isFullyQualifiedStackName(stackName) {
+    if (!stackName) {
+        return false;
+    }
+    const split = stackName.split("/");
+    return split.length === 3 && !!split[0] && !!split[1] && !!split[2];
+}
+exports.isFullyQualifiedStackName = isFullyQualifiedStackName;
+//# sourceMappingURL=remoteWorkspace.js.map
 
 /***/ }),
 
@@ -18219,7 +18556,7 @@ function newUncaughtHandler(errorSet) {
 
 "use strict";
 
-// Copyright 2016-2020, Pulumi Corporation.
+// Copyright 2016-2022, Pulumi Corporation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18263,6 +18600,7 @@ const log = __importStar(__nccwpck_require__(642));
 const cmd_1 = __nccwpck_require__(9586);
 const errors_1 = __nccwpck_require__(1369);
 const server_1 = __nccwpck_require__(3621);
+const localWorkspace_1 = __nccwpck_require__(5142);
 const langrpc = __nccwpck_require__(5628);
 /**
  * Stack is an isolated, independently configurable instance of a Pulumi program.
@@ -18378,6 +18716,7 @@ Event: ${line}\n${e.toString()}`);
             const args = ["up", "--yes", "--skip-preview"];
             let kind = execKind.local;
             let program = this.workspace.program;
+            args.push(...this.remoteArgs());
             if (opts) {
                 if (opts.program) {
                     program = opts.program;
@@ -18477,7 +18816,9 @@ Event: ${line}\n${e.toString()}`);
             }
             // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
             const outputs = yield this.outputs();
-            const summary = yield this.info(opts === null || opts === void 0 ? void 0 : opts.showSecrets);
+            // If it's a remote workspace, explicitly set showSecrets to false to prevent attempting to
+            // load the project file.
+            const summary = yield this.info(!this.isRemote && (opts === null || opts === void 0 ? void 0 : opts.showSecrets));
             return {
                 stdout: upResult.stdout,
                 stderr: upResult.stderr,
@@ -18497,6 +18838,7 @@ Event: ${line}\n${e.toString()}`);
             const args = ["preview"];
             let kind = execKind.local;
             let program = this.workspace.program;
+            args.push(...this.remoteArgs());
             if (opts) {
                 if (opts.program) {
                     program = opts.program;
@@ -18615,6 +18957,7 @@ Event: ${line}\n${e.toString()}`);
     refresh(opts) {
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["refresh", "--yes", "--skip-preview"];
+            args.push(...this.remoteArgs());
             if (opts) {
                 if (opts.message) {
                     args.push("--message", opts.message);
@@ -18651,7 +18994,9 @@ Event: ${line}\n${e.toString()}`);
             const refPromise = this.runPulumiCmd(args, opts === null || opts === void 0 ? void 0 : opts.onOutput);
             const [refResult, logResult] = yield Promise.all([refPromise, logPromise]);
             yield cleanUp(logFile, logResult);
-            const summary = yield this.info(opts === null || opts === void 0 ? void 0 : opts.showSecrets);
+            // If it's a remote workspace, explicitly set showSecrets to false to prevent attempting to
+            // load the project file.
+            const summary = yield this.info(!this.isRemote && (opts === null || opts === void 0 ? void 0 : opts.showSecrets));
             return {
                 stdout: refResult.stdout,
                 stderr: refResult.stderr,
@@ -18667,6 +19012,7 @@ Event: ${line}\n${e.toString()}`);
     destroy(opts) {
         return __awaiter(this, void 0, void 0, function* () {
             const args = ["destroy", "--yes", "--skip-preview"];
+            args.push(...this.remoteArgs());
             if (opts) {
                 if (opts.message) {
                     args.push("--message", opts.message);
@@ -18703,7 +19049,9 @@ Event: ${line}\n${e.toString()}`);
             const desPromise = this.runPulumiCmd(args, opts === null || opts === void 0 ? void 0 : opts.onOutput);
             const [desResult, logResult] = yield Promise.all([desPromise, logPromise]);
             yield cleanUp(logFile, logResult);
-            const summary = yield this.info(opts === null || opts === void 0 ? void 0 : opts.showSecrets);
+            // If it's a remote workspace, explicitly set showSecrets to false to prevent attempting to
+            // load the project file.
+            const summary = yield this.info(!this.isRemote && (opts === null || opts === void 0 ? void 0 : opts.showSecrets));
             return {
                 stdout: desResult.stdout,
                 stderr: desResult.stderr,
@@ -18856,6 +19204,9 @@ Event: ${line}\n${e.toString()}`);
             let envs = {
                 "PULUMI_DEBUG_COMMANDS": "true",
             };
+            if (this.isRemote) {
+                envs["PULUMI_EXPERIMENTAL"] = "true";
+            }
             const pulumiHome = this.workspace.pulumiHome;
             if (pulumiHome) {
                 envs["PULUMI_HOME"] = pulumiHome;
@@ -18867,6 +19218,14 @@ Event: ${line}\n${e.toString()}`);
             yield this.workspace.postCommandCallback(this.name);
             return result;
         });
+    }
+    get isRemote() {
+        const ws = this.workspace;
+        return ws instanceof localWorkspace_1.LocalWorkspace ? ws.isRemote : false;
+    }
+    remoteArgs() {
+        const ws = this.workspace;
+        return ws instanceof localWorkspace_1.LocalWorkspace ? ws.remoteArgs() : [];
     }
 }
 exports.Stack = Stack;
