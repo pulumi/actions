@@ -52,7 +52,7 @@ jobs:
     name: Dotnet ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [up, refresh, destroy, preview]
+        command: [up, refresh, destroy, preview, cancel]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
@@ -86,7 +86,7 @@ jobs:
     name: Golang ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
       matrix:
-        command: [up, refresh, destroy, preview]
+        command: [up, refresh, destroy, preview, cancel]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:

@@ -67,7 +67,8 @@ const main = async () => {
       stack.refresh({ onOutput, ...config.options }).then((r) => r.stdout),
     destroy: () =>
       stack.destroy({ onOutput, ...config.options }).then((r) => r.stdout),
-    preview: async () => {
+    cancel: async () => { await stack.cancel(); return "" },
+      preview: async () => {
       const { stdout, stderr } = await stack.preview(config.options);
       onOutput(stdout);
       onOutput(stderr);
