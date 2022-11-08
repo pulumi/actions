@@ -13,7 +13,7 @@ jobs:
           filters: |
             dist:
               - 'dist/**'
-      - uses: mshick/add-pr-comment@v1
+      - uses: mshick/add-pr-comment@v2
         if: steps.changes.outputs.dist == 'true'
         with:
           message: |
