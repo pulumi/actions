@@ -80924,23 +80924,12 @@ var lib_exec = __nccwpck_require__(1514);
 
 
 const exec_exec = (command, args = [], silent) => modules_awaiter(void 0, void 0, void 0, function* () {
-    let stdout = '';
-    let stderr = '';
-    const options = {
+    const { exitCode, stdout, stderr } = yield lib_exec.getExecOutput(command, args, {
         silent: silent,
         ignoreReturnCode: true,
-    };
-    options.listeners = {
-        stdout: (data) => {
-            stdout += data.toString();
-        },
-        stderr: (data) => {
-            stderr += data.toString();
-        },
-    };
-    const returnCode = yield lib_exec.exec(command, args, options);
+    });
     return {
-        success: returnCode === 0,
+        success: exitCode === 0,
         stdout: stdout.trim(),
         stderr: stderr.trim(),
     };
