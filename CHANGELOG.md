@@ -10,6 +10,10 @@
 
 - feat: Always show login information
 
+- feat: Includes the project name in comments, eliminating conflicts when
+  working with multiple projects in the same repository.
+  ([#563](https://github.com/pulumi/actions/issues/563))
+
 --
 
 ## 3.19.1 (2022-09-06)

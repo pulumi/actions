@@ -41,6 +41,9 @@ const main = async () => {
     ? LocalWorkspace.createOrSelectStack(stackArgs, stackOpts)
     : LocalWorkspace.selectStack(stackArgs, stackOpts));
 
+  const projectSettings = await stack.workspace.projectSettings();
+  const projectName = projectSettings.name;
+
   const onOutput = (msg: string) => {
     core.debug(msg);
     core.info(msg);
@@ -93,7 +96,7 @@ const main = async () => {
   if (config.commentOnPr && config.isPullRequest) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
-    handlePullRequestMessage(config, output);
+    handlePullRequestMessage(config, projectName, output);
   }
 
   core.endGroup();

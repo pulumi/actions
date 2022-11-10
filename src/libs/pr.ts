@@ -6,6 +6,7 @@ import { Config } from '../config';
 
 export async function handlePullRequestMessage(
   config: Config,
+  projectName: string,
   output: string,
 ): Promise<void> {
   const {
@@ -15,7 +16,8 @@ export async function handlePullRequestMessage(
     options: { editCommentOnPr },
   } = config;
 
-  const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
+  const heading = `#### :tropical_drink: \`${command}\` on ${projectName}/${stackName}`;
+
   const summary = '<summary>Pulumi report</summary>';
 
   const rawBody = output.substring(0, 64_000);
