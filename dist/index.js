@@ -80909,11 +80909,11 @@ var dedent = __nccwpck_require__(5281);
 
 
 
-function handlePullRequestMessage(config, output) {
+function handlePullRequestMessage(config, projectName, output) {
     var _a;
     return modules_awaiter(this, void 0, void 0, function* () {
         const { githubToken, command, stackName, options: { editCommentOnPr }, } = config;
-        const heading = `#### :tropical_drink: \`${command}\` on ${stackName}`;
+        const heading = `#### :tropical_drink: \`${command}\` on ${projectName}/${stackName}`;
         const summary = '<summary>Pulumi report</summary>';
         const rawBody = output.substring(0, 64000);
         // a line break between heading and rawBody is needed
@@ -81147,6 +81147,8 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
     const stack = yield (config.upsert
         ? automation.LocalWorkspace.createOrSelectStack(stackArgs, stackOpts)
         : automation.LocalWorkspace.selectStack(stackArgs, stackOpts));
+    const projectSettings = yield stack.workspace.projectSettings();
+    const projectName = projectSettings.name;
     const onOutput = (msg) => {
         core.debug(msg);
         core.info(msg);
@@ -81187,7 +81189,7 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
     if (config.commentOnPr && config.isPullRequest) {
         core.debug(`Commenting on pull request`);
         (0,invariant/* default */.ZP)(config.githubToken, 'github-token is missing.');
-        handlePullRequestMessage(config, output);
+        handlePullRequestMessage(config, projectName, output);
     }
     core.endGroup();
 });
