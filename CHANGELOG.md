@@ -1,6 +1,13 @@
 # CHANGELOG
 
+**(none)**
+
+--
+
+## 3.20.0 (2022-11-10)
+
 - feat: Always show login information
+
 - fix: no output when applying
 
 - fix: pull request comment body too big. Trims body when above 64k characters.
@@ -13,8 +20,6 @@
 - feat: Includes the project name in comments, eliminating conflicts when
   working with multiple projects in the same repository.
   ([#563](https://github.com/pulumi/actions/issues/563))
-
---
 
 ## 3.19.1 (2022-09-06)
 
