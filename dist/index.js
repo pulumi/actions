@@ -36124,7 +36124,8 @@ proto.pulumirpc.RegisterResourceRequest.toObject = function(includeInstance, msg
     plugindownloadurl: jspb.Message.getFieldWithDefault(msg, 24, ""),
     retainondelete: jspb.Message.getBooleanFieldWithDefault(msg, 25, false),
     aliasesList: jspb.Message.toObjectList(msg.getAliasesList(),
-    pulumi_alias_pb.Alias.toObject, includeInstance)
+    pulumi_alias_pb.Alias.toObject, includeInstance),
+    deletedwith: jspb.Message.getFieldWithDefault(msg, 27, "")
   };
 
   if (includeInstance) {
@@ -36271,6 +36272,10 @@ proto.pulumirpc.RegisterResourceRequest.deserializeBinaryFromReader = function(m
       var value = new pulumi_alias_pb.Alias;
       reader.readMessage(value,pulumi_alias_pb.Alias.deserializeBinaryFromReader);
       msg.addAliases(value);
+      break;
+    case 27:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDeletedwith(value);
       break;
     default:
       reader.skipField();
@@ -36478,6 +36483,13 @@ proto.pulumirpc.RegisterResourceRequest.serializeBinaryToWriter = function(messa
       26,
       f,
       pulumi_alias_pb.Alias.serializeBinaryToWriter
+    );
+  }
+  f = message.getDeletedwith();
+  if (f.length > 0) {
+    writer.writeString(
+      27,
+      f
     );
   }
 };
@@ -37455,6 +37467,24 @@ proto.pulumirpc.RegisterResourceRequest.prototype.addAliases = function(opt_valu
  */
 proto.pulumirpc.RegisterResourceRequest.prototype.clearAliasesList = function() {
   return this.setAliasesList([]);
+};
+
+
+/**
+ * optional string deletedWith = 27;
+ * @return {string}
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.getDeletedwith = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 27, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.RegisterResourceRequest} returns this
+ */
+proto.pulumirpc.RegisterResourceRequest.prototype.setDeletedwith = function(value) {
+  return jspb.Message.setProto3StringField(this, 27, value);
 };
 
 
@@ -39843,9 +39873,10 @@ const utils = __importStar(__nccwpck_require__(1888));
 const output_1 = __nccwpck_require__(3037);
 const resource_1 = __nccwpck_require__(796);
 const debuggable_1 = __nccwpck_require__(257);
+const settings_1 = __nccwpck_require__(4530);
 const invoke_1 = __nccwpck_require__(4800);
 const rpc_1 = __nccwpck_require__(60);
-const settings_1 = __nccwpck_require__(4530);
+const settings_2 = __nccwpck_require__(4530);
 const gstruct = __nccwpck_require__(8152);
 const resproto = __nccwpck_require__(2480);
 /**
@@ -39859,7 +39890,7 @@ function getResource(res, parent, props, custom, urn) {
     const type = qualifiedType.split("$").pop();
     const label = `resource:urn=${urn}`;
     log.debug(`Getting resource: urn=${urn}`);
-    const monitor = settings_1.getMonitor();
+    const monitor = settings_2.getMonitor();
     const resopAsync = prepareResource(label, res, parent, custom, false, props, {});
     const preallocError = new Error();
     debuggable_1.debuggablePromise(resopAsync.then((resop) => __awaiter(this, void 0, void 0, function* () {
@@ -39881,7 +39912,7 @@ function getResource(res, parent, props, custom, urn) {
                         if (rpcError) {
                             if (rpcError.code === grpc.status.UNAVAILABLE || rpcError.code === grpc.status.CANCELLED) {
                                 err = rpcError;
-                                settings_1.terminateRpcs();
+                                settings_2.terminateRpcs();
                                 rpcError.message = "Resource monitor is terminating";
                                 preallocError.code = rpcError.code;
                             }
@@ -39944,13 +39975,13 @@ function readResource(res, parent, t, name, props, opts) {
     }
     const label = `resource:${name}[${t}]#...`;
     log.debug(`Reading resource: id=${output_1.Output.isInstance(id) ? "Output<T>" : id}, t=${t}, name=${name}`);
-    const monitor = settings_1.getMonitor();
+    const monitor = settings_2.getMonitor();
     const resopAsync = prepareResource(label, res, parent, true, false, props, opts);
     const preallocError = new Error();
     debuggable_1.debuggablePromise(resopAsync.then((resop) => __awaiter(this, void 0, void 0, function* () {
         const resolvedID = yield rpc_1.serializeProperty(label, id, new Set(), { keepOutputValues: false });
         log.debug(`ReadResource RPC prepared: id=${resolvedID}, t=${t}, name=${name}` +
-            (settings_1.excessiveDebugOutput ? `, obj=${JSON.stringify(resop.serializedProps)}` : ``));
+            (settings_2.excessiveDebugOutput ? `, obj=${JSON.stringify(resop.serializedProps)}` : ``));
         // Create a resource request and do the RPC.
         const req = new resproto.ReadResourceRequest();
         req.setType(t);
@@ -39978,7 +40009,7 @@ function readResource(res, parent, t, name, props, opts) {
                         if (rpcError) {
                             if (rpcError.code === grpc.status.UNAVAILABLE || rpcError.code === grpc.status.CANCELLED) {
                                 err = rpcError;
-                                settings_1.terminateRpcs();
+                                settings_2.terminateRpcs();
                                 rpcError.message = "Resource monitor is terminating";
                                 preallocError.code = rpcError.code;
                             }
@@ -40023,7 +40054,7 @@ exports.readResource = readResource;
 function registerResource(res, parent, t, name, custom, remote, newDependency, props, opts) {
     const label = `resource:${name}[${t}]`;
     log.debug(`Registering resource: t=${t}, name=${name}, custom=${custom}, remote=${remote}`);
-    const monitor = settings_1.getMonitor();
+    const monitor = settings_2.getMonitor();
     const resopAsync = prepareResource(label, res, parent, custom, remote, props, opts);
     // In order to present a useful stack trace if an error does occur, we preallocate potential
     // errors here. V8 captures a stack trace at the moment an Error is created and this stack
@@ -40032,7 +40063,7 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
     const preallocError = new Error();
     debuggable_1.debuggablePromise(resopAsync.then((resop) => __awaiter(this, void 0, void 0, function* () {
         log.debug(`RegisterResource RPC prepared: t=${t}, name=${name}` +
-            (settings_1.excessiveDebugOutput ? `, obj=${JSON.stringify(resop.serializedProps)}` : ``));
+            (settings_2.excessiveDebugOutput ? `, obj=${JSON.stringify(resop.serializedProps)}` : ``));
         const req = new resproto.RegisterResourceRequest();
         req.setType(t);
         req.setName(name);
@@ -40056,6 +40087,10 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
         req.setReplaceonchangesList(opts.replaceOnChanges || []);
         req.setPlugindownloadurl(opts.pluginDownloadURL || "");
         req.setRetainondelete(opts.retainOnDelete || false);
+        req.setDeletedwith(opts.deletedWith);
+        if (opts.deletedWith && !(yield settings_1.monitorSupportsDeletedWith())) {
+            throw new Error("The Pulumi CLI does not support the DeletedWith option. Please update the Pulumi CLI.");
+        }
         const customTimeouts = new resproto.RegisterResourceRequest.CustomTimeouts();
         if (opts.customTimeouts != null) {
             customTimeouts.setCreate(opts.customTimeouts.create);
@@ -40088,7 +40123,7 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
                             // shut down. Don't emit an error and don't do any more RPCs, just exit.
                             if (rpcErr.code === grpc.status.UNAVAILABLE || rpcErr.code === grpc.status.CANCELLED) {
                                 // Re-emit the message
-                                settings_1.terminateRpcs();
+                                settings_2.terminateRpcs();
                                 rpcErr.message = "Resource monitor is terminating";
                                 preallocError.code = rpcErr.code;
                             }
@@ -40155,7 +40190,7 @@ function prepareResource(label, res, parent, custom, remote, props, opts) {
         // automation api inline programs that don't have stack exports can exit quickly. If we don't do this,
         // sometimes they will exit right after `prepareResource` is called as a part of register resource, but before the
         // .then() that adds to the queue via `runAsyncResourceOp`.
-        const done = settings_1.rpcKeepAlive();
+        const done = settings_2.rpcKeepAlive();
         try {
             // Simply initialize the URN property and get prepared to resolve it later on.
             // Note: a resource urn will always get a value, and thus the output property
@@ -40431,7 +40466,7 @@ function resolveOutputs(res, t, name, props, outputs, deps, resolvers, err) {
             Object.assign(allProps, rpc_1.deserializeProperties(outputs));
         }
         const label = `resource:${name}[${t}]#...`;
-        if (!settings_1.isDryRun() || settings_1.isLegacyApplyEnabled()) {
+        if (!settings_2.isDryRun() || settings_2.isLegacyApplyEnabled()) {
             for (const key of Object.keys(props)) {
                 if (!allProps.hasOwnProperty(key)) {
                     // input prop the engine didn't give us a final value for.  Just use the value passed into the resource
@@ -40464,9 +40499,9 @@ function registerResourceOutputs(res, outputs) {
         const resolved = yield rpc_1.serializeProperties(opLabel, { outputs });
         const outputsObj = gstruct.Struct.fromJavaScript(resolved.outputs);
         log.debug(`RegisterResourceOutputs RPC prepared: urn=${urn}` +
-            (settings_1.excessiveDebugOutput ? `, outputs=${JSON.stringify(outputsObj)}` : ``));
+            (settings_2.excessiveDebugOutput ? `, outputs=${JSON.stringify(outputsObj)}` : ``));
         // Fetch the monitor and make an RPC request.
-        const monitor = settings_1.getMonitor();
+        const monitor = settings_2.getMonitor();
         if (monitor) {
             const req = new resproto.RegisterResourceOutputsRequest();
             req.setUrn(urn);
@@ -40479,7 +40514,7 @@ function registerResourceOutputs(res, outputs) {
                     // If the monitor is unavailable, it is in the process of shutting down or has already
                     // shut down. Don't emit an error and don't do any more RPCs, just exit.
                     if (err.code === grpc.status.UNAVAILABLE || err.code === grpc.status.CANCELLED) {
-                        settings_1.terminateRpcs();
+                        settings_2.terminateRpcs();
                         err.message = "Resource monitor is terminating";
                     }
                     reject(err);
@@ -40516,7 +40551,7 @@ function listResourceOutputs(typeFilter, stackName) {
     }
     return query
         .from(invoke_1.invoke("pulumi:pulumi:readStackResourceOutputs", {
-        stackName: stackName || settings_1.getStack(),
+        stackName: stackName || settings_2.getStack(),
     }).then(({ outputs }) => utils.values(outputs)))
         .map(({ type: typ, outputs }) => {
         return Object.assign(Object.assign({}, outputs), { __pulumiType: typ });
@@ -40536,7 +40571,7 @@ let resourceChainLabel = undefined;
 function runAsyncResourceOp(label, callback, serial) {
     // Serialize the invocation if necessary.
     if (serial === undefined) {
-        serial = settings_1.serialize();
+        serial = settings_2.serialize();
     }
     const resourceOp = rpc_1.suppressUnhandledGrpcRejections(debuggable_1.debuggablePromise(resourceChain.then(() => __awaiter(this, void 0, void 0, function* () {
         if (serial) {
@@ -40546,7 +40581,7 @@ function runAsyncResourceOp(label, callback, serial) {
         return callback();
     })), label + "-initial"));
     // Ensure the process won't exit until this RPC call finishes and resolve it when appropriate.
-    const done = settings_1.rpcKeepAlive();
+    const done = settings_2.rpcKeepAlive();
     const finalOp = debuggable_1.debuggablePromise(resourceOp.then(() => { done(); }, () => { done(); }), label + "-final");
     // Set up another promise that propagates the error, if any, so that it triggers unhandled rejection logic.
     resourceOp.catch((err) => Promise.reject(err));
@@ -41759,6 +41794,16 @@ function monitorSupportsOutputValues() {
     });
 }
 exports.monitorSupportsOutputValues = monitorSupportsOutputValues;
+/**
+ * monitorSupportsDeletedWith returns a promise that when resolved tells you if the resource monitor we are
+ * connected to is able to support the deletedWith resource option across its RPC interface.
+ */
+function monitorSupportsDeletedWith() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return monitorSupportsFeature("deletedWith");
+    });
+}
+exports.monitorSupportsDeletedWith = monitorSupportsDeletedWith;
 // sxsRandomIdentifier is a module level global that is transfered to process.env.
 // the goal is to detect side by side (sxs) pulumi/pulumi situations for inline programs
 // and fail fast. See https://github.com/pulumi/pulumi/issues/7333 for details.
