@@ -31,7 +31,7 @@
     "eslint": "~7.32.0",
     "eslint-config-prettier": "~8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "~27.1.4",
+    "eslint-plugin-jest": "~27.1.5",
     "faker": "^6.6.6",
     "husky": "^8.0.2",
     "jest": "~26.6.3",
