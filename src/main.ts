@@ -99,7 +99,7 @@ const main = async () => {
     handlePullRequestMessage(config, projectName, output);
   }
 
-  if (config.downsert && config.command === 'destroy') {
+  if (config.remove && config.command === 'destroy') {
     stack.workspace.removeStack(stack.name)
   }
 

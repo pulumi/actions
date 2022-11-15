@@ -77,7 +77,7 @@ inputs:
     description: 'Create the stack if it currently does not exist'
     required: false
     default: 'false'
-  downsert:
+  remove:
     description: 'Delete the stack after a destroy operation'
     required: false
     default: 'false'

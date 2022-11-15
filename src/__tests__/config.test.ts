@@ -36,7 +36,6 @@ describe('config.ts', () => {
         "commentOnPr": false,
         "commentOnPrNumber": undefined,
         "configMap": undefined,
-        "downsert": undefined,
         "githubToken": "n/a",
         "isPullRequest": false,
         "options": Object {
@@ -55,6 +54,7 @@ describe('config.ts', () => {
           "userAgent": "pulumi/actions@v3",
         },
         "refresh": undefined,
+        "remove": undefined,
         "secretsProvider": undefined,
         "stackName": "dev",
         "upsert": undefined,
@@ -101,7 +101,6 @@ describe('config.ts', () => {
         "commentOnPr": true,
         "commentOnPrNumber": undefined,
         "configMap": undefined,
-        "downsert": undefined,
         "githubToken": "n/a",
         "isPullRequest": false,
         "options": Object {
@@ -120,6 +119,7 @@ describe('config.ts', () => {
           "userAgent": "pulumi/actions@v3",
         },
         "refresh": undefined,
+        "remove": undefined,
         "secretsProvider": undefined,
         "stackName": "dev",
         "upsert": undefined,
@@ -158,7 +158,6 @@ describe('config.ts', () => {
         "commentOnPr": false,
         "commentOnPrNumber": undefined,
         "configMap": undefined,
-        "downsert": undefined,
         "githubToken": "n/a",
         "isPullRequest": true,
         "options": Object {
@@ -177,6 +176,7 @@ describe('config.ts', () => {
           "userAgent": "pulumi/actions@v3",
         },
         "refresh": undefined,
+        "remove": undefined,
         "secretsProvider": undefined,
         "stackName": "dev",
         "upsert": undefined,
