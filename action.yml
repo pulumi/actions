@@ -77,6 +77,10 @@ inputs:
     description: 'Create the stack if it currently does not exist'
     required: false
     default: 'false'
+  remove:
+    description: 'Delete the stack after a destroy operation'
+    required: false
+    default: 'false'
   edit-pr-comment:
     description: 'Edit previous PR comment instead of posting new one'
     required: false

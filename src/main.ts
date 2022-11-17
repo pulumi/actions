@@ -99,6 +99,10 @@ const main = async () => {
     handlePullRequestMessage(config, projectName, output);
   }
 
+  if (config.remove && config.command === 'destroy') {
+    stack.workspace.removeStack(stack.name)
+  }
+
   core.endGroup();
 };
 
