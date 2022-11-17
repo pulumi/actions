@@ -1,6 +1,6 @@
 # CHANGELOG
 
-**(none)**
+- feat: Add deletion of stack after destroy (remove flag)
 
 --
 
