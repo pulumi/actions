@@ -80851,6 +80851,7 @@ const config = lib.Record({
     configMap: lib.String,
     githubToken: lib.String,
     upsert: lib.Boolean,
+    remove: lib.Boolean,
     refresh: lib.Boolean,
     secretsProvider: lib.String,
     commentOnPrNumber: lib.Number,
@@ -80868,6 +80869,7 @@ function makeConfig() {
             commentOnPr: parseBoolean((0,core.getInput)('comment-on-pr')),
             commentOnPrNumber: parseNumber((0,core.getInput)('comment-on-pr-number')),
             upsert: parseBoolean((0,core.getInput)('upsert')),
+            remove: parseBoolean((0,core.getInput)('remove')),
             refresh: parseBoolean((0,core.getInput)('refresh')),
             configMap: (0,core.getInput)('config-map'),
             isPullRequest: ((_a = github.context === null || github.context === void 0 ? void 0 : github.context.payload) === null || _a === void 0 ? void 0 : _a.pull_request) !== undefined,
@@ -81190,6 +81192,9 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
         core.debug(`Commenting on pull request`);
         (0,invariant/* default */.ZP)(config.githubToken, 'github-token is missing.');
         handlePullRequestMessage(config, projectName, output);
+    }
+    if (config.remove && config.command === 'destroy') {
+        stack.workspace.removeStack(stack.name);
     }
     core.endGroup();
 });
