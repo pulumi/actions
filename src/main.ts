@@ -93,14 +93,17 @@ const main = async () => {
     }
   }
 
-  if (config.commentOnPr && config.isPullRequest) {
+  if (
+    config.commentOnPrNumber ||
+    (config.commentOnPr && config.isPullRequest)
+  ) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
     handlePullRequestMessage(config, projectName, output);
   }
 
   if (config.remove && config.command === 'destroy') {
-    stack.workspace.removeStack(stack.name)
+    stack.workspace.removeStack(stack.name);
   }
 
   core.endGroup();
