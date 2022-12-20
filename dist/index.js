@@ -17403,7 +17403,7 @@ class LocalWorkspace {
         const store = new localState.LocalStore();
         localState.asyncLocalStorage.enterWith(store);
         if (opts) {
-            const { workDir, pulumiHome, program, envVars, secretsProvider, remote, remoteGitProgramArgs, remotePreRunCommands, remoteEnvVars } = opts;
+            const { workDir, pulumiHome, program, envVars, secretsProvider, remote, remoteGitProgramArgs, remotePreRunCommands, remoteEnvVars, remoteSkipInstallDependencies } = opts;
             if (workDir) {
                 dir = workDir;
             }
@@ -17414,6 +17414,7 @@ class LocalWorkspace {
             this.remoteGitProgramArgs = remoteGitProgramArgs;
             this.remotePreRunCommands = remotePreRunCommands;
             this.remoteEnvVars = Object.assign({}, remoteEnvVars);
+            this.remoteSkipInstallDependencies = remoteSkipInstallDependencies;
             envs = Object.assign({}, envVars);
         }
         if (!dir) {
@@ -18032,6 +18033,9 @@ class LocalWorkspace {
         for (const command of (_b = this.remotePreRunCommands) !== null && _b !== void 0 ? _b : []) {
             args.push("--remote-pre-run-command", command);
         }
+        if (this.remoteSkipInstallDependencies) {
+            args.push("--remote-skip-install-dependencies");
+        }
         return args;
     }
 }
@@ -18372,6 +18376,7 @@ function createLocalWorkspace(args, opts) {
             remoteGitProgramArgs: args,
             remoteEnvVars: opts === null || opts === void 0 ? void 0 : opts.envVars,
             remotePreRunCommands: opts === null || opts === void 0 ? void 0 : opts.preRunCommands,
+            remoteSkipInstallDependencies: opts === null || opts === void 0 ? void 0 : opts.skipInstallDependencies,
         };
         return yield localWorkspace_1.LocalWorkspace.create(localOpts);
     });
@@ -21766,6 +21771,15 @@ function interpolate(literals, ...placeholders) {
     });
 }
 exports.interpolate = interpolate;
+/**
+ * [jsonStringify] Uses JSON.stringify to serialize the given Input value into a JSON string.
+ */
+function jsonStringify(obj, replacer, space) {
+    return output(obj).apply(o => {
+        return JSON.stringify(o, replacer, space);
+    });
+}
+exports.jsonStringify = jsonStringify;
 //# sourceMappingURL=output.js.map
 
 /***/ }),
@@ -39682,8 +39696,6 @@ class Resource {
             if (opts.protect === undefined) {
                 opts.protect = parent.__protect;
             }
-            // Update aliases to include the full set of aliases implied by the child and parent aliases.
-            opts.aliases = allAliases(opts.aliases || [], name, t, parent, parent.__name);
             this.__providers = parent.__providers;
         }
         // providers is found by combining (in ascending order of priority)
@@ -40913,6 +40925,7 @@ const rpc_1 = __nccwpck_require__(60);
 const settings_2 = __nccwpck_require__(4530);
 const gstruct = __nccwpck_require__(8152);
 const resproto = __nccwpck_require__(2480);
+const aliasproto = __nccwpck_require__(6489);
 /**
  * Get an existing resource's state from the engine.
  */
@@ -41081,6 +41094,41 @@ function readResource(res, parent, t, name, props, opts) {
     })), label);
 }
 exports.readResource = readResource;
+function getParentURN(parent) {
+    if (resource_1.Resource.isInstance(parent)) {
+        return parent.urn;
+    }
+    return output_1.output(parent);
+}
+function mapAliasesForRequest(aliases, parentURN) {
+    if (aliases === undefined) {
+        return [];
+    }
+    return Promise.all(aliases.map((a) => __awaiter(this, void 0, void 0, function* () {
+        const newAlias = new aliasproto.Alias();
+        if (typeof a === "string") {
+            newAlias.setUrn(a);
+        }
+        else {
+            const newAliasSpec = new aliasproto.Alias.Spec();
+            const noParent = !a.hasOwnProperty("parent") && !parentURN;
+            newAliasSpec.setName(a.name);
+            newAliasSpec.setType(a.type);
+            newAliasSpec.setStack(a.stack);
+            newAliasSpec.setProject(a.project);
+            if (noParent) {
+                newAliasSpec.setNoparent(noParent);
+            }
+            else {
+                const aliasParentUrn = a.hasOwnProperty("parent") ? getParentURN(a.parent) : output_1.output(parentURN);
+                const urn = yield aliasParentUrn.promise();
+                newAliasSpec.setParenturn(urn);
+            }
+            newAlias.setSpec(newAliasSpec);
+        }
+        return newAlias;
+    })));
+}
 /**
  * registerResource registers a new resource object with a given type t and name.  It returns the auto-generated
  * URN and the ID that will resolve after the deployment has completed.  All properties will be initialized to property
@@ -41090,7 +41138,7 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
     const label = `resource:${name}[${t}]`;
     log.debug(`Registering resource: t=${t}, name=${name}, custom=${custom}, remote=${remote}`);
     const monitor = settings_2.getMonitor();
-    const resopAsync = prepareResource(label, res, parent, custom, remote, props, opts);
+    const resopAsync = prepareResource(label, res, parent, custom, remote, props, opts, t, name);
     // In order to present a useful stack trace if an error does occur, we preallocate potential
     // errors here. V8 captures a stack trace at the moment an Error is created and this stack
     // trace will lead directly to user code. Throwing in `runAsyncResourceOp` results in an Error
@@ -41115,7 +41163,13 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
         req.setAcceptsecrets(true);
         req.setAcceptresources(!utils.disableResourceReferences);
         req.setAdditionalsecretoutputsList(opts.additionalSecretOutputs || []);
-        req.setAliasurnsList(resop.aliases);
+        if (resop.monitorSupportsStructuredAliases) {
+            const aliasesList = yield mapAliasesForRequest(resop.aliases, resop.parentURN);
+            req.setAliasesList(aliasesList);
+        }
+        else {
+            req.setAliasurnsList(resop.aliases);
+        }
         req.setImportid(resop.import || "");
         req.setSupportspartialvalues(true);
         req.setRemote(remote);
@@ -41218,7 +41272,7 @@ exports.registerResource = registerResource;
  * Prepares for an RPC that will manufacture a resource, and hence deals with input and output
  * properties.
  */
-function prepareResource(label, res, parent, custom, remote, props, opts) {
+function prepareResource(label, res, parent, custom, remote, props, opts, type, name) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         // add an entry to the rpc queue while we prepare the request.
@@ -41348,12 +41402,18 @@ function prepareResource(label, res, parent, custom, remote, props, opts) {
                 addAll(allDirectDependencyURNs, urns);
                 propertyToDirectDependencyURNs.set(propertyName, urns);
             }
-            // Wait for all aliases. Note that we use `res.__aliases` instead of `opts.aliases` as the former has been processed
-            // in the Resource constructor prior to calling `registerResource` - both adding new inherited aliases and
-            // simplifying aliases down to URNs.
+            const monitorSupportsStructuredAliases = yield settings_2.monitorSupportsAliasSpecs();
+            let computedAliases;
+            if (!monitorSupportsStructuredAliases && parent) {
+                computedAliases = resource_1.allAliases(opts.aliases || [], name, type, parent, parent.__name);
+            }
+            else {
+                computedAliases = opts.aliases || [];
+            }
+            // Wait for all aliases.
             const aliases = [];
             const uniqueAliases = new Set();
-            for (const alias of (res.__aliases || [])) {
+            for (const alias of (computedAliases || [])) {
                 const aliasVal = yield output_1.output(alias).promise();
                 if (!uniqueAliases.has(aliasVal)) {
                     uniqueAliases.add(aliasVal);
@@ -41372,6 +41432,7 @@ function prepareResource(label, res, parent, custom, remote, props, opts) {
                 propertyToDirectDependencyURNs: propertyToDirectDependencyURNs,
                 aliases: aliases,
                 import: importID,
+                monitorSupportsStructuredAliases,
             };
         }
         finally {
@@ -42839,6 +42900,19 @@ function monitorSupportsDeletedWith() {
     });
 }
 exports.monitorSupportsDeletedWith = monitorSupportsDeletedWith;
+/**
+ * monitorSupportsAliasSpecs returns a promise that when resolved tells you if the resource monitor we are
+ * connected to is able to support alias specs across its RPC interface. When it does, we marshal aliases
+ * in a special way.
+ *
+ * @internal
+ */
+function monitorSupportsAliasSpecs() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return monitorSupportsFeature("aliasSpecs");
+    });
+}
+exports.monitorSupportsAliasSpecs = monitorSupportsAliasSpecs;
 // sxsRandomIdentifier is a module level global that is transfered to process.env.
 // the goal is to detect side by side (sxs) pulumi/pulumi situations for inline programs
 // and fail fast. See https://github.com/pulumi/pulumi/issues/7333 for details.
