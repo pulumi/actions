@@ -1,4 +1,3 @@
-import * as dedent from 'dedent';
 import * as yaml from 'js-yaml';
 
 export function parseArray(input: string): string[] {
@@ -31,6 +30,5 @@ export function parseYAML<T>(input: string): T | undefined {
   if (!parsed) {
     return undefined;
   }
-  const dedented = dedent(input);
-  return yaml.load(dedented) as T;
+  return yaml.load(input) as T;
 }
