@@ -1,4 +1,4 @@
-import { parseArray, parseBoolean, parseNumber } from '../utils';
+import { parseArray, parseBoolean, parseNumber, parseYAML } from '../utils';
 
 describe('utils.ts', () => {
   it('should parse input to array', () => {
@@ -36,5 +36,32 @@ describe('utils.ts', () => {
     expect(parseNumber(truthy)).toBe(1);
     expect(parseNumber(falsy)).toBeNaN();
     expect(parseNumber(undef)).toBeUndefined();
+  });
+
+  it('should parse YAML', () => {
+    const input = `
+    - key: first-key
+      value: first-value
+    - key: second-key
+      value: second-value
+      optionalValue: optional-value
+    `;
+    const parsed: {
+      key: string;
+      value: string;
+      optionalValue: string;
+    }[] = parseYAML(input);
+
+    expect(parsed).toStrictEqual([
+      {
+        key: 'first-key',
+        value: 'first-value',
+      },
+      {
+        key: 'second-key',
+        value: 'second-value',
+        optionalValue: 'optional-value',
+      },
+    ]);
   });
 });

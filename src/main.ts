@@ -19,6 +19,7 @@ const main = async () => {
   core.debug('Configuration is loaded');
 
   await pulumiCli.downloadCli(config.options.pulumiVersion);
+  await pulumiCli.installManualPlugins(config.manualPlugins);
   await login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
 
   const workDir = resolve(
@@ -100,7 +101,7 @@ const main = async () => {
   }
 
   if (config.remove && config.command === 'destroy') {
-    stack.workspace.removeStack(stack.name)
+    stack.workspace.removeStack(stack.name);
   }
 
   core.endGroup();

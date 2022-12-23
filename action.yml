@@ -93,6 +93,17 @@ inputs:
     description: 'Colorize output. Choices are: always, never, raw, auto'
     required: false
     default: 'auto'
+  manual-plugins:
+    description: |
+      List of plugins to install using "pulumi.plugin.install" defined as an
+      YAML array. See the command help for all options
+      Example:
+      - kind: KIND
+        name: NAME
+        version: VERSION
+        flags:
+          server: URL to plugin
+    required: false
 outputs:
   output:
     description: Output from running command

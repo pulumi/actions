@@ -1,7 +1,7 @@
 import { getInput } from '@actions/core';
 import { context } from '@actions/github';
 import * as rt from 'runtypes';
-import { parseArray, parseBoolean, parseNumber } from './libs/utils';
+import { parseArray, parseBoolean, parseNumber, parseYAML } from './libs/utils';
 
 export const command = rt.Union(
   rt.Literal('up'),
@@ -28,6 +28,24 @@ export const options = rt.Partial({
   pulumiVersion: rt.String,
 });
 
+export const manualPlugin = rt
+  .Record({
+    kind: rt.String,
+    name: rt.String,
+  })
+  .And(
+    rt.Partial({
+      version: rt.String,
+      flags: rt.Partial({
+        checksum: rt.String,
+        exact: rt.Boolean,
+        file: rt.String,
+        reinstall: rt.Boolean,
+        server: rt.String,
+      }),
+    }),
+  );
+
 export const config = rt
   .Record({
     // Required options
@@ -38,6 +56,7 @@ export const config = rt
     options: options,
     // Information inferred from the environment that must be present
     isPullRequest: rt.Boolean,
+    manualPlugins: rt.Array(manualPlugin),
   })
   .And(
     rt.Partial({
@@ -54,6 +73,7 @@ export const config = rt
   );
 
 export type Config = rt.Static<typeof config>;
+export type ManualPlugin = rt.Static<typeof manualPlugin>;
 
 export async function makeConfig(): Promise<Config> {
   return config.check({
@@ -85,5 +105,6 @@ export async function makeConfig(): Promise<Config> {
       pulumiVersion: getInput('pulumi-version') || "^3",
       color: getInput('color'),
     },
+    manualPlugins: parseYAML(getInput('manual-plugins')) || [],
   });
 }

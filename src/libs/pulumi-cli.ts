@@ -3,7 +3,8 @@ import * as path from 'path';
 import * as core from '@actions/core';
 import * as io from '@actions/io';
 import * as tc from '@actions/tool-cache';
-import * as semver from 'semver'
+import * as semver from 'semver';
+import { ManualPlugin } from '../config';
 import * as exec from './exec';
 import { getVersionObject } from './libs/get-version';
 
@@ -86,4 +87,44 @@ export async function downloadCli(range: string): Promise<void> {
 
   const cachedPath = await tc.cacheDir(path.join(destination, 'bin'), 'pulumi', version);
   core.addPath(cachedPath);
+}
+
+export async function installManualPlugins(
+  plugins: ManualPlugin[],
+): Promise<void> {
+  if (plugins.length == 0) {
+    core.debug('No manual plugins defined');
+    return;
+  }
+  core.startGroup(`Installing ${plugins.length} manual plugins`);
+  for (const plugin of plugins) {
+    const params = ['plugin', 'install', plugin.kind, plugin.name];
+    if (plugin.version) {
+      params.push(plugin.version);
+    }
+    if (plugin.flags) {
+      const flags = plugin.flags;
+      if (flags.checksum) {
+        params.push('--checksum');
+        params.push(flags.checksum);
+      }
+      if (flags.exact) {
+        params.push('--exact');
+      }
+      if (flags.file) {
+        params.push('--file');
+        params.push(flags.file);
+      }
+      if (flags.reinstall) {
+        params.push('--reinstall');
+      }
+      if (flags.server) {
+        params.push('--server');
+        params.push(flags.server);
+      }
+    }
+    core.debug(`Installing plugin using: ${params.join(' ')}`);
+    await run(...params);
+  }
+  core.endGroup();
 }

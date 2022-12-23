@@ -2,6 +2,9 @@
 
 - feat: Add deletion of stack after destroy (remove flag)
 
+- feat: added support to install manually install plugins
+  [#810](https://github.com/pulumi/actions/pull/810)
+
 --
 
 ## 3.20.0 (2022-11-10)

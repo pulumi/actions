@@ -1,3 +1,6 @@
+import * as dedent from 'dedent';
+import * as yaml from 'js-yaml';
+
 export function parseArray(input: string): string[] {
   return parseUndefined(input)
     ? input.split(/\r?\n/).reduce<string[]>(
@@ -21,4 +24,13 @@ export function parseBoolean(input: string): boolean | undefined {
 
 export function parseNumber(input: string): number | undefined {
   return parseUndefined(input) ? Number(input) : undefined;
+}
+
+export function parseYAML<T>(input: string): T | undefined {
+  const parsed = parseUndefined(input);
+  if (!parsed) {
+    return undefined;
+  }
+  const dedented = dedent(input);
+  return yaml.load(dedented) as T;
 }
