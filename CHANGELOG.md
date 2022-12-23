@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- feat: Add multi-comment support on the same PR using comment identifiers
+  [#809](https://github.com/pulumi/actions/pull/809)
+
 --
 
 ## 4.3.0 (2023-05-12)

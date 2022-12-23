@@ -19,7 +19,9 @@ export async function handlePullRequestMessage(
   const heading = `#### :tropical_drink: \`${command}\` on ${projectName}/${stackName}`;
 
   const summary = '<summary>Pulumi report</summary>';
-
+  const commentOnPrIdTag = `<!-- pulumi-comment-id: ${
+    config.commentOnPrId ?? 'default'
+  } -->`;
   const rawBody = output.substring(0, 64_000);
   // a line break between heading and rawBody is needed
   // otherwise the backticks won't work as intended
@@ -38,6 +40,7 @@ export async function handlePullRequestMessage(
         : ''
     }
     </details>
+    ${commentOnPrIdTag}
   `;
 
   const { payload, repo } = context;
@@ -53,9 +56,15 @@ export async function handlePullRequestMessage(
         ...repo,
         issue_number: nr,
       });
-      const comment = comments.find((comment) =>
-        comment.body.startsWith(heading) && comment.body.includes(summary),
-      );
+      const comment = comments.find((comment) => {
+        if (config.commentOnPrId) {
+          return comment.body.includes(commentOnPrIdTag);
+        } else {
+          return (
+            comment.body.startsWith(heading) && comment.body.includes(summary)
+          );
+        }
+      });
 
       // If comment exists, update it.
       if (comment) {

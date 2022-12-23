@@ -23,6 +23,9 @@ inputs:
     description: 'If true, a comment will be created with results'
     required: false
     default: 'false'
+  comment-on-pr-id:
+    description: 'Hidden id to support multiple comments in one PR'
+    required: false
   comment-on-pr-number:
     description: 'Overrides the PR used to comment on'
     required: false

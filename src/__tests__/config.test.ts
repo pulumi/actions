@@ -38,6 +38,7 @@ describe('config.ts', () => {
         "cloudUrl": "file://~",
         "command": "up",
         "commentOnPr": false,
+        "commentOnPrId": "",
         "commentOnPrNumber": undefined,
         "configMap": undefined,
         "editCommentOnPr": false,

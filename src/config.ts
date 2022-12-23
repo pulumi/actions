@@ -42,6 +42,7 @@ export function makeConfig() {
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
     commentOnPr: getBooleanInput('comment-on-pr'),
+    commentOnPrId: getInput('comment-on-pr-id'),
     commentOnPrNumber: getNumberInput('comment-on-pr-number', {}),
     upsert: getBooleanInput('upsert'),
     remove: getBooleanInput('remove'),
