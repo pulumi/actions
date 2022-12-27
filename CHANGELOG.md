@@ -2,7 +2,9 @@
 
 ## HEAD (Unreleased)
 
-_(none)_
+- fix: allow `comment-on-pr-number` to be used for `${{ github.event }}` types
+  other than `pull_request`
+  ([#803](https://github.com/pulumi/actions/issues/803))
 
 --
 
