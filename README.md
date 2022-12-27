@@ -233,6 +233,6 @@ release. We will also cut patch releases periodically as needed to address bugs.
 We intend this action to work for all GitHub users, both SaaS users and GitHub
 Enterprise users. As such, this action will continue to use Node 12 until all
 maintained versions of GitHub Enterprise have Node 16 support. This date is
-2022-01-18, when GitHub Enterprise v3.3 is sunset. After 2022-01-18, this action
+2023-01-18, when GitHub Enterprise v3.3 is sunset. After 2022-01-18, this action
 will upgrade to Node 16, and will no longer run on GitHub Actions runners
 without Node 16 support.
