@@ -12,12 +12,13 @@ export const command = rt.Union(
 );
 export type Commands = rt.Static<typeof command>;
 
-const plugin = rt.Partial({
+const plugin = rt.Record({
   name: rt.String,
   version: rt.String,
+}).And(rt.Partial({
   server: rt.String,
   kind: rt.String
-});
+}));
 export type Plugin = rt.Static<typeof plugin>;
 export type Plugins = Plugin[];
 
