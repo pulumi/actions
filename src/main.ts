@@ -57,9 +57,12 @@ const main = async () => {
   if (config.plugins != []) {
     for(const plugin of config.plugins) {
       if (plugin.server) {
-        stack.workspace.installPluginFromServer(plugin.name, plugin.version, plugin.server);
+        await stack.workspace.installPluginFromServer(plugin.name,
+                                                      plugin.version,
+                                                      plugin.server);
       } else {
-        stack.workspace.installPlugin(plugin.name, plugin.version, plugin.kind);
+        await stack.workspace.installPlugin(plugin.name, plugin.version,
+                                            plugin.kind || 'resource');
       }
     }
   }

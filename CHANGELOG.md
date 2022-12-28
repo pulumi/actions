@@ -1,6 +1,7 @@
 # CHANGELOG
 
 - feat: Add deletion of stack after destroy (remove flag)
+- feat: add plugins installation
 
 --
 
