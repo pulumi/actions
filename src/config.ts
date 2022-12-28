@@ -10,8 +10,16 @@ export const command = rt.Union(
   rt.Literal('destroy'),
   rt.Literal('preview'),
 );
-
 export type Commands = rt.Static<typeof command>;
+
+const plugin = rt.Partial({
+  name: rt.String,
+  version: rt.String,
+  server: rt.String,
+  kind: rt.String
+});
+type Plugin = rt.Static<typeof plugin>;
+type Plugins = Plugin[];
 
 export const options = rt.Partial({
   parallel: rt.Number,
@@ -48,6 +56,7 @@ export const config = rt
       upsert: rt.Boolean,
       remove: rt.Boolean,
       refresh: rt.Boolean,
+      plugins: rt.Array(plugin),
       secretsProvider: rt.String,
       commentOnPrNumber: rt.Number,
     }),
@@ -69,6 +78,7 @@ export async function makeConfig(): Promise<Config> {
     remove: parseBoolean(getInput('remove')),
     refresh: parseBoolean(getInput('refresh')),
     configMap: getInput('config-map'),
+    plugins: JSON.parse(getInput('plugins')) as Plugins,
     isPullRequest: context?.payload?.pull_request !== undefined,
     options: {
       parallel: parseNumber(getInput('parallel')),
