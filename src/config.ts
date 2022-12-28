@@ -7,6 +7,7 @@ import {
   getYAMLInput,
 } from 'actions-parsers';
 import * as rt from 'runtypes';
+import { parseSemicolorToArray } from './libs/utils';
 
 // installationConfig is the expected Action inputs when
 // the user intends to download the Pulumi CLI without
@@ -62,11 +63,13 @@ export function makeConfig() {
       message: getInput('message'),
       expectNoChanges: getBooleanInput('expect-no-changes'),
       diff: getBooleanInput('diff'),
-      replace: getMultilineInput('replace'),
-      target: getMultilineInput('target'),
+      replace: parseSemicolorToArray(getMultilineInput('replace')),
+      target: parseSemicolorToArray(getMultilineInput('target')),
       targetDependents: getBooleanInput('target-dependents'),
-      policyPacks: getMultilineInput('policyPacks'),
-      policyPackConfigs: getMultilineInput('policyPackConfigs'),
+      policyPacks: parseSemicolorToArray(getMultilineInput('policyPacks')),
+      policyPackConfigs: parseSemicolorToArray(
+        getMultilineInput('policyPackConfigs'),
+      ),
       userAgent: 'pulumi/actions@v3',
       pulumiVersion: getInput('pulumi-version') || '^3',
       color: getUnionInput('color', {
