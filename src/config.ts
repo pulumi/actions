@@ -1,7 +1,7 @@
 import { getInput } from '@actions/core';
 import { context } from '@actions/github';
 import * as rt from 'runtypes';
-import { parseArray, parseBoolean, parseNumber } from './libs/utils';
+import { parseArray, parseBoolean, parseNumber, parsePlugins } from './libs/utils';
 
 export const command = rt.Union(
   rt.Literal('up'),
@@ -18,8 +18,8 @@ const plugin = rt.Partial({
   server: rt.String,
   kind: rt.String
 });
-type Plugin = rt.Static<typeof plugin>;
-type Plugins = Plugin[];
+export type Plugin = rt.Static<typeof plugin>;
+export type Plugins = Plugin[];
 
 export const options = rt.Partial({
   parallel: rt.Number,
@@ -78,7 +78,7 @@ export async function makeConfig(): Promise<Config> {
     remove: parseBoolean(getInput('remove')),
     refresh: parseBoolean(getInput('refresh')),
     configMap: getInput('config-map'),
-    plugins: JSON.parse(getInput('plugins')) as Plugins,
+    plugins: parsePlugins(getInput('plugins')),
     isPullRequest: context?.payload?.pull_request !== undefined,
     options: {
       parallel: parseNumber(getInput('parallel')),

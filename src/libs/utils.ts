@@ -1,3 +1,6 @@
+import YAML from 'yaml';
+import { Plugin, Plugins } from '../config';
+
 export function parseArray(input: string): string[] {
   return parseUndefined(input)
     ? input.split(/\r?\n/).reduce<string[]>(
@@ -21,4 +24,13 @@ export function parseBoolean(input: string): boolean | undefined {
 
 export function parseNumber(input: string): number | undefined {
   return parseUndefined(input) ? Number(input) : undefined;
+}
+
+export function parsePlugins(input: string): Plugins {
+  if (parseUndefined(input)) {
+    const plugins = YAML.parse(input);
+    return plugins.map(plugin => plugin as Plugin) as Plugins;
+  } else {
+    return [] as Plugins;
+  }
 }
