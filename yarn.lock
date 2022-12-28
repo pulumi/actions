@@ -1276,10 +1276,10 @@ acorn@^8.2.4:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.7.1.tgz#0197122c843d1bf6d0a5e83220a788f278f63c30"
   integrity sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==
 
-actions-parsers@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/actions-parsers/-/actions-parsers-1.0.1.tgz#bb18eccdaf987e0d8d6e0edd9e0b8af8d9e43d34"
-  integrity sha512-EEFHJijP0gBhxw7h+/ddQeal7DLHOydIikJPqSAhtCaQMf/3pbNe+Lc0fRFmsd1Xsp3kpdivOzv0srQ6ahexLg==
+actions-parsers@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/actions-parsers/-/actions-parsers-1.0.2.tgz#104c014ecc89c6403428dc88995aa8abd0d2d6c3"
+  integrity sha512-v5e1cDI2Ut11VRO6s+/vSKyVD1K0XZA167J20A/4JaKOw5jTy/fME0Kr2QOwi4ECrMJ29gi5lrkyc0CDMbiqIQ==
   dependencies:
     js-yaml "^4.1.0"
 
