@@ -48,6 +48,7 @@ inputs:
   expect-no-changes:
     description: 'Return an error if any changes occur during this update'
     required: false
+    default: 'false'
   diff:
     description: 'Display operation as a rich diff showing the overall change'
     required: false
