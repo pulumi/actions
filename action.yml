@@ -52,6 +52,7 @@ inputs:
   diff:
     description: 'Display operation as a rich diff showing the overall change'
     required: false
+    default: 'false'
   replace:
     description: 'Specify resources to replace. Multiple resources can be specified one per line'
     required: false
