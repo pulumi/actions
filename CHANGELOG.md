@@ -1,6 +1,7 @@
 # CHANGELOG
 
 - feat: Add deletion of stack after destroy (remove flag)
+- docs: Advise setting GITHUB_TOKEN to avoid rate limits
 
 --
 

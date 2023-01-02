@@ -29,6 +29,7 @@ jobs:
           stack-name: org-name/stack-name
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Avoid GitHub rate limits (see below)
 ```
 
 This will check out the existing directory and run `pulumi preview`.
@@ -41,8 +42,8 @@ The action can be configured with the following arguments:
   values are `up` (update), `refresh`, `destroy` and `preview`.
 
 - `stack-name` (required) - The name of the stack that Pulumi will be operating
-  on. Use the fully quaified org-name/stack-name when operating on a stack outside
-  of your individual account.
+  on. Use the fully quaified org-name/stack-name when operating on a stack
+  outside of your individual account.
 
 - `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`.
 
@@ -105,8 +106,8 @@ The action can be configured with the following arguments:
   `Pulumi.<stack-name>.yaml` file that you will need to add back to source
   control as part of the action if you wish to perform any further tasks with
   that stack.
-- `remove` - (optional) Removes the target stack if all resources are
-  destroyed. Used only with `destroy` command.
+- `remove` - (optional) Removes the target stack if all resources are destroyed.
+  Used only with `destroy` command.
 - `pulumi-version` - (optional) Install a specific version of the Pulumi CLI.
   Defaults to "^3"
 
@@ -114,6 +115,14 @@ By default, this action will try to authenticate Pulumi with the
 [Pulumi SaaS](https://app.pulumi.com/). If you have not specified a
 `PULUMI_ACCESS_TOKEN` then you will need to specify an alternative backend via
 the `cloud-url` argument.
+
+If you are using any Pulumi plugins then you should also set the `GITHUB_TOKEN`
+environment variable in order to avoid hitting GitHub rate limits. The easiest
+way to do this is to set it to the automatically created
+`${{ secrets.GITHUB_TOKEN }}`. (The GitHub docs provide more details regarding
+[automatic token authentication](https://docs.github.com/en/actions/security-guides/automatic-token-authentication)
+and
+[rate limits](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting).)
 
 ### Stack Outputs
 
@@ -148,6 +157,7 @@ action, we would use code similar to the following:
   id: pulumi
   env:
     PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   with:
     command: up
     cloud-url: gs://my-bucket
