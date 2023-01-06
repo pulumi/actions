@@ -21780,6 +21780,15 @@ function jsonStringify(obj, replacer, space) {
     });
 }
 exports.jsonStringify = jsonStringify;
+/**
+ * [jsonParse] Uses JSON.parse to deserialize the given Input JSON string into a value.
+ */
+function jsonParse(text, reviver) {
+    return output(text).apply(t => {
+        return JSON.parse(t, reviver);
+    });
+}
+exports.jsonParse = jsonParse;
 //# sourceMappingURL=output.js.map
 
 /***/ }),
