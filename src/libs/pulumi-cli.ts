@@ -43,6 +43,21 @@ export async function downloadCli(range: string): Promise<void> {
 
   core.info(`Configured range: ${range}`);
 
+  // Check if the default range was selected
+  if (range === '^3') {
+    core.info('Default range selected. Checking for Pulumi CLI on the runner');
+
+    // Check if Pulumi CLI is already installed on the runner
+    if (await isAvailable()) {
+      // If found, skip downloading CLI by exiting the function
+      core.info('Skipping Pulumi CLI download and using version installed on the runner');
+      return Promise.resolve();
+    }
+    else {
+      core.info('Pulumi CLI not installed on the runner. Proceeding to download');
+    }
+  }
+
   const { version, downloads } = await getVersionObject(range);
 
   core.info(`Matched version: ${version}`);
