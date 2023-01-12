@@ -1,7 +1,7 @@
 import { getInput } from '@actions/core';
 import { context } from '@actions/github';
 import * as rt from 'runtypes';
-import { parseArray, parseBoolean, parseNumber } from './libs/utils';
+import { parseArray, parseBoolean, parseNumber, parsePlugins } from './libs/utils';
 
 export const command = rt.Union(
   rt.Literal('up'),
@@ -10,8 +10,17 @@ export const command = rt.Union(
   rt.Literal('destroy'),
   rt.Literal('preview'),
 );
-
 export type Commands = rt.Static<typeof command>;
+
+const plugin = rt.Record({
+  name: rt.String,
+  version: rt.String,
+}).And(rt.Partial({
+  server: rt.String,
+  kind: rt.String
+}));
+export type Plugin = rt.Static<typeof plugin>;
+export type Plugins = Plugin[];
 
 export const options = rt.Partial({
   parallel: rt.Number,
@@ -48,6 +57,7 @@ export const config = rt
       upsert: rt.Boolean,
       remove: rt.Boolean,
       refresh: rt.Boolean,
+      plugins: rt.Array(plugin),
       secretsProvider: rt.String,
       commentOnPrNumber: rt.Number,
     }),
@@ -69,6 +79,7 @@ export async function makeConfig(): Promise<Config> {
     remove: parseBoolean(getInput('remove')),
     refresh: parseBoolean(getInput('refresh')),
     configMap: getInput('config-map'),
+    plugins: parsePlugins(getInput('plugins')),
     isPullRequest: context?.payload?.pull_request !== undefined,
     options: {
       parallel: parseNumber(getInput('parallel')),

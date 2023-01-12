@@ -47,6 +47,10 @@ inputs:
     description: 'Config to use during the operations'
     required: false
     default: ''
+  plugins:
+    description: 'Plugins which will install'
+    required: false
+    default: '[]'
   expect-no-changes:
     description: 'Return an error if any changes occur during this update'
     required: false
