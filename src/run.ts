@@ -1,10 +1,13 @@
 import { resolve } from 'path';
 import * as core from '@actions/core';
+import { cacheFile } from '@actions/tool-cache';
 import {
   ConfigMap,
   LocalProgramArgs,
   LocalWorkspace,
   LocalWorkspaceOptions,
+  PluginInfo,
+  Stack,
 } from '@pulumi/pulumi/automation';
 import invariant from 'ts-invariant';
 import YAML from 'yaml';
@@ -18,12 +21,14 @@ function downloadOnly(cmd: Commands): boolean {
   return cmd === 'install';
 }
 
+const disableCache = false;
+
 export const runAction = async (config: Config): Promise<void> => {
 
   await pulumiCli.downloadCli(config.options.pulumiVersion);
 
   if(downloadOnly(config.command)) {
-    core.info("Pulumi has been successfully installed. Exiting.")
+    core.info("Pulumi has been successfully installed.");
     return;
   }
   core.info('Pulumi is going forward anyway!');
@@ -112,6 +117,21 @@ export const runAction = async (config: Config): Promise<void> => {
   if (config.remove && config.command === 'destroy') {
     stack.workspace.removeStack(stack.name)
   }
+  
+  if(!disableCache) {
+    await cachePlugins(stack);
+  }
 
   core.endGroup();  
+};
+
+// NB: Another approach would be to use cacheDir, which caches an
+//     entire directory. Using cacheDir, it's harder to version
+//     individual plugins separate from the whole directory.
+const cachePlugins = async (stack: Stack): Promise<string[]> => {
+  const plugins = await stack.workspace.listPlugins();
+  const cacheAll = plugins.map((plugin: PluginInfo) => {
+    return cacheFile(plugin.path, plugin.name, plugin.name, plugin.version);
+  });
+  return Promise.all(cacheAll);
 };
