@@ -12,6 +12,14 @@ export async function isAvailable(): Promise<boolean> {
   return res.stderr != '' && !res.success ? false : res.success;
 }
 
+export async function getVersion(): Promise<string | undefined> {
+  const res = await exec.exec('pulumi', ['version'], true);
+  if (res.success && res.stderr === '' && res.stdout.startsWith('v'))
+    return res.stdout.substring(1); // Return version without 'v' prefix
+  else
+    return undefined;
+}
+
 export async function run(...args: string[]): Promise<void> {
   await exec.exec(`pulumi`, args, true);
 }
@@ -43,19 +51,21 @@ export async function downloadCli(range: string): Promise<void> {
 
   core.info(`Configured range: ${range}`);
 
-  // Check if the default range was selected
-  if (range === '^3') {
-    core.info('Default range selected. Checking for Pulumi CLI on the runner');
+  // Check for version of Pulumi CLI installed on the runner
+  const runnerVersion = await getVersion();
 
-    // Check if Pulumi CLI is already installed on the runner
-    if (await isAvailable()) {
-      // If found, skip downloading CLI by exiting the function
+  if (runnerVersion) { 
+    core.info(`Runner version: ${runnerVersion}`);
+    // Check if runner version matches
+    if (semver.satisfies(runnerVersion, range)) {
+      // If runner version matches, skip downloading CLI by exiting the function
       core.info('Skipping Pulumi CLI download and using version installed on the runner');
-      return Promise.resolve();
+      return;
+    } else {
+      core.info('Pulumi CLI on the runner does not match. Proceeding to download'); 
     }
-    else {
-      core.info('Pulumi CLI not installed on the runner. Proceeding to download');
-    }
+  } else {
+    core.info('Pulumi CLI not installed on the runner. Proceeding to download'); 
   }
 
   const { version, downloads } = await getVersionObject(range);
