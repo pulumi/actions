@@ -1,7 +1,5 @@
 name: 'build-test'
 on: # rebuild any PRs and main branch changes
-  workflow_dispatch:
-    
   pull_request:
     paths-ignore:
       - 'CHANGELOG.md'
@@ -34,7 +32,6 @@ jobs:
         with:
           go-version: '^1.13.1'
       - run: |
-          pulumi version
           pulumi login --local
           pulumi stack init dev
         working-directory: .github/test-stacks/golang
