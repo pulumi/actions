@@ -13,6 +13,7 @@ export async function isAvailable(): Promise<boolean> {
 }
 
 export async function getVersion(): Promise<string | undefined> {
+  core.debug('Executing command \'pulumi version\' to check version of CLI on the runner');
   const res = await exec.exec('pulumi', ['version'], true);
 
   core.debug(`Success: ${res.success}`)
@@ -20,9 +21,9 @@ export async function getVersion(): Promise<string | undefined> {
   core.debug(`StdErr: ${res.stderr}`)
 
   // Only check for success and if the [stdout] starts with the version
-  // prefix 'v'. If the runner version is not the latest version then
-  // the "warning of newer version" will be in [stderr] field, which 
-  // will trigger the else condition if we also check for [stderr === '']
+  // prefix 'v'. If success is true and the runner version is not the 
+  // latest version then the "warning of newer version" will be in [stderr] field, 
+  // which will trigger an else condition if we also check for [stderr === '']
   if (res.success && res.stdout.startsWith('v'))
     return res.stdout.substring(1); // Return version without 'v' prefix
   else
