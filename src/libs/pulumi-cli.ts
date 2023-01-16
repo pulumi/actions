@@ -13,14 +13,18 @@ export async function isAvailable(): Promise<boolean> {
 }
 
 export async function getVersion(): Promise<string | undefined> {
-  const res = await exec.exec('pulumi', ['version'], false);
+  const res = await exec.exec('pulumi', ['version'], true);
 
-  core.info(`Success: ${res.success}`)
-  core.info(`StdOut: ${res.stdout}`)
-  core.info(`StdErr: ${res.stderr}`)
+  core.debug(`Success: ${res.success}`)
+  core.debug(`StdOut: ${res.stdout}`)
+  core.debug(`StdErr: ${res.stderr}`)
 
-  if (res.success && res.stderr === '')
-    return res.stdout;
+  // Only check for success and if the [stdout] starts with the version
+  // prefix 'v'. If the runner version is not the latest version then
+  // the "warning of newer version" will be in [stderr] field, which 
+  // will trigger the else condition if we also check for [stderr === '']
+  if (res.success && res.stdout.startsWith('v'))
+    return res.stdout.substring(1); // Return version without 'v' prefix
   else
     return undefined;
 }
@@ -58,19 +62,19 @@ export async function downloadCli(range: string): Promise<void> {
 
   // Check for version of Pulumi CLI installed on the runner
   const runnerVersion = await getVersion();
-  core.info(`Runner version: ${runnerVersion}`);
 
-  if (runnerVersion) { 
+  if (runnerVersion) {
+    core.info(`Runner version: ${runnerVersion}`);
     // Check if runner version matches
     if (semver.satisfies(runnerVersion, range)) {
       // If runner version matches, skip downloading CLI by exiting the function
       core.info(`Runner version ${runnerVersion} matched. Skipping Pulumi CLI download`);
       return;
     } else {
-      core.info('Pulumi CLI on the runner does not match. Proceeding to download'); 
+      core.info('Pulumi CLI on the runner does not match. Proceeding to download');
     }
   } else {
-    core.info('Pulumi CLI not installed on the runner. Proceeding to download'); 
+    core.info('Pulumi CLI not installed on the runner. Proceeding to download');
   }
 
   const { version, downloads } = await getVersionObject(range);
