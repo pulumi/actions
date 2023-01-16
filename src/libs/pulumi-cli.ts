@@ -14,6 +14,7 @@ export async function isAvailable(): Promise<boolean> {
 
 export async function getVersion(): Promise<string | undefined> {
   core.debug('Executing command \'pulumi version\' to check version of CLI on the runner');
+  
   const res = await exec.exec('pulumi', ['version'], true);
 
   core.debug(`Success: ${res.success}`)
