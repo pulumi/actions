@@ -13,7 +13,7 @@ export async function isAvailable(): Promise<boolean> {
 }
 
 export async function getVersion(): Promise<string | undefined> {
-  const res = await exec.exec('pulumi', ['version'], true);
+  const res = await exec.exec(`pulumi`, ['version'], true);
   if (res.success && res.stderr === '' && res.stdout.startsWith('v'))
     return res.stdout.substring(1); // Return version without 'v' prefix
   else
@@ -53,9 +53,9 @@ export async function downloadCli(range: string): Promise<void> {
 
   // Check for version of Pulumi CLI installed on the runner
   const runnerVersion = await getVersion();
+  core.info(`Runner version: ${runnerVersion}`);
 
   if (runnerVersion) { 
-    core.info(`Runner version: ${runnerVersion}`);
     // Check if runner version matches
     if (semver.satisfies(runnerVersion, range)) {
       // If runner version matches, skip downloading CLI by exiting the function
