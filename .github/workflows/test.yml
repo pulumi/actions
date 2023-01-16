@@ -34,6 +34,7 @@ jobs:
         with:
           go-version: '^1.13.1'
       - run: |
+          pulumi version
           pulumi login --local
           pulumi stack init dev
         working-directory: .github/test-stacks/golang
