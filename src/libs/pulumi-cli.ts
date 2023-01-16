@@ -13,7 +13,12 @@ export async function isAvailable(): Promise<boolean> {
 }
 
 export async function getVersion(): Promise<string | undefined> {
-  const res = await exec.exec(`pulumi`, ['version'], true);
+  const res = await exec.exec('pulumi', ['version'], false);
+
+  core.info(`Success: ${res.success}`)
+  core.info(`StdOut: ${res.stdout}`)
+  core.info(`StdErr: ${res.stderr}`)
+
   if (res.success && res.stderr === '')
     return res.stdout;
   else
