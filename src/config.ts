@@ -4,11 +4,12 @@ import * as rt from 'runtypes';
 import { parseArray, parseBoolean, parseNumber } from './libs/utils';
 
 export const command = rt.Union(
+  rt.Literal('destroy'),
+  rt.Literal('install'),
+  rt.Literal('preview'),
+  rt.Literal('refresh'),
   rt.Literal('up'),
   rt.Literal('update'),
-  rt.Literal('refresh'),
-  rt.Literal('destroy'),
-  rt.Literal('preview'),
 );
 
 export type Commands = rt.Static<typeof command>;

@@ -2,6 +2,9 @@
 
 - feat: Add deletion of stack after destroy (remove flag)
 
+- feat: Add support for an `install` command, similar to
+  [setup-pulumi](https://github.com/marketplace/actions/setup-pulumi)
+
 --
 
 ## 3.20.0 (2022-11-10)
