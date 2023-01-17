@@ -12,23 +12,18 @@ export async function isAvailable(): Promise<boolean> {
   return res.stderr != '' && !res.success ? false : res.success;
 }
 
-export async function getVersion(): Promise<string | undefined> {
-  core.debug('Executing command \'pulumi version\' to check version of CLI on the runner');
-  
+export async function getVersion(): Promise<string | null> {
   const res = await exec.exec('pulumi', ['version'], true);
-
-  core.debug(`Success: ${res.success}`)
-  core.debug(`StdOut: ${res.stdout}`)
-  core.debug(`StdErr: ${res.stderr}`)
 
   // Only check for success and if the [stdout] starts with the version
   // prefix 'v'. If success is true and the runner version is not the 
   // latest version then the "warning of newer version" will be in [stderr] field, 
   // which will trigger an else condition if we also check for [stderr === '']
   if (res.success && res.stdout.startsWith('v'))
-    return res.stdout.substring(1); // Return version without 'v' prefix
+    // Return version without 'v' prefix
+    return res.stdout.substring(1); 
   else
-    return undefined;
+    return null;
 }
 
 export async function run(...args: string[]): Promise<void> {
@@ -66,17 +61,16 @@ export async function downloadCli(range: string): Promise<void> {
   const runnerVersion = await getVersion();
 
   if (runnerVersion) {
-    core.info(`Runner version: ${runnerVersion}`);
     // Check if runner version matches
     if (semver.satisfies(runnerVersion, range)) {
       // If runner version matches, skip downloading CLI by exiting the function
-      core.info(`Runner version ${runnerVersion} matched. Skipping Pulumi CLI download`);
+      core.info(`Pulumi version ${runnerVersion} is already installed on this machine. Skipping downloading.`);
       return;
     } else {
-      core.info('Pulumi CLI on the runner does not match. Proceeding to download');
+      core.info(`Pulumi ${runnerVersion} does not satisfy the desired version ${range}. Proceeding to download`);
     }
   } else {
-    core.info('Pulumi CLI not installed on the runner. Proceeding to download');
+    core.info('Pulumi is not detected in the PATH. Proceeding to download');
   }
 
   const { version, downloads } = await getVersionObject(range);
