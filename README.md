@@ -41,8 +41,8 @@ The action can be configured with the following arguments:
   values are `up` (update), `refresh`, `destroy` and `preview`.
 
 - `stack-name` (required) - The name of the stack that Pulumi will be operating
-  on. Use the fully quaified org-name/stack-name when operating on a stack outside
-  of your individual account.
+  on. Use the fully quaified org-name/stack-name when operating on a stack
+  outside of your individual account.
 
 - `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`.
 
@@ -70,22 +70,37 @@ The action can be configured with the following arguments:
 
 ### Extra options
 
-- `parallel` - (optional) Allow P resource operations to run in parallel at once
-  (1 for no parallelism). Defaults to unbounded.
+- `config-map` - (optional) Configuration of the stack. Format Yaml string:
+  `{<key | string>: {value: <value | string>, secret: <is_secret | boolean> },}`.
 
-- `message` - (optional) Optional message to associate with the update
-  operation.
-
-- `expect-no-changes` - (optional) Return an error if any changes occur during
-  this update.
+- `diff` - (optional) Display operation as a rich diff showing the overall
+  change.
 
 - `edit-pr-comment` - (optional) Edit previous PR comment instead of posting new
   one. **PLEASE NOTE:** that as of 3.2.0 of the Action, this now defaults to
   `true`. This is in an effort to reduce verbosity - if you want to have a
   comment per PR run, please ensure that you set this to `false`.
 
-- `diff` - (optional) Display operation as a rich diff showing the overall
-  change.
+- `expect-no-changes` - (optional) Return an error if any changes occur during
+  this update.
+
+- `message` - (optional) Optional message to associate with the update
+  operation.
+
+- `parallel` - (optional) Allow P resource operations to run in parallel at once
+  (1 for no parallelism). Defaults to unbounded.
+
+- `policy-pack` - (optional) Run one or more policy packs with the provided
+  `command`
+
+- `policy-pack-config` - (optional) Path(s) to JSON file(s) containing the
+  config for the policy pack with the corresponding "policy-pack" argument
+
+- `pulumi-version` - (optional) Install a specific version of the Pulumi CLI.
+  Defaults to "^3"
+
+- `remove` - (optional) Removes the target stack if all resources are destroyed.
+  Used only with `destroy` command.
 
 - `replace` - (optional) Specify resources to replace. Multiple resources can be
   specified one per line (example: `<value | string>,...`).
@@ -97,18 +112,11 @@ The action can be configured with the following arguments:
 - `target-dependents` - (optional) Allows updating of dependent targets
   discovered but not specified in target.
 
-- `config-map` - (optional) Configuration of the stack. Format Yaml string:
-  `{<key | string>: {value: <value | string>, secret: <is_secret | boolean> },}`.
-
 - `upsert` - (optional) Allows the creation of the specified stack if it
   currently doesn't exist. **PLEASE NOTE:** This will create a
   `Pulumi.<stack-name>.yaml` file that you will need to add back to source
   control as part of the action if you wish to perform any further tasks with
   that stack.
-- `remove` - (optional) Removes the target stack if all resources are
-  destroyed. Used only with `destroy` command.
-- `pulumi-version` - (optional) Install a specific version of the Pulumi CLI.
-  Defaults to "^3"
 
 By default, this action will try to authenticate Pulumi with the
 [Pulumi SaaS](https://app.pulumi.com/). If you have not specified a
