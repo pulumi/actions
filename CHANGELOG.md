@@ -2,9 +2,13 @@
 
 ## HEAD (Unreleased)
 
-- feat: set action runtime to NodeJS 16
+_(none)_
 
 --
+
+## 4.0.0 (2023-19-01)
+
+- feat: Update Action runtime to NodeJS 16
 
 ## 3.21.0 (2023-19-01)
 
