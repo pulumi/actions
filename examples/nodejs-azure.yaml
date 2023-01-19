@@ -21,7 +21,7 @@ jobs:
         run: yarn install
 
       - name: Applying infrastructure 🚀
-        uses: pulumi/actions@v3
+        uses: pulumi/actions@v4
         with:
           command: up
           stack-name: dev

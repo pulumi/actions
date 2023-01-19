@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: set action runtime to NodeJS 16
 
 --
 
