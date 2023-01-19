@@ -14,7 +14,6 @@ jobs:
             dist:
               - 'dist/**'
       - uses: mshick/add-pr-comment@v2
-      - uses: mshick/add-pr-comment@v1 # TODO: update to v2 after https://github.com/mshick/add-pr-comment/pull/50 merged
         if: steps.changes.outputs.dist == 'true'
         with:
           message: |
