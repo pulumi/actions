@@ -1,8 +1,14 @@
 # CHANGELOG
 
-- feat: Add deletion of stack after destroy (remove flag)
+## HEAD (Unreleased)
+
+**(none)**
 
 --
+
+## 3.21.0 (2023-19-01)
+
+- feat: Add deletion of stack after destroy (remove flag)
 
 ## 3.20.0 (2022-11-10)
 
