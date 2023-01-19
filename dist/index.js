@@ -81951,7 +81951,7 @@ const options = lib.Partial({
     policyPackConfigs: lib.Array(lib.String),
     targetDependents: lib.Boolean,
     editCommentOnPr: lib.Boolean,
-    userAgent: lib.Literal('pulumi/actions@v3'),
+    userAgent: lib.Literal('pulumi/actions@v4'),
     pulumiVersion: lib.String,
 });
 const config = lib.Record({
@@ -82003,7 +82003,7 @@ function makeConfig() {
                 policyPacks: parseArray((0,core.getInput)('policyPacks')),
                 policyPackConfigs: parseArray((0,core.getInput)('policyPackConfigs')),
                 editCommentOnPr: parseBoolean((0,core.getInput)('edit-pr-comment')),
-                userAgent: 'pulumi/actions@v3',
+                userAgent: 'pulumi/actions@v4',
                 pulumiVersion: (0,core.getInput)('pulumi-version') || "^3",
                 color: (0,core.getInput)('color'),
             },
