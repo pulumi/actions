@@ -1,8 +1,5 @@
 # Pulumi GitHub Actions
 
-**PLEASE NOTE:** As of v3.1.0 of this GitHub Action, the end user no longer
-needs to install the Pulumi CLI as part of their workflow!
-
 Pulumi's GitHub Actions deploy apps and infrastructure to your cloud of choice,
 using just your favorite language and GitHub. This includes previewing,
 validating, and collaborating on proposed deployments in the context of Pull
@@ -194,7 +191,20 @@ the correct GitHub Marketplace actions that support it.
 - [NodeJS Runtime + Azure Blob Self Managed Backend](examples/nodejs-azure.yaml)
 - [NodeJS Runtime + Local File System Self Managed Backend](examples/nodejs-local.yaml)
 
-## Migrating from GitHub Action v1 (and beyond)?
+## Release Cadence
+
+As of `v3.18`, we are intending to move to a monthly cadence for minor releases.
+Minor releases will be published around the beginning of the month. We may cut a
+patch release instead, if the changes are small enough not to warrant a minor
+release. We will also cut patch releases periodically as needed to address bugs.
+
+## Migrating from v3
+
+v4 of the Pulumi Action updates the NodeJS runtime from Node 12 to Node 16.
+Users of GitHub Enterprise will have to upgrade to v3.4 or newer. All other
+users are unaffected.
+
+## Migrating from GitHub Action v1 and v2
 
 Here are some pointers when migrating from v1 to v2 of our GitHub Action.
 
@@ -228,19 +238,3 @@ with:
 - run: pip install -r requirements
   working-directory: infra
 ```
-
-## Release Cadence
-
-As of `v3.18`, we are intending to move to a monthly cadence for minor releases.
-Minor releases will be published around the beginning of the month. We may cut a
-patch release instead, if the changes are small enough not to warrant a minor
-release. We will also cut patch releases periodically as needed to address bugs.
-
-## Node 12 Support Ending 2023-01-18
-
-We intend this action to work for all GitHub users, both SaaS users and GitHub
-Enterprise users. As such, this action will continue to use Node 12 until all
-maintained versions of GitHub Enterprise have Node 16 support. This date is
-2023-01-18, when GitHub Enterprise v3.3 is sunset. After 2023-01-18, this action
-will upgrade to Node 16, and will no longer run on GitHub Actions runners
-without Node 16 support.
