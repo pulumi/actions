@@ -4,7 +4,8 @@
 
 _(none)_
 
---
+- bug: Fix installation on Windows.
+([#851](https://github.com/pulumi/actions/pull/851))
 
 ## 4.0.0 (2023-19-01)
 
