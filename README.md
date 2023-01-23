@@ -49,7 +49,8 @@ The action can be configured with the following arguments:
   with the correct access credentials for that backend.
 
 - `comment-on-pr` - (optional) If `true`, then the action will add the results
-  of the Pulumi action to the PR
+  of the Pulumi action to the PR. Ignored unless `${{ github.event }}` type is
+  `pull_request`.
 
 - `github-token` - (optional) A GitHub token that has access levels to allow the
   Action to comment on a PR. Defaults to `${{ github.token }}`
@@ -60,7 +61,7 @@ The action can be configured with the following arguments:
 - `secrets-provider` - (optional) The type of the provider that should be used
   to encrypt and decrypt secrets. Possible choices: `default`, `passphrase`,
   `awskms`, `azurekeyvault`, `gcpkms`, `hashivault`. e.g.
-  `gcpkms://projects//locations/us-west1/keyRings/acmecorpsec/cryptoKeys/payroll `
+  `gcpkms://projects//locations/us-west1/keyRings/acmecorpsec/cryptoKeys/payroll`
 
 - `color` - (optional) Colorize output. Choices are: always, never, raw, auto
   (default "auto").
@@ -72,6 +73,9 @@ The action can be configured with the following arguments:
 
 - `diff` - (optional) Display operation as a rich diff showing the overall
   change.
+
+- `comment-on-pr-number` - (optional) If set to a number, then the action will
+  add the results of the Pulumi action to the specified PR number.
 
 - `edit-pr-comment` - (optional) Edit previous PR comment instead of posting new
   one. **PLEASE NOTE:** that as of 3.2.0 of the Action, this now defaults to

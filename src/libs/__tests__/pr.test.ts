@@ -2,7 +2,12 @@ import * as gh from '@actions/github';
 import { Config } from '../../config';
 import { handlePullRequestMessage } from '../pr';
 
-const comments = [{ id: 2, body: '#### :tropical_drink: `preview` on myFirstProject/staging. <summary>Pulumi report</summary>' }];
+const comments = [
+  {
+    id: 2,
+    body: '#### :tropical_drink: `preview` on myFirstProject/staging. <summary>Pulumi report</summary>',
+  },
+];
 const resp = { data: comments };
 const projectName = 'myFirstProject';
 const defaultOptions = {
@@ -46,17 +51,59 @@ describe('pr.ts', () => {
     await handlePullRequestMessage(defaultOptions, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
       body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
-      issue_number: 123
+      issue_number: 123,
     });
   });
 
-  it('should fail if no pull request data', async () => {
+  it('should add pull request message to the PR defined in config, overriding the github context', async () => {
+    // @ts-ignore
+    gh.context = {
+      payload: {
+        pull_request: {
+          number: 123,
+        },
+      },
+    };
+
+    const options: Config = {
+      ...defaultOptions,
+      commentOnPrNumber: 87,
+    };
+
+    process.env.GITHUB_REPOSITORY = 'pulumi/actions';
+
+    await handlePullRequestMessage(options, projectName, 'test');
+    expect(createComment).toHaveBeenCalledWith({
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      issue_number: 87,
+    });
+  });
+
+  it('should fail if no pull request data, and no PR number in config', async () => {
     process.env.GITHUB_REPOSITORY = 'pulumi/actions';
     // @ts-ignore
     gh.context = { payload: {} };
     await expect(
       handlePullRequestMessage(defaultOptions, projectName, 'test'),
     ).rejects.toThrow('Missing pull request event data');
+  });
+
+  it('should add pull request message to the PR defined in config, if no pull request data', async () => {
+    // @ts-ignore
+    gh.context = { payload: {} };
+
+    const options: Config = {
+      ...defaultOptions,
+      commentOnPrNumber: 87,
+    };
+
+    process.env.GITHUB_REPOSITORY = 'pulumi/actions';
+
+    await handlePullRequestMessage(options, projectName, 'test');
+    expect(createComment).toHaveBeenCalledWith({
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      issue_number: 87,
+    });
   });
 
   it('should trim the output when the output is larger than 64k characters', async () => {
@@ -92,11 +139,10 @@ describe('pr.ts', () => {
       options: { editCommentOnPr: true },
     } as Config;
 
-
     await handlePullRequestMessage(options, projectName, 'test');
     expect(updateComment).toHaveBeenCalledWith({
       comment_id: 2,
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>'
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
     });
   });
 });
