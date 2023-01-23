@@ -82309,7 +82309,8 @@ const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
             core.setSecret(outExport.value);
         }
     }
-    if (config.commentOnPr && config.isPullRequest) {
+    if (config.commentOnPrNumber ||
+        (config.commentOnPr && config.isPullRequest)) {
         core.debug(`Commenting on pull request`);
         (0,invariant/* default */.ZP)(config.githubToken, 'github-token is missing.');
         handlePullRequestMessage(config, projectName, output);
