@@ -6,7 +6,8 @@
   other than `pull_request`
   ([#803](https://github.com/pulumi/actions/issues/803))
 
---
+- bug: Fix installation on Windows.
+([#851](https://github.com/pulumi/actions/pull/851))
 
 ## 4.0.0 (2023-19-01)
 

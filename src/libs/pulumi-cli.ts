@@ -1,9 +1,9 @@
-import * as os from 'os';
-import * as path from 'path';
 import * as core from '@actions/core';
 import * as io from '@actions/io';
 import * as tc from '@actions/tool-cache';
-import * as semver from 'semver'
+import * as os from 'os';
+import * as path from 'path';
+import * as semver from 'semver';
 import * as exec from './exec';
 import { getVersionObject } from './libs/get-version';
 
@@ -33,6 +33,7 @@ export function getPlatform(): string | undefined {
 
 export async function downloadCli(range: string): Promise<void> {
   const platform = getPlatform();
+  core.debug(`Platform: ${platform}`);
 
   if (!platform) {
     throw new Error(
@@ -63,17 +64,28 @@ export async function downloadCli(range: string): Promise<void> {
     })
 
   const downloaded = await tc.downloadTool(downloads[platform]);
-  core.debug(`successfully downloaded ${downloads[platform]}`);
+  core.debug(`successfully downloaded ${downloads[platform]} to ${downloaded}`);
 
-  switch (platform) {
-    case "windows": {
-      await tc.extractZip(downloaded, os.homedir());
-      await io.mv(path.join(os.homedir(), 'Pulumi'), path.join(os.homedir(), '.pulumi'));
+  await io.mkdirP(destination);
+  core.debug(`Successfully created ${destination}`)
+
+  switch(platform) {
+    case "windows-x64": {
+      const extractedPath = await tc.extractZip(downloaded, destination);
+      core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`)
+      const oldPath = path.join(destination, 'pulumi', 'bin')
+      const newPath = path.join(destination, 'bin')
+      await io.mv(oldPath, newPath);
+      core.debug(`Successfully renamed ${oldPath} to ${newPath}`)
+      await io
+        .rmRF(path.join(destination, 'pulumi'))
+        .catch()
+        .then(() => {
+          core.info(`Successfully deleted left-over ${path.join(destination, "pulumi")}`);
+        })
       break;
     }
     default: {
-      await io.mkdirP(destination);
-      core.debug(`Successfully created ${destination}`)
       const extractedPath = await tc.extractTar(downloaded, destination);
       core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`)
       const oldPath = path.join(destination, 'pulumi')
@@ -86,4 +98,14 @@ export async function downloadCli(range: string): Promise<void> {
 
   const cachedPath = await tc.cacheDir(path.join(destination, 'bin'), 'pulumi', version);
   core.addPath(cachedPath);
+
+  // Check that running pulumi now returns a version we expect
+  const versionExec = await exec.exec(`pulumi`, ['version'], true);
+  const pulumiVersion = versionExec.stdout.trim();
+  core.debug(`Running pulumi verison returned: ${pulumiVersion}`);
+  if (!semver.satisfies(pulumiVersion, version)) {
+    throw new Error(
+      'Installed version did not satisfy the resolved version',
+    );
+  }
 }
