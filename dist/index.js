@@ -82078,12 +82078,12 @@ function handlePullRequestMessage(config, projectName, output) {
     });
 }
 
-// EXTERNAL MODULE: external "os"
-var external_os_ = __nccwpck_require__(2037);
 // EXTERNAL MODULE: ./node_modules/@actions/io/lib/io.js
 var io = __nccwpck_require__(7436);
 // EXTERNAL MODULE: ./node_modules/@actions/tool-cache/lib/tool-cache.js
 var tool_cache = __nccwpck_require__(7784);
+// EXTERNAL MODULE: external "os"
+var external_os_ = __nccwpck_require__(2037);
 // EXTERNAL MODULE: ./node_modules/semver/index.js
 var semver = __nccwpck_require__(1383);
 // EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
@@ -82183,6 +82183,7 @@ function getPlatform() {
 function downloadCli(range) {
     return modules_awaiter(this, void 0, void 0, function* () {
         const platform = getPlatform();
+        core.debug(`Platform: ${platform}`);
         if (!platform) {
             throw new Error('Unsupported operating system - Pulumi CLI is only released for Darwin (x64, arm64), Linux (x64, arm64) and Windows (x64)');
         }
@@ -82201,16 +82202,25 @@ function downloadCli(range) {
             core.info(`Successfully deleted pre-existing ${external_path_.join(destination, "bin")}`);
         });
         const downloaded = yield tool_cache.downloadTool(downloads[platform]);
-        core.debug(`successfully downloaded ${downloads[platform]}`);
+        core.debug(`successfully downloaded ${downloads[platform]} to ${downloaded}`);
+        yield io.mkdirP(destination);
+        core.debug(`Successfully created ${destination}`);
         switch (platform) {
-            case "windows": {
-                yield tool_cache.extractZip(downloaded, external_os_.homedir());
-                yield io.mv(external_path_.join(external_os_.homedir(), 'Pulumi'), external_path_.join(external_os_.homedir(), '.pulumi'));
+            case "windows-x64": {
+                const extractedPath = yield tool_cache.extractZip(downloaded, destination);
+                core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`);
+                const oldPath = external_path_.join(destination, 'pulumi', 'bin');
+                const newPath = external_path_.join(destination, 'bin');
+                yield io.mv(oldPath, newPath);
+                core.debug(`Successfully renamed ${oldPath} to ${newPath}`);
+                yield io.rmRF(external_path_.join(destination, 'pulumi'))
+                    .catch()
+                    .then(() => {
+                    core.info(`Successfully deleted left-over ${external_path_.join(destination, "pulumi")}`);
+                });
                 break;
             }
             default: {
-                yield io.mkdirP(destination);
-                core.debug(`Successfully created ${destination}`);
                 const extractedPath = yield tool_cache.extractTar(downloaded, destination);
                 core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`);
                 const oldPath = external_path_.join(destination, 'pulumi');
@@ -82222,6 +82232,13 @@ function downloadCli(range) {
         }
         const cachedPath = yield tool_cache.cacheDir(external_path_.join(destination, 'bin'), 'pulumi', version);
         core.addPath(cachedPath);
+        // Check that running pulumi now returns a version we expect
+        const versionExec = yield exec_exec(`pulumi`, ['version'], true);
+        const pulumiVersion = versionExec.stdout.trim();
+        core.debug(`Running pulumi verison returned: ${pulumiVersion}`);
+        if (!semver.satisfies(pulumiVersion, version)) {
+            throw new Error('Installed version did not satisfy the resolved version');
+        }
     });
 }
 
