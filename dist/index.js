@@ -17122,7 +17122,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const execa_1 = __importDefault(__nccwpck_require__(5447));
-const state_1 = __nccwpck_require__(4741);
 const errors_1 = __nccwpck_require__(1369);
 /** @internal */
 class CommandResult {
@@ -17144,16 +17143,13 @@ exports.CommandResult = CommandResult;
 const unknownErrCode = -2;
 /** @internal */
 function runPulumiCmd(args, cwd, additionalEnv, onOutput) {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         // all commands should be run in non-interactive mode.
         // this causes commands to fail rather than prompting for input (and thus hanging indefinitely)
         if (!args.includes("--non-interactive")) {
             args.push("--non-interactive");
         }
-        const store = state_1.getStore();
-        const config = (_a = store === null || store === void 0 ? void 0 : store.config) !== null && _a !== void 0 ? _a : {};
-        const env = Object.assign(Object.assign({}, config), additionalEnv);
+        const env = Object.assign({}, additionalEnv);
         try {
             const proc = execa_1.default("pulumi", args, { env, cwd });
             if (onOutput && proc.stdout) {
@@ -17380,7 +17376,6 @@ const upath = __importStar(__nccwpck_require__(8004));
 const cmd_1 = __nccwpck_require__(9586);
 const minimumVersion_1 = __nccwpck_require__(8410);
 const stack_1 = __nccwpck_require__(9010);
-const localState = __importStar(__nccwpck_require__(4741));
 const stackSettings_1 = __nccwpck_require__(5973);
 const SKIP_VERSION_CHECK_VAR = "PULUMI_AUTOMATION_API_SKIP_VERSION_CHECK";
 /**
@@ -17400,8 +17395,6 @@ class LocalWorkspace {
     constructor(opts) {
         let dir = "";
         let envs = {};
-        const store = new localState.LocalStore();
-        localState.asyncLocalStorage.enterWith(store);
         if (opts) {
             const { workDir, pulumiHome, program, envVars, secretsProvider, remote, remoteGitProgramArgs, remotePreRunCommands, remoteEnvVars, remoteSkipInstallDependencies } = opts;
             if (workDir) {
@@ -17775,6 +17768,53 @@ class LocalWorkspace {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.runPulumiCmd(["config", "refresh", "--force", "--stack", stackName]);
             return this.getAllConfig(stackName);
+        });
+    }
+    /**
+     * Returns the value associated with the specified stack name and key,
+     * scoped to the LocalWorkspace.
+     *
+     * @param stackName The stack to read tag metadata from.
+     * @param key The key to use for the tag lookup.
+     */
+    getTag(stackName, key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.runPulumiCmd(["stack", "tag", "get", key, "--stack", stackName]);
+            return result.stdout.trim();
+        });
+    }
+    /**
+     * Sets the specified key-value pair on the provided stack name.
+     *
+     * @param stackName The stack to operate on.
+     * @param key The tag key to set.
+     * @param value The tag value to set.
+     */
+    setTag(stackName, key, value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.runPulumiCmd(["stack", "tag", "set", key, value, "--stack", stackName]);
+        });
+    }
+    /**
+     * Removes the specified key-value pair on the provided stack name.
+     *
+     * @param stackName The stack to operate on.
+     * @param key The tag key to remove.
+     */
+    removeTag(stackName, key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.runPulumiCmd(["stack", "tag", "rm", key, "--stack", stackName]);
+        });
+    }
+    /**
+     * Returns the tag map for the specified tag name, scoped to the current LocalWorkspace.
+     *
+     * @param stackName The stack to read tag metadata from.
+     */
+    listTags(stackName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.runPulumiCmd(["stack", "tag", "ls", "--json", "--stack", stackName]);
+            return JSON.parse(result.stdout);
         });
     }
     /**
@@ -18431,10 +18471,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const errors_1 = __nccwpck_require__(9693);
 const log = __importStar(__nccwpck_require__(642));
-const settings = __importStar(__nccwpck_require__(4530));
-const stack = __importStar(__nccwpck_require__(6664));
 const runtimeConfig = __importStar(__nccwpck_require__(7146));
 const debuggable = __importStar(__nccwpck_require__(257));
+const settings = __importStar(__nccwpck_require__(4530));
+const stack = __importStar(__nccwpck_require__(6664));
+const localState = __importStar(__nccwpck_require__(4741));
 const langproto = __nccwpck_require__(3979);
 const plugproto = __nccwpck_require__(8008);
 // maxRPCMessageSize raises the gRPC Max Message size from `4194304` (4mb) to `419430400` (400mb)
@@ -18444,7 +18485,6 @@ exports.maxRPCMessageSize = 1024 * 1024 * 400;
 class LanguageServer {
     constructor(program) {
         this.program = program;
-        this.running = false;
         // set a bit in runtime settings to indicate that we're running in inline mode.
         // this allows us to detect and fail fast for side by side pulumi scenarios.
         settings.setInline();
@@ -18464,11 +18504,12 @@ class LanguageServer {
         callback(undefined, resp);
     }
     run(call, callback) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            const req = call.request;
-            const resp = new langproto.RunResponse();
-            this.running = true;
+        const req = call.request;
+        const resp = new langproto.RunResponse();
+        // Setup a new async state store for this run
+        const store = new localState.LocalStore();
+        return localState.asyncLocalStorage.run(store, () => __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const errorSet = new Set();
             const uncaughtHandler = newUncaughtHandler(errorSet);
             try {
@@ -18509,7 +18550,7 @@ class LanguageServer {
                 callback(err, undefined);
             }
             callback(undefined, resp);
-        });
+        }));
     }
     getPluginInfo(call, callback) {
         const resp = new plugproto.PluginInfo();
@@ -19129,6 +19170,45 @@ Event: ${line}\n${e.toString()}`);
     refreshConfig() {
         return __awaiter(this, void 0, void 0, function* () {
             return this.workspace.refreshConfig(this.name);
+        });
+    }
+    /**
+     * Returns the tag value associated with specified key.
+     *
+     * @param key The key to use for the tag lookup.
+     */
+    getTag(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.getTag(this.name, key);
+        });
+    }
+    /**
+     * Sets a tag key-value pair on the Stack in the associated Workspace.
+     *
+     * @param key The tag key to set.
+     * @param value The tag value to set.
+     */
+    setTag(key, value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.workspace.setTag(this.name, key, value);
+        });
+    }
+    /**
+     * Removes the specified tag key-value pair from the Stack in the associated Workspace.
+     *
+     * @param key The tag key to remove.
+     */
+    removeTag(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.workspace.removeTag(this.name, key);
+        });
+    }
+    /**
+     * Returns the full tag map associated with the stack in the Workspace.
+     */
+    listTags() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.workspace.listTags(this.name);
         });
     }
     /**
