@@ -1,8 +1,8 @@
+import * as os from 'os';
+import * as path from 'path';
 import * as core from '@actions/core';
 import * as io from '@actions/io';
 import * as tc from '@actions/tool-cache';
-import * as os from 'os';
-import * as path from 'path';
 import * as semver from 'semver';
 import * as exec from './exec';
 import { getVersionObject } from './libs/get-version';
@@ -12,7 +12,7 @@ export async function isAvailable(): Promise<boolean> {
   return res.stderr != '' && !res.success ? false : res.success;
 }
 
-export async function getVersion(): Promise<string | null> {
+export async function getVersion(): Promise<string | undefined> {
   const res = await exec.exec('pulumi', ['version'], true);
 
   // Only check for success and if the [stdout] starts with the version
@@ -23,7 +23,7 @@ export async function getVersion(): Promise<string | null> {
     // Return version without 'v' prefix
     return res.stdout.substring(1); 
   else
-    return null;
+    return undefined;
 }
 
 export async function run(...args: string[]): Promise<void> {
