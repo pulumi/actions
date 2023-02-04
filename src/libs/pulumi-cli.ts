@@ -64,7 +64,7 @@ export async function downloadCli(range: string): Promise<void> {
     // Check if runner version matches
     if (semver.satisfies(runnerVersion, range)) {
       // If runner version matches, skip downloading CLI by exiting the function
-      core.info(`Pulumi version ${runnerVersion} is already installed on this machine. Skipping downloading.`);
+      core.info(`Pulumi version ${runnerVersion} is already installed on this machine. Skipping download`);
       return;
     } else {
       core.info(`Pulumi ${runnerVersion} does not satisfy the desired version ${range}. Proceeding to download`);
