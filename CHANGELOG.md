@@ -7,7 +7,10 @@
   ([#803](https://github.com/pulumi/actions/issues/803))
 
 - bug: Fix installation on Windows.
-([#851](https://github.com/pulumi/actions/pull/851))
+  ([#851](https://github.com/pulumi/actions/pull/851))
+
+- fix: strip ansi control characters from pull request comment
+  ([#859](https://github.com/pulumi/actions/pull/859))
 
 ## 4.0.0 (2023-19-01)
 
