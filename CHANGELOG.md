@@ -7,7 +7,11 @@
   ([#803](https://github.com/pulumi/actions/issues/803))
 
 - bug: Fix installation on Windows.
-([#851](https://github.com/pulumi/actions/pull/851))
+  ([#851](https://github.com/pulumi/actions/pull/851))
+
+- feat: Add support for skipping downloading the Pulumi CLI if it is already
+  installed on the runner being used and the runner CLI version is suitable.
+  ([#789](https://github.com/pulumi/actions/issues/789))
 
 ## 4.0.0 (2023-19-01)
 
@@ -16,9 +20,6 @@
 ## 3.21.0 (2023-19-01)
 
 - feat: Add deletion of stack after destroy (remove flag)
-- feat: Add support for skipping downloading the Pulumi CLI if it is already
-  installed on the runner being used and the runner CLI version is suitable.
-  ([#789](https://github.com/pulumi/actions/issues/789))
 
 ## 3.20.0 (2022-11-10)
 
