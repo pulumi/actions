@@ -822,10 +822,10 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.7.0.tgz#af80a1ef7cf110ea3a68242acd95648991bcd763"
   integrity sha512-FGBx/Qd09lMaqQcogCHyYrFEpTx4cAjeS+48lMIR12z7LdH+zofGDVQSubN59nL6IpubfKqTeIDu9rNO28iHVA==
 
-"@pulumi/pulumi@3.53.1":
-  version "3.53.1"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.53.1.tgz#4fca3e17ad677c1fd1f537f17863614e4c43663e"
-  integrity sha512-v6kqxEXN8K7gWT4V2/Z57YfxSpPeohoSG1S43KHHMwCym5lDvv3E0U1CYbdkkxKFbMW11bzxydy6Ti9oJ6xE0Q==
+"@pulumi/pulumi@3.54.0":
+  version "3.54.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.54.0.tgz#de3abdb09912857f2e4ef30684e23c105ce8320e"
+  integrity sha512-7c56BCsepB9gIN1jOpBHCQyx/aSyURmuW6fV9y6aw1IspgJqBylvLCfE+5tA0i6UedaAvf8xV4R58ckgbFM5Vg==
   dependencies:
     "@grpc/grpc-js" "~1.3.8"
     "@logdna/tail-file" "^2.0.6"
