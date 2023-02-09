@@ -23,7 +23,7 @@ export async function handlePullRequestMessage(
   const rawBody = output.substring(0, 64_000);
 
   // Make sure the output isn't empty. If it's not, get the last 100 lines.
-  const last100Lines = output.length >= 0 ? output.slice(-100) : '';
+  const last100Lines = output.length > 0 ? output.slice(-100) : '';
 
   const diffUpdates = last100Lines.match(/\~[0-9]+ to update/);
   const diffCreations = last100Lines.match(/\+[0-9]+ to create/);
