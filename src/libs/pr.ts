@@ -25,7 +25,7 @@ export async function handlePullRequestMessage(
   // Make sure the output isn't empty. If it's not, get the last 100 lines.
   const last100Lines = output.length >= 0 ? output.slice(-100) : '';
 
-  const diffChanges = last100Lines.match(/\~[0-9]+ to update/);
+  const diffUpdates = last100Lines.match(/\~[0-9]+ to update/);
   const diffCreations = last100Lines.match(/\+[0-9]+ to create/);
   const diffDeletions = last100Lines.match(/\-[0-9]+ to delete/);
   const diffUnchanged = last100Lines.match(/[0-9]+ unchanged/);
@@ -38,7 +38,7 @@ export async function handlePullRequestMessage(
   // If certain diffs are absent, they're set to 0 to make output consistent
   const diffSummary = searchPattern.test(last100Lines)
     ? `:red_circle: ${diffDeletions ?? '-0 to delete'},
-       :yellow_circle: ${diffChanges ?? '~0 to update'},
+       :yellow_circle: ${diffUpdates ?? '~0 to update'},
        :green_circle: ${diffCreations ?? '+0 to create'},
        :white_circle: ${diffUnchanged ?? '0 unchanged'}
       `
