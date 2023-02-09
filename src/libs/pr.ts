@@ -32,7 +32,7 @@ export async function handlePullRequestMessage(
 
   // Regex to match the diff summary
   const searchPattern =
-    /(~|\+|-)?[0-9]+ (to)? (update|create|delete|unchanged)/;
+    /(~|\+|-)?[0-9]+( to)? (update|create|delete|unchanged)/;
 
   // Generate a summary with the changes, if any. If there's none, return an empty string.
   // If certain diffs are absent, they're set to 0 to make output consistent
