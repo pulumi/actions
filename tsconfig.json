@@ -4,6 +4,7 @@
     "target": "es2015",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "allowJs": false,
     "importHelpers": true,
     "alwaysStrict": true,
