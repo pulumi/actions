@@ -98,6 +98,7 @@ const runAction = async (config: Config): Promise<void> => {
       onOutput(stderr);
       return stdout;
     },
+    outputs: () => new Promise(() => '') //do nothing, outputs are fetched anyway afterwards
   };
 
   core.debug(`Running action ${config.command}`);
