@@ -9,6 +9,7 @@ export const command = rt.Union(
   rt.Literal('refresh'),
   rt.Literal('destroy'),
   rt.Literal('preview'),
+  rt.Literal('outputs'),
 );
 
 export type Commands = rt.Static<typeof command>;
