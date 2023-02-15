@@ -76,6 +76,7 @@ const main = async () => {
       onOutput(stderr);
       return stdout;
     },
+    outputs: () => new Promise(() => '') //do nothing, outputs are fetched anyway afterwards
   };
 
   core.debug(`Running action ${config.command}`);
