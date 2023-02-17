@@ -76,7 +76,7 @@ const main = async () => {
       onOutput(stderr);
       return stdout;
     },
-    outputs: () => new Promise(() => '') //do nothing, outputs are fetched anyway afterwards
+    output: () => new Promise(() => '') //do nothing, outputs are fetched anyway afterwards
   };
 
   core.debug(`Running action ${config.command}`);
@@ -89,6 +89,7 @@ const main = async () => {
 
   for (const [outKey, outExport] of Object.entries(outputs)) {
     core.setOutput(outKey, outExport.value);
+    onOutput(outKey + ' found');
     if (outExport.secret) {
       core.setSecret(outExport.value);
     }
