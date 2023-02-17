@@ -55,6 +55,9 @@
 - feat: Add support for output command.
 ([#868](https://github.com/pulumi/actions/issues/868))
 
+- feat: Add support for output command.
+([#868](https://github.com/pulumi/actions/issues/868))
+
 ## 4.0.0 (2023-19-01)
 
 - feat: Update Action runtime to NodeJS 16
