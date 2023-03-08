@@ -56,6 +56,22 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
+      - name: Remove pre-installed Pulumi
+        shell: bash
+        env:
+          RUNNER_OS: ${{ matrix.os }}
+        run: |
+          EXT=""
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            EXT=".exe"
+          fi
+
+          if command -v "pulumi${EXT}"; then
+            PULUMI_INSTALL_DIR=$(dirname "$(command -v "pulumi${EXT}")")
+            echo "Deleting Pulumi"
+            rm -v "$PULUMI_INSTALL_DIR"/pulumi*
+          fi
+
       - uses: actions/checkout@v3
 
       - name: Download dist artifact
@@ -90,6 +106,22 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
+      - name: Remove pre-installed Pulumi
+        shell: bash
+        env:
+          RUNNER_OS: ${{ matrix.os }}
+        run: |
+          EXT=""
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            EXT=".exe"
+          fi
+
+          if command -v "pulumi${EXT}"; then
+            PULUMI_INSTALL_DIR=$(dirname "$(command -v "pulumi${EXT}")")
+            echo "Deleting Pulumi"
+            rm -v "$PULUMI_INSTALL_DIR"/pulumi*
+          fi
+
       - uses: actions/checkout@v3
 
       - name: Download dist artifact
@@ -124,6 +156,22 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
+      - name: Remove pre-installed Pulumi
+        shell: bash
+        env:
+          RUNNER_OS: ${{ matrix.os }}
+        run: |
+          EXT=""
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            EXT=".exe"
+          fi
+
+          if command -v "pulumi${EXT}"; then
+            PULUMI_INSTALL_DIR=$(dirname "$(command -v "pulumi${EXT}")")
+            echo "Deleting Pulumi"
+            rm -v "$PULUMI_INSTALL_DIR"/pulumi*
+          fi
+
       - uses: actions/checkout@v3
 
       - name: Download dist artifact
@@ -174,6 +222,22 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
+      - name: Remove pre-installed Pulumi
+        shell: bash
+        env:
+          RUNNER_OS: ${{ matrix.os }}
+        run: |
+          EXT=""
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            EXT=".exe"
+          fi
+
+          if command -v "pulumi${EXT}"; then
+            PULUMI_INSTALL_DIR=$(dirname "$(command -v "pulumi${EXT}")")
+            echo "Deleting Pulumi"
+            rm -v "$PULUMI_INSTALL_DIR"/pulumi*
+          fi
+
       - uses: actions/checkout@v3
 
       - name: Download dist artifact
@@ -234,6 +298,22 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
+      - name: Remove pre-installed Pulumi
+        shell: bash
+        env:
+          RUNNER_OS: ${{ matrix.os }}
+        run: |
+          EXT=""
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            EXT=".exe"
+          fi
+
+          if command -v "pulumi${EXT}"; then
+            PULUMI_INSTALL_DIR=$(dirname "$(command -v "pulumi${EXT}")")
+            echo "Deleting Pulumi"
+            rm -v "$PULUMI_INSTALL_DIR"/pulumi*
+          fi
+
       - uses: actions/checkout@v3
 
       - name: Download dist artifact
