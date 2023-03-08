@@ -34,13 +34,14 @@ This will check out the existing directory and run `pulumi preview`.
 
 The action can be configured with the following arguments:
 
-- `command` (required) - The command to run as part of the action. Accepted
-  values are `up` (alias: update), `refresh`, `destroy`, `install`, and
-  `preview`.
+- `command` (optional) - The command to run as part of the action. Accepted
+  values are `up` (alias: update), `refresh`, `destroy`, and `preview`. If
+  unspecified, the action will stop after installing Pulumi.
 
-- `stack-name` (required) - The name of the stack that Pulumi will be operating
+- `stack-name` (optional) - The name of the stack that Pulumi will be operating
   on. Use the fully quaified org-name/stack-name when operating on a stack
-  outside of your individual account.
+  outside of your individual account. This field is required if a `command` was
+  specified.
 
 - `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`.
 
@@ -127,10 +128,14 @@ the `cloud-url` argument.
 
 ### Installation Only
 
-Unlike the other possible commands, the `install` command does not directly
-correspond to a CLI subcommand of the `pulumi` binary. Instead, workflow steps
-that provide `command: install` will install the Pulumi CLI and exit without
-performing any other operations.
+If you want to only install the Pulumi CLI, omit the `command` field of the
+action.
+
+```yaml
+- uses: pulumi/actions@v4
+```
+
+This will install Pulumi and exit without performing any other operations.
 
 ### Stack Outputs
 

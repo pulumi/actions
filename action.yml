@@ -7,10 +7,10 @@ branding:
 inputs:
   command:
     description: 'Pulumi command to run, eg. up'
-    required: true
+    required: false
   stack-name:
     description: 'Which stack you want to apply to, eg. dev'
-    required: true
+    required: false
   work-dir:
     description: 'Location of your Pulumi files. Defaults to ./'
     required: false
