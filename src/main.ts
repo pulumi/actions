@@ -4,7 +4,7 @@ import {
   ConfigMap,
   LocalProgramArgs,
   LocalWorkspace,
-  LocalWorkspaceOptions
+  LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
 import invariant from 'ts-invariant';
 import YAML from 'yaml';
@@ -15,25 +15,19 @@ import * as pulumiCli from './libs/pulumi-cli';
 import { login } from './login';
 
 const main = async () => {
-  try {
-    const downloadConfig = await makeInstallationConfig();
-    installOnly(downloadConfig);
-    core.info("Pulumi has been successfully installed. Exiting.")
-  } catch(error) {
-    // This could be one of two error types:
-    // 1. Validation failed, which is a recoverable error.
-    // 2. Installation failed, which is unrecoverable.
-    // We check the error type to see whether to procede or bail.
-    if(error?.name === "ValidationError") {
-      const config = await makeConfig();
-      core.debug('Configuration is loaded');
-      runAction(config);
-    } else {
-      throw(error);
-    }
+  const downloadConfig = makeInstallationConfig();
+  if (downloadConfig.success) {
+    await installOnly(downloadConfig.value);
+    core.info("Pulumi has been successfully installed. Exiting.");
+    return;
   }
-};
 
+  // If we get here, we're not in install-only mode.
+  // Attempt to parse the full configuration and run the action.
+  const config = await makeConfig();
+  core.debug('Configuration is loaded');
+  runAction(config);
+};
 
 // installOnly is the main entrypoint of the program when the user
 // intends to install the Pulumi CLI without running additional commands.
@@ -127,10 +121,10 @@ const runAction = async (config: Config): Promise<void> => {
   }
 
   if (config.remove && config.command === 'destroy') {
-    stack.workspace.removeStack(stack.name)
+    stack.workspace.removeStack(stack.name);
   }
 
-  core.endGroup();  
+  core.endGroup();
 };
 
 (async () => {

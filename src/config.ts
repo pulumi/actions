@@ -24,8 +24,8 @@ export const installationConfig = rt.Record({
 
 export type InstallationConfig = rt.Static<typeof installationConfig>;
 
-export async function makeInstallationConfig(): Promise<InstallationConfig> {
-  return installationConfig.check({
+export function makeInstallationConfig(): rt.Result<InstallationConfig> {
+  return installationConfig.validate({
     command: getInput('command') || undefined,
     pulumiVersion: getInput('pulumi-version') || "^3",
   });
