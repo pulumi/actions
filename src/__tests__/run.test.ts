@@ -5,7 +5,7 @@ const spy = jest.spyOn(pulumiCli, 'run');
 
 const installConfig: Record<string, string> = {
   command: undefined,
-  pulumiVersion: "^4",
+  "pulumi-version": "^2", // test with a non-default value
 };
 
 describe('Config without a provided command', () => {
@@ -45,8 +45,12 @@ describe('Config without a provided command', () => {
       info: jest.fn(),
     }));
     const { makeInstallationConfig } = require('../config');
-    const conf = await makeInstallationConfig()
-    expect(conf).toBeTruthy();
+    const conf = makeInstallationConfig()
+    expect(conf.success).toBeTruthy();
+    expect(conf.value).toEqual({
+      command: undefined,
+      pulumiVersion: "^2",
+    });
   });
 });
 
