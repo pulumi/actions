@@ -2,12 +2,16 @@
 
 ## HEAD (Unreleased)
 
+- feat: Support install-only mode similar to
+  [setup-pulumi](https://github.com/marketplace/actions/setup-pulumi)
+  ([#834](https://github.com/pulumi/actions/pull/834))
+
 - fix: allow `comment-on-pr-number` to be used for `${{ github.event }}` types
   other than `pull_request`
   ([#803](https://github.com/pulumi/actions/issues/803))
 
 - bug: Fix installation on Windows.
-([#851](https://github.com/pulumi/actions/pull/851))
+  ([#851](https://github.com/pulumi/actions/pull/851))
 
 ## 4.0.0 (2023-19-01)
 
@@ -16,10 +20,6 @@
 ## 3.21.0 (2023-19-01)
 
 - feat: Add deletion of stack after destroy (remove flag)
-- feat: Add support for an `install` command, similar to
-  [setup-pulumi](https://github.com/marketplace/actions/setup-pulumi)
-
---
 
 ## 3.20.0 (2022-11-10)
 
