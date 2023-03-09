@@ -2,6 +2,12 @@
 
 ## HEAD (Unreleased)
 
+**(none)**
+
+--
+
+## 4.1.0 (2023-03-08)
+
 - feat: Support install-only mode similar to
   [setup-pulumi](https://github.com/marketplace/actions/setup-pulumi)
   ([#834](https://github.com/pulumi/actions/pull/834))
@@ -10,7 +16,7 @@
   other than `pull_request`
   ([#803](https://github.com/pulumi/actions/issues/803))
 
-- bug: Fix installation on Windows.
+- fix: Fix installation on Windows.
   ([#851](https://github.com/pulumi/actions/pull/851))
 
 ## 4.0.0 (2023-19-01)
