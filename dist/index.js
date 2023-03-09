@@ -82022,7 +82022,21 @@ function parseNumber(input) {
 
 
 
-const command = lib.Union(lib.Literal('up'), lib.Literal('update'), lib.Literal('refresh'), lib.Literal('destroy'), lib.Literal('preview'));
+const command = lib.Union(lib.Literal('destroy'), lib.Literal('preview'), lib.Literal('refresh'), lib.Literal('up'), lib.Literal('update'));
+// installationConfig is the expected Action inputs when
+// the user intends to download the Pulumi CLI without
+// running any other Pulumi operations.
+// We expect command NOT to be provided.
+const installationConfig = lib.Record({
+    command: lib.Undefined,
+    pulumiVersion: lib.String,
+});
+function makeInstallationConfig() {
+    return installationConfig.validate({
+        command: (0,core.getInput)('command') || undefined,
+        pulumiVersion: (0,core.getInput)('pulumi-version') || "^3",
+    });
+}
 const options = lib.Partial({
     parallel: lib.Number,
     message: lib.String,
@@ -82351,8 +82365,24 @@ const login = (cloudUrl, accessToken) => modules_awaiter(void 0, void 0, void 0,
 
 
 const main = () => modules_awaiter(void 0, void 0, void 0, function* () {
+    const downloadConfig = makeInstallationConfig();
+    if (downloadConfig.success) {
+        yield installOnly(downloadConfig.value);
+        core.info("Pulumi has been successfully installed. Exiting.");
+        return;
+    }
+    // If we get here, we're not in install-only mode.
+    // Attempt to parse the full configuration and run the action.
     const config = yield makeConfig();
     core.debug('Configuration is loaded');
+    runAction(config);
+});
+// installOnly is the main entrypoint of the program when the user
+// intends to install the Pulumi CLI without running additional commands.
+const installOnly = (config) => modules_awaiter(void 0, void 0, void 0, function* () {
+    yield downloadCli(config.pulumiVersion);
+});
+const runAction = (config) => modules_awaiter(void 0, void 0, void 0, function* () {
     yield downloadCli(config.options.pulumiVersion);
     yield login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
