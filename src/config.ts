@@ -4,14 +4,32 @@ import * as rt from 'runtypes';
 import { parseArray, parseBoolean, parseNumber } from './libs/utils';
 
 export const command = rt.Union(
-  rt.Literal('up'),
-  rt.Literal('update'),
-  rt.Literal('refresh'),
   rt.Literal('destroy'),
   rt.Literal('preview'),
+  rt.Literal('refresh'),
+  rt.Literal('up'),
+  rt.Literal('update'),
 );
 
 export type Commands = rt.Static<typeof command>;
+
+// installationConfig is the expected Action inputs when
+// the user intends to download the Pulumi CLI without
+// running any other Pulumi operations.
+// We expect command NOT to be provided.
+export const installationConfig = rt.Record({
+  command: rt.Undefined,
+  pulumiVersion: rt.String,
+});
+
+export type InstallationConfig = rt.Static<typeof installationConfig>;
+
+export function makeInstallationConfig(): rt.Result<InstallationConfig> {
+  return installationConfig.validate({
+    command: getInput('command') || undefined,
+    pulumiVersion: getInput('pulumi-version') || "^3",
+  });
+}
 
 export const options = rt.Partial({
   parallel: rt.Number,
