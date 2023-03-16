@@ -23218,8 +23218,8 @@ class LocalWorkspace {
      */
     whoAmI() {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.runPulumiCmd(["whoami"]);
-            return { user: result.stdout.trim() };
+            const result = yield this.runPulumiCmd(["whoami", "--json"]);
+            return JSON.parse(result.stdout);
         });
     }
     /**
