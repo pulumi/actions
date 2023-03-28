@@ -1,3 +1,4 @@
+import * as core from "@actions/core";
 import got from 'got';
 import * as rt from 'runtypes';
 import { maxSatisfying } from 'semver';
@@ -33,12 +34,11 @@ export async function getVersionObject(range: string): Promise<Version> {
     return latest;
   }
 
-  const resp = maxSatisfying(
-    versions.map((v) => v.version),
-    range,
-  );
+  const availableVersions = versions.map((v) => v.version);
+  const resp = maxSatisfying(availableVersions, range);
 
   if (resp === null) {
+    core.debug(`Expecting a version to satisfy the range ${range}, but one was not found. Available versions are: ${availableVersions}`);
     throw new Error(
       'Could not find a version that satisfied the version range',
     );
@@ -48,7 +48,7 @@ export async function getVersionObject(range: string): Promise<Version> {
 
   if (!ver) {
     throw new Error(
-      'Could not find a version that satisfied the version range',
+      `Despite previously having identified ${resp} as satisfying the Semver range ${range}, we're unable to recover that version from the original list.`,
     );
   }
 
