@@ -22734,7 +22734,7 @@ __export(__nccwpck_require__(8106));
 
 "use strict";
 
-// Copyright 2016-2022, Pulumi Corporation.
+// Copyright 2016-2023, Pulumi Corporation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23218,8 +23218,20 @@ class LocalWorkspace {
      */
     whoAmI() {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.runPulumiCmd(["whoami", "--json"]);
-            return JSON.parse(result.stdout);
+            let ver = this._pulumiVersion;
+            if (ver === undefined) {
+                // Assume an old version. Doesn't really matter what this is as long as it's pre-3.58.
+                ver = semver.parse("3.0.0");
+            }
+            // 3.58 added the --json flag (https://github.com/pulumi/pulumi/releases/tag/v3.58.0)
+            if (ver.compare("3.58.0") >= 0) {
+                const result = yield this.runPulumiCmd(["whoami", "--json"]);
+                return JSON.parse(result.stdout);
+            }
+            else {
+                const result = yield this.runPulumiCmd(["whoami"]);
+                return { user: result.stdout.trim() };
+            }
         });
     }
     /**
