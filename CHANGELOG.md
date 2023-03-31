@@ -6,6 +6,11 @@
 
 --
 
+## 4.1.1 (2023-03-31)
+
+- fix: Improve error messages around failed Semver resolution.
+  ([#898](https://github.com/pulumi/actions/pull/898))
+
 ## 4.1.0 (2023-03-08)
 
 - feat: Support install-only mode similar to
