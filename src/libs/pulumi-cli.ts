@@ -1,8 +1,8 @@
+import * as os from 'os';
+import * as path from 'path';
 import * as core from '@actions/core';
 import * as io from '@actions/io';
 import * as tc from '@actions/tool-cache';
-import * as os from 'os';
-import * as path from 'path';
 import * as semver from 'semver';
 import * as exec from './exec';
 import { getVersionObject } from './libs/get-version';
