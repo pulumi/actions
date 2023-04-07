@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- chore: add dist files to gitignore and forcebly commit them instead
 
 --
 
