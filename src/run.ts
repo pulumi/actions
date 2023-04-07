@@ -10,12 +10,12 @@ import type { Stack }from "@pulumi/pulumi/automation";
 import invariant from 'ts-invariant';
 import YAML from 'yaml';
 import { Commands, Config, } from './config';
-import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
 import { login } from './login';
 
-const runAction = async (config: Config): Promise<void> => {
+export const runAction = async (config: Config): Promise<void> => {
+  const { environmentVariables } = require('./libs/envs');
   await pulumiCli.downloadCli(config.options.pulumiVersion);
   await login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
 
@@ -116,4 +116,4 @@ async function previewAction(args: PreviewActionArgs): Promise<string> {
   return stdout;
 }
 
-export { runAction }
+export default { runAction, previewAction }
