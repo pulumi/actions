@@ -49,7 +49,6 @@ describe('config.ts', () => {
           "parallel": undefined,
           "policyPackConfigs": Array [],
           "policyPacks": Array [],
-          "pulumiVersion": "^3",
           "replace": Array [],
           "target": Array [],
           "targetDependents": false,

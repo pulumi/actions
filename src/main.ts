@@ -41,7 +41,7 @@ const installOnly = async (config: InstallationConfig): Promise<void> => {
 };
 
 const runAction = async (config: Config): Promise<void> => {
-  await pulumiCli.downloadCli(config.options.pulumiVersion);
+  await pulumiCli.downloadCli(config.pulumiVersion);
   await login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
 
   const workDir = resolve(
