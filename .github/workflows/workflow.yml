@@ -37,7 +37,9 @@ jobs:
               - .github/test-stacks/**
 
       - name: Upload artifacts
-        if: steps.changes.outputs.dist == 'true'
+        if:
+          steps.changes.outputs.dist == 'true' || github.event_name ==
+          'workflow_dispatch'
         uses: actions/upload-artifact@v3
         with:
           name: dist
@@ -48,7 +50,9 @@ jobs:
 
   test-install-only:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
+    if:
+      ${{ needs.install-and-build.outputs.changed == 'true' || github.event_name
+      == 'workflow_dispatch' }}
     runs-on: ${{ matrix.os }}
     name: Install-only on ${{ matrix.os }}
     strategy:
@@ -85,13 +89,15 @@ jobs:
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
         with:
-          config-map: "{name: {value: my-pet, secret: false}}"
+          config-map: '{name: {value: my-pet, secret: false}}'
 
       - run: pulumi version
 
   test-dotnet-stack:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
+    if:
+      ${{ needs.install-and-build.outputs.changed == 'true' || github.event_name
+      == 'workflow_dispatch' }}
     runs-on: ${{ matrix.os }}
     name: Dotnet ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -137,11 +143,13 @@ jobs:
           upsert: true
           stack-name: dev
           work-dir: .github/test-stacks/dotnet
-          config-map: "{name: {value: my-pet, secret: false}}"
+          config-map: '{name: {value: my-pet, secret: false}}'
 
   test-golang-stack:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
+    if:
+      ${{ needs.install-and-build.outputs.changed == 'true' || github.event_name
+      == 'workflow_dispatch' }}
     runs-on: ${{ matrix.os }}
     name: Golang ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -187,11 +195,13 @@ jobs:
           stack-name: dev
           upsert: true
           work-dir: .github/test-stacks/golang
-          config-map: "{name: {value: my-user-name, secret: false}}"
+          config-map: '{name: {value: my-user-name, secret: false}}'
 
   test-nodejs-stack:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
+    if:
+      ${{ needs.install-and-build.outputs.changed == 'true' || github.event_name
+      == 'workflow_dispatch' }}
     runs-on: ${{ matrix.os }}
     name: NodeJS ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -253,11 +263,13 @@ jobs:
           stack-name: dev
           upsert: true
           work-dir: .github/test-stacks/nodejs
-          config-map: "{name: {value: hostname, secret: false}}"
+          config-map: '{name: {value: hostname, secret: false}}'
 
   test-python-stack:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
+    if:
+      ${{ needs.install-and-build.outputs.changed == 'true' || github.event_name
+      == 'workflow_dispatch' }}
     runs-on: ${{ matrix.os }}
     name: Python ${{ matrix.command }} on ${{ matrix.os }}
     strategy:
@@ -330,11 +342,13 @@ jobs:
           stack-name: dev
           upsert: true
           work-dir: .github/test-stacks/python
-          config-map: "{name: {value: hostname, secret: false}}"
+          config-map: '{name: {value: hostname, secret: false}}'
 
   test-generic-inputs:
     needs: install-and-build
-    if: ${{ needs.install-and-build.outputs.changed == 'true' }}
+    if:
+      ${{ needs.install-and-build.outputs.changed == 'true' || github.event_name
+      == 'workflow_dispatch' }}
     runs-on: ${{ matrix.os }}
     name: Inputs on ${{ matrix.os }}
     strategy:
@@ -396,4 +410,4 @@ jobs:
           work-dir: .github/test-stacks/nodejs
           upsert: true
           refresh: true
-          config-map: "{name: {value: hostname, secret: false}}"
+          config-map: '{name: {value: hostname, secret: false}}'
