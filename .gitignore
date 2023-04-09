@@ -31,3 +31,5 @@ build/
 # .NET
 **/obj
 **/bin
+
+dist/

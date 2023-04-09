@@ -7,10 +7,14 @@ branding:
 inputs:
   command:
     description: 'Pulumi command to run, eg. up'
-    required: true
+    required: false
   stack-name:
     description: 'Which stack you want to apply to, eg. dev'
-    required: true
+    required: false
+  pulumi-version:
+    description: 'Install a specific version of the Pulumi CLI'
+    required: false
+    default: '^3'
   work-dir:
     description: 'Location of your Pulumi files. Defaults to ./'
     required: false
@@ -22,7 +26,6 @@ inputs:
   comment-on-pr-number:
     description: 'Overrides the PR used to comment on'
     required: false
-    default: '0'
   github-token:
     description: 'Github Token'
     required: false
@@ -30,29 +33,26 @@ inputs:
   cloud-url:
     description: 'A cloud URL to log in to'
     required: false
-    default: ''
   secrets-provider:
     description: 'The type of the provider that should be used to encrypt and decrypt secrets. Possible choices: default, passphrase, awskms, azurekeyvault, gcpkms, hashivault'
     required: false
-    default: ''
   parallel:
     description: 'Allow P resource operations to run in parallel at once (1 for no parallelism). Defaults to unbounded.'
     required: false
-    default: '2147483647'
   message:
     description: 'Optional message to associate with the update operation'
     required: false
-    default: ''
   config-map:
     description: 'Config to use during the operations'
     required: false
-    default: ''
   expect-no-changes:
     description: 'Return an error if any changes occur during this update'
     required: false
+    default: 'false'
   diff:
     description: 'Display operation as a rich diff showing the overall change'
     required: false
+    default: 'false'
   replace:
     description: 'Specify resources to replace. Multiple resources can be specified one per line'
     required: false
@@ -85,10 +85,6 @@ inputs:
     description: 'Edit previous PR comment instead of posting new one'
     required: false
     default: 'true'
-  pulumi-version:
-    description: 'Install a specific version of the Pulumi CLI'
-    required: false
-    default: '^3'
   color:
     description: 'Colorize output. Choices are: always, never, raw, auto'
     required: false

@@ -2,16 +2,31 @@
 
 ## HEAD (Unreleased)
 
+- chore: add dist files to gitignore and forcebly commit them instead
+- refactor: Improve config
+- feat: Add support for skipping downloading the Pulumi CLI if it is already
+  installed on the runner being used and the runner CLI version is suitable.
+  ([#789](https://github.com/pulumi/actions/issues/789))
+
+--
+
+## 4.1.1 (2023-03-31)
+
+- fix: Improve error messages around failed Semver resolution.
+  ([#898](https://github.com/pulumi/actions/pull/898))
+
+## 4.1.0 (2023-03-08)
+
+- feat: Support install-only mode similar to
+  [setup-pulumi](https://github.com/marketplace/actions/setup-pulumi)
+  ([#834](https://github.com/pulumi/actions/pull/834))
+
 - fix: allow `comment-on-pr-number` to be used for `${{ github.event }}` types
   other than `pull_request`
   ([#803](https://github.com/pulumi/actions/issues/803))
 
-- bug: Fix installation on Windows.
+- fix: Fix installation on Windows.
   ([#851](https://github.com/pulumi/actions/pull/851))
-
-- feat: Add support for skipping downloading the Pulumi CLI if it is already
-  installed on the runner being used and the runner CLI version is suitable.
-  ([#789](https://github.com/pulumi/actions/issues/789))
 
 ## 4.0.0 (2023-19-01)
 

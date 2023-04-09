@@ -1,89 +1,82 @@
-import { getInput } from '@actions/core';
-import { context } from '@actions/github';
+import {
+  getBooleanInput,
+  getInput,
+  getMultilineInput,
+  getNumberInput,
+  getUnionInput,
+  getYAMLInput,
+} from 'actions-parsers';
 import * as rt from 'runtypes';
-import { parseArray, parseBoolean, parseNumber } from './libs/utils';
+import { parseSemicolorToArray } from './libs/utils';
 
-export const command = rt.Union(
-  rt.Literal('up'),
-  rt.Literal('update'),
-  rt.Literal('refresh'),
-  rt.Literal('destroy'),
-  rt.Literal('preview'),
-);
-
-export type Commands = rt.Static<typeof command>;
-
-export const options = rt.Partial({
-  parallel: rt.Number,
-  message: rt.String,
-  expectNoChanges: rt.Boolean,
-  diff: rt.Boolean,
-  replace: rt.Array(rt.String),
-  target: rt.Array(rt.String),
-  policyPacks: rt.Array(rt.String),
-  policyPackConfigs: rt.Array(rt.String),
-  targetDependents: rt.Boolean,
-  editCommentOnPr: rt.Boolean,
-  userAgent: rt.Literal('pulumi/actions@v4'),
+// installationConfig is the expected Action inputs when
+// the user intends to download the Pulumi CLI without
+// running any other Pulumi operations.
+// We expect command NOT to be provided.
+export const installationConfig = rt.Record({
+  command: rt.Undefined,
   pulumiVersion: rt.String,
 });
 
-export const config = rt
-  .Record({
-    // Required options
-    command: command,
-    stackName: rt.String,
-    workDir: rt.String,
-    commentOnPr: rt.Boolean,
-    options: options,
-    // Information inferred from the environment that must be present
-    isPullRequest: rt.Boolean,
-  })
-  .And(
-    rt.Partial({
-      // Optional options
-      cloudUrl: rt.String,
-      configMap: rt.String,
-      githubToken: rt.String,
-      upsert: rt.Boolean,
-      remove: rt.Boolean,
-      refresh: rt.Boolean,
-      secretsProvider: rt.String,
-      commentOnPrNumber: rt.Number,
+export type InstallationConfig = rt.Static<typeof installationConfig>;
+
+export function makeInstallationConfig(): rt.Result<InstallationConfig> {
+  return installationConfig.validate({
+    command: getInput('command') || undefined,
+    pulumiVersion: getInput('pulumi-version') || '^3',
+  });
+}
+
+const configValueRt = rt.Dictionary(
+  rt.Record({
+    value: rt.String,
+    secret: rt.Boolean.optional(),
+  }),
+  rt.String,
+);
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function makeConfig() {
+  return {
+    command: getUnionInput('command', {
+      required: true,
+      alternatives: ['up', 'update', 'refresh', 'destroy', 'preview'] as const,
     }),
-  );
-
-export type Config = rt.Static<typeof config>;
-
-export async function makeConfig(): Promise<Config> {
-  return config.check({
-    command: getInput('command', { required: true }),
     stackName: getInput('stack-name', { required: true }),
-    workDir: getInput('work-dir') || './',
+    pulumiVersion: getInput('pulumi-version', { required: true }),
+    workDir: getInput('work-dir', { required: true }),
     secretsProvider: getInput('secrets-provider'),
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
-    commentOnPr: parseBoolean(getInput('comment-on-pr')),
-    commentOnPrNumber: parseNumber(getInput('comment-on-pr-number')),
-    upsert: parseBoolean(getInput('upsert')),
-    remove: parseBoolean(getInput('remove')),
-    refresh: parseBoolean(getInput('refresh')),
-    configMap: getInput('config-map'),
-    isPullRequest: context?.payload?.pull_request !== undefined,
+    commentOnPr: getBooleanInput('comment-on-pr'),
+    commentOnPrNumber: getNumberInput('comment-on-pr-number', {}),
+    upsert: getBooleanInput('upsert'),
+    remove: getBooleanInput('remove'),
+    refresh: getBooleanInput('refresh'),
+    configMap: getYAMLInput('config-map', {
+      parser: (configMap) => configValueRt.check(configMap),
+    }),
+    editCommentOnPr: getBooleanInput('edit-pr-comment'),
+
     options: {
-      parallel: parseNumber(getInput('parallel')),
+      parallel: getNumberInput('parallel', {}),
       message: getInput('message'),
-      expectNoChanges: parseBoolean(getInput('expect-no-changes')),
-      diff: parseBoolean(getInput('diff')),
-      replace: parseArray(getInput('replace')),
-      target: parseArray(getInput('target')),
-      targetDependents: parseBoolean(getInput('target-dependents')),
-      policyPacks: parseArray(getInput('policyPacks')),
-      policyPackConfigs: parseArray(getInput('policyPackConfigs')),
-      editCommentOnPr: parseBoolean(getInput('edit-pr-comment')),
-      userAgent: 'pulumi/actions@v4',
-      pulumiVersion: getInput('pulumi-version') || "^3",
-      color: getInput('color'),
+      expectNoChanges: getBooleanInput('expect-no-changes'),
+      diff: getBooleanInput('diff'),
+      replace: parseSemicolorToArray(getMultilineInput('replace')),
+      target: parseSemicolorToArray(getMultilineInput('target')),
+      targetDependents: getBooleanInput('target-dependents'),
+      policyPacks: parseSemicolorToArray(getMultilineInput('policyPacks')),
+      policyPackConfigs: parseSemicolorToArray(
+        getMultilineInput('policyPackConfigs'),
+      ),
+      userAgent: 'pulumi/actions@v3',
+      color: getUnionInput('color', {
+        alternatives: ['always', 'never', 'raw', 'auto'] as const,
+      }),
     },
-  });
+  };
 }
+
+export type Config = ReturnType<typeof makeConfig>;
+export type Commands = Config['command'];
