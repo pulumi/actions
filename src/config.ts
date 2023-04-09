@@ -43,7 +43,7 @@ export function makeConfig() {
       alternatives: ['up', 'update', 'refresh', 'destroy', 'preview'] as const,
     }),
     stackName: getInput('stack-name', { required: true }),
-    pulumiVersion: getInput('pulumi-version'),
+    pulumiVersion: getInput('pulumi-version', { required: true }),
     workDir: getInput('work-dir', { required: true }),
     secretsProvider: getInput('secrets-provider'),
     cloudUrl: getInput('cloud-url'),
@@ -71,7 +71,6 @@ export function makeConfig() {
         getMultilineInput('policyPackConfigs'),
       ),
       userAgent: 'pulumi/actions@v3',
-      pulumiVersion: getInput('pulumi-version') || '^3',
       color: getUnionInput('color', {
         alternatives: ['always', 'never', 'raw', 'auto'] as const,
       }),
