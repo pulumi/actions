@@ -53,6 +53,8 @@ export async function downloadCli(range: string): Promise<void> {
 
   const isPulumiInstalled = await io.which('pulumi', true);
 
+  core.info(`Pulumi is installed: ${isPulumiInstalled}, ${typeof isPulumiInstalled}`)
+
   if (isPulumiInstalled) {
     // Check for version of Pulumi CLI installed on the runner
     const runnerVersion = await getVersion();
