@@ -94776,12 +94776,12 @@ function handlePullRequestMessage(config, projectName, output) {
     });
 }
 
+// EXTERNAL MODULE: external "os"
+var external_os_ = __nccwpck_require__(22037);
 // EXTERNAL MODULE: ./node_modules/@actions/io/lib/io.js
 var io = __nccwpck_require__(47351);
 // EXTERNAL MODULE: ./node_modules/@actions/tool-cache/lib/tool-cache.js
 var tool_cache = __nccwpck_require__(27784);
-// EXTERNAL MODULE: external "os"
-var external_os_ = __nccwpck_require__(22037);
 // EXTERNAL MODULE: ./node_modules/semver/index.js
 var semver = __nccwpck_require__(11383);
 // EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
@@ -94864,6 +94864,20 @@ function isAvailable() {
         return res.stderr != '' && !res.success ? false : res.success;
     });
 }
+function getVersion() {
+    return modules_awaiter(this, void 0, void 0, function* () {
+        const res = yield exec_exec('pulumi', ['version'], true);
+        // Only check for success and if the [stdout] starts with the version
+        // prefix 'v'. If success is true and the runner version is not the 
+        // latest version then the "warning of newer version" will be in [stderr] field, 
+        // which will trigger an else condition if we also check for [stderr === '']
+        if (res.success && res.stdout.startsWith('v'))
+            // Return version without 'v' prefix
+            return res.stdout.substring(1);
+        else
+            return undefined;
+    });
+}
 function run(...args) {
     return modules_awaiter(this, void 0, void 0, function* () {
         yield exec_exec(`pulumi`, args, true);
@@ -94889,6 +94903,22 @@ function downloadCli(range) {
             throw new Error('Unsupported operating system - Pulumi CLI is only released for Darwin (x64, arm64), Linux (x64, arm64) and Windows (x64)');
         }
         core.info(`Configured range: ${range}`);
+        // Check for version of Pulumi CLI installed on the runner
+        const runnerVersion = yield getVersion();
+        if (runnerVersion) {
+            // Check if runner version matches
+            if (semver.satisfies(runnerVersion, range)) {
+                // If runner version matches, skip downloading CLI by exiting the function
+                core.info(`Pulumi version ${runnerVersion} is already installed on this machine. Skipping download`);
+                return;
+            }
+            else {
+                core.info(`Pulumi ${runnerVersion} does not satisfy the desired version ${range}. Proceeding to download`);
+            }
+        }
+        else {
+            core.info('Pulumi is not detected in the PATH. Proceeding to download');
+        }
         const { version, downloads } = yield getVersionObject(range);
         core.info(`Matched version: ${version}`);
         const isUnsupportedVersion = semver.lt(version, '3.0.0');
