@@ -7,6 +7,7 @@
 - feat: Add support for skipping downloading the Pulumi CLI if it is already
   installed on the runner being used and the runner CLI version is suitable.
   ([#789](https://github.com/pulumi/actions/issues/789))
+- fix: issue where pulumi command is not found when checking for version
 
 --
 
