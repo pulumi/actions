@@ -51,7 +51,7 @@ export async function downloadCli(range: string): Promise<void> {
 
   core.info(`Configured range: ${range}`);
 
-  const isPulumiInstalled = await io.which('pulumi', true);
+  const isPulumiInstalled = await io.which('pulumi');
 
   core.info(`Pulumi is installed: ${isPulumiInstalled}, ${typeof isPulumiInstalled}`)
 
