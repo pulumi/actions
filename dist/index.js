@@ -94602,7 +94602,7 @@ const {
     __decorate,
     __param,
     __metadata,
-    __awaiter: modules_awaiter,
+    __awaiter,
     __generator,
     __exportStar,
     __createBinding,
@@ -94732,7 +94732,7 @@ var dedent = __nccwpck_require__(35281);
 
 function handlePullRequestMessage(config, projectName, output) {
     var _a;
-    return modules_awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         const { githubToken, command, stackName, editCommentOnPr, } = config;
         const heading = `#### :tropical_drink: \`${command}\` on ${projectName}/${stackName}`;
         const summary = '<summary>Pulumi report</summary>';
@@ -94785,12 +94785,12 @@ var tool_cache = __nccwpck_require__(27784);
 // EXTERNAL MODULE: ./node_modules/semver/index.js
 var semver = __nccwpck_require__(11383);
 // EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
-var lib_exec = __nccwpck_require__(71514);
+var exec = __nccwpck_require__(71514);
 ;// CONCATENATED MODULE: ./src/libs/exec.ts
 
 
-const exec_exec = (command, args = [], silent) => modules_awaiter(void 0, void 0, void 0, function* () {
-    const { exitCode, stdout, stderr } = yield lib_exec.getExecOutput(command, args, {
+const exec_exec = (command, args = [], silent) => __awaiter(void 0, void 0, void 0, function* () {
+    const { exitCode, stdout, stderr } = yield exec.getExecOutput(command, args, {
         silent: silent,
         ignoreReturnCode: true,
     });
@@ -94826,7 +94826,7 @@ const VersionRt = lib.Record({
 });
 const VersionsRt = lib.Array(VersionRt);
 function getVersionObject(range) {
-    return modules_awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         const result = yield source_default()('https://raw.githubusercontent.com/pulumi/docs/master/data/versions.json', { responseType: 'json' });
         const versions = VersionsRt.check(result.body);
         if (range == 'latest') {
@@ -94858,18 +94858,12 @@ function getVersionObject(range) {
 
 
 
-function isAvailable() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const res = yield exec.exec(`pulumi`, [], true);
-        return res.stderr != '' && !res.success ? false : res.success;
-    });
-}
 function getVersion() {
-    return modules_awaiter(this, void 0, void 0, function* () {
-        const res = yield exec_exec('pulumi', ['version'], true);
+    return __awaiter(this, void 0, void 0, function* () {
+        const res = yield exec_exec('pulumi', ['version']);
         // Only check for success and if the [stdout] starts with the version
-        // prefix 'v'. If success is true and the runner version is not the 
-        // latest version then the "warning of newer version" will be in [stderr] field, 
+        // prefix 'v'. If success is true and the runner version is not the
+        // latest version then the "warning of newer version" will be in [stderr] field,
         // which will trigger an else condition if we also check for [stderr === '']
         if (res.success && res.stdout.startsWith('v'))
             // Return version without 'v' prefix
@@ -94879,7 +94873,7 @@ function getVersion() {
     });
 }
 function run(...args) {
-    return modules_awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         yield exec_exec(`pulumi`, args, true);
     });
 }
@@ -94896,28 +94890,31 @@ function getPlatform() {
     return platforms[`${runnerPlatform}-${runnerArch}`];
 }
 function downloadCli(range) {
-    return modules_awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         const platform = getPlatform();
         core.debug(`Platform: ${platform}`);
         if (!platform) {
             throw new Error('Unsupported operating system - Pulumi CLI is only released for Darwin (x64, arm64), Linux (x64, arm64) and Windows (x64)');
         }
         core.info(`Configured range: ${range}`);
-        // Check for version of Pulumi CLI installed on the runner
-        const runnerVersion = yield getVersion();
-        if (runnerVersion) {
-            // Check if runner version matches
-            if (semver.satisfies(runnerVersion, range)) {
-                // If runner version matches, skip downloading CLI by exiting the function
-                core.info(`Pulumi version ${runnerVersion} is already installed on this machine. Skipping download`);
-                return;
+        const isPulumiInstalled = yield io.which('pulumi');
+        if (isPulumiInstalled) {
+            // Check for version of Pulumi CLI installed on the runner
+            const runnerVersion = yield getVersion();
+            if (runnerVersion) {
+                // Check if runner version matches
+                if (semver.satisfies(runnerVersion, range)) {
+                    // If runner version matches, skip downloading CLI by exiting the function
+                    core.info(`Pulumi version ${runnerVersion} is already installed on this machine. Skipping download`);
+                    return;
+                }
+                else {
+                    core.info(`Pulumi ${runnerVersion} does not satisfy the desired version ${range}. Proceeding to download`);
+                }
             }
             else {
-                core.info(`Pulumi ${runnerVersion} does not satisfy the desired version ${range}. Proceeding to download`);
+                core.info('Pulumi is not detected in the PATH. Proceeding to download');
             }
-        }
-        else {
-            core.info('Pulumi is not detected in the PATH. Proceeding to download');
         }
         const { version, downloads } = yield getVersionObject(range);
         core.info(`Matched version: ${version}`);
@@ -94930,14 +94927,14 @@ function downloadCli(range) {
         yield io.rmRF(external_path_.join(destination, 'bin'))
             .catch()
             .then(() => {
-            core.info(`Successfully deleted pre-existing ${external_path_.join(destination, "bin")}`);
+            core.info(`Successfully deleted pre-existing ${external_path_.join(destination, 'bin')}`);
         });
         const downloaded = yield tool_cache.downloadTool(downloads[platform]);
         core.debug(`successfully downloaded ${downloads[platform]} to ${downloaded}`);
         yield io.mkdirP(destination);
         core.debug(`Successfully created ${destination}`);
         switch (platform) {
-            case "windows-x64": {
+            case 'windows-x64': {
                 const extractedPath = yield tool_cache.extractZip(downloaded, destination);
                 core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`);
                 const oldPath = external_path_.join(destination, 'pulumi', 'bin');
@@ -94947,7 +94944,7 @@ function downloadCli(range) {
                 yield io.rmRF(external_path_.join(destination, 'pulumi'))
                     .catch()
                     .then(() => {
-                    core.info(`Successfully deleted left-over ${external_path_.join(destination, "pulumi")}`);
+                    core.info(`Successfully deleted left-over ${external_path_.join(destination, 'pulumi')}`);
                 });
                 break;
             }
@@ -94977,7 +94974,7 @@ function downloadCli(range) {
 
 
 
-const login = (cloudUrl, accessToken) => modules_awaiter(void 0, void 0, void 0, function* () {
+const login = (cloudUrl, accessToken) => __awaiter(void 0, void 0, void 0, function* () {
     if (cloudUrl) {
         core.info(`Logging into ${cloudUrl}`);
         yield run('--non-interactive', 'login', cloudUrl);
@@ -95000,7 +94997,7 @@ const login = (cloudUrl, accessToken) => modules_awaiter(void 0, void 0, void 0,
 
 
 
-const main_main = () => modules_awaiter(void 0, void 0, void 0, function* () {
+const main_main = () => __awaiter(void 0, void 0, void 0, function* () {
     const downloadConfig = makeInstallationConfig();
     if (downloadConfig.success) {
         yield installOnly(downloadConfig.value);
@@ -95015,10 +95012,10 @@ const main_main = () => modules_awaiter(void 0, void 0, void 0, function* () {
 });
 // installOnly is the main entrypoint of the program when the user
 // intends to install the Pulumi CLI without running additional commands.
-const installOnly = (config) => modules_awaiter(void 0, void 0, void 0, function* () {
+const installOnly = (config) => __awaiter(void 0, void 0, void 0, function* () {
     yield downloadCli(config.pulumiVersion);
 });
-const runAction = (config) => modules_awaiter(void 0, void 0, void 0, function* () {
+const runAction = (config) => __awaiter(void 0, void 0, void 0, function* () {
     yield downloadCli(config.pulumiVersion);
     yield login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
@@ -95054,7 +95051,7 @@ const runAction = (config) => modules_awaiter(void 0, void 0, void 0, function* 
         update: () => stack.up(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
         refresh: () => stack.refresh(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
         destroy: () => stack.destroy(Object.assign({ onOutput }, config.options)).then((r) => r.stdout),
-        preview: () => modules_awaiter(void 0, void 0, void 0, function* () {
+        preview: () => __awaiter(void 0, void 0, void 0, function* () {
             const { stdout, stderr } = yield stack.preview(config.options);
             onOutput(stdout);
             onOutput(stderr);
@@ -95085,7 +95082,7 @@ const runAction = (config) => modules_awaiter(void 0, void 0, void 0, function* 
     }
     core.endGroup();
 });
-(() => modules_awaiter(void 0, void 0, void 0, function* () {
+(() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield main_main();
     }
