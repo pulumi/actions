@@ -34,6 +34,7 @@ jobs:
             dist:
               - 'dist/**'
               - .github/workflows/**
+              - .github/test-stacks/**
 
       - name: Upload artifacts
         if: steps.changes.outputs.dist == 'true'
