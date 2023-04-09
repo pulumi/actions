@@ -19,6 +19,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           file_pattern: dist/**
+          add_options: -u --force
           commit_message: 'chore(dist): Update dist [automated commit]'
           commit_user_name: Pulumi Bot
           commit_user_email: pulumi-bot@users.noreply.github.com
