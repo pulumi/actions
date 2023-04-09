@@ -1,26 +1,11 @@
 import * as os from 'os';
 import * as path from 'path';
 import * as core from '@actions/core';
-import { getExecOutput } from '@actions/exec';
 import * as io from '@actions/io';
 import * as tc from '@actions/tool-cache';
 import * as semver from 'semver';
 import * as exec from './exec';
 import { getVersionObject } from './libs/get-version';
-
-export async function isAvailable(): Promise<boolean> {
-  const res = await getExecOutput('which', ['pulumi']);
-
-  if (res.stderr) {
-    return false;
-  }
-
-  if (res.stdout.includes('not found')) {
-    return false;
-  }
-
-  return true;
-}
 
 export async function getVersion(): Promise<string | undefined> {
   const res = await exec.exec('pulumi', ['version']);
@@ -66,7 +51,7 @@ export async function downloadCli(range: string): Promise<void> {
 
   core.info(`Configured range: ${range}`);
 
-  const isPulumiInstalled = await isAvailable();
+  const isPulumiInstalled = await io.which('pulumi', true);
 
   if (isPulumiInstalled) {
     // Check for version of Pulumi CLI installed on the runner
