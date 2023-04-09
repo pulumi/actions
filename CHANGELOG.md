@@ -3,6 +3,7 @@
 ## HEAD (Unreleased)
 
 - chore: add dist files to gitignore and forcebly commit them instead
+- refactor: Improve config
 
 --
 

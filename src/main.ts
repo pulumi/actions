@@ -1,14 +1,19 @@
 import { resolve } from 'path';
 import * as core from '@actions/core';
+import { context } from '@actions/github';
 import {
-  ConfigMap,
   LocalProgramArgs,
   LocalWorkspace,
   LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
 import invariant from 'ts-invariant';
-import YAML from 'yaml';
-import { Commands, Config, InstallationConfig, makeConfig, makeInstallationConfig } from './config';
+import {
+  Commands,
+  Config,
+  InstallationConfig,
+  makeConfig,
+  makeInstallationConfig,
+} from './config';
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
@@ -18,7 +23,7 @@ const main = async () => {
   const downloadConfig = makeInstallationConfig();
   if (downloadConfig.success) {
     await installOnly(downloadConfig.value);
-    core.info("Pulumi has been successfully installed. Exiting.");
+    core.info('Pulumi has been successfully installed. Exiting.');
     return;
   }
 
@@ -33,10 +38,10 @@ const main = async () => {
 // intends to install the Pulumi CLI without running additional commands.
 const installOnly = async (config: InstallationConfig): Promise<void> => {
   await pulumiCli.downloadCli(config.pulumiVersion);
-}
+};
 
 const runAction = async (config: Config): Promise<void> => {
-  await pulumiCli.downloadCli(config.options.pulumiVersion);
+  await pulumiCli.downloadCli(config.pulumiVersion);
   await login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
 
   const workDir = resolve(
@@ -67,9 +72,8 @@ const runAction = async (config: Config): Promise<void> => {
     core.info(msg);
   };
 
-  if (config.configMap != '') {
-    const configMap: ConfigMap = YAML.parse(config.configMap);
-    await stack.setAllConfig(configMap);
+  if (config.configMap) {
+    await stack.setAllConfig(config.configMap);
   }
 
   if (config.refresh) {
@@ -111,13 +115,13 @@ const runAction = async (config: Config): Promise<void> => {
     }
   }
 
-  if (
-    config.commentOnPrNumber ||
-    (config.commentOnPr && config.isPullRequest)
-  ) {
-    core.debug(`Commenting on pull request`);
-    invariant(config.githubToken, 'github-token is missing.');
-    handlePullRequestMessage(config, projectName, output);
+  if (config.commentOnPrNumber || config.commentOnPr) {
+    const isPullRequest = context.payload.pull_request !== undefined;
+    if (isPullRequest) {
+      core.debug(`Commenting on pull request`);
+      invariant(config.githubToken, 'github-token is missing.');
+      handlePullRequestMessage(config, projectName, output);
+    }
   }
 
   if (config.remove && config.command === 'destroy') {

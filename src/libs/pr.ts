@@ -13,7 +13,7 @@ export async function handlePullRequestMessage(
     githubToken,
     command,
     stackName,
-    options: { editCommentOnPr },
+    editCommentOnPr,
   } = config;
 
   const heading = `#### :tropical_drink: \`${command}\` on ${projectName}/${stackName}`;
