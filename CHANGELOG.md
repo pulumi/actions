@@ -8,6 +8,9 @@
   installed on the runner being used and the runner CLI version is suitable.
   ([#789](https://github.com/pulumi/actions/issues/789))
 - fix: issue where pulumi command is not found when checking for version
+- fix: Issue where dotnet test stack workflow is failing. Upgrade dotnet test
+  project and workflow job from .NET 3.1 to 6.x.
+  ([#904](https://github.com/pulumi/actions/issues/904))
 
 --
 
