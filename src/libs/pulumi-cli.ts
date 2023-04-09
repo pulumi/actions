@@ -66,24 +66,28 @@ export async function downloadCli(range: string): Promise<void> {
 
   core.info(`Configured range: ${range}`);
 
-  // Check for version of Pulumi CLI installed on the runner
-  const runnerVersion = await getVersion();
+  const isPulumiInstalled = await isAvailable();
 
-  if (runnerVersion) {
-    // Check if runner version matches
-    if (semver.satisfies(runnerVersion, range)) {
-      // If runner version matches, skip downloading CLI by exiting the function
-      core.info(
-        `Pulumi version ${runnerVersion} is already installed on this machine. Skipping download`,
-      );
-      return;
+  if (isPulumiInstalled) {
+    // Check for version of Pulumi CLI installed on the runner
+    const runnerVersion = await getVersion();
+
+    if (runnerVersion) {
+      // Check if runner version matches
+      if (semver.satisfies(runnerVersion, range)) {
+        // If runner version matches, skip downloading CLI by exiting the function
+        core.info(
+          `Pulumi version ${runnerVersion} is already installed on this machine. Skipping download`,
+        );
+        return;
+      } else {
+        core.info(
+          `Pulumi ${runnerVersion} does not satisfy the desired version ${range}. Proceeding to download`,
+        );
+      }
     } else {
-      core.info(
-        `Pulumi ${runnerVersion} does not satisfy the desired version ${range}. Proceeding to download`,
-      );
+      core.info('Pulumi is not detected in the PATH. Proceeding to download');
     }
-  } else {
-    core.info('Pulumi is not detected in the PATH. Proceeding to download');
   }
 
   const { version, downloads } = await getVersionObject(range);
