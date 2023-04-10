@@ -2,6 +2,12 @@
 
 ## HEAD (Unreleased)
 
+**(none)**
+
+--
+
+## 4.2.0 (2023-04-09)
+
 - chore: add dist files to gitignore and forcebly commit them instead
 - refactor: Improve config
 - feat: Add support for skipping downloading the Pulumi CLI if it is already
@@ -11,8 +17,6 @@
 - fix: Issue where dotnet test stack workflow is failing. Upgrade dotnet test
   project and workflow job from .NET 3.1 to 6.x.
   ([#904](https://github.com/pulumi/actions/issues/904))
-
---
 
 ## 4.1.1 (2023-03-31)
 
