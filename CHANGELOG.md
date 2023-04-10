@@ -6,7 +6,7 @@
 
 --
 
-## 4.2.0 (2023-04-09)
+## 4.2.0 (2023-04-10)
 
 - chore: add dist files to gitignore and forcebly commit them instead
 - refactor: Improve config
