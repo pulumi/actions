@@ -94704,10 +94704,6 @@ function makeInstallationConfig() {
         pulumiVersion: (0,main.getInput)('pulumi-version') || '^3',
     });
 }
-const configValueRt = lib.Dictionary(lib.Record({
-    value: lib.String,
-    secret: lib.Boolean.optional(),
-}), lib.String);
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function makeConfig() {
     return {
@@ -94726,9 +94722,10 @@ function makeConfig() {
         upsert: (0,main.getBooleanInput)('upsert'),
         remove: (0,main.getBooleanInput)('remove'),
         refresh: (0,main.getBooleanInput)('refresh'),
-        configMap: (0,main.getYAMLInput)('config-map', {
-            parser: (configMap) => configValueRt.check(configMap),
-        }),
+        // TODO: Add parser back once pulumi/pulumi#12641 is fixed.
+        // @see https://github.com/pulumi/actions/pull/913
+        // @see https://github.com/pulumi/actions/pull/912
+        configMap: (0,main.getYAMLInput)('config-map'),
         editCommentOnPr: (0,main.getBooleanInput)('edit-pr-comment'),
         options: {
             parallel: (0,main.getNumberInput)('parallel', {}),
