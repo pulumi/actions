@@ -48,7 +48,7 @@ export function makeConfig() {
     // TODO: Add parser back once pulumi/pulumi#12641 is fixed.
     // @see https://github.com/pulumi/actions/pull/913
     // @see https://github.com/pulumi/actions/pull/912
-    configMap: getYAMLInput('config-map'),
+    configMap: getYAMLInput<string>('config-map'),
     editCommentOnPr: getBooleanInput('edit-pr-comment'),
 
     options: {
