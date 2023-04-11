@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: support for config on multiple types on keys and values
 
 --
 
