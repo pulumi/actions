@@ -46,7 +46,8 @@ export function makeConfig() {
     remove: getBooleanInput('remove'),
     refresh: getBooleanInput('refresh'),
     // TODO: Add parser back once pulumi/pulumi#12641 is fixed.
-    // @see
+    // @see https://github.com/pulumi/actions/pull/913
+    // @see https://github.com/pulumi/actions/pull/912
     configMap: getYAMLInput('config-map'),
     editCommentOnPr: getBooleanInput('edit-pr-comment'),
 
