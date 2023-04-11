@@ -29,10 +29,10 @@ export function makeInstallationConfig(): rt.Result<InstallationConfig> {
 
 const configValueRt = rt.Dictionary(
   rt.Record({
-    value: rt.String,
+    value: rt.Union(rt.String, rt.Number, rt.Boolean, rt.Null).optional(),
     secret: rt.Boolean.optional(),
   }),
-  rt.String,
+  rt.Union(rt.String, rt.Number),
 );
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
