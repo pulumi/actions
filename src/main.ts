@@ -73,7 +73,8 @@ const runAction = async (config: Config): Promise<void> => {
   };
 
   if (config.configMap) {
-    await stack.setAllConfig(config.configMap);
+    // TODO: Remove `any` once pulumi/pulumi#12641 is fixed.
+    await stack.setAllConfig(config.configMap as any);
   }
 
   if (config.refresh) {
