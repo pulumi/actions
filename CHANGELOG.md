@@ -2,9 +2,12 @@
 
 ## HEAD (Unreleased)
 
-- fix: remove config-map parser
-
 --
+
+## 4.2.1 (2023-04-11)
+
+- fix: remove config-map parser, which should fix a bug causing errors when
+  config values were non-strings.
 
 ## 4.2.0 (2023-04-10)
 
