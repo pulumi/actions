@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- fix: remove config-map parser
 
 --
 
