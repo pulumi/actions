@@ -27,14 +27,6 @@ export function makeInstallationConfig(): rt.Result<InstallationConfig> {
   });
 }
 
-const configValueRt = rt.Dictionary(
-  rt.Record({
-    value: rt.String,
-    secret: rt.Boolean.optional(),
-  }),
-  rt.String,
-);
-
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function makeConfig() {
   return {
@@ -53,9 +45,9 @@ export function makeConfig() {
     upsert: getBooleanInput('upsert'),
     remove: getBooleanInput('remove'),
     refresh: getBooleanInput('refresh'),
-    configMap: getYAMLInput('config-map', {
-      parser: (configMap) => configValueRt.check(configMap),
-    }),
+    // TODO: Add parser back once pulumi/pulumi#12641 is fixed.
+    // @see
+    configMap: getYAMLInput('config-map'),
     editCommentOnPr: getBooleanInput('edit-pr-comment'),
 
     options: {
