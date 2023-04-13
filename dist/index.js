@@ -46975,7 +46975,7 @@ function getAllTransitivelyReferencedResourceURNs(resources, exclude) {
         // To do this, first we just get the transitively reachable set of resources (not diving
         // into custom resources).  In the above picture, if we start with 'Comp1', this will be
         // [Comp1, Cust1, Comp2, Cust2, Cust3]
-        const transitivelyReachableResources = yield getTransitivelyReferencedChildResourcesOfComponentResources(resources);
+        const transitivelyReachableResources = yield getTransitivelyReferencedChildResourcesOfComponentResources(resources, exclude);
         // Then we filter to only include Custom and Remote resources.
         const transitivelyReachableCustomResources = [...transitivelyReachableResources]
             .filter(r => (resource_1.CustomResource.isInstance(r) || r.__remote) && !exclude.has(r));
@@ -46989,26 +46989,32 @@ exports.getAllTransitivelyReferencedResourceURNs = getAllTransitivelyReferencedR
  * Recursively walk the resources passed in, returning them and all resources reachable from
  * [Resource.__childResources] through any **Component** resources we encounter.
  */
-function getTransitivelyReferencedChildResourcesOfComponentResources(resources) {
+function getTransitivelyReferencedChildResourcesOfComponentResources(resources, exclude) {
     return __awaiter(this, void 0, void 0, function* () {
         // Recursively walk the dependent resources through their children, adding them to the result set.
         const result = new Set();
-        yield addTransitivelyReferencedChildResourcesOfComponentResources(resources, result);
+        yield addTransitivelyReferencedChildResourcesOfComponentResources(resources, exclude, result);
         return result;
     });
 }
-function addTransitivelyReferencedChildResourcesOfComponentResources(resources, result) {
+function addTransitivelyReferencedChildResourcesOfComponentResources(resources, exclude, result) {
     return __awaiter(this, void 0, void 0, function* () {
         if (resources) {
             for (const resource of resources) {
                 if (!result.has(resource)) {
                     result.add(resource);
                     if (resource_1.ComponentResource.isInstance(resource)) {
+                        // Skip including children of a resource in the excluded set to avoid depending on
+                        // children that haven't been registered yet.
+                        if (exclude.has(resource)) {
+                            continue;
+                        }
                         // This await is safe even if __isConstructed is undefined. Ensure that the
                         // resource has completely finished construction.  That way all parent/child
                         // relationships will have been setup.
                         yield resource.__data;
-                        addTransitivelyReferencedChildResourcesOfComponentResources(resource.__childResources, result);
+                        const children = resource.__childResources;
+                        addTransitivelyReferencedChildResourcesOfComponentResources(children, exclude, result);
                     }
                 }
             }
