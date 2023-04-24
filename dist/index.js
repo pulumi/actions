@@ -95040,7 +95040,7 @@ const login = (cloudUrl, accessToken) => __awaiter(void 0, void 0, void 0, funct
         yield run('--non-interactive', 'login', cloudUrl);
     }
     else if (accessToken !== '') {
-        core.info("Logging into the Pulumi Service backend.");
+        core.info("Logging into the Pulumi Cloud backend.");
         yield run('--non-interactive', 'login');
     }
 });
