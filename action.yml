@@ -90,7 +90,7 @@ inputs:
     required: false
     default: 'auto'
   exclude-protected:
-    description: 'Do not destroy protected resources. Only valid when command is destroy.'
+    description: 'Skip destroying protected resources. Only valid when command is destroy.'
     required: false
     default: 'false'
 outputs:

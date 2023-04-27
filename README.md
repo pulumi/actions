@@ -121,7 +121,7 @@ The action can be configured with the following arguments:
   control as part of the action if you wish to perform any further tasks with
   that stack.
 
-- `exclude-protected` - (optional) Do not destroy protected resources. Only
+- `exclude-protected` - (optional) Skip destroying protected resources. Only
   valid when `command` is `destroy`.
 
 By default, this action will try to authenticate Pulumi with
