@@ -68,6 +68,7 @@ export function makeConfig() {
       color: getUnionInput('color', {
         alternatives: ['always', 'never', 'raw', 'auto'] as const,
       }),
+      excludeProtected: getBooleanInput('exclude-protected'),
     },
   };
 }
