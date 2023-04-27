@@ -15,6 +15,7 @@ const defaultConfig: Record<string, string> = {
   'expect-no-changes': 'false',
   diff: 'false',
   'target-dependents': 'false',
+  'exclude-protected': 'false',
 };
 
 function setupMockedConfig(config: Record<string, string>) {
@@ -44,6 +45,7 @@ describe('config.ts', () => {
         "options": Object {
           "color": undefined,
           "diff": false,
+          "excludeProtected": false,
           "expectNoChanges": false,
           "message": "",
           "parallel": undefined,

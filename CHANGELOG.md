@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- feat: Support `exclude-protected` on `destroy`.
+  ([#925](https://github.com/pulumi/actions/pull/925))
+
 --
 
 ## 4.2.1 (2023-04-11)

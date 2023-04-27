@@ -89,6 +89,10 @@ inputs:
     description: 'Colorize output. Choices are: always, never, raw, auto'
     required: false
     default: 'auto'
+  exclude-protected:
+    description: 'Skip destroying protected resources. Only valid when command is destroy.'
+    required: false
+    default: 'false'
 outputs:
   output:
     description: Output from running command
