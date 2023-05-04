@@ -22646,11 +22646,15 @@ const localBackendConflictText = "the stack is currently locked by";
 /** @internal */
 function createCommandError(result) {
     const stderr = result.stderr;
-    return (notFoundRegex.test(stderr) ? new StackNotFoundError(result)
-        : alreadyExistsRegex.test(stderr) ? new StackAlreadyExistsError(result)
-            : stderr.indexOf(conflictText) >= 0 ? new ConcurrentUpdateError(result)
-                : stderr.indexOf(localBackendConflictText) >= 0 ? new ConcurrentUpdateError(result)
-                    : new CommandError(result));
+    return notFoundRegex.test(stderr)
+        ? new StackNotFoundError(result)
+        : alreadyExistsRegex.test(stderr)
+            ? new StackAlreadyExistsError(result)
+            : stderr.indexOf(conflictText) >= 0
+                ? new ConcurrentUpdateError(result)
+                : stderr.indexOf(localBackendConflictText) >= 0
+                    ? new ConcurrentUpdateError(result)
+                    : new CommandError(result);
 }
 exports.createCommandError = createCommandError;
 //# sourceMappingURL=errors.js.map
@@ -22792,7 +22796,7 @@ class LocalWorkspace {
         let dir = "";
         let envs = {};
         if (opts) {
-            const { workDir, pulumiHome, program, envVars, secretsProvider, remote, remoteGitProgramArgs, remotePreRunCommands, remoteEnvVars, remoteSkipInstallDependencies } = opts;
+            const { workDir, pulumiHome, program, envVars, secretsProvider, remote, remoteGitProgramArgs, remotePreRunCommands, remoteEnvVars, remoteSkipInstallDependencies, } = opts;
             if (workDir) {
                 dir = workDir;
             }
@@ -23109,7 +23113,17 @@ class LocalWorkspace {
     setConfig(stackName, key, value) {
         return __awaiter(this, void 0, void 0, function* () {
             const secretArg = value.secret ? "--secret" : "--plaintext";
-            yield this.runPulumiCmd(["config", "set", key, "--stack", stackName, secretArg, "--non-interactive", "--", value.value]);
+            yield this.runPulumiCmd([
+                "config",
+                "set",
+                key,
+                "--stack",
+                stackName,
+                secretArg,
+                "--non-interactive",
+                "--",
+                value.value,
+            ]);
         });
     }
     /**
@@ -23355,7 +23369,14 @@ class LocalWorkspace {
         return __awaiter(this, void 0, void 0, function* () {
             // TODO: do this in parallel after this is fixed https://github.com/pulumi/pulumi/issues/6050
             const maskedResult = yield this.runPulumiCmd(["stack", "output", "--json", "--stack", stackName]);
-            const plaintextResult = yield this.runPulumiCmd(["stack", "output", "--json", "--show-secrets", "--stack", stackName]);
+            const plaintextResult = yield this.runPulumiCmd([
+                "stack",
+                "output",
+                "--json",
+                "--show-secrets",
+                "--stack",
+                stackName,
+            ]);
             const maskedOuts = JSON.parse(maskedResult.stdout);
             const plaintextOuts = JSON.parse(plaintextResult.stdout);
             const outputs = {};
@@ -23502,8 +23523,7 @@ function isLocalProgramArgs(args) {
  * @param args The args object to evaluate
  */
 function isInlineProgramArgs(args) {
-    return args.projectName !== undefined &&
-        args.program !== undefined;
+    return args.projectName !== undefined && args.program !== undefined;
 }
 const settingsExtensions = [".yaml", ".yml", ".json"];
 function getStackSettingsName(name) {
@@ -23984,7 +24004,7 @@ function newUncaughtHandler(errorSet) {
         // is also necessary as users can throw arbitrary things in JS (including non-Errors).
         let defaultMessage = "";
         if (!!err) {
-            defaultMessage = err.stack || err.message || ("" + err);
+            defaultMessage = err.stack || err.message || "" + err;
         }
         // First, log the error.
         if (errors_1.RunError.isInstance(err)) {
@@ -24133,8 +24153,7 @@ class Stack {
     }
     readLines(logPath, callback) {
         return __awaiter(this, void 0, void 0, function* () {
-            const eventLogTail = new tail_file_1.default(logPath, { startPos: 0, pollFileIntervalMs: 200 })
-                .on("tail_error", (err) => {
+            const eventLogTail = new tail_file_1.default(logPath, { startPos: 0, pollFileIntervalMs: 200 }).on("tail_error", (err) => {
                 throw err;
             });
             yield eventLogTail.start();
@@ -24218,7 +24237,9 @@ Event: ${line}\n${e.toString()}`);
                 }
                 applyGlobalOpts(opts, args);
             }
-            let onExit = (hasError) => { return; };
+            let onExit = (hasError) => {
+                return;
+            };
             let didError = false;
             if (program) {
                 kind = execKind.inline;
@@ -24343,7 +24364,9 @@ Event: ${line}\n${e.toString()}`);
                 }
                 applyGlobalOpts(opts, args);
             }
-            let onExit = (hasError) => { return; };
+            let onExit = (hasError) => {
+                return;
+            };
             let didError = false;
             if (program) {
                 kind = execKind.inline;
@@ -24701,7 +24724,7 @@ Event: ${line}\n${e.toString()}`);
     runPulumiCmd(args, onOutput) {
         return __awaiter(this, void 0, void 0, function* () {
             let envs = {
-                "PULUMI_DEBUG_COMMANDS": "true",
+                PULUMI_DEBUG_COMMANDS: "true",
             };
             if (this.isRemote) {
                 envs["PULUMI_EXPERIMENTAL"] = "true";
@@ -24786,11 +24809,15 @@ const cleanUp = (logFile, rl) => __awaiter(void 0, void 0, void 0, function* () 
         // remove the logfile
         if (fs.rm) {
             // remove with Node JS 15.X+
-            fs.rm(path.dirname(logFile), { recursive: true }, () => { return; });
+            fs.rm(path.dirname(logFile), { recursive: true }, () => {
+                return;
+            });
         }
         else {
             // remove with Node JS 14.X
-            fs.rmdir(path.dirname(logFile), { recursive: true }, () => { return; });
+            fs.rmdir(path.dirname(logFile), { recursive: true }, () => {
+                return;
+            });
         }
     }
 });
@@ -25011,9 +25038,7 @@ exports.error = error;
 function log(engine, sev, msg, resource, streamId, ephemeral) {
     // Ensure we log everything in serial order.
     const keepAlive = settings_1.rpcKeepAlive();
-    const urnPromise = resource
-        ? resource.urn.promise()
-        : Promise.resolve("");
+    const urnPromise = resource ? resource.urn.promise() : Promise.resolve("");
     lastLog = Promise.all([lastLog, urnPromise]).then(([_, urn]) => {
         return new Promise((resolve, reject) => {
             try {
@@ -26765,17 +26790,16 @@ class OutputImpl {
         // Create a copy of the async resources.  Populate this with the sync-resources if that's
         // all we have.  That way this is always ensured to be a superset of the list of sync resources.
         allResources = allResources || Promise.resolve([]);
-        const allResourcesCopy = allResources.then(r => utils.union(copyResources(r), resourcesCopy));
+        const allResourcesCopy = allResources.then((r) => utils.union(copyResources(r), resourcesCopy));
         // We are only known if we are not explicitly unknown and the resolved value of the output
         // contains no distinguished unknown values.
         isKnown = Promise.all([isKnown, promise]).then(([known, val]) => known && !containsUnknowns(val));
-        const lifted = Promise.all([allResourcesCopy, promise, isKnown, isSecret])
-            .then(([liftedResources, value, liftedIsKnown, liftedIsSecret]) => liftInnerOutput(liftedResources, value, liftedIsKnown, liftedIsSecret));
+        const lifted = Promise.all([allResourcesCopy, promise, isKnown, isSecret]).then(([liftedResources, value, liftedIsKnown, liftedIsSecret]) => liftInnerOutput(liftedResources, value, liftedIsKnown, liftedIsSecret));
         this.resources = () => resourcesCopy;
-        this.allResources = () => lifted.then(l => l.allResources);
-        this.isKnown = lifted.then(l => l.isKnown);
-        this.isSecret = lifted.then(l => l.isSecret);
-        this.promise = (withUnknowns) => OutputImpl.getPromisedValue(lifted.then(l => l.value), withUnknowns);
+        this.allResources = () => lifted.then((l) => l.allResources);
+        this.isKnown = lifted.then((l) => l.isKnown);
+        this.isSecret = lifted.then((l) => l.isSecret);
+        this.promise = (withUnknowns) => OutputImpl.getPromisedValue(lifted.then((l) => l.value), withUnknowns);
         this.toString = () => {
             const message = `Calling [toString] on an [Output<T>] is not supported.
 
@@ -26895,23 +26919,27 @@ To manipulate the value of this Output, use '.apply' instead.`);
     // the containing object are unknown.
     apply(func, runWithUnknowns) {
         // we're inside the modern `output` code, so it's safe to call `.allResources!` here.
-        const applied = Promise.all([this.allResources(), this.promise(/*withUnknowns*/ true), this.isKnown, this.isSecret])
-            .then(([allResources, value, isKnown, isSecret]) => applyHelperAsync(allResources, value, isKnown, isSecret, func, !!runWithUnknowns));
-        const result = new OutputImpl(this.resources(), applied.then(a => a.value), applied.then(a => a.isKnown), applied.then(a => a.isSecret), applied.then(a => a.allResources));
+        const applied = Promise.all([
+            this.allResources(),
+            this.promise(/*withUnknowns*/ true),
+            this.isKnown,
+            this.isSecret,
+        ]).then(([allResources, value, isKnown, isSecret]) => applyHelperAsync(allResources, value, isKnown, isSecret, func, !!runWithUnknowns));
+        const result = new OutputImpl(this.resources(), applied.then((a) => a.value), applied.then((a) => a.isKnown), applied.then((a) => a.isSecret), applied.then((a) => a.allResources));
         return result;
     }
 }
 /** @internal */
 function getAllResources(op) {
-    return op.allResources instanceof Function
-        ? op.allResources()
-        : Promise.resolve(op.resources());
+    return op.allResources instanceof Function ? op.allResources() : Promise.resolve(op.resources());
 }
 exports.getAllResources = getAllResources;
 function copyResources(resources) {
-    const copy = Array.isArray(resources) ? new Set(resources) :
-        resources instanceof Set ? new Set(resources) :
-            new Set([resources]);
+    const copy = Array.isArray(resources)
+        ? new Set(resources)
+        : resources instanceof Set
+            ? new Set(resources)
+            : new Set([resources]);
     return copy;
 }
 function liftInnerOutput(allResources, value, isKnown, isSecret) {
@@ -27012,7 +27040,7 @@ function outputRec(val) {
         // Promise<Output>. Wrap this in another Output as the final result.  This Output's
         // construction will be able to merge the inner Output's data with its own.  See
         // liftInnerOutput for more details.
-        return createSimpleOutput(val.then(v => outputRec(v)));
+        return createSimpleOutput(val.then((v) => outputRec(v)));
     }
     else if (exports.Output.isInstance(val)) {
         // We create a new output here from the raw pieces of the original output in order to
@@ -27048,7 +27076,7 @@ function outputRec(val) {
             return allValues;
         }
         // Otherwise, combine the data from all the outputs/non-outputs to one final output.
-        const promisedArray = Promise.all(allValues.map(v => getAwaitableValue(v)));
+        const promisedArray = Promise.all(allValues.map((v) => getAwaitableValue(v)));
         const [syncResources, isKnown, isSecret, allResources] = getResourcesAndDetails(allValues);
         return new exports.Output(syncResources, promisedArray, isKnown, isSecret, allResources);
     }
@@ -27066,10 +27094,13 @@ function outputRec(val) {
             // Note: we intentionally return a new value here and not 'val'.  This ensures we get a
             // copy.  This has been behavior we've had since the beginning and there may be subtle
             // logic out there that depends on this that we would not want ot break.
-            return promisedValues.reduce((o, kvp) => { o[kvp.key] = kvp.value; return o; }, {});
+            return promisedValues.reduce((o, kvp) => {
+                o[kvp.key] = kvp.value;
+                return o;
+            }, {});
         }
         const promisedObject = getPromisedObject(promisedValues);
-        const [syncResources, isKnown, isSecret, allResources] = getResourcesAndDetails(promisedValues.map(kvp => kvp.value));
+        const [syncResources, isKnown, isSecret, allResources] = getResourcesAndDetails(promisedValues.map((kvp) => kvp.value));
         return new exports.Output(syncResources, promisedObject, isKnown, isSecret, allResources);
     }
 }
@@ -27143,7 +27174,7 @@ function getResourcesAndDetails(allValues) {
     }
     // All the outputs were generated in `function all` using `output(v)`.  So it's safe
     // to call `.allResources!` here.
-    const allResources = Promise.all(allOutputs.map(o => o.allResources())).then(arr => {
+    const allResources = Promise.all(allOutputs.map((o) => o.allResources())).then((arr) => {
         const result = new Set();
         for (const set of arr) {
             for (const res of set) {
@@ -27153,9 +27184,9 @@ function getResourcesAndDetails(allValues) {
         return result;
     });
     // A merged output is known if all of its inputs are known.
-    const isKnown = Promise.all(allOutputs.map(o => o.isKnown)).then(ps => ps.every(b => b));
+    const isKnown = Promise.all(allOutputs.map((o) => o.isKnown)).then((ps) => ps.every((b) => b));
     // A merged output is secret if any of its inputs are secret.
-    const isSecret = Promise.all(allOutputs.map(o => isSecretOutput(o))).then(ps => ps.some(b => b));
+    const isSecret = Promise.all(allOutputs.map((o) => isSecretOutput(o))).then((ps) => ps.some((b) => b));
     return [syncResources, isKnown, isSecret, allResources];
 }
 /**
@@ -27214,10 +27245,10 @@ function containsUnknowns(value) {
         }
         seen.add(val);
         if (val instanceof Array) {
-            return val.some(e => impl(e, seen));
+            return val.some((e) => impl(e, seen));
         }
         else {
-            return Object.keys(val).some(k => impl(val[k], seen));
+            return Object.keys(val).some((k) => impl(val[k], seen));
         }
     }
 }
@@ -27236,7 +27267,7 @@ exports.Output = OutputImpl;
  *
  */
 function concat(...params) {
-    return output(params).apply(array => array.join(""));
+    return output(params).apply((array) => array.join(""));
 }
 exports.concat = concat;
 /**
@@ -27252,7 +27283,7 @@ exports.concat = concat;
  * [Promise]s, [Output]s, or just plain JavaScript values.
  */
 function interpolate(literals, ...placeholders) {
-    return output(placeholders).apply(unwrapped => {
+    return output(placeholders).apply((unwrapped) => {
         let result = "";
         // interleave the literals with the placeholders
         for (let i = 0; i < unwrapped.length; i++) {
@@ -27269,7 +27300,7 @@ exports.interpolate = interpolate;
  * [jsonStringify] Uses JSON.stringify to serialize the given Input value into a JSON string.
  */
 function jsonStringify(obj, replacer, space) {
-    return output(obj).apply(o => {
+    return output(obj).apply((o) => {
         return JSON.stringify(o, replacer, space);
     });
 }
@@ -27278,7 +27309,7 @@ exports.jsonStringify = jsonStringify;
  * [jsonParse] Uses JSON.parse to deserialize the given Input JSON string into a value.
  */
 function jsonParse(text, reviver) {
-    return output(text).apply(t => {
+    return output(text).apply((t) => {
         return JSON.parse(t, reviver);
     });
 }
@@ -45556,7 +45587,7 @@ function createUrn(name, type, parent, project, stack) {
         else {
             parentUrn = output_1.output(parent);
         }
-        parentPrefix = parentUrn.apply(parentUrnString => {
+        parentPrefix = parentUrn.apply((parentUrnString) => {
             const prefix = parentUrnString.substring(0, parentUrnString.lastIndexOf("::")) + "$";
             if (prefix.endsWith("::pulumi:pulumi:Stack$")) {
                 // Don't prefix the stack type as a parent type
@@ -45589,7 +45620,7 @@ function inheritedChildAlias(childName, parentName, parentAlias, childType) {
     // * childAlias: "urn:pulumi:stackname::projectname::aws:s3/bucket:Bucket::app-function"
     let aliasName = output_1.output(childName);
     if (childName.startsWith(parentName)) {
-        aliasName = output_1.output(parentAlias).apply(parentAliasUrn => {
+        aliasName = output_1.output(parentAlias).apply((parentAliasUrn) => {
             const parentAliasName = parentAliasUrn.substring(parentAliasUrn.lastIndexOf("::") + 2);
             return parentAliasName + childName.substring(parentName.length);
         });
@@ -45613,12 +45644,12 @@ function allAliases(childAliases, childName, childType, parent, parentName) {
     for (const childAlias of childAliases) {
         aliases.push(collapseAliasToUrn(childAlias, childName, childType, parent));
     }
-    for (const parentAlias of (parent.__aliases || [])) {
+    for (const parentAlias of parent.__aliases || []) {
         // For each parent alias, add an alias that uses that base child name and the parent alias
         aliases.push(inheritedChildAlias(childName, parentName, parentAlias, childType));
         // Also add an alias for each child alias and the parent alias
         for (const childAlias of childAliases) {
-            const inheritedAlias = collapseAliasToUrn(childAlias, childName, childType, parent).apply(childAliasURN => {
+            const inheritedAlias = collapseAliasToUrn(childAlias, childName, childType, parent).apply((childAliasURN) => {
                 const { name: aliasedChildName, type: aliasedChildType } = urnTypeAndName(childAliasURN);
                 return inheritedChildAlias(aliasedChildName, parentName, parentAlias, aliasedChildType);
             });
@@ -45752,7 +45783,7 @@ class Resource {
             // resource's properties will be resolved asynchronously after the operation completes, so
             // that dependent computations resolve normally.  If we are just planning, on the other
             // hand, values will never resolve.
-            resource_1.registerResource(this, parent, t, name, custom, remote, urn => new DependencyResource(urn), props, opts);
+            resource_1.registerResource(this, parent, t, name, custom, remote, (urn) => new DependencyResource(urn), props, opts);
         }
     }
     static isInstance(obj) {
@@ -45801,7 +45832,7 @@ Resource.doNotCapture = true;
 exports.rootStackResource = undefined;
 // collapseAliasToUrn turns an Alias into a URN given a set of default data
 function collapseAliasToUrn(alias, defaultName, defaultType, defaultParent) {
-    return output_1.output(alias).apply(a => {
+    return output_1.output(alias).apply((a) => {
         if (typeof a === "string") {
             return output_1.output(a);
         }
@@ -46059,10 +46090,10 @@ function normalizeProviders(opts) {
 function merge(dest, source, alwaysCreateArray) {
     // unwind any top level promise/outputs.
     if (isPromiseOrOutput(dest)) {
-        return output_1.output(dest).apply(d => merge(d, source, alwaysCreateArray));
+        return output_1.output(dest).apply((d) => merge(d, source, alwaysCreateArray));
     }
     if (isPromiseOrOutput(source)) {
-        return output_1.output(source).apply(s => merge(dest, s, alwaysCreateArray));
+        return output_1.output(source).apply((s) => merge(dest, s, alwaysCreateArray));
     }
     // If either are an array, make a new array and merge the values into it.
     // Otherwise, just overwrite the destination with the source value.
@@ -46200,7 +46231,7 @@ class PushableAsyncIterable {
         }
     }
     shift() {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             if (this.bufferedData.length === 0) {
                 if (this.completed === true) {
                     resolve(closeValue);
@@ -46405,16 +46436,17 @@ function leakedPromises() {
     const localStore = state.getStore();
     const leaked = localStore.leakCandidates;
     const promisePlural = leaked.size === 1 ? "promise was" : "promises were";
-    const message = leaked.size === 0 ? "" :
-        `The Pulumi runtime detected that ${leaked.size} ${promisePlural} still active\n` +
+    const message = leaked.size === 0
+        ? ""
+        : `The Pulumi runtime detected that ${leaked.size} ${promisePlural} still active\n` +
             "at the time that the process exited. There are a few ways that this can occur:\n" +
             "  * Not using `await` or `.then` on a Promise returned from a Pulumi API\n" +
             "  * Introducing a cyclic dependency between two Pulumi Resources\n" +
             "  * A bug in the Pulumi Runtime\n" +
             "\n" +
             "Leaving promises active is probably not what you want. If you are unsure about\n" +
-            "why you are seeing this message, re-run your program "
-            + "with the `PULUMI_DEBUG_PROMISE_LEAKS`\n" +
+            "why you are seeing this message, re-run your program " +
+            "with the `PULUMI_DEBUG_PROMISE_LEAKS`\n" +
             "environment variable. The Pulumi runtime will then print out additional\n" +
             "debug information about the leaked promises.";
     if (debugPromiseLeaks) {
@@ -46429,9 +46461,7 @@ function leakedPromises() {
 exports.leakedPromises = leakedPromises;
 /** @internal */
 function promiseDebugString(p) {
-    return `CONTEXT(${p._debugId}): ${p._debugCtx}\n` +
-        `STACK_TRACE:\n` +
-        `${p._debugStackTrace}`;
+    return `CONTEXT(${p._debugId}): ${p._debugCtx}\n` + `STACK_TRACE:\n` + `${p._debugStackTrace}`;
 }
 exports.promiseDebugString = promiseDebugString;
 let promiseId = 0;
@@ -46471,10 +46501,12 @@ function debuggablePromise(p, ctx) {
     }
     // Add this promise to the leak candidates list, and schedule it for removal if it resolves.
     localStore.leakCandidates.add(p);
-    return p.then((val) => {
+    return p
+        .then((val) => {
         localStore.leakCandidates.delete(p);
         return val;
-    }).catch((err) => {
+    })
+        .catch((err) => {
         localStore.leakCandidates.delete(p);
         err.promise = p;
         throw err;
@@ -46586,7 +46618,7 @@ exports.invoke = invoke;
  * Similar to `invoke`, but returns a single value instead of an object with a single key.
  */
 function invokeSingle(tok, props, opts = {}) {
-    return invokeAsync(tok, props, opts).then(outputs => {
+    return invokeAsync(tok, props, opts).then((outputs) => {
         // assume outputs have a single key
         const keys = Object.keys(outputs);
         // return the first key's value from the outputs
@@ -46602,9 +46634,7 @@ function streamInvoke(tok, props, opts = {}) {
         const done = settings_1.rpcKeepAlive();
         try {
             const serialized = yield rpc_1.serializeProperties(`streamInvoke:${tok}`, props);
-            log.debug(`StreamInvoke RPC prepared: tok=${tok}` + settings_1.excessiveDebugOutput
-                ? `, obj=${JSON.stringify(serialized)}`
-                : ``);
+            log.debug(`StreamInvoke RPC prepared: tok=${tok}` + settings_1.excessiveDebugOutput ? `, obj=${JSON.stringify(serialized)}` : ``);
             // Fetch the monitor and make an RPC request.
             const monitor = settings_1.getMonitor();
             const provider = yield resource_1.ProviderResource.register(getProvider(tok, opts));
@@ -46704,8 +46734,7 @@ function createInvokeRequest(tok, serialized, provider, opts) {
     return req;
 }
 function getProvider(tok, opts) {
-    return opts.provider ? opts.provider :
-        opts.parent ? opts.parent.getProvider(tok) : undefined;
+    return opts.provider ? opts.provider : opts.parent ? opts.parent.getProvider(tok) : undefined;
 }
 function deserializeResponse(tok, resp) {
     const failures = resp.getFailuresList();
@@ -46720,9 +46749,7 @@ function deserializeResponse(tok, resp) {
         throw new Error(`Invoke of '${tok}' failed: ${reasons}`);
     }
     const ret = resp.getReturn();
-    return ret === undefined
-        ? ret
-        : rpc_1.deserializeProperties(ret);
+    return ret === undefined ? ret : rpc_1.deserializeProperties(ret);
 }
 /**
  * `call` dynamically calls the function, `tok`, which is offered by a provider plugin.
@@ -46961,7 +46988,8 @@ function getResource(res, parent, props, custom, urn) {
                     resp = yield debuggable_1.debuggablePromise(new Promise((resolve, reject) => monitor.invoke(req, (rpcError, innerResponse) => {
                         log.debug(`getResource Invoke RPC finished: err: ${rpcError}, resp: ${innerResponse}`);
                         if (rpcError) {
-                            if (rpcError.code === grpc.status.UNAVAILABLE || rpcError.code === grpc.status.CANCELLED) {
+                            if (rpcError.code === grpc.status.UNAVAILABLE ||
+                                rpcError.code === grpc.status.CANCELLED) {
                                 err = rpcError;
                                 settings_2.terminateRpcs();
                                 rpcError.message = "Resource monitor is terminating";
@@ -47058,14 +47086,14 @@ function readResource(res, parent, t, name, props, opts) {
                     resp = yield debuggable_1.debuggablePromise(new Promise((resolve, reject) => monitor.readResource(req, (rpcError, innerResponse) => {
                         log.debug(`ReadResource RPC finished: ${label}; err: ${rpcError}, resp: ${innerResponse}`);
                         if (rpcError) {
-                            if (rpcError.code === grpc.status.UNAVAILABLE || rpcError.code === grpc.status.CANCELLED) {
+                            if (rpcError.code === grpc.status.UNAVAILABLE ||
+                                rpcError.code === grpc.status.CANCELLED) {
                                 err = rpcError;
                                 settings_2.terminateRpcs();
                                 rpcError.message = "Resource monitor is terminating";
                                 preallocError.code = rpcError.code;
                             }
-                            preallocError.message =
-                                `failed to read resource #${resolvedID} '${name}' [${t}]: ${rpcError.message}`;
+                            preallocError.message = `failed to read resource #${resolvedID} '${name}' [${t}]: ${rpcError.message}`;
                             reject(preallocError);
                         }
                         else {
@@ -47213,7 +47241,8 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
                             err = rpcErr;
                             // If the monitor is unavailable, it is in the process of shutting down or has already
                             // shut down. Don't emit an error and don't do any more RPCs, just exit.
-                            if (rpcErr.code === grpc.status.UNAVAILABLE || rpcErr.code === grpc.status.CANCELLED) {
+                            if (rpcErr.code === grpc.status.UNAVAILABLE ||
+                                rpcErr.code === grpc.status.CANCELLED) {
                                 // Re-emit the message
                                 settings_2.terminateRpcs();
                                 rpcErr.message = "Resource monitor is terminating";
@@ -47262,7 +47291,7 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
             if (rpcDeps) {
                 for (const [k, propertyDeps] of resp.getPropertydependenciesMap().entries()) {
                     const urns = propertyDeps.getUrnsList();
-                    deps[k] = urns.map(urn => newDependency(urn));
+                    deps[k] = urns.map((urn) => newDependency(urn));
                 }
             }
             // Now resolve the output properties.
@@ -47416,7 +47445,7 @@ function prepareResource(label, res, parent, custom, remote, props, opts, type, 
             // Wait for all aliases.
             const aliases = [];
             const uniqueAliases = new Set();
-            for (const alias of (computedAliases || [])) {
+            for (const alias of computedAliases || []) {
                 const aliasVal = yield output_1.output(alias).promise();
                 if (!uniqueAliases.has(aliasVal)) {
                     uniqueAliases.add(aliasVal);
@@ -47483,9 +47512,8 @@ function getAllTransitivelyReferencedResourceURNs(resources, exclude) {
         // [Comp1, Cust1, Comp2, Cust2, Cust3]
         const transitivelyReachableResources = yield getTransitivelyReferencedChildResourcesOfComponentResources(resources, exclude);
         // Then we filter to only include Custom and Remote resources.
-        const transitivelyReachableCustomResources = [...transitivelyReachableResources]
-            .filter(r => (resource_1.CustomResource.isInstance(r) || r.__remote) && !exclude.has(r));
-        const promises = transitivelyReachableCustomResources.map(r => r.urn.promise());
+        const transitivelyReachableCustomResources = [...transitivelyReachableResources].filter((r) => (resource_1.CustomResource.isInstance(r) || r.__remote) && !exclude.has(r));
+        const promises = transitivelyReachableCustomResources.map((r) => r.urn.promise());
         const urns = yield Promise.all(promises);
         return new Set(urns);
     });
@@ -47545,7 +47573,7 @@ function gatherExplicitDependencies(dependsOn) {
             }
             else if (output_1.Output.isInstance(dependsOn)) {
                 // Recursively gather dependencies, await the promise, and append the output's dependencies.
-                const dos = dependsOn.apply(v => gatherExplicitDependencies(v));
+                const dos = dependsOn.apply((v) => gatherExplicitDependencies(v));
                 const urns = yield dos.promise();
                 const dosResources = yield output_1.getAllResources(dos);
                 const implicits = yield gatherExplicitDependencies([...dosResources]);
@@ -47689,7 +47717,11 @@ function runAsyncResourceOp(label, callback, serial) {
     })), label + "-initial"));
     // Ensure the process won't exit until this RPC call finishes and resolve it when appropriate.
     const done = settings_2.rpcKeepAlive();
-    const finalOp = debuggable_1.debuggablePromise(resourceOp.then(() => { done(); }, () => { done(); }), label + "-final");
+    const finalOp = debuggable_1.debuggablePromise(resourceOp.then(() => {
+        done();
+    }, () => {
+        done();
+    }), label + "-final");
     // Set up another promise that propagates the error, if any, so that it triggers unhandled rejection logic.
     resourceOp.catch((err) => Promise.reject(err));
     // If serialization is requested, wait for the prior resource operation to finish before we proceed, serializing
@@ -47841,7 +47873,7 @@ function serializeFilteredProperties(label, props, acceptKey, opts) {
  */
 function serializeResourceProperties(label, props, opts) {
     return __awaiter(this, void 0, void 0, function* () {
-        return serializeFilteredProperties(label, props, key => key !== "id" && key !== "urn", opts);
+        return serializeFilteredProperties(label, props, (key) => key !== "id" && key !== "urn", opts);
     });
 }
 exports.serializeResourceProperties = serializeResourceProperties;
@@ -47851,7 +47883,7 @@ exports.serializeResourceProperties = serializeResourceProperties;
  */
 function serializeProperties(label, props, opts) {
     return __awaiter(this, void 0, void 0, function* () {
-        const [result] = yield serializeFilteredProperties(label, props, _ => true, opts);
+        const [result] = yield serializeFilteredProperties(label, props, (_) => true, opts);
         return result;
     });
 }
@@ -47859,7 +47891,7 @@ exports.serializeProperties = serializeProperties;
 /** @internal */
 function serializePropertiesReturnDeps(label, props, opts) {
     return __awaiter(this, void 0, void 0, function* () {
-        return serializeFilteredProperties(label, props, _ => true, opts);
+        return serializeFilteredProperties(label, props, (_) => true, opts);
     });
 }
 exports.serializePropertiesReturnDeps = serializePropertiesReturnDeps;
@@ -48239,7 +48271,7 @@ function deserializeProperty(prop) {
                         const assets = {};
                         for (const name of Object.keys(prop["assets"])) {
                             const a = deserializeProperty(prop["assets"][name]);
-                            if (!(asset.Asset.isInstance(a)) && !(asset.Archive.isInstance(a))) {
+                            if (!asset.Asset.isInstance(a) && !asset.Archive.isInstance(a)) {
                                 throw new Error("Expected an AssetArchive's assets to be unmarshaled Asset or Archive objects");
                             }
                             assets[name] = a;
@@ -48300,7 +48332,7 @@ function deserializeProperty(prop) {
                     const isSecret = prop["secret"] === true;
                     const dependencies = prop["dependencies"];
                     const resources = Array.isArray(dependencies)
-                        ? dependencies.map(d => new resource_1.DependencyResource(d))
+                        ? dependencies.map((d) => new resource_1.DependencyResource(d))
                         : [];
                     return new output_1.Output(resources, Promise.resolve(value), Promise.resolve(isKnown), Promise.resolve(isSecret), Promise.resolve([]));
                 default:
@@ -48332,7 +48364,7 @@ exports.deserializeProperty = deserializeProperty;
  * promise may still be rejected.
  */
 function suppressUnhandledGrpcRejections(p) {
-    p.catch(err => {
+    p.catch((err) => {
         if (!errors_1.isGrpcError(err)) {
             throw err;
         }
@@ -48802,7 +48834,7 @@ exports.disconnectSync = disconnectSync;
 function rpcKeepAlive() {
     const localStore = state_1.getStore();
     let done = undefined;
-    const donePromise = debuggable_1.debuggablePromise(new Promise(resolve => done = resolve), "rpcKeepAlive");
+    const donePromise = debuggable_1.debuggablePromise(new Promise((resolve) => (done = resolve)), "rpcKeepAlive");
     localStore.settings.rpcDone = localStore.settings.rpcDone.then(() => donePromise);
     return done;
 }
@@ -49075,7 +49107,7 @@ function massage(prop, objectStack) {
             return yield massage(yield prop, objectStack);
         }
         if (output_1.Output.isInstance(prop)) {
-            const result = prop.apply(v => massage(v, objectStack));
+            const result = prop.apply((v) => massage(v, objectStack));
             // explicitly await the underlying promise of the output here.  This is necessary to get a
             // deterministic walk of the object graph.  We need that deterministic walk, otherwise our
             // actual cycle detection logic (using 'objectStack') doesn't work.  i.e. if we don't do
@@ -49144,7 +49176,7 @@ function massageComplex(prop, objectStack) {
             // from a resource. This allows the engine to perform resource-specific filtering of unknowns
             // from output diffs during a preview. This filtering is not necessary during an update because
             // all property values are known.
-            const pojo = yield serializeAllKeys(n => !n.startsWith("__"));
+            const pojo = yield serializeAllKeys((n) => !n.startsWith("__"));
             return !settings_1.isDryRun() ? pojo : Object.assign(Object.assign({}, pojo), { "@isPulumiResource": true });
         }
         if (prop instanceof Array) {
@@ -49154,7 +49186,7 @@ function massageComplex(prop, objectStack) {
             }
             return result;
         }
-        return yield serializeAllKeys(n => true);
+        return yield serializeAllKeys((n) => true);
         function serializeAllKeys(include) {
             return __awaiter(this, void 0, void 0, function* () {
                 const obj = {};
@@ -49260,7 +49292,7 @@ class LocalStore {
         this.stackResource = undefined;
         /**
          * leakCandidates tracks the list of potential leak candidates.
-        */
+         */
         this.leakCandidates = new Set();
     }
 }
@@ -49280,13 +49312,11 @@ function setStackResource(newStackResource) {
     localStore.stackResource = newStackResource;
 }
 exports.setStackResource = setStackResource;
-;
 /** @internal */
 function getLocalStore() {
     return exports.asyncLocalStorage.getStore();
 }
 exports.getLocalStore = getLocalStore;
-;
 getLocalStore.captureReplacement = () => {
     const returnFunc = () => {
         if (global.globalStore === undefined) {
