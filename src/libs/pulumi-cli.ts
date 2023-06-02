@@ -7,6 +7,22 @@ import * as semver from 'semver';
 import * as exec from './exec';
 import { getVersionObject } from './libs/get-version';
 
+/**
+ * Returns true if the version is known to have issues and should not be used
+ * if already installed on the runner. Instead, proceed to downloading the CLI.
+ */
+function isKnownBadVersion(version: string): boolean {
+  const knownBadVersions = new Set([
+    // The following versions have a regression with the `--target` and
+    // `--target-replace` flags that may cause stack corruption when used.
+    // See: https://github.com/pulumi/pulumi/issues/12964
+    '3.66.0',
+    '3.67.0',
+    '3.67.1',
+  ]);
+  return knownBadVersions.has(version);
+}
+
 export async function getVersion(): Promise<string | undefined> {
   const res = await exec.exec('pulumi', ['version']);
 
@@ -58,8 +74,13 @@ export async function downloadCli(range: string): Promise<void> {
     const runnerVersion = await getVersion();
 
     if (runnerVersion) {
-      // Check if runner version matches
-      if (semver.satisfies(runnerVersion, range)) {
+      if (isKnownBadVersion(runnerVersion)) {
+        // If the version on the runner is known bad, proceed to downloading the CLI to get
+        // a more recent version.
+        core.info(
+          `Pulumi version ${runnerVersion} has a known issue. Proceeding to download`,
+        );
+      } else if (semver.satisfies(runnerVersion, range)) {
         // If runner version matches, skip downloading CLI by exiting the function
         core.info(
           `Pulumi version ${runnerVersion} is already installed on this machine. Skipping download`,
