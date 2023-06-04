@@ -48,6 +48,35 @@ jobs:
     outputs:
       changed: ${{ steps.changes.outputs.dist }}
 
+  test-install-only-without-removal-of-pre-installed-pulumi:
+    needs: install-and-build
+    if:
+      ${{ needs.install-and-build.outputs.changed == 'true' || github.event_name
+      == 'workflow_dispatch' }}
+    runs-on: ${{ matrix.os }}
+    name: Install-only without removal of pre-installed Pulumi on ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      # If no action is specified, just install.
+      - uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          config-map: '{name: {value: my-pet, secret: false}}'
+
+      - run: pulumi version
+
   test-install-only:
     needs: install-and-build
     if:
