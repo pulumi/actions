@@ -2,10 +2,12 @@
 
 ## HEAD (Unreleased)
 
+--
+
+## 4.4.0 (2023-06-05)
+
 - feat: Download CLI if preinstalled version has a known issue.
   ([#956](https://github.com/pulumi/actions/pull/956))
-
---
 
 ## 4.3.0 (2023-05-12)
 
