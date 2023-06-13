@@ -4,6 +4,10 @@
 
 --
 
+## 4.5.0 (2023-06-13)
+
+- feat: Show a brief summary and direct URL to Pulumi UI in PR comments
+
 ## 4.4.0 (2023-06-05)
 
 - feat: Download CLI if preinstalled version has a known issue.

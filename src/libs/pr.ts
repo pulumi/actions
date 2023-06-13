@@ -22,21 +22,25 @@ export async function handlePullRequestMessage(
 
   const rawBody = output.substring(0, 64_000);
 
-  // Make sure the output isn't empty. If it's not, get the last 100 lines.
-  const last100Lines = output.length > 0 ? output.slice(-100) : '';
+  // Make sure the output isn't empty. If it's not, get the last 500 chars.
+  const last500Chars = output.length > 0 ? output.slice(-100) : '';
 
-  const diffUpdates = last100Lines.match(/\~[0-9]+ to update/);
-  const diffCreations = last100Lines.match(/\+[0-9]+ to create/);
-  const diffDeletions = last100Lines.match(/\-[0-9]+ to delete/);
-  const diffUnchanged = last100Lines.match(/[0-9]+ unchanged/);
+  // Get the first 500 chars to fetch the operation URL on Pulumi's UI
+  const first500Chars = output.length > 0 ? output.slice(500) : '';
+
+  const diffUpdates = last500Chars.match(/\~[0-9]+ to update/);
+  const diffCreations = last500Chars.match(/\+[0-9]+ to create/);
+  const diffDeletions = last500Chars.match(/\-[0-9]+ to delete/);
+  const diffUnchanged = last500Chars.match(/[0-9]+ unchanged/);
+  const url = first500Chars.match(/View Live: (.*)/)[1] ?? 'N/A';
 
   // Regex to match the diff summary
-  const searchPattern =
+  const summarySearchPattern =
     /(~|\+|-)?[0-9]+( to)? (update|create|delete|unchanged)/;
 
   // Generate a summary with the changes, if any. If there's none, return an empty string.
   // If certain diffs are absent, they're set to 0 to make output consistent
-  const diffSummary = searchPattern.test(last100Lines)
+  const diffSummary = summarySearchPattern.test(last500Chars)
     ? `:red_circle: ${diffDeletions ?? '-0 to delete'},
        :yellow_circle: ${diffUpdates ?? '~0 to update'},
        :green_circle: ${diffCreations ?? '+0 to create'},
@@ -48,6 +52,7 @@ export async function handlePullRequestMessage(
   // otherwise the backticks won't work as intended
   const body = dedent`
     ${heading}
+    URL: ${url}
 
     ${diffSummary}
     <details>
