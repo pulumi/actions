@@ -53,7 +53,7 @@
     "envalid": "^7.3.1",
     "got": "^11.8.6",
     "runtypes": "^6.6.0",
-    "semver": "^7.5.1",
+    "semver": "^7.5.2",
     "ts-invariant": "^0.10.3",
     "typescript": "4.5"
   }
