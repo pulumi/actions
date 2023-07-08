@@ -85025,6 +85025,16 @@ function parse(source, root, options) {
             parseGroup(parent, rule);
             return;
         }
+        // Type names can consume multiple tokens, in multiple variants:
+        //    package.subpackage   field       tokens: "package.subpackage" [TYPE NAME ENDS HERE] "field"
+        //    package . subpackage field       tokens: "package" "." "subpackage" [TYPE NAME ENDS HERE] "field"
+        //    package.  subpackage field       tokens: "package." "subpackage" [TYPE NAME ENDS HERE] "field"
+        //    package  .subpackage field       tokens: "package" ".subpackage" [TYPE NAME ENDS HERE] "field"
+        // Keep reading tokens until we get a type name with no period at the end,
+        // and the next token does not start with a period.
+        while (type.endsWith(".") || peek().startsWith(".")) {
+            type += next();
+        }
 
         /* istanbul ignore if */
         if (!typeRefRe.test(type))
@@ -88184,7 +88194,7 @@ util.decorateEnum = function decorateEnum(object) {
 util.setProperty = function setProperty(dst, path, value) {
     function setProp(dst, path, value) {
         var part = path.shift();
-        if (part === "__proto__") {
+        if (part === "__proto__" || part === "prototype") {
           return dst;
         }
         if (path.length > 0) {
