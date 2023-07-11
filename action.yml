@@ -26,6 +26,10 @@ inputs:
   comment-on-pr-number:
     description: 'Overrides the PR used to comment on'
     required: false
+  comment-on-summary:
+    description: 'If true, a comment on the GitHub step summary will be created'
+    required: false
+    default: 'false'
   github-token:
     description: 'Github Token'
     required: false

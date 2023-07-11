@@ -54,6 +54,9 @@ The action can be configured with the following arguments:
   of the Pulumi action to the PR. Ignored unless `${{ github.event }}` type is
   `pull_request`.
 
+- `comment-on-summary` - (optional) If `true`, then the action will add the
+  results of the Pulumi action to the GitHub step summary.
+
 - `github-token` - (optional) A GitHub token that has access levels to allow the
   Action to comment on a PR. Defaults to `${{ github.token }}`
 

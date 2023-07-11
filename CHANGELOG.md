@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- feat: comment on GitHub step summary.
+  ([#986](https://github.com/pulumi/actions/pull/986))
+
 --
 
 ## 4.4.0 (2023-06-05)

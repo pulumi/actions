@@ -43,6 +43,7 @@ export function makeConfig() {
     githubToken: getInput('github-token'),
     commentOnPr: getBooleanInput('comment-on-pr'),
     commentOnPrNumber: getNumberInput('comment-on-pr-number', {}),
+    commentOnSummary: getBooleanInput('comment-on-summary'),
     upsert: getBooleanInput('upsert'),
     remove: getBooleanInput('remove'),
     refresh: getBooleanInput('refresh'),
