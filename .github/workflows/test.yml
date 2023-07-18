@@ -56,3 +56,49 @@ jobs:
           work-dir: .github/test-stacks/golang
           config-map: "{name: {value: test, secret: false}}"
       - run: echo 'The random string is `${{ steps.pulumi.outputs.name }}`'
+  test-update-plan: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '^1.13.1'
+      - run: |
+          pulumi login --local
+          pulumi stack init dev
+        working-directory: .github/test-stacks/golang
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: yarn
+      - run: yarn install
+      - run: yarn build
+      - uses: ./
+        if: always()
+        id: pulumi-preview
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: preview
+          cloud-url: file://~
+          stack-name: dev
+          upsert: true
+          work-dir: .github/test-stacks/golang
+          config-map: "{name: {value: test, secret: false}}"
+          plan: /tmp/update-plan.json
+      - uses: ./
+        if: always()
+        id: pulumi-up
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: up
+          cloud-url: file://~
+          stack-name: dev
+          upsert: true
+          work-dir: .github/test-stacks/golang
+          config-map: "{name: {value: test, secret: false}}"
+          plan: /tmp/update-plan.json
+      - run: echo 'The random string is `${{ steps.pulumi-up.outputs.name }}`'

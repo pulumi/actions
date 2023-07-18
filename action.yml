@@ -93,6 +93,9 @@ inputs:
     description: 'Skip destroying protected resources. Only valid when command is destroy.'
     required: false
     default: 'false'
+  plan:
+    description: 'Where to either save an Update Plan or read an Update Plan from'
+    required: false
 outputs:
   output:
     description: Output from running command
