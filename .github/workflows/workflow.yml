@@ -270,7 +270,7 @@ jobs:
       - name: Get npm cache directory
         id: npm-cache-dir
         run: |
-          echo "::set-output name=dir::$(npm config get cache)"
+          echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         id: npm-cache
@@ -412,7 +412,7 @@ jobs:
       - name: Get npm cache directory
         id: npm-cache-dir
         run: |
-          echo "::set-output name=dir::$(npm config get cache)"
+          echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         id: npm-cache
