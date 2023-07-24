@@ -97369,6 +97369,7 @@ function makeConfig() {
                 alternatives: ['always', 'never', 'raw', 'auto'],
             }),
             excludeProtected: (0,main.getBooleanInput)('exclude-protected'),
+            plan: (0,main.getInput)('plan'),
         },
     };
 }
