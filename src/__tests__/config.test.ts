@@ -16,6 +16,7 @@ const defaultConfig: Record<string, string> = {
   diff: 'false',
   'target-dependents': 'false',
   'exclude-protected': 'false',
+  'plan': '',
 };
 
 function setupMockedConfig(config: Record<string, string>) {
@@ -49,6 +50,7 @@ describe('config.ts', () => {
           "expectNoChanges": false,
           "message": "",
           "parallel": undefined,
+          "plan": "",
           "policyPackConfigs": Array [],
           "policyPacks": Array [],
           "replace": Array [],
