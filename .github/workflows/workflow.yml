@@ -57,6 +57,7 @@ jobs:
     name: Install-only without removal of pre-installed Pulumi on ${{ matrix.os }}
     strategy:
       matrix:
+        command: [up, refresh, destroy, preview, output]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     steps:
