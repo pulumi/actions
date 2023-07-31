@@ -5,7 +5,8 @@
 - feat: Add Update Plan Functionality
   ([#994](https://github.com/pulumi/actions/pull/994))
 
---
+- feat: Add support for output command.
+  ([#868](https://github.com/pulumi/actions/issues/868)) --
 
 ## 4.4.0 (2023-06-05)
 
@@ -51,15 +52,6 @@
 
 - fix: Fix installation on Windows.
   ([#851](https://github.com/pulumi/actions/pull/851))
-
-- feat: Add support for output command.
-  ([#868](https://github.com/pulumi/actions/issues/868))
-
-- feat: Add support for output command.
-  ([#868](https://github.com/pulumi/actions/issues/868))
-
-- feat: Add support for output command.
-  ([#868](https://github.com/pulumi/actions/issues/868))
 
 ## 4.0.0 (2023-19-01)
 
