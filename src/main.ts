@@ -111,7 +111,6 @@ const runAction = async (config: Config): Promise<void> => {
 
   for (const [outKey, outExport] of Object.entries(outputs)) {
     core.setOutput(outKey, outExport.value);
-    onOutput(outKey + ' found');
     if (outExport.secret) {
       core.setSecret(outExport.value);
     }
