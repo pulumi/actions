@@ -70,6 +70,7 @@ export function makeConfig() {
         alternatives: ['always', 'never', 'raw', 'auto'] as const,
       }),
       excludeProtected: getBooleanInput('exclude-protected'),
+      plan: getInput('plan'),
     },
   };
 }

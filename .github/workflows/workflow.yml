@@ -174,6 +174,34 @@ jobs:
           work-dir: .github/test-stacks/dotnet
           config-map: '{name: {value: my-pet, secret: false}}'
 
+      - name: Ensure Update Plan is Not Generated
+        shell: bash
+        if: matrix.command == 'preview'
+        working-directory: .github/test-stacks/dotnet
+        run: |
+          ! test -f update-plan.json || exit 1
+
+      - name: Run Pulumi Preview with Update Plan
+        if: matrix.command == 'preview'
+        uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          upsert: true
+          work-dir: .github/test-stacks/dotnet
+          config-map: '{name: {value: hostname, secret: false}}'
+          plan: update-plan.json
+
+      - name: Ensure Update Plan is Generated and Not Empty
+        shell: bash
+        if: matrix.command == 'preview'
+        working-directory: .github/test-stacks/dotnet
+        run: |
+          test -s update-plan.json
+
   test-golang-stack:
     needs: install-and-build
     if:
@@ -226,6 +254,34 @@ jobs:
           work-dir: .github/test-stacks/golang
           config-map: '{name: {value: my-user-name, secret: false}}'
 
+      - name: Ensure Update Plan is Not Generated
+        shell: bash
+        if: matrix.command == 'preview'
+        working-directory: .github/test-stacks/golang
+        run: |
+          ! test -f update-plan.json || exit 1
+
+      - name: Run Pulumi Preview with Update Plan
+        if: matrix.command == 'preview'
+        uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          upsert: true
+          work-dir: .github/test-stacks/golang
+          config-map: '{name: {value: hostname, secret: false}}'
+          plan: update-plan.json
+
+      - name: Ensure Update Plan is Generated and Not Empty
+        shell: bash
+        if: matrix.command == 'preview'
+        working-directory: .github/test-stacks/golang
+        run: |
+          test -s update-plan.json
+
   test-nodejs-stack:
     needs: install-and-build
     if:
@@ -266,19 +322,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
-
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-
-      - uses: actions/cache@v3
-        id: npm-cache
-        with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: npm
 
       - run: npm install
         working-directory: .github/test-stacks/nodejs
@@ -293,6 +337,35 @@ jobs:
           upsert: true
           work-dir: .github/test-stacks/nodejs
           config-map: '{name: {value: hostname, secret: false}}'
+
+      - name: Ensure Update Plan is Not Generated
+        shell: bash
+        if: matrix.command == 'preview'
+        working-directory: .github/test-stacks/nodejs
+        run: |
+          ! test -f update-plan.json || exit 1
+
+      - name: Run Pulumi Preview with Update Plan
+        if: matrix.command == 'preview'
+        uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          upsert: true
+          work-dir: .github/test-stacks/nodejs
+          config-map: '{name: {value: hostname, secret: false}}'
+          plan: update-plan.json
+
+      - name: Ensure Update Plan is Generated and Not Empty
+        shell: bash
+        if: matrix.command == 'preview'
+        working-directory: .github/test-stacks/nodejs
+        run: |
+          test -s update-plan.json
+
 
   test-python-stack:
     needs: install-and-build
@@ -373,6 +446,34 @@ jobs:
           work-dir: .github/test-stacks/python
           config-map: '{name: {value: hostname, secret: false}}'
 
+      - name: Ensure Update Plan is Not Generated
+        shell: bash
+        if: matrix.command == 'preview'
+        working-directory: .github/test-stacks/python
+        run: |
+          ! test -f update-plan.json || exit 1
+
+      - name: Run Pulumi Preview with Update Plan
+        if: matrix.command == 'preview'
+        uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: ${{ matrix.command }}
+          cloud-url: file://~
+          stack-name: dev
+          upsert: true
+          work-dir: .github/test-stacks/python
+          config-map: '{name: {value: hostname, secret: false}}'
+          plan: update-plan.json
+
+      - name: Ensure Update Plan is Generated and Not Empty
+        shell: bash
+        if: matrix.command == 'preview'
+        working-directory: .github/test-stacks/python
+        run: |
+          test -s update-plan.json
+
   test-generic-inputs:
     needs: install-and-build
     if:
@@ -409,22 +510,10 @@ jobs:
           name: dist
           path: dist
 
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-
-      - uses: actions/cache@v3
-        id: npm-cache
-        with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
+          cache: npm
 
       - run: npm install
         working-directory: .github/test-stacks/nodejs
