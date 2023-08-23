@@ -96939,6 +96939,7 @@ function makeConfig() {
         githubToken: (0,main.getInput)('github-token'),
         commentOnPr: (0,main.getBooleanInput)('comment-on-pr'),
         commentOnPrNumber: (0,main.getNumberInput)('comment-on-pr-number', {}),
+        commentOnSummary: (0,main.getBooleanInput)('comment-on-summary'),
         upsert: (0,main.getBooleanInput)('upsert'),
         remove: (0,main.getBooleanInput)('remove'),
         refresh: (0,main.getBooleanInput)('refresh'),
@@ -97351,6 +97352,11 @@ const runAction = (config) => __awaiter(void 0, void 0, void 0, function* () {
             (0,invariant/* default */.ZP)(config.githubToken, 'github-token is missing.');
             handlePullRequestMessage(config, projectName, output);
         }
+    }
+    if (config.commentOnSummary) {
+        yield core.summary.addHeading(`Pulumi ${config.stackName} results`)
+            .addCodeBlock(output, "diff")
+            .write();
     }
     if (config.remove && config.command === 'destroy') {
         stack.workspace.removeStack(stack.name);
