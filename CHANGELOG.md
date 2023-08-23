@@ -2,6 +2,8 @@
 
 ## HEAD (Unreleased)
 
+- feat: comment on GitHub step summary.
+  ([#986](https://github.com/pulumi/actions/pull/986))
 - feat: Add Update Plan Functionality
   ([#994](https://github.com/pulumi/actions/pull/994))
 

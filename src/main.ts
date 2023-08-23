@@ -124,6 +124,13 @@ const runAction = async (config: Config): Promise<void> => {
     }
   }
 
+  if (config.commentOnSummary) {
+    await core.summary
+      .addHeading(`Pulumi ${config.stackName} results`)
+      .addCodeBlock(output, "diff")
+      .write();
+  }
+
   if (config.remove && config.command === 'destroy') {
     stack.workspace.removeStack(stack.name);
   }
