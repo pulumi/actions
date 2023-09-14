@@ -6,6 +6,10 @@
 
 ---
 
+## 4.6.0 (2023-10-12)
+
+- chore: node 20 as default runtime
+
 ## 4.5.0 (2023-09-12)
 
 - feat: comment on GitHub step summary.
