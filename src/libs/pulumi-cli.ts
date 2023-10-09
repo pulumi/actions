@@ -55,6 +55,18 @@ export function getPlatform(): string | undefined {
   return platforms[`${runnerPlatform}-${runnerArch}`];
 }
 
+async function exportFromCache(cachedPath: string, expectedVersion: string) {
+  core.addPath(cachedPath);
+
+  // Check that running pulumi now returns a version we expect
+  const versionExec = await exec.exec(`pulumi`, ['version'], true);
+  const pulumiVersion = versionExec.stdout.trim();
+  core.debug(`Running pulumi verison returned: ${pulumiVersion}`);
+  if (!semver.satisfies(pulumiVersion, expectedVersion)) {
+    throw new Error('Installed version did not satisfy the resolved version');
+  }
+}
+
 export async function downloadCli(range: string): Promise<void> {
   const platform = getPlatform();
   core.debug(`Platform: ${platform}`);
@@ -94,6 +106,13 @@ export async function downloadCli(range: string): Promise<void> {
     } else {
       core.info('Pulumi is not detected in the PATH. Proceeding to download');
     }
+  }
+
+  let cachedPath = tc.find('pulumi', range);
+  if (cachedPath) {
+    core.info('Found Pulumi in the tool cache');
+    await exportFromCache(cachedPath, range);
+    return;
   }
 
   const { version, downloads } = await getVersionObject(range);
@@ -158,18 +177,10 @@ export async function downloadCli(range: string): Promise<void> {
     }
   }
 
-  const cachedPath = await tc.cacheDir(
+  cachedPath = await tc.cacheDir(
     path.join(destination, 'bin'),
     'pulumi',
     version,
   );
-  core.addPath(cachedPath);
-
-  // Check that running pulumi now returns a version we expect
-  const versionExec = await exec.exec(`pulumi`, ['version'], true);
-  const pulumiVersion = versionExec.stdout.trim();
-  core.debug(`Running pulumi verison returned: ${pulumiVersion}`);
-  if (!semver.satisfies(pulumiVersion, version)) {
-    throw new Error('Installed version did not satisfy the resolved version');
-  }
+  await exportFromCache(cachedPath, version);
 }
