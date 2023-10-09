@@ -26,6 +26,10 @@ inputs:
   comment-on-pr-number:
     description: 'Overrides the PR used to comment on'
     required: false
+  comment-on-summary:
+    description: 'If true, a comment on the GitHub step summary will be created'
+    required: false
+    default: 'false'
   github-token:
     description: 'Github Token'
     required: false
@@ -107,5 +111,5 @@ runs:
   #
   # Trying to upgrade in July 2022 broke our users that depend on
   # GitHub Enterprise versions < 3.4
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
