@@ -4,6 +4,9 @@
 
 **(none)**
 
+- feat: Search for pulumi in the tool cache
+  ([#1025](https://github.com/pulumi/actions/pull/1025))
+
 ---
 
 ## 4.6.0 (2023-10-12)
