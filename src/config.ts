@@ -115,6 +115,9 @@ export function makeConfig() {
       suppressOutputs: getBooleanInput('suppress-outputs'),
       suppressProgress: getBooleanInput('suppress-progress'),
       continueOnError: getBooleanInput('continue-on-error'),
+      logVerbosity: getInput('log-verbosity'),
+      logToStdErr: getInput('log-to-std-err'),
+      debug: getInput('debug'),
     },
   };
 }

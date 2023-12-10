@@ -118,6 +118,15 @@ inputs:
     description: 'Continue running the update even if an error is encountered'
     required: false
     default: 'false'
+  log-verbosity:
+    description: 'Log verbosity of CLI during execution 1-10; Anything >3 is very verbose'
+    required: false
+  log-to-std-err:
+    description: 'Log to stderr instead of to files'
+    required: false
+  debug:
+    description: 'Print detailed debugging output during resource operations'
+    required: false
 outputs:
   output:
     description: Output from running command
