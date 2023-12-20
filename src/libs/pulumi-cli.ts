@@ -100,7 +100,12 @@ export async function downloadCli(range: string): Promise<void> {
 
   core.info(`Matched version: ${version}`);
 
-  const isUnsupportedVersion = semver.lt(version, '3.0.0');
+  let isUnsupportedVersion;
+  if (range == 'dev') {
+    isUnsupportedVersion = false;
+  } else {
+    isUnsupportedVersion = semver.lt(version, '3.0.0');
+  }
 
   if (isUnsupportedVersion) {
     core.warning(

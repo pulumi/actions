@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: allow installing the latest dev release automatically
 
 ---
 
