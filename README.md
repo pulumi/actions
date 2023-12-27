@@ -99,12 +99,13 @@ The action can be configured with the following arguments:
 - `policyPacks` - (optional) Run one or more policy packs with the provided
   `command`. Multiple values can be specified one per line (example: `<value | string>,...`).
 
-- `policyPackConfigs` - (optional) Path(s) to JSON file(s) containing the
-  config for the policy pack with the corresponding "policy-pack" argument.
-  Multiple values can be specified one per line (example: `<value | string>,...`).
+- `policyPackConfigs` - (optional) Path(s) to JSON file(s) containing the config
+  for the policy pack with the corresponding "policy-pack" argument. Multiple
+  values can be specified one per line (example: `<value | string>,...`).
 
 - `pulumi-version` - (optional) Install a specific version of the Pulumi CLI.
-  Defaults to "^3"
+  Defaults to "^3". Allows a "dev" argument to download the latest unreleased
+  version.
 
 - `remove` - (optional) Removes the target stack if all resources are destroyed.
   Used only with `destroy` command.

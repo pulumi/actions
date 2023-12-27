@@ -21,6 +21,22 @@ export type Version = rt.Static<typeof VersionRt>;
 const VersionsRt = rt.Array(VersionRt);
 
 export async function getVersionObject(range: string): Promise<Version> {
+  if (range == 'dev') {
+    const result = await got('https://www.pulumi.com/latest-dev-version');
+    const version = 'v' + result.body.trim();
+    const date = new Date().toISOString();
+    const downloads = {
+      'linux-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-linux-x64.tar.gz`,
+      'linux-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-linux-arm64.tar.gz`,
+      'darwin-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-x64.tar.gz`,
+      'darwin-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-arm64.tar.gz`,
+      'windows-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-windows-x64.zip`,
+    };
+    const checksums = 'https://get.pulumi.com/releases/sdk/pulumi-${version}-checksums.txt';
+    const latest = false;
+    return { version, date, downloads, checksums, latest };
+  }
+
   const result = await got(
     'https://raw.githubusercontent.com/pulumi/docs/master/data/versions.json',
     { responseType: 'json' },
