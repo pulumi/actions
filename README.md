@@ -97,8 +97,7 @@ The action can be configured with the following arguments:
   (1 for no parallelism). Defaults to unbounded.
 
 - `policyPacks` - (optional) Run one or more policy packs with the provided
-  `command`. Multiple values can be specified one per line (example:
-  `<value | string>,...`).
+  `command`. Multiple values can be specified one per line (example: `<value | string>,...`).
 
 - `policyPackConfigs` - (optional) Path(s) to JSON file(s) containing the config
   for the policy pack with the corresponding "policy-pack" argument. Multiple
