@@ -97084,6 +97084,21 @@ const VersionRt = lib.Record({
 const VersionsRt = lib.Array(VersionRt);
 function getVersionObject(range) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (range == 'dev') {
+            const result = yield source_default()('https://www.pulumi.com/latest-dev-version');
+            const version = 'v' + result.body.trim();
+            const date = new Date().toISOString();
+            const downloads = {
+                'linux-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-linux-x64.tar.gz`,
+                'linux-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-linux-arm64.tar.gz`,
+                'darwin-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-x64.tar.gz`,
+                'darwin-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-arm64.tar.gz`,
+                'windows-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-windows-x64.zip`,
+            };
+            const checksums = 'https://get.pulumi.com/releases/sdk/pulumi-${version}-checksums.txt';
+            const latest = false;
+            return { version, date, downloads, checksums, latest };
+        }
         const result = yield source_default()('https://raw.githubusercontent.com/pulumi/docs/master/data/versions.json', { responseType: 'json' });
         const versions = VersionsRt.check(result.body);
         if (range == 'latest') {
@@ -97194,7 +97209,13 @@ function downloadCli(range) {
         }
         const { version, downloads } = yield getVersionObject(range);
         core.info(`Matched version: ${version}`);
-        const isUnsupportedVersion = semver.lt(version, '3.0.0');
+        let isUnsupportedVersion;
+        if (range == 'dev') {
+            isUnsupportedVersion = false;
+        }
+        else {
+            isUnsupportedVersion = semver.lt(version, '3.0.0');
+        }
         if (isUnsupportedVersion) {
             core.warning(`Using Pulumi CLI version less than 3.0.0 may cause unexpected behavior. Please consider migrating to 3.0.0 or higher. You can find our migration guide at https://www.pulumi.com/docs/get-started/install/migrating-3.0/`);
         }
