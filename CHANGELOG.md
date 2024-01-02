@@ -4,7 +4,7 @@
 
 ---
 
-## 4.6.0 (2024-01-02)
+## 5.0.0 (2024-01-02)
 
 - feat: allow installing the latest dev release automatically
   ([#1051](https://github.com/pulumi/actions/pull/1051))
