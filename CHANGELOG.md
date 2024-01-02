@@ -2,13 +2,14 @@
 
 ## HEAD (Unreleased)
 
-- feat: allow installing the latest dev release automatically
-
 ---
 
-## 4.6.0 (2023-10-12)
+## 4.6.0 (2024-01-02)
 
+- feat: allow installing the latest dev release automatically
+  ([#1051](https://github.com/pulumi/actions/pull/1051))
 - chore: node 20 as default runtime
+  ([#1018](https://github.com/pulumi/actions/pull/1018))
 
 ## 4.5.0 (2023-09-12)
 
