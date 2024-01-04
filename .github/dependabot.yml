@@ -2,6 +2,14 @@ version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
     schedule:
       interval: "daily"
     labels:
@@ -10,6 +18,14 @@ updates:
       - "dependencies"
   - package-ecosystem: "npm"
     directory: "/"
+    groups:
+      npm:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
     schedule:
       interval: "daily"
     ignore:
