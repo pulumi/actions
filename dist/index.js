@@ -97314,6 +97314,8 @@ const installOnly = (config) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const runAction = (config) => __awaiter(void 0, void 0, void 0, function* () {
     yield downloadCli(config.pulumiVersion);
+    console.log(environmentVariables);
+    console.log(process.env);
     yield login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
     core.debug(`Working directory resolved at ${workDir}`);
