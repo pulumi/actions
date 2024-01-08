@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- fix: error out when login fails
+  ([#1062](https://github.com/pulumi/actions/pull/1062))
+
 ---
 
 ## 5.0.0 (2024-01-02)
