@@ -97161,7 +97161,8 @@ function getVersion() {
 }
 function run(...args) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield exec_exec(`pulumi`, args, true);
+        core.info(`Running pulumi ${args.join(' ')}`);
+        return yield exec_exec(`pulumi`, args, true);
     });
 }
 function getPlatform() {
@@ -97274,12 +97275,13 @@ function downloadCli(range) {
 const login = (cloudUrl, accessToken) => __awaiter(void 0, void 0, void 0, function* () {
     if (cloudUrl) {
         core.info(`Logging into ${cloudUrl}`);
-        yield run('--non-interactive', 'login', cloudUrl);
+        return yield run('--non-interactive', 'login', cloudUrl);
     }
     else if (accessToken !== '') {
         core.info("Logging into the Pulumi Cloud backend.");
-        yield run('--non-interactive', 'login');
+        return yield run('--non-interactive', 'login');
     }
+    return Promise.resolve({ success: true, stdout: '', stderr: '' });
 });
 
 ;// CONCATENATED MODULE: ./src/main.ts
@@ -97316,7 +97318,12 @@ const runAction = (config) => __awaiter(void 0, void 0, void 0, function* () {
     yield downloadCli(config.pulumiVersion);
     console.log(environmentVariables);
     console.log(process.env);
-    yield login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
+    const result = yield login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
+    if (!result.success) {
+        core.setFailed(result.stderr);
+        core.debug(result.stderr);
+        return;
+    }
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
     core.debug(`Working directory resolved at ${workDir}`);
     const stackArgs = {
@@ -97368,7 +97375,9 @@ const runAction = (config) => __awaiter(void 0, void 0, void 0, function* () {
             core.setSecret(outExport.value);
         }
     }
+    core.debug(`before commenting on pull request`);
     if (config.commentOnPrNumber || config.commentOnPr) {
+        core.debug(`Commenting on pull request`);
         const isPullRequest = github.context.payload.pull_request !== undefined;
         if (isPullRequest) {
             core.debug(`Commenting on pull request`);

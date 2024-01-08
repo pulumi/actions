@@ -44,7 +44,12 @@ const runAction = async (config: Config): Promise<void> => {
     await pulumiCli.downloadCli(config.pulumiVersion);
     console.log(environmentVariables);
     console.log(process.env);
-  await login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
+  const result = await login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
+  if (!result.success) {
+    core.setFailed(result.stderr);
+    core.debug(result.stderr);
+    return;
+  }
 
   const workDir = resolve(
     environmentVariables.GITHUB_WORKSPACE,
@@ -117,8 +122,10 @@ const runAction = async (config: Config): Promise<void> => {
     }
   }
 
+    core.debug(`before commenting on pull request`);
   if (config.commentOnPrNumber || config.commentOnPr) {
-    const isPullRequest = context.payload.pull_request !== undefined;
+      core.debug(`Commenting on pull request`);
+      const isPullRequest = context.payload.pull_request !== undefined;
     if (isPullRequest) {
       core.debug(`Commenting on pull request`);
       invariant(config.githubToken, 'github-token is missing.');
