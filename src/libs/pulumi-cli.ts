@@ -36,8 +36,8 @@ export async function getVersion(): Promise<string | undefined> {
   else return undefined;
 }
 
-export async function run(...args: string[]): Promise<void> {
-  await exec.exec(`pulumi`, args, true);
+export async function run(...args: string[]): Promise<exec.ExecResult> {
+  return exec.exec(`pulumi`, args, true);
 }
 
 export function getPlatform(): string | undefined {
