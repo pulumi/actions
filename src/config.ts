@@ -65,7 +65,7 @@ export function makeConfig() {
       policyPackConfigs: parseSemicolorToArray(
         getMultilineInput('policyPackConfigs'),
       ),
-      userAgent: 'pulumi/actions@v3',
+      userAgent: 'pulumi/actions@v5',
       color: getUnionInput('color', {
         alternatives: ['always', 'never', 'raw', 'auto'] as const,
       }),
