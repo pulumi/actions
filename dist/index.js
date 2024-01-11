@@ -96958,7 +96958,7 @@ function makeConfig() {
             targetDependents: (0,main.getBooleanInput)('target-dependents'),
             policyPacks: parseSemicolorToArray((0,main.getMultilineInput)('policyPacks')),
             policyPackConfigs: parseSemicolorToArray((0,main.getMultilineInput)('policyPackConfigs')),
-            userAgent: 'pulumi/actions@v3',
+            userAgent: 'pulumi/actions@v5',
             color: (0,main.getUnionInput)('color', {
                 alternatives: ['always', 'never', 'raw', 'auto'],
             }),
@@ -96974,9 +96974,6 @@ var dist = __nccwpck_require__(52322);
 
 const environmentVariables = dist.cleanEnv(process.env, {
     GITHUB_WORKSPACE: dist.str(),
-    PULUMI_ACCESS_TOKEN: dist.str({
-        default: '',
-    }),
 });
 
 // EXTERNAL MODULE: ./node_modules/dedent/dist/dedent.js
@@ -97161,7 +97158,7 @@ function getVersion() {
 }
 function run(...args) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield exec_exec(`pulumi`, args, true);
+        return exec_exec(`pulumi`, args, true);
     });
 }
 function getPlatform() {
@@ -97271,15 +97268,13 @@ function downloadCli(range) {
 
 
 
-const login = (cloudUrl, accessToken) => __awaiter(void 0, void 0, void 0, function* () {
+const login = (cloudUrl) => __awaiter(void 0, void 0, void 0, function* () {
     if (cloudUrl) {
         core.info(`Logging into ${cloudUrl}`);
-        yield run('--non-interactive', 'login', cloudUrl);
+        return run('--non-interactive', 'login', cloudUrl);
     }
-    else if (accessToken !== '') {
-        core.info("Logging into the Pulumi Cloud backend.");
-        yield run('--non-interactive', 'login');
-    }
+    core.info("Logging into the Pulumi Cloud backend.");
+    return run('--non-interactive', 'login');
 });
 
 ;// CONCATENATED MODULE: ./src/main.ts
@@ -97314,7 +97309,10 @@ const installOnly = (config) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const runAction = (config) => __awaiter(void 0, void 0, void 0, function* () {
     yield downloadCli(config.pulumiVersion);
-    yield login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
+    const result = yield login(config.cloudUrl);
+    if (!result.success) {
+        throw new Error(result.stderr);
+    }
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
     core.debug(`Working directory resolved at ${workDir}`);
     const stackArgs = {
