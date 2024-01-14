@@ -5,6 +5,9 @@
 - fix: error out when login fails
   ([#1062](https://github.com/pulumi/actions/pull/1062))
 
+- feat: Search for pulumi in the tool cache
+  ([#1025](https://github.com/pulumi/actions/pull/1025))
+
 ---
 
 ## 5.0.0 (2024-01-02)
