@@ -36,8 +36,8 @@ export async function getVersion(): Promise<string | undefined> {
   else return undefined;
 }
 
-export async function run(...args: string[]): Promise<void> {
-  await exec.exec(`pulumi`, args, true);
+export async function run(...args: string[]): Promise<exec.ExecResult> {
+  return exec.exec(`pulumi`, args, true);
 }
 
 export function getPlatform(): string | undefined {
@@ -100,7 +100,12 @@ export async function downloadCli(range: string): Promise<void> {
 
   core.info(`Matched version: ${version}`);
 
-  const isUnsupportedVersion = semver.lt(version, '3.0.0');
+  let isUnsupportedVersion;
+  if (range == 'dev') {
+    isUnsupportedVersion = false;
+  } else {
+    isUnsupportedVersion = semver.lt(version, '3.0.0');
+  }
 
   if (isUnsupportedVersion) {
     core.warning(

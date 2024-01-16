@@ -96,14 +96,16 @@ The action can be configured with the following arguments:
 - `parallel` - (optional) Allow P resource operations to run in parallel at once
   (1 for no parallelism). Defaults to unbounded.
 
-- `policy-pack` - (optional) Run one or more policy packs with the provided
-  `command`
+- `policyPacks` - (optional) Run one or more policy packs with the provided
+  `command`. Multiple values can be specified one per line (example: `<value | string>,...`).
 
-- `policy-pack-config` - (optional) Path(s) to JSON file(s) containing the
-  config for the policy pack with the corresponding "policy-pack" argument
+- `policyPackConfigs` - (optional) Path(s) to JSON file(s) containing the config
+  for the policy pack with the corresponding "policy-pack" argument. Multiple
+  values can be specified one per line (example: `<value | string>,...`).
 
 - `pulumi-version` - (optional) Install a specific version of the Pulumi CLI.
-  Defaults to "^3"
+  Defaults to "^3". Allows a "dev" argument to download the latest unreleased
+  version.
 
 - `remove` - (optional) Removes the target stack if all resources are destroyed.
   Used only with `destroy` command.

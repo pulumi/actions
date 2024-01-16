@@ -58,7 +58,7 @@ describe('config.ts', () => {
           "replace": Array [],
           "target": Array [],
           "targetDependents": false,
-          "userAgent": "pulumi/actions@v3",
+          "userAgent": "pulumi/actions@v5",
         },
         "pulumiVersion": "^3",
         "refresh": false,

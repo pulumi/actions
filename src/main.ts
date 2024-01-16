@@ -42,7 +42,10 @@ const installOnly = async (config: InstallationConfig): Promise<void> => {
 
 const runAction = async (config: Config): Promise<void> => {
   await pulumiCli.downloadCli(config.pulumiVersion);
-  await login(config.cloudUrl, environmentVariables.PULUMI_ACCESS_TOKEN);
+  const result = await login(config.cloudUrl);
+  if (!result.success) {
+    throw new Error(result.stderr);
+  }
 
   const workDir = resolve(
     environmentVariables.GITHUB_WORKSPACE,

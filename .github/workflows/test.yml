@@ -16,10 +16,10 @@ jobs:
   build-test: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 20.x
           cache: yarn
       - run: yarn install
       - run: yarn build
@@ -27,8 +27,8 @@ jobs:
   test-output: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: '^1.13.1'
       - run: |
@@ -37,9 +37,9 @@ jobs:
         working-directory: .github/test-stacks/golang
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 20.x
           cache: yarn
       - run: yarn install
       - run: yarn build
@@ -59,8 +59,8 @@ jobs:
   test-update-plan: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: '^1.13.1'
       - run: |
@@ -69,9 +69,9 @@ jobs:
         working-directory: .github/test-stacks/golang
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 20.x
           cache: yarn
       - run: yarn install
       - run: yarn build
