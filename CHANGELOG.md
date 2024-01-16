@@ -4,6 +4,9 @@
 
 - fix: error out when login fails
   ([#1062](https://github.com/pulumi/actions/pull/1062))
+  
+- feat: Add support for output command.
+  ([#868](https://github.com/pulumi/actions/issues/868))
 
 ---
 

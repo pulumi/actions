@@ -35,8 +35,8 @@ This will check out the existing directory and run `pulumi preview`.
 The action can be configured with the following arguments:
 
 - `command` (optional) - The command to run as part of the action. Accepted
-  values are `up` (alias: update), `refresh`, `destroy`, and `preview`. If
-  unspecified, the action will stop after installing Pulumi.
+  values are `up` (alias: update), `refresh`, `destroy`, `preview` and `output`.
+  If unspecified, the action will stop after installing Pulumi.
 
 - `stack-name` (optional) - The name of the stack that Pulumi will be operating
   on. Use the fully quaified org-name/stack-name when operating on a stack
