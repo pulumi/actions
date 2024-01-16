@@ -96929,7 +96929,7 @@ function makeConfig() {
     return {
         command: (0,main.getUnionInput)('command', {
             required: true,
-            alternatives: ['up', 'update', 'refresh', 'destroy', 'preview'],
+            alternatives: ['up', 'update', 'refresh', 'destroy', 'preview', 'output'],
         }),
         stackName: (0,main.getInput)('stack-name', { required: true }),
         pulumiVersion: (0,main.getInput)('pulumi-version', { required: true }),
@@ -97352,6 +97352,7 @@ const runAction = (config) => __awaiter(void 0, void 0, void 0, function* () {
             onOutput(stderr);
             return stdout;
         }),
+        output: () => new Promise(() => '') //do nothing, outputs are fetched anyway afterwards
     };
     core.debug(`Running action ${config.command}`);
     const output = yield actions[config.command]();
