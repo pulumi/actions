@@ -33,7 +33,7 @@ export function makeConfig() {
   return {
     command: getUnionInput('command', {
       required: true,
-      alternatives: ['up', 'update', 'refresh', 'destroy', 'preview'] as const,
+      alternatives: ['up', 'update', 'refresh', 'destroy', 'preview', 'output'] as const,
     }),
     stackName: getInput('stack-name', { required: true }),
     pulumiVersion: getInput('pulumi-version', { required: true }),
