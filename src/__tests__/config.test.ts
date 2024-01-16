@@ -78,7 +78,7 @@ describe('config.ts', () => {
     });
 
     await expect(() => makeConfig()).toThrowErrorMatchingInlineSnapshot(
-      `"Input was not correct for command. Valid alternatives are: up, update, refresh, destroy, preview"`,
+      `"Input was not correct for command. Valid alternatives are: up, update, refresh, destroy, preview, output"`,
     );
   });
 });
