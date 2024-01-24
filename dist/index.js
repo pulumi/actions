@@ -97311,7 +97311,7 @@ const runAction = (config) => __awaiter(void 0, void 0, void 0, function* () {
     yield downloadCli(config.pulumiVersion);
     const result = yield login(config.cloudUrl);
     if (!result.success) {
-        throw new Error(result.stderr);
+        core.warning(`Failed to login to Pulumi service: ${result.stderr}`);
     }
     const workDir = (0,external_path_.resolve)(environmentVariables.GITHUB_WORKSPACE, config.workDir);
     core.debug(`Working directory resolved at ${workDir}`);
