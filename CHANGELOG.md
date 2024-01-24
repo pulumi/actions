@@ -2,13 +2,15 @@
 
 ## HEAD (Unreleased)
 
+---
+
+## 5.1.0 (2024-01-24)
+
 - fix: error out when login fails
   ([#1062](https://github.com/pulumi/actions/pull/1062))
-  
+
 - feat: Add support for output command.
   ([#868](https://github.com/pulumi/actions/issues/868))
-
----
 
 ## 5.0.0 (2024-01-02)
 
