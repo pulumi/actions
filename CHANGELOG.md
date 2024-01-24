@@ -2,10 +2,12 @@
 
 ## HEAD (Unreleased)
 
-- fix: only warn when login fails instead of erroring
-  ([#1082](https://github.com/pulumi/actions/pull/1062))
-
 ---
+
+## 5.1.1 (2024-01-24)
+
+- fix: only warn when login fails instead of erroring
+  ([#1082](https://github.com/pulumi/actions/pull/1082))
 
 ## 5.1.0 (2024-01-24)
 
