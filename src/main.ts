@@ -44,7 +44,7 @@ const runAction = async (config: Config): Promise<void> => {
   await pulumiCli.downloadCli(config.pulumiVersion);
   const result = await login(config.cloudUrl);
   if (!result.success) {
-    throw new Error(result.stderr);
+    core.warning(`Failed to login to Pulumi service: ${result.stderr}`);
   }
 
   const workDir = resolve(
