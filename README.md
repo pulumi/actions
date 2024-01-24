@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: pulumi/actions@v4
+      - uses: pulumi/actions@v5
         with:
           command: preview
           stack-name: org-name/stack-name
@@ -148,7 +148,7 @@ If you want to only install the Pulumi CLI, omit the `command` field of the
 action.
 
 ```yaml
-- uses: pulumi/actions@v4
+- uses: pulumi/actions@v5
 ```
 
 This will install Pulumi and exit without performing any other operations.
@@ -182,7 +182,7 @@ We can see that `pet-name` is an output. To get the value of this output in the
 action, we would use code similar to the following:
 
 ```yaml
-- uses: pulumi/actions@v4
+- uses: pulumi/actions@v5
   id: pulumi
   env:
     PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
@@ -230,6 +230,12 @@ As of `v3.18`, we are intending to move to a monthly cadence for minor releases.
 Minor releases will be published around the beginning of the month. We may cut a
 patch release instead, if the changes are small enough not to warrant a minor
 release. We will also cut patch releases periodically as needed to address bugs.
+
+## Migrating from v4
+
+v5 of the Pulumi Action updates the NodeJS runtime from Node 16 to Node 20.
+Users of GitHub Enterprise will have to upgrade to v3.6 or newer. All other
+users are unaffected.
 
 ## Migrating from v3
 
