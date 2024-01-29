@@ -19,7 +19,7 @@ jobs:
     name: Preview
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: pulumi/actions@v5
         with:
           command: preview
