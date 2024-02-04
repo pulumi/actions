@@ -2,6 +2,8 @@
 
 ## HEAD (Unreleased)
 
+- feat: verbosity and debug inputs to enable debug options
+
 ---
 
 ## 5.1.1 (2024-01-24)
