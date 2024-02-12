@@ -18,6 +18,11 @@ const defaultConfig: Record<string, string> = {
   'target-dependents': 'false',
   'exclude-protected': 'false',
   'plan': '',
+  'log-verbosity': '9',
+  'tracing': 'file:./up.trace',
+  'log-to-stderr': 'false',
+  'debug': 'false',
+
 };
 
 function setupMockedConfig(config: Record<string, string>) {
