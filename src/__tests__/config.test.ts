@@ -17,7 +17,9 @@ const defaultConfig: Record<string, string> = {
   diff: 'false',
   'target-dependents': 'false',
   'exclude-protected': 'false',
-  'plan': '',
+  plan: '',
+  'suppress-outputs': 'false',
+  'suppress-progress': 'false',
 };
 
 function setupMockedConfig(config: Record<string, string>) {
@@ -56,6 +58,8 @@ describe('config.ts', () => {
           "policyPackConfigs": Array [],
           "policyPacks": Array [],
           "replace": Array [],
+          "suppressOutputs": false,
+          "suppressProgress": false,
           "target": Array [],
           "targetDependents": false,
           "userAgent": "pulumi/actions@v5",
