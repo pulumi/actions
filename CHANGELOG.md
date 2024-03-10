@@ -2,6 +2,10 @@
 
 ## HEAD (Unreleased)
 
+- feat: allow running `up` and `preview` commands with the `--refresh` flag via
+  the `soft-refresh` config option
+  ([#1118](https://github.com/pulumi/actions/pull/1118))
+
 ---
 
 ## 5.1.1 (2024-01-24)
