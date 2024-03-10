@@ -60,8 +60,11 @@ The action can be configured with the following arguments:
 - `github-token` - (optional) A GitHub token that has access levels to allow the
   Action to comment on a PR. Defaults to `${{ github.token }}`
 
-- `refresh` - (optional) If `true`, stack is refreshed before running the
-  `command`.
+- `refresh` - (optional) If `true`, `pulumi refresh` is called before running
+  the `command`. See `soft-refresh` for `--refresh` flag.
+
+- `soft-refresh` - (optional) If `true`, `preview` and `up` commands are called
+  with the `--refresh` flag.
 
 - `secrets-provider` - (optional) The type of the provider that should be used
   to encrypt and decrypt secrets. Possible choices: `default`, `passphrase`,
@@ -97,7 +100,8 @@ The action can be configured with the following arguments:
   (1 for no parallelism). Defaults to unbounded.
 
 - `policyPacks` - (optional) Run one or more policy packs with the provided
-  `command`. Multiple values can be specified one per line (example: `<value | string>,...`).
+  `command`. Multiple values can be specified one per line (example:
+  `<value | string>,...`).
 
 - `policyPackConfigs` - (optional) Path(s) to JSON file(s) containing the config
   for the policy pack with the corresponding "policy-pack" argument. Multiple
