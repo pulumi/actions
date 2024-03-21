@@ -17,7 +17,7 @@
   "lint-staged": {
     "src/**/*.{yaml,yml}": "prettier --write",
     "src/**/*.{js,ts}": "eslint --cache --fix",
-    "{.eslintrc}": "prettier --write",
+    ".eslintrc": "prettier --write",
     "*.md": "prettier --write"
   },
   "devDependencies": {
@@ -36,7 +36,7 @@
     "husky": "^8.0.3",
     "jest": "~26.6.3",
     "jest-playback": "^3.0.0",
-    "lint-staged": "^13.2.2",
+    "lint-staged": "^15.2.2",
     "prettier": "^2.8.8",
     "rimraf": "~5.0.1",
     "ts-jest": "~26.5.6"
