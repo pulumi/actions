@@ -133,6 +133,12 @@ The action can be configured with the following arguments:
 - `exclude-protected` - (optional) Skip destroying protected resources. Only
   valid when `command` is `destroy`.
 
+- `suppress-outputs` - (optional) Suppress display of stack outputs (in case
+  they contain sensitive values).
+
+- `suppress-progress` - (optional) Suppress display of periodic progress dots to
+  limit logs length.
+
 - `plan` - (optional) Used for
   [update plans](https://www.pulumi.com/docs/concepts/update-plans/)
   - On `preview`: Where to save the update plan. If you choose to use this in a

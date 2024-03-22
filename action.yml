@@ -104,6 +104,14 @@ inputs:
   plan:
     description: 'Where to either save an Update Plan or read an Update Plan from'
     required: false
+  suppress-outputs:
+    description: 'Suppress display of stack outputs (in case they contain sensitive values).'
+    required: false
+    default: 'false'
+  suppress-progress:
+    description: 'Suppress display of periodic progress dots to limit logs length'
+    required: false
+    default: 'false'
 outputs:
   output:
     description: Output from running command

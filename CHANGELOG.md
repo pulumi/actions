@@ -2,6 +2,10 @@
 
 ## HEAD (Unreleased)
 
+- feat: support disabling progress dots and outputs printing
+  (--suppress-progress, --suppress-outputs)
+  ([#116](https://github.com/pulumi/actions/pull/1116))
+ 
 - feat: allow running `up` and `preview` commands with the `--refresh` flag via
   the `soft-refresh` config option
   ([#1118](https://github.com/pulumi/actions/pull/1118))
