@@ -2,11 +2,13 @@
 
 ## HEAD (Unreleased)
 
+---
+
+## 5.2.0 (2024-03-26)
+
 - feat: support disabling progress dots and outputs printing
   (--suppress-progress, --suppress-outputs)
   ([#116](https://github.com/pulumi/actions/pull/1116))
-
----
 
 ## 5.1.1 (2024-01-24)
 
