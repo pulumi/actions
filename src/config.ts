@@ -58,6 +58,7 @@ export function makeConfig() {
       message: getInput('message'),
       expectNoChanges: getBooleanInput('expect-no-changes'),
       diff: getBooleanInput('diff'),
+      refresh: getBooleanInput('soft-refresh'),
       replace: parseSemicolorToArray(getMultilineInput('replace')),
       target: parseSemicolorToArray(getMultilineInput('target')),
       targetDependents: getBooleanInput('target-dependents'),
