@@ -175,6 +175,6 @@ export async function downloadCli(range: string): Promise<void> {
   const pulumiVersion = versionExec.stdout.trim();
   core.debug(`Running pulumi verison returned: ${pulumiVersion}`);
   if (!semver.satisfies(pulumiVersion, version)) {
-    throw new Error('Installed version did not satisfy the resolved version');
+    throw new Error(`Installed version "${pulumiVersion}" did not satisfy the resolved version "${version}"`);
   }
 }

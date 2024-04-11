@@ -4,6 +4,11 @@
 
 ---
 
+## 5.2.1 (2024-04-11)
+
+- fix: include the versions in the error message
+  ([#1147](https://github.com/pulumi/actions/pull/1147))
+
 ## 5.2.0 (2024-03-26)
 
 - feat: support disabling progress dots and outputs printing
