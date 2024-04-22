@@ -79,7 +79,7 @@ For more information regarding the OpenID Connect integration, refer to the
 - `oidc-pulumi-organization`: The name of the organization it will request a
   token for.
 
-- `oidc-equested-token-type`: Defines the type of token to request:
+- `oidc-requested-token-type`: Defines the type of token to request:
 
   - Org token: `urn:pulumi:token-type:access_token:organization`
   - Team token: `urn:pulumi:token-type:access_token:team` (scope
