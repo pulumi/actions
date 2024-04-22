@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- feat: Add support for OIDC token exchange for authentication
+  ([#1155](https://github.com/pulumi/actions/pull/1155))
+
 ---
 
 ## 5.2.1 (2024-04-11)
