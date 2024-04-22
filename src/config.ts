@@ -33,7 +33,14 @@ export function makeConfig() {
   return {
     command: getUnionInput('command', {
       required: true,
-      alternatives: ['up', 'update', 'refresh', 'destroy', 'preview', 'output'] as const,
+      alternatives: [
+        'up',
+        'update',
+        'refresh',
+        'destroy',
+        'preview',
+        'output',
+      ] as const,
     }),
     stackName: getInput('stack-name', { required: true }),
     pulumiVersion: getInput('pulumi-version', { required: true }),
@@ -73,6 +80,17 @@ export function makeConfig() {
       plan: getInput('plan'),
       suppressOutputs: getBooleanInput('suppress-outputs'),
       suppressProgress: getBooleanInput('suppress-progress'),
+    },
+
+    oidcAuthentication: {
+      organizationName: getInput('oidc-pulumi-organization', {
+        required: false,
+      }),
+      scope: getInput('oidc-scope', { required: false }),
+      requestedTokenType: getInput('oidc-requested-token-type', {
+        required: false,
+      }),
+      expiration: getNumberInput('oidc-token-expiration', { required: false }),
     },
   };
 }

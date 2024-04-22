@@ -71,6 +71,30 @@ The action can be configured with the following arguments:
 - `color` - (optional) Colorize output. Choices are: always, never, raw, auto
   (default "auto").
 
+### Using OpenID Connect authentication
+
+For more information regarding the OpenID Connect integration, refer to the
+[Pulumi Documentation](https://www.pulumi.com/docs/pulumi-cloud/oidc/client/).
+
+- `oidc-pulumi-organization`: The name of the organization it will request a
+  token for.
+
+- `oidc-equested-token-type`: Defines the type of token to request:
+
+  - Org token: `urn:pulumi:token-type:access_token:organization`
+  - Team token: `urn:pulumi:token-type:access_token:team` (scope
+    `team:{TEAM_NAME}` is required)
+  - Personal token: `urn:pulumi:token-type:access_token:personal` (scope
+    `user:{USER_LOGIN}` is required)
+
+- `oidc-scope`: When requesting a personal or team token, the
+  [proper scope](https://www.pulumi.com/docs/pulumi-cloud/oidc/client/) should
+  be defined.
+
+- `oidc-token-expiration`: (optional, time in seconds) used to customize the
+  token expiration required by the operation. The default token expiration (2
+  hours) will be used.
+
 ### Extra options
 
 - `config-map` - (optional) Configuration of the stack. Format Yaml string:

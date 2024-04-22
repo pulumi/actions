@@ -108,6 +108,18 @@ inputs:
     description: 'Suppress display of periodic progress dots to limit logs length'
     required: false
     default: 'false'
+  oidc-pulumi-organization:
+    description: The organization it will exchange a token for
+    required: false
+  oidc-scope:
+    description: The scope to use when requesting the Pulumi access token
+    required: false
+  oidc-requested-token-type:
+    description: Type of access token to request
+    required: false
+  oidc-token-expiration: 
+    description: Token expiration
+    required: false
 outputs:
   output:
     description: Output from running command

@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { join, resolve } from 'path';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import {
@@ -6,6 +6,7 @@ import {
   LocalWorkspace,
   LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
+import axios from 'axios';
 import invariant from 'ts-invariant';
 import {
   Commands,
@@ -31,6 +32,9 @@ const main = async () => {
   // Attempt to parse the full configuration and run the action.
   const config = await makeConfig();
   core.debug('Configuration is loaded');
+
+  await ensureAccessToken(config);
+
   runAction(config);
 };
 
@@ -38,6 +42,57 @@ const main = async () => {
 // intends to install the Pulumi CLI without running additional commands.
 const installOnly = async (config: InstallationConfig): Promise<void> => {
   await pulumiCli.downloadCli(config.pulumiVersion);
+};
+
+const ensureAccessToken = async (config: Config): Promise<void> => {
+  const pulumiToken = process.env['PULUMI_ACCESS_TOKEN'];
+  if (!pulumiToken && !!config.oidcAuthentication.organizationName) {
+    const audience = `urn:pulumi:org:${config.oidcAuthentication.organizationName}`;
+    core.debug(`Fetching OIDC Token for ${audience}`);
+
+    const id_token = await core.getIDToken(audience);
+
+    core.debug(`Exchanging oidc token for pulumi token`);
+    const access_token = await exchangeIdToken(config, audience, id_token);
+
+    process.env['PULUMI_ACCESS_TOKEN'] = access_token;
+  }
+};
+
+const exchangeIdToken = async (
+  config: Config,
+  audience: string,
+  subjectToken: string,
+): Promise<string> => {
+  const base =
+    config.cloudUrl == '' ? 'https://api.pulumi.com' : config.cloudUrl;
+  const url = join(base, 'api', 'oauth', 'token');
+
+  const body = {
+    audience: audience,
+    grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+    subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
+    requested_token_type: config.oidcAuthentication.requestedTokenType,
+    subject_token: subjectToken,
+    scope: config.oidcAuthentication.scope,
+  };
+
+  if (config.oidcAuthentication.expiration) {
+    body['expiration'] = config.oidcAuthentication.expiration;
+  }
+
+  try {
+    const res = await axios.post(url, body);
+
+    return res.data.access_token;
+  } catch (error) {
+    const res = error.response;
+    core.debug(error);
+
+    throw new Error(
+      `Invalid response from token exchange ${res.status}: ${res.statusText} (${res.data.error}: ${res.data.message})`,
+    );
+  }
 };
 
 const runAction = async (config: Config): Promise<void> => {
@@ -101,7 +156,7 @@ const runAction = async (config: Config): Promise<void> => {
       onOutput(stderr);
       return stdout;
     },
-    output: () => new Promise(() => '') //do nothing, outputs are fetched anyway afterwards
+    output: () => new Promise(() => ''), //do nothing, outputs are fetched anyway afterwards
   };
 
   core.debug(`Running action ${config.command}`);
@@ -131,7 +186,7 @@ const runAction = async (config: Config): Promise<void> => {
   if (config.commentOnSummary) {
     await core.summary
       .addHeading(`Pulumi ${config.stackName} results`)
-      .addCodeBlock(output, "diff")
+      .addCodeBlock(output, 'diff')
       .write();
   }
 

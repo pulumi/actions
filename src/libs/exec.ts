@@ -14,6 +14,7 @@ export const exec = async (
   const { exitCode, stdout, stderr } = await aexec.getExecOutput(command, args, {
     silent: silent,
     ignoreReturnCode: true,
+    env: process.env,
   });
 
   return {
