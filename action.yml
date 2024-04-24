@@ -123,6 +123,8 @@ inputs:
 outputs:
   output:
     description: Output from running command
+  pulumi-access-token:
+    description: Output of the OIDC token exchance when running on oidc exange mode Only
 runs:
   # TODO upgrade to node16 by 1 Nov 2022.
   #

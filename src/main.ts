@@ -12,8 +12,10 @@ import {
   Commands,
   Config,
   InstallationConfig,
+  OidcLoginConfig,
   makeConfig,
   makeInstallationConfig,
+  makeOidcLoginConfig,
 } from './config';
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
@@ -24,16 +26,26 @@ const main = async () => {
   const downloadConfig = makeInstallationConfig();
   if (downloadConfig.success) {
     await installOnly(downloadConfig.value);
-    core.info('Pulumi has been successfully installed. Exiting.');
-    return;
+    core.info('Pulumi has been successfully installed.');
   }
 
+  const oidcConfig = makeOidcLoginConfig();
+  if (oidcConfig.success) {
+    await ensureAccessToken(oidcConfig.value);
+    core.setSecret(process.env['PULUMI_ACCESS_TOKEN'])
+    core.setOutput("pulumi-access-token", process.env['PULUMI_ACCESS_TOKEN'])
+    core.info('OIDC token exchange performed successfully.');
+  }
+
+  if (downloadConfig.success || (oidcConfig.success && oidcConfig.value.command === undefined)) {
+    core.info('Exiting.');
+    return;
+  }
+  
   // If we get here, we're not in install-only mode.
   // Attempt to parse the full configuration and run the action.
   const config = await makeConfig();
   core.debug('Configuration is loaded');
-
-  await ensureAccessToken(config);
 
   runAction(config);
 };
@@ -44,10 +56,10 @@ const installOnly = async (config: InstallationConfig): Promise<void> => {
   await pulumiCli.downloadCli(config.pulumiVersion);
 };
 
-const ensureAccessToken = async (config: Config): Promise<void> => {
+const ensureAccessToken = async (config: OidcLoginConfig): Promise<void> => {
   const pulumiToken = process.env['PULUMI_ACCESS_TOKEN'];
-  if (!pulumiToken && !!config.oidcAuthentication.organizationName) {
-    const audience = `urn:pulumi:org:${config.oidcAuthentication.organizationName}`;
+  if (!pulumiToken && !!config.organizationName) {
+    const audience = `urn:pulumi:org:${config.organizationName}`;
     core.debug(`Fetching OIDC Token for ${audience}`);
 
     const id_token = await core.getIDToken(audience);
@@ -60,25 +72,27 @@ const ensureAccessToken = async (config: Config): Promise<void> => {
 };
 
 const exchangeIdToken = async (
-  config: Config,
+  config: OidcLoginConfig,
   audience: string,
   subjectToken: string,
 ): Promise<string> => {
   const base =
-    config.cloudUrl == '' ? 'https://api.pulumi.com' : config.cloudUrl;
+    !config.cloudUrl ? 'https://api.pulumi.com' : config.cloudUrl;
   const url = join(base, 'api', 'oauth', 'token');
 
   const body = {
     audience: audience,
     grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
     subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-    requested_token_type: config.oidcAuthentication.requestedTokenType,
+    requested_token_type: config.requestedTokenType,
     subject_token: subjectToken,
-    scope: config.oidcAuthentication.scope,
   };
 
-  if (config.oidcAuthentication.expiration) {
-    body['expiration'] = config.oidcAuthentication.expiration;
+  if (config.expiration) {
+    body["expiration"] = config.expiration;
+  }
+  if (config.scope) {
+    body["scope"] = config.scope;
   }
 
   try {

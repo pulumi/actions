@@ -28,6 +28,33 @@ export function makeInstallationConfig(): rt.Result<InstallationConfig> {
   });
 }
 
+// installationConfig is the expected Action inputs when
+// the user intends to fetch a Pulumi access token using
+// a Github OIDC token without
+// running any other Pulumi operations.
+// We expect command NOT to be provided.
+export const oidcLoginConfig = rt.Record({
+  command: rt.String.Or(rt.Undefined),
+  cloudUrl: rt.String.Or(rt.Undefined),
+  organizationName: rt.String,
+  requestedTokenType: rt.String,
+  scope: rt.String.Or(rt.Undefined),
+  expiration: rt.Number.Or(rt.Undefined),
+});
+
+export type OidcLoginConfig = rt.Static<typeof oidcLoginConfig>;
+
+export function makeOidcLoginConfig(): rt.Result<OidcLoginConfig> {
+  return oidcLoginConfig.validate({
+    command: getInput('command') || undefined,
+    organizationName: getInput('oidc-pulumi-organization')|| undefined,
+    scope: getInput('oidc-scope', { required: false }) || undefined,
+    requestedTokenType: getInput('oidc-requested-token-type') || undefined,
+    expiration: getNumberInput('oidc-token-expiration', { required: false }) || undefined,
+    cloudUrl: getInput('cloud-url') || undefined,
+  });
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function makeConfig() {
   return {
@@ -81,7 +108,6 @@ export function makeConfig() {
       suppressOutputs: getBooleanInput('suppress-outputs'),
       suppressProgress: getBooleanInput('suppress-progress'),
     },
-
     oidcAuthentication: {
       organizationName: getInput('oidc-pulumi-organization', {
         required: false,
