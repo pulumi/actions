@@ -108,16 +108,6 @@ export function makeConfig() {
       suppressOutputs: getBooleanInput('suppress-outputs'),
       suppressProgress: getBooleanInput('suppress-progress'),
     },
-    oidcAuthentication: {
-      organizationName: getInput('oidc-pulumi-organization', {
-        required: false,
-      }),
-      scope: getInput('oidc-scope', { required: false }),
-      requestedTokenType: getInput('oidc-requested-token-type', {
-        required: false,
-      }),
-      expiration: getNumberInput('oidc-token-expiration', { required: false }),
-    },
   };
 }
 
