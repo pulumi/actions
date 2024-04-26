@@ -47,12 +47,6 @@ describe('config.ts', () => {
         "configMap": undefined,
         "editCommentOnPr": false,
         "githubToken": "n/a",
-        "oidcAuthentication": Object {
-          "expiration": undefined,
-          "organizationName": "",
-          "requestedTokenType": "",
-          "scope": "",
-        },
         "options": Object {
           "color": undefined,
           "diff": false,
