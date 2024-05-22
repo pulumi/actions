@@ -13,7 +13,7 @@ name: Pulumi
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   up:
     name: Preview
