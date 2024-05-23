@@ -16,7 +16,7 @@ latest release is `v3.18.1`, and you wish to cut `v.3.19.0`.
 1. Checkout the default branch.
 
    ```bash
-   $ git checkout master
+   $ git checkout main
    ```
 
 2. Open up `CHANGELOG.md`. Create a new h2 with the release version and the date
@@ -45,7 +45,7 @@ latest release is `v3.18.1`, and you wish to cut `v.3.19.0`.
 
 3. Commit your changes to `CHANGELOG.md`, and open a PR. Once your changes have
    been approved and status checks have passed, merge your PR into the default
-   branch, `master`.
+   branch, `main`.
 
 4. Wait for status checks on the default branch to pass.
 

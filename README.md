@@ -266,7 +266,7 @@ Here are some pointers when migrating from v1 to v2 of our GitHub Action.
 
 - The action now runs natively, so the action workflow needs to have the correct
   environment configured. There are
-  [sample workflows available](https://github.com/pulumi/actions/tree/master/.github/workflows).
+  [sample workflows available](https://github.com/pulumi/actions/tree/main/.github/workflows).
   For examples, if you are running a NodeJS (for example) app then you need to
   ensure that your action has NodeJS available to it:
 
