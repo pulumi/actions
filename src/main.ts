@@ -119,13 +119,12 @@ const runAction = async (config: Config): Promise<void> => {
     }
   }
 
-  if (config.commentOnPrNumber || config.commentOnPr) {
-    const isPullRequest = context.payload.pull_request !== undefined;
-    if (isPullRequest) {
-      core.debug(`Commenting on pull request`);
-      invariant(config.githubToken, 'github-token is missing.');
-      handlePullRequestMessage(config, projectName, output);
-    }
+  const isPullRequest = context.payload.pull_request !== undefined;
+  if (config.commentOnPrNumber ||
+      (config.commentOnPr && isPullRequest)) {
+    core.debug(`Commenting on pull request`);
+    invariant(config.githubToken, 'github-token is missing.');
+    handlePullRequestMessage(config, projectName, output);
   }
 
   if (config.commentOnSummary) {
