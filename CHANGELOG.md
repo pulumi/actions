@@ -2,10 +2,12 @@
 
 ## HEAD (Unreleased)
 
-- fix: `make comment-on-pr-number` option work even outside of pull-request events
-  ([#1178](https://github.com/pulumi/actions/pull/1178))
-
 ---
+
+## 5.2.4 (2024-05-28)
+
+- fix: `make comment-on-pr-number` option work even outside of pull-request
+  events ([#1178](https://github.com/pulumi/actions/pull/1178))
 
 ## 5.2.1 (2024-04-11)
 
