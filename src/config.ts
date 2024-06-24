@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import { ConfigMap } from '@pulumi/pulumi/automation';
 import {
   getBooleanInput,
@@ -22,9 +23,20 @@ export const installationConfig = rt.Record({
 export type InstallationConfig = rt.Static<typeof installationConfig>;
 
 export function makeInstallationConfig(): rt.Result<InstallationConfig> {
+  let pulumiVersion = getInput('pulumi-version') || '^3';
+  const versionFile = getInput('pulumi-version-file');
+  if (versionFile) {
+    if (fs.existsSync(versionFile)) {
+      pulumiVersion = fs
+        .readFileSync(versionFile, { encoding: 'utf-8' })
+        .trim();
+    } else {
+      throw new Error(`pulumi-version-file '${versionFile}' does not exist`);
+    }
+  }
   return installationConfig.validate({
     command: getInput('command') || undefined,
-    pulumiVersion: getInput('pulumi-version') || '^3',
+    pulumiVersion,
   });
 }
 
@@ -33,7 +45,14 @@ export function makeConfig() {
   return {
     command: getUnionInput('command', {
       required: true,
-      alternatives: ['up', 'update', 'refresh', 'destroy', 'preview', 'output'] as const,
+      alternatives: [
+        'up',
+        'update',
+        'refresh',
+        'destroy',
+        'preview',
+        'output',
+      ] as const,
     }),
     stackName: getInput('stack-name', { required: true }),
     pulumiVersion: getInput('pulumi-version', { required: true }),
