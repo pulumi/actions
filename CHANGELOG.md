@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- fix: remove `pulumi-version` default
+  ((#1208)[https://github.com/pulumi/actions/pull/1208])
+
 ---
 
 ## 5.3.0 (2024-06-25)
