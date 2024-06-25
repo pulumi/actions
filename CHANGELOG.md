@@ -2,10 +2,12 @@
 
 ## HEAD (Unreleased)
 
+---
+
+## 5.3.2 (2024-06-25)
+
 - fix: add 3.120.0 to the list of known-bad versions
   ((#1210)[https://github.com/pulumi/actions/pull/1210])
-
----
 
 ## 5.3.1 (2024-06-25)
 
