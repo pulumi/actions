@@ -6,6 +6,11 @@
 
 ---
 
+## 4.5.1 (2024-06-26)
+
+- fix: add 3.120.0 to the list of known-bad versions
+  ((#1212)[https://github.com/pulumi/actions/pull/1212])
+
 ## 4.5.0 (2023-09-12)
 
 - feat: comment on GitHub step summary.
