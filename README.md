@@ -109,6 +109,10 @@ The action can be configured with the following arguments:
   range is installed. Use "latest" to fetch the latest published release or
   "dev" to download the latest development pre-release.
 
+- `pulumi-version-file` - (optional) File containing the version of the Pulumi
+  CLI to install. Example: .pulumi.version. Only one `pulumi-version` or
+  `pulumi-version-file` should be provided.
+
 - `remove` - (optional) Removes the target stack if all resources are destroyed.
   Used only with `destroy` command.
 

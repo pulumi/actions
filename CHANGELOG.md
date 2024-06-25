@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- feat: add option `pulumi-version-file`
+  ([#1204](https://github.com/pulumi/actions/pull/1204))
+
 ---
 
 ## 5.2.4 (2024-05-28)
