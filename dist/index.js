@@ -97127,6 +97127,7 @@ function isKnownBadVersion(version) {
         '3.66.0',
         '3.67.0',
         '3.67.1',
+        '3.120.0',
     ]);
     return knownBadVersions.has(version);
 }
