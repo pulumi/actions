@@ -23,8 +23,13 @@ export const installationConfig = rt.Record({
 export type InstallationConfig = rt.Static<typeof installationConfig>;
 
 export function makeInstallationConfig(): rt.Result<InstallationConfig> {
-  let pulumiVersion = getInput('pulumi-version') || '^3';
+  let pulumiVersion = getInput('pulumi-version');
   const versionFile = getInput('pulumi-version-file');
+  if (pulumiVersion && versionFile) {
+    throw new Error(
+      "Only one of 'pulumi-version' or 'pulumi-version-file' should be provided, got both",
+    );
+  }
   if (versionFile) {
     if (fs.existsSync(versionFile)) {
       pulumiVersion = fs
@@ -36,7 +41,7 @@ export function makeInstallationConfig(): rt.Result<InstallationConfig> {
   }
   return installationConfig.validate({
     command: getInput('command') || undefined,
-    pulumiVersion,
+    pulumiVersion: pulumiVersion ?? '^3',
   });
 }
 

@@ -61,8 +61,11 @@ describe('Config without a provided command', () => {
     }));
     jest.mock('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
-        if (name === 'pulumi-version-file') {
-          return '.pulumi.version';
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return undefined;
         }
         return installConfig[name];
       }),
@@ -90,6 +93,35 @@ describe('Config without a provided command', () => {
     }));
     jest.mock('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return undefined;
+        }
+        return installConfig[name];
+      }),
+    }));
+
+    const { makeInstallationConfig } = require('../config');
+    expect(() => {
+      makeInstallationConfig();
+    }).toThrow(/pulumi-version-file '\.pulumi\.version' does not exist/);
+  });
+
+  it('should fail if pulumi-version-file and pulumi-version are both provided', async () => {
+    jest.mock('fs', () => ({
+      ...jest.requireActual('fs'),
+      readFileSync: jest.fn((path: string) => {
+        expect(path).toEqual('.pulumi.version');
+        return '3.121.0';
+      }),
+      existsSync: jest.fn(() => {
+        return false;
+      }),
+    }));
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
         if (name === 'pulumi-version-file') {
           return '.pulumi.version';
         }
@@ -100,7 +132,9 @@ describe('Config without a provided command', () => {
     const { makeInstallationConfig } = require('../config');
     expect(() => {
       makeInstallationConfig();
-    }).toThrow(/pulumi-version-file '\.pulumi\.version' does not exist/);
+    }).toThrow(
+      /Only one of 'pulumi-version' or 'pulumi-version-file' should be provided, got both/,
+    );
   });
 });
 
