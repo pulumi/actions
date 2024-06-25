@@ -14,6 +14,7 @@ inputs:
   pulumi-version:
     description: 'Install a specific version of the Pulumi CLI'
     required: false
+    default: '^3'
   pulumi-version-file:
     description: 'File containing the version of the Pulumi CLI to install. Example: .pulumi.version'
     required: false
