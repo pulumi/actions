@@ -47,6 +47,22 @@ export function makeInstallationConfig(): rt.Result<InstallationConfig> {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function makeConfig() {
+  let pulumiVersion = getInput('pulumi-version');
+  const versionFile = getInput('pulumi-version-file');
+  if (pulumiVersion && versionFile) {
+    throw new Error(
+      "Only one of 'pulumi-version' or 'pulumi-version-file' should be provided, got both",
+    );
+  }
+  if (versionFile) {
+    if (fs.existsSync(versionFile)) {
+      pulumiVersion = fs
+        .readFileSync(versionFile, { encoding: 'utf-8' })
+        .trim();
+    } else {
+      throw new Error(`pulumi-version-file '${versionFile}' does not exist`);
+    }
+  }
   return {
     command: getUnionInput('command', {
       required: true,
@@ -60,7 +76,7 @@ export function makeConfig() {
       ] as const,
     }),
     stackName: getInput('stack-name', { required: true }),
-    pulumiVersion: getInput('pulumi-version') ?? '^3',
+    pulumiVersion: pulumiVersion ?? '^3',
     workDir: getInput('work-dir', { required: true }),
     secretsProvider: getInput('secrets-provider'),
     cloudUrl: getInput('cloud-url'),

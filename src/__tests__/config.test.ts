@@ -34,7 +34,7 @@ describe('config.ts', () => {
   });
   it('should validate a configuration', async () => {
     setupMockedConfig(defaultConfig);
-    const c = await makeConfig();
+    const c = makeConfig();
 
     expect(c).toBeTruthy();
     expect(c).toMatchInlineSnapshot(`
@@ -81,8 +81,103 @@ describe('config.ts', () => {
       command: 'invalid',
     });
 
-    await expect(() => makeConfig()).toThrowErrorMatchingInlineSnapshot(
+    expect(() => makeConfig()).toThrowErrorMatchingInlineSnapshot(
       `"Input was not correct for command. Valid alternatives are: up, update, refresh, destroy, preview, output"`,
     );
   });
+
+  it('should return ^3 if pulumi-version is undefined', async () => {
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version':
+            return undefined;
+        }
+        return defaultConfig[name];
+      }),
+    }));
+    const conf = makeConfig();
+    expect(conf.pulumiVersion).toEqual('^3');
+  });
+
+  it('should read version from pulumi-version-file', async () => {
+    jest.mock('fs', () => ({
+      ...jest.requireActual('fs'),
+      readFileSync: jest.fn((path: string) => {
+        expect(path).toEqual('.pulumi.version');
+        return '3.121.0';
+      }),
+      existsSync: jest.fn(() => {
+        return true;
+      }),
+    }));
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return undefined;
+        }
+        return defaultConfig[name];
+      }),
+    }));
+    const conf = makeConfig();
+    expect(conf.pulumiVersion).toEqual('3.121.0');
+  });
+
+  it('should fail if pulumi-version-file does not exist', async () => {
+    jest.mock('fs', () => ({
+      ...jest.requireActual('fs'),
+      readFileSync: jest.fn((path: string) => {
+        expect(path).toEqual('.pulumi.version');
+        return '3.121.0';
+      }),
+      existsSync: jest.fn(() => {
+        return false;
+      }),
+    }));
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return undefined;
+        }
+        return defaultConfig[name];
+      }),
+    }));
+    expect(() => {
+      makeConfig();
+    }).toThrow(/pulumi-version-file '\.pulumi\.version' does not exist/);
+  });
+
+  it('should fail if pulumi-version-file and pulumi-version are both provided', async () => {
+    jest.mock('fs', () => ({
+      ...jest.requireActual('fs'),
+      readFileSync: jest.fn((path: string) => {
+        expect(path).toEqual('.pulumi.version');
+        return '3.121.0';
+      }),
+      existsSync: jest.fn(() => {
+        return false;
+      }),
+    }));
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        if (name === 'pulumi-version-file') {
+          return '.pulumi.version';
+        }
+        return defaultConfig[name];
+      }),
+    }));
+
+    expect(() => {
+      makeConfig();
+    }).toThrow(
+      /Only one of 'pulumi-version' or 'pulumi-version-file' should be provided, got both/,
+    );
+  });
+
 });
