@@ -24,9 +24,6 @@ export type InstallationConfig = rt.Static<typeof installationConfig>;
 
 export function makeInstallationConfig(): rt.Result<InstallationConfig> {
   let pulumiVersion = getInput('pulumi-version');
-  if (pulumiVersion === "undefined") {
-    pulumiVersion = undefined;
-  }
   const versionFile = getInput('pulumi-version-file');
   if (pulumiVersion && versionFile) {
     throw new Error(
@@ -51,9 +48,6 @@ export function makeInstallationConfig(): rt.Result<InstallationConfig> {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function makeConfig() {
   let pulumiVersion = getInput('pulumi-version');
-  if (pulumiVersion === "undefined") {
-    pulumiVersion = undefined;
-  }
   const versionFile = getInput('pulumi-version-file');
   if (pulumiVersion && versionFile) {
     throw new Error(

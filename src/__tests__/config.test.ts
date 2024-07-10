@@ -87,20 +87,44 @@ describe('config.ts', () => {
   });
 
   it('should return ^3 if pulumi-version is undefined', async () => {
-    setupMockedConfig({
-      ...defaultConfig,
-      'pulumi-version': undefined,
-    });
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version':
+            return undefined;
+        }
+        return defaultConfig[name];
+      }),
+      getBooleanInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+    }));
+    const { makeConfig } = require('../config');
     const conf = makeConfig();
     expect(conf.pulumiVersion).toEqual('^3');
   });
 
   it('should read version from pulumi-version-file', async () => {
-    setupMockedConfig({
-      ...defaultConfig,
-      'pulumi-version': undefined,
-      'pulumi-version-file': '.pulumi.version',
-    });
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return undefined;
+        }
+        return defaultConfig[name];
+      }),
+      getBooleanInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+    }));
     jest.mock('fs', () => ({
       ...jest.requireActual('fs'),
       readFileSync: jest.fn((path: string) => {
@@ -117,11 +141,17 @@ describe('config.ts', () => {
   });
 
   it('should fail if pulumi-version-file does not exist', async () => {
-    setupMockedConfig({
-      ...defaultConfig,
-      'pulumi-version': undefined,
-      'pulumi-version-file': '.pulumi.version',
-    });
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return undefined;
+        }
+        return defaultConfig[name];
+      }),
+    }));
     jest.mock('fs', () => ({
       ...jest.requireActual('fs'),
       readFileSync: jest.fn((path: string) => {
@@ -139,11 +169,17 @@ describe('config.ts', () => {
   });
 
   it('should fail if pulumi-version-file and pulumi-version are both provided', async () => {
-    setupMockedConfig({
-      ...defaultConfig,
-      'pulumi-version': '^3',
-      'pulumi-version-file': '.pulumi.version',
-    });
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return '^3';
+        }
+        return defaultConfig[name];
+      }),
+    }));
     jest.mock('fs', () => ({
       ...jest.requireActual('fs'),
       readFileSync: jest.fn((path: string) => {
