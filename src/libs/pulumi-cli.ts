@@ -70,7 +70,7 @@ export async function downloadCli(range: string): Promise<void> {
 
   const isPulumiInstalled = await io.which('pulumi');
 
-  if (isPulumiInstalled) {
+  if (isPulumiInstalled && range != 'latest') {
     // Check for version of Pulumi CLI installed on the runner
     const runnerVersion = await getVersion();
 
@@ -98,6 +98,16 @@ export async function downloadCli(range: string): Promise<void> {
   }
 
   const { version, downloads } = await getVersionObject(range);
+  if (isPulumiInstalled && range === 'latest') {
+    const runnerVersion = await getVersion();
+    if (runnerVersion && runnerVersion === version) {
+      core.info(
+        `Pulumi version ${runnerVersion} is already installed on this machine, and is the latest available. Skipping download`
+      );
+      return;
+    }
+  }
+
 
   core.info(`Matched version: ${version}`);
 

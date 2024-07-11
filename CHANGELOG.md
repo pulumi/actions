@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- fix: download latest version only when necessary when 'pulumi-version: latest'
+  is specified ((#1225)[https://github.com/pulumi/actions/pull/1225])
+
 - fix: make `pulumi-version-file` work in non-install mode as well
   ((#1216)[https://github.com/pulumi/actions/pull/1216])
 
