@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: strip ansi control characters from pull request comment
+  ([#1231](https://github.com/pulumi/actions/pull/1231))
 
 ---
 
