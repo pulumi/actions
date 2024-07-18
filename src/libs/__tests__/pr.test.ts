@@ -56,6 +56,25 @@ describe('pr.ts', () => {
     });
   });
 
+  it('should convert ansi controll character to html and add to pull request message', async () => {
+    // @ts-ignore
+    gh.context = {
+      payload: {
+        pull_request: {
+          number: 123,
+        },
+      },
+    };
+
+    process.env.GITHUB_REPOSITORY = 'pulumi/actions';
+
+    await handlePullRequestMessage(defaultOptions, projectName, '\x1b[30mblack\x1b[37mwhite');
+    expect(createComment).toHaveBeenCalledWith({
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n<pre>\n<span style="color:#000">black<span style="color:#AAA">white</span></span>\n</pre>\n\n</details>',
+      issue_number: 123,
+    });
+  });
+
   it('should add pull request message to the PR defined in config, overriding the github context', async () => {
     // @ts-ignore
     gh.context = {
