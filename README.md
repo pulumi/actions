@@ -87,6 +87,9 @@ The action can be configured with the following arguments:
   `true`. This is in an effort to reduce verbosity - if you want to have a
   comment per PR run, please ensure that you set this to `false`.
 
+- `comment-max-character` - (optional) Maximum number of characters of the Pulumi
+  action result to be added to the PR. Default value is 64000.
+
 - `expect-no-changes` - (optional) Return an error if any changes occur during
   this update.
 

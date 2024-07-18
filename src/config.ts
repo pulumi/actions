@@ -84,6 +84,7 @@ export function makeConfig() {
     commentOnPr: getBooleanInput('comment-on-pr'),
     commentOnPrNumber: getNumberInput('comment-on-pr-number', {}),
     commentOnSummary: getBooleanInput('comment-on-summary'),
+    commentMaxCharacter: getNumberInput('comment-max-character'),
     upsert: getBooleanInput('upsert'),
     remove: getBooleanInput('remove'),
     refresh: getBooleanInput('refresh'),
