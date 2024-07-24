@@ -1,4 +1,4 @@
-import * as gh from '@actions/github';
+import gh from '@actions/github';
 import { Config } from '../../config';
 import { handlePullRequestMessage } from '../pr';
 
@@ -50,7 +50,26 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(defaultOptions, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n<pre>\ntest\n</pre>\n\n</details>',
+      issue_number: 123,
+    });
+  });
+
+  it('should convert ansi control character to html and add to pull request message', async () => {
+    // @ts-ignore
+    gh.context = {
+      payload: {
+        pull_request: {
+          number: 123,
+        },
+      },
+    };
+
+    process.env.GITHUB_REPOSITORY = 'pulumi/actions';
+
+    await handlePullRequestMessage(defaultOptions, projectName, '\x1b[30mblack\x1b[37mwhite');
+    expect(createComment).toHaveBeenCalledWith({
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n<pre>\n<span style="color:#000">black<span style="color:#AAA">white</span></span>\n</pre>\n\n</details>',
       issue_number: 123,
     });
   });
@@ -74,7 +93,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(options, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n<pre>\ntest\n</pre>\n\n</details>',
       issue_number: 87,
     });
   });
@@ -101,7 +120,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(options, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n<pre>\ntest\n</pre>\n\n</details>',
       issue_number: 87,
     });
   });
@@ -142,7 +161,7 @@ describe('pr.ts', () => {
     await handlePullRequestMessage(options, projectName, 'test');
     expect(updateComment).toHaveBeenCalledWith({
       comment_id: 2,
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n<pre>\ntest\n</pre>\n\n</details>',
     });
   });
 });
