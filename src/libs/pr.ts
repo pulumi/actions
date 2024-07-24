@@ -46,14 +46,16 @@ export async function handlePullRequestMessage(
     command,
     stackName,
     editCommentOnPr,
-    commentMaxCharacter,
   } = config;
+
+  // GitHub limits comment characters to 65535, use lower max to keep buffer for variable values
+  const MAX_CHARACTER_COMMENT = 64_000;
 
   const heading = `#### :tropical_drink: \`${command}\` on ${projectName}/${stackName}`;
 
   const summary = '<summary>Pulumi report</summary>';
 
-  const [htmlBody, trimmed]: [string, boolean] = ansiToHtml(output, commentMaxCharacter);
+  const [htmlBody, trimmed]: [string, boolean] = ansiToHtml(output, MAX_CHARACTER_COMMENT);
 
   const body = dedent`
     ${heading}

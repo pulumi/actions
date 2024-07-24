@@ -9,7 +9,6 @@ const defaultConfig: Record<string, string> = {
   'pulumi-version': '^3',
   'comment-on-pr': 'false',
   'comment-on-summary': 'false',
-  'comment-max-character': '64000',
   upsert: 'false',
   remove: 'false',
   refresh: 'false',
@@ -42,7 +41,6 @@ describe('config.ts', () => {
       Object {
         "cloudUrl": "file://~",
         "command": "up",
-        "commentMaxCharacter": 64000,
         "commentOnPr": false,
         "commentOnPrNumber": undefined,
         "commentOnSummary": false,

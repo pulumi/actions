@@ -32,10 +32,6 @@ inputs:
     description: 'If true, a comment on the GitHub step summary will be created'
     required: false
     default: 'false'
-  comment-max-character:
-    description: 'Maximum number of characters of output added to the PR.'
-    required: false
-    default: "64000"
   github-token:
     description: 'Github Token'
     required: false

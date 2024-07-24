@@ -13,7 +13,6 @@ const projectName = 'myFirstProject';
 const defaultOptions = {
   command: 'preview',
   stackName: 'staging',
-  commentMaxCharacter: 64000,
   options: {},
 } as Config;
 const createComment = jest.fn();
