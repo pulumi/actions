@@ -56,7 +56,7 @@ describe('pr.ts', () => {
     });
   });
 
-  it('should convert ansi controll character to html and add to pull request message', async () => {
+  it('should convert ansi control character to html and add to pull request message', async () => {
     // @ts-ignore
     gh.context = {
       payload: {
