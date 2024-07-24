@@ -2,10 +2,14 @@
 
 ## HEAD (Unreleased)
 
-- feat: strip ansi control characters from pull request comment
-  ([#1231](https://github.com/pulumi/actions/pull/1231))
+_(none)_
 
 ---
+
+## 5.4.0 (2024-07-24)
+
+- feat: strip ansi control characters from pull request comment
+  ([#1231](https://github.com/pulumi/actions/pull/1231))
 
 ## 5.3.3 (2024-07-11)
 
