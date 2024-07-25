@@ -4,6 +4,9 @@ on:
     branches:
       - main
 
+env:
+  GITHUB_TOKEN: ${{ secrets.PULUMI_BOT_TOKEN }}
+
 jobs:
   update-dist:
     runs-on: ubuntu-latest
