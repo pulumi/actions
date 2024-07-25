@@ -29,7 +29,7 @@ const main = async () => {
 
   // If we get here, we're not in install-only mode.
   // Attempt to parse the full configuration and run the action.
-  const config = await makeConfig();
+  const config = makeConfig();
   core.debug('Configuration is loaded');
   runAction(config);
 };
