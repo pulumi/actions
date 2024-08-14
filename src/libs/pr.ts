@@ -26,7 +26,7 @@ function ansiToHtml(
 
     // trim input message by number of exceeded characters
     const dif: number = htmlBody.length - maxLength;
-    message = message.substring(0, message.length - dif);
+    message = message.substring(dif, htmlBody.length);
     trimmed = true;
 
     // convert trimmed message to html
@@ -68,7 +68,7 @@ export async function handlePullRequestMessage(
     </pre>
     ${
       trimmed
-        ? ':warning: **Warn**: The output was too long and trimmed.'
+        ? ':warning: **Warn**: The output was too long and trimmed from the front.'
         : ''
     }
     </details>
