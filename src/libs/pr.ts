@@ -71,6 +71,7 @@ export async function handlePullRequestMessage(
 
     <details>
     ${summary}
+
     ${trimCommentsFromFront
       ? ':warning: **Warn**: The output was too long and trimmed from the front.'
       : ''
