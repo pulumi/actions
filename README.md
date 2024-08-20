@@ -143,11 +143,16 @@ The action can be configured with the following arguments:
 
 - `plan` - (optional) Used for
   [update plans](https://www.pulumi.com/docs/concepts/update-plans/)
+
   - On `preview`: Where to save the update plan. If you choose to use this in a
     different run of your workflow (let's say you create an update plan via a
     preview on Pull Request creation and want to `up` using the plan) you must
     upload the plan as an artifact, and retrieve it wherever you run `up`
   - On `up`: Where to read the update plan from.
+
+- `trim-comments-from-front` - (optional) If `true`, then the action will trim
+  long pr comments from the front instead of the back. This ensures that the
+  resources summary is always visible.
 
 By default, this action will try to authenticate Pulumi with
 [Pulumi Cloud](https://app.pulumi.com/). If you have not specified a

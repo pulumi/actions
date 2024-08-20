@@ -30,8 +30,7 @@ function ansiToHtml(
     const dif: number = htmlBody.length - maxLength;
 
     if (trimCommentsFromFront) {
-      const frontTrimmedMessage = 'warning: **Warn**: The output was too long and trimmed from the front.\n';
-      message = frontTrimmedMessage + message.substring(dif, htmlBody.length);
+      message = message.substring(dif, htmlBody.length);
     } else {
       message = message.substring(0, message.length - dif);
     }
@@ -67,23 +66,20 @@ export async function handlePullRequestMessage(
 
   const [htmlBody, trimmed]: [string, boolean] = ansiToHtml(output, MAX_CHARACTER_COMMENT, trimCommentsFromFront);
 
-  let trimmedMessage = 'warning: **Warn**: The output was too long and trimmed.';
-  if (trimCommentsFromFront) {
-    // trimmedMessage is empty because we put it at the beginning of htmlBody
-    trimmedMessage = '';
-  }
-
   const body = dedent`
     ${heading}
 
     <details>
     ${summary}
-
+    ${trimCommentsFromFront
+      ? 'warning: **Warn**: The output was too long and trimmed from the front.'
+      : ''
+    }
     <pre>
     ${htmlBody}
     </pre>
-    ${trimmed
-      ? `${trimmedMessage}`
+    ${trimmed || (trimmed && !trimCommentsFromFront)
+      ? 'warning: **Warn**: The output was too long and trimmed.'
       : ''
     }
     </details>

@@ -144,7 +144,7 @@ describe('pr.ts', () => {
 
     const call = createComment.mock.calls[0][0];
     expect(call.body.length).toBeLessThan(65_536);
-    expect(call.body).toContain('The output was too long and trimmed');
+    expect(call.body).toContain('The output was too long and trimmed.');
   });
 
   it('should trim the output from front when the output is larger than 64k characters and config is set', async () => {
@@ -173,7 +173,7 @@ describe('pr.ts', () => {
     const call = createComment.mock.calls[0][0];
     expect(call.body.length).toBeLessThan(65_536);
     expect(call.body).toContain('this is at the end and should be in the output');
-    expect(call.body).toContain('The output was too long and trimmed from the front');
+    expect(call.body).toContain('The output was too long and trimmed from the front.');
   });
 
   it('should edit the comment if it finds a previous created one', async () => {
