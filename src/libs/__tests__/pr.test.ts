@@ -147,6 +147,35 @@ describe('pr.ts', () => {
     expect(call.body).toContain('The output was too long and trimmed');
   });
 
+  it('should trim the output from front when the output is larger than 64k characters and config is set', async () => {
+    process.env.GITHUB_REPOSITORY = 'pulumi/actions';
+    // @ts-ignore
+    gh.context = {
+      payload: {
+        pull_request: {
+          number: 123,
+        },
+      },
+    };
+    const trimFromFrontOptions = {
+      command: 'preview',
+      stackName: 'staging',
+      trimCommentsFromFront: true,
+      options: {},
+    } as Config;
+
+    await handlePullRequestMessage(
+      trimFromFrontOptions,
+      projectName,
+      'a'.repeat(65_000) + '\n' + 'this is at the end and should be in the output',
+    );
+
+    const call = createComment.mock.calls[0][0];
+    expect(call.body.length).toBeLessThan(65_536);
+    expect(call.body).toContain('this is at the end and should be in the output');
+    expect(call.body).toContain('The output was too long and trimmed from the front');
+  });
+
   it('should edit the comment if it finds a previous created one', async () => {
     // @ts-ignore
     gh.context = { repo: {} };

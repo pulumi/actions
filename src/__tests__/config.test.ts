@@ -9,6 +9,7 @@ const defaultConfig: Record<string, string> = {
   'pulumi-version': '^3',
   'comment-on-pr': 'false',
   'comment-on-summary': 'false',
+  'trim-comments-from-front': 'false',
   upsert: 'false',
   remove: 'false',
   refresh: 'false',
@@ -69,6 +70,7 @@ describe('config.ts', () => {
         "remove": false,
         "secretsProvider": "",
         "stackName": "dev",
+        "trimCommentsFromFront": false,
         "upsert": false,
         "workDir": "./",
       }
