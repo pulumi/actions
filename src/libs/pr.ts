@@ -72,14 +72,14 @@ export async function handlePullRequestMessage(
     <details>
     ${summary}
     ${trimCommentsFromFront
-      ? 'warning: **Warn**: The output was too long and trimmed from the front.'
+      ? ':warning: **Warn**: The output was too long and trimmed from the front.'
       : ''
     }
     <pre>
     ${htmlBody}
     </pre>
-    ${trimmed || (trimmed && !trimCommentsFromFront)
-      ? 'warning: **Warn**: The output was too long and trimmed.'
+    ${trimmed && !trimCommentsFromFront
+      ? ':warning: **Warn**: The output was too long and trimmed.'
       : ''
     }
     </details>
