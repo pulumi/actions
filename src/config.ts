@@ -92,7 +92,7 @@ export function makeConfig() {
     // @see https://github.com/pulumi/actions/pull/912
     configMap: getYAMLInput<ConfigMap>('config-map'),
     editCommentOnPr: getBooleanInput('edit-pr-comment'),
-    trimCommentsFromFront: getBooleanInput('trim-comments-from-front'),
+    alwaysIncludeSummary: getBooleanInput('always-include-summary'),
 
     options: {
       parallel: getNumberInput('parallel', {}),

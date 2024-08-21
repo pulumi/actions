@@ -9,7 +9,7 @@ const defaultConfig: Record<string, string> = {
   'pulumi-version': '^3',
   'comment-on-pr': 'false',
   'comment-on-summary': 'false',
-  'trim-comments-from-front': 'false',
+  'always-include-summary': 'false',
   upsert: 'false',
   remove: 'false',
   refresh: 'false',
@@ -40,6 +40,7 @@ describe('config.ts', () => {
     expect(c).toBeTruthy();
     expect(c).toMatchInlineSnapshot(`
       Object {
+        "alwaysIncludeSummary": false,
         "cloudUrl": "file://~",
         "command": "up",
         "commentOnPr": false,
@@ -70,7 +71,6 @@ describe('config.ts', () => {
         "remove": false,
         "secretsProvider": "",
         "stackName": "dev",
-        "trimCommentsFromFront": false,
         "upsert": false,
         "workDir": "./",
       }
@@ -199,5 +199,4 @@ describe('config.ts', () => {
       /Only one of 'pulumi-version' or 'pulumi-version-file' should be provided, got both/,
     );
   });
-
 });

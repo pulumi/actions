@@ -8,13 +8,13 @@ import { Config } from '../config';
 function ansiToHtml(
   message: string,
   maxLength: number,
-  trimCommentsFromFront: boolean,
+  alwaysIncludeSummary: boolean,
 ): [string, boolean] {
   /**
    *  Converts an ansi string to html by for example removing color escape characters.
    *  message: ansi string to convert
    *  maxLength: Maximum number of characters of final message incl. HTML tags
-   *  trimCommentsFromFront: if true, trim message from front (if trimming is needed), otherwise from end
+   *  alwaysIncludeSummary: if true, trim message from front (if trimming is needed), otherwise from end
    *
    *  return message as html and information if message was trimmed because of length
    */
@@ -29,7 +29,7 @@ function ansiToHtml(
     // trim input message by number of exceeded characters from front or back as configured
     const dif: number = htmlBody.length - maxLength;
 
-    if (trimCommentsFromFront) {
+    if (alwaysIncludeSummary) {
       message = message.substring(dif, htmlBody.length);
     } else {
       message = message.substring(0, message.length - dif);
@@ -54,7 +54,7 @@ export async function handlePullRequestMessage(
     command,
     stackName,
     editCommentOnPr,
-    trimCommentsFromFront,
+    alwaysIncludeSummary,
   } = config;
 
   // GitHub limits comment characters to 65535, use lower max to keep buffer for variable values
@@ -64,7 +64,7 @@ export async function handlePullRequestMessage(
 
   const summary = '<summary>Pulumi report</summary>';
 
-  const [htmlBody, trimmed]: [string, boolean] = ansiToHtml(output, MAX_CHARACTER_COMMENT, trimCommentsFromFront);
+  const [htmlBody, trimmed]: [string, boolean] = ansiToHtml(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
 
   const body = dedent`
     ${heading}
@@ -72,14 +72,14 @@ export async function handlePullRequestMessage(
     <details>
     ${summary}
 
-    ${trimCommentsFromFront
+    ${alwaysIncludeSummary
       ? ':warning: **Warn**: The output was too long and trimmed from the front.'
       : ''
     }
     <pre>
     ${htmlBody}
     </pre>
-    ${trimmed && !trimCommentsFromFront
+    ${trimmed && !alwaysIncludeSummary
       ? ':warning: **Warn**: The output was too long and trimmed.'
       : ''
     }

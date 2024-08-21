@@ -158,15 +158,15 @@ describe('pr.ts', () => {
         },
       },
     };
-    const trimFromFrontOptions = {
+    const alwaysIncludeSummaryOptions = {
       command: 'preview',
       stackName: 'staging',
-      trimCommentsFromFront: true,
+      alwaysIncludeSummary: true,
       options: {},
     } as Config;
 
     await handlePullRequestMessage(
-      trimFromFrontOptions,
+      alwaysIncludeSummaryOptions,
       projectName,
       'a'.repeat(65_000) + '\n' + 'this is at the end and should be in the output',
     );
