@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-_(none)_
+- feat: Trim PR comments from the front
+  ([#1252](https://github.com/pulumi/actions/pull/1252))
 
 ---
 

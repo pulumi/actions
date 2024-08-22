@@ -110,6 +110,10 @@ inputs:
     description: 'Suppress display of periodic progress dots to limit logs length'
     required: false
     default: 'false'
+  always-include-summary:
+    description: 'If comments must be trimmed, trim them from the front. This ensures the resources summary is always included in the comment'
+    required: false
+    default: 'false'
 outputs:
   output:
     description: Output from running command
