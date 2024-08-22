@@ -2,10 +2,12 @@
 
 ## HEAD (Unreleased)
 
-- feat: Trim PR comments from the front
-  ([#1252](https://github.com/pulumi/actions/pull/1252))
-
 ---
+
+## 5.5.0 (2024-08-22)
+
+- feat: Allow trimming PR comments from the front, so the summary is always
+  included in the comment ([#1252](https://github.com/pulumi/actions/pull/1252))
 
 ## 5.4.0 (2024-07-24)
 
