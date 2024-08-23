@@ -72,7 +72,7 @@ export async function handlePullRequestMessage(
     <details>
     ${summary}
 
-    ${alwaysIncludeSummary
+    ${trimmed && alwaysIncludeSummary
       ? ':warning: **Warn**: The output was too long and trimmed from the front.'
       : ''
     }
