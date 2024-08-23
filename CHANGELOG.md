@@ -2,10 +2,12 @@
 
 ## HEAD (Unreleased)
 
+---
+
+## 5.5.1 (2024-08-23)
+
 - fix: `always-include-summary` only logs warning when ouput is too large
   ([#1263](https://github.com/pulumi/actions/pull/1263))
-
----
 
 ## 5.5.0 (2024-08-22)
 
