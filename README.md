@@ -60,11 +60,8 @@ The action can be configured with the following arguments:
 - `github-token` - (optional) A GitHub token that has access levels to allow the
   Action to comment on a PR. Defaults to `${{ github.token }}`
 
-- `refresh` - (optional) If `true`, `pulumi refresh` is called before running
-  the `command`. See `soft-refresh` for `--refresh` flag.
-
-- `soft-refresh` - (optional) If `true`, `preview` and `up` commands are called
-  with the `--refresh` flag.
+- `refresh` - (optional) If `true`, `preview` and `up` commands are called with
+  the `--refresh` flag.
 
 - `secrets-provider` - (optional) The type of the provider that should be used
   to encrypt and decrypt secrets. Possible choices: `default`, `passphrase`,

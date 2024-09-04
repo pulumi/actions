@@ -79,11 +79,6 @@ const runAction = async (config: Config): Promise<void> => {
     await stack.setAllConfig(config.configMap);
   }
 
-  if (config.refresh) {
-    core.startGroup(`Refresh stack on ${config.stackName}`);
-    await stack.refresh({ onOutput });
-    core.endGroup();
-  }
 
   core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
 

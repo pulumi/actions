@@ -74,10 +74,6 @@ inputs:
     description: 'Path to JSON file containing the config for the policy pack of the corresponding "--policy-pack" flag.'
     required: false
   refresh:
-    description: 'Perform `pulumi refresh` and update the state before the operation'
-    required: false
-    default: 'false'
-  soft-refresh:
     description: 'Execute the operation with the `--refresh` option'
     required: false
     default: 'false'
