@@ -4,7 +4,7 @@
 
 - feat: (breaking change) Update the `refresh` option to runcommands with the
   `--refresh` flag. ([#1118](https://github.com/pulumi/actions/pull/1118))
-  
+
 ---
 
 ## 5.5.1 (2024-08-23)
@@ -60,7 +60,6 @@
 - feat: support disabling progress dots and outputs printing
   (--suppress-progress, --suppress-outputs)
   ([#116](https://github.com/pulumi/actions/pull/1116))
-
 
 ## 5.1.1 (2024-01-24)
 
