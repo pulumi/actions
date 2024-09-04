@@ -1,4 +1,4 @@
-import * as gh from '@actions/github';
+import gh from '@actions/github';
 import { Config } from '../../config';
 import { handlePullRequestMessage } from '../pr';
 
@@ -50,7 +50,26 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(defaultOptions, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>',
+      issue_number: 123,
+    });
+  });
+
+  it('should convert ansi control character to html and add to pull request message', async () => {
+    // @ts-ignore
+    gh.context = {
+      payload: {
+        pull_request: {
+          number: 123,
+        },
+      },
+    };
+
+    process.env.GITHUB_REPOSITORY = 'pulumi/actions';
+
+    await handlePullRequestMessage(defaultOptions, projectName, '\x1b[30mblack\x1b[37mwhite');
+    expect(createComment).toHaveBeenCalledWith({
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\n<span style="color:#000">black<span style="color:#AAA">white</span></span>\n</pre>\n\n</details>',
       issue_number: 123,
     });
   });
@@ -74,7 +93,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(options, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>',
       issue_number: 87,
     });
   });
@@ -101,7 +120,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(options, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>',
       issue_number: 87,
     });
   });
@@ -125,7 +144,38 @@ describe('pr.ts', () => {
 
     const call = createComment.mock.calls[0][0];
     expect(call.body.length).toBeLessThan(65_536);
-    expect(call.body).toContain('The output was too long and trimmed');
+    expect(call.body).toContain('The output was too long and trimmed.');
+    expect(call.body).not.toContain('The output was too long and trimmed from the front.');
+  });
+
+  it('should trim the output from front when the output is larger than 64k characters and config is set', async () => {
+    process.env.GITHUB_REPOSITORY = 'pulumi/actions';
+    // @ts-ignore
+    gh.context = {
+      payload: {
+        pull_request: {
+          number: 123,
+        },
+      },
+    };
+    const alwaysIncludeSummaryOptions = {
+      command: 'preview',
+      stackName: 'staging',
+      alwaysIncludeSummary: true,
+      options: {},
+    } as Config;
+
+    await handlePullRequestMessage(
+      alwaysIncludeSummaryOptions,
+      projectName,
+      'a'.repeat(65_000) + '\n' + 'this is at the end and should be in the output',
+    );
+
+    const call = createComment.mock.calls[0][0];
+    expect(call.body.length).toBeLessThan(65_536);
+    expect(call.body).toContain('this is at the end and should be in the output');
+    expect(call.body).toContain('The output was too long and trimmed from the front.');
+    expect(call.body).not.toContain('The output was too long and trimmed.');
   });
 
   it('should edit the comment if it finds a previous created one', async () => {
@@ -142,7 +192,7 @@ describe('pr.ts', () => {
     await handlePullRequestMessage(options, projectName, 'test');
     expect(updateComment).toHaveBeenCalledWith({
       comment_id: 2,
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n```\ntest\n```\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>',
     });
   });
 });

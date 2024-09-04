@@ -9,6 +9,7 @@ const defaultConfig: Record<string, string> = {
   'pulumi-version': '^3',
   'comment-on-pr': 'false',
   'comment-on-summary': 'false',
+  'always-include-summary': 'false',
   upsert: 'false',
   remove: 'false',
   refresh: 'false',
@@ -34,11 +35,12 @@ describe('config.ts', () => {
   });
   it('should validate a configuration', async () => {
     setupMockedConfig(defaultConfig);
-    const c = await makeConfig();
+    const c = makeConfig();
 
     expect(c).toBeTruthy();
     expect(c).toMatchInlineSnapshot(`
       Object {
+        "alwaysIncludeSummary": false,
         "cloudUrl": "file://~",
         "command": "up",
         "commentOnPr": false,
@@ -81,8 +83,120 @@ describe('config.ts', () => {
       command: 'invalid',
     });
 
-    await expect(() => makeConfig()).toThrowErrorMatchingInlineSnapshot(
+    expect(() => makeConfig()).toThrowErrorMatchingInlineSnapshot(
       `"Input was not correct for command. Valid alternatives are: up, update, refresh, destroy, preview, output"`,
+    );
+  });
+
+  it('should return ^3 if pulumi-version is undefined', async () => {
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version':
+            return undefined;
+        }
+        return defaultConfig[name];
+      }),
+      getBooleanInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+    }));
+    const { makeConfig } = require('../config');
+    const conf = makeConfig();
+    expect(conf.pulumiVersion).toEqual('^3');
+  });
+
+  it('should read version from pulumi-version-file', async () => {
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return undefined;
+        }
+        return defaultConfig[name];
+      }),
+      getBooleanInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+    }));
+    jest.mock('fs', () => ({
+      ...jest.requireActual('fs'),
+      readFileSync: jest.fn((path: string) => {
+        expect(path).toEqual('.pulumi.version');
+        return '3.121.0';
+      }),
+      existsSync: jest.fn(() => {
+        return true;
+      }),
+    }));
+    const { makeConfig } = require('../config');
+    const conf = makeConfig();
+    expect(conf.pulumiVersion).toEqual('3.121.0');
+  });
+
+  it('should fail if pulumi-version-file does not exist', async () => {
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return undefined;
+        }
+        return defaultConfig[name];
+      }),
+    }));
+    jest.mock('fs', () => ({
+      ...jest.requireActual('fs'),
+      readFileSync: jest.fn((path: string) => {
+        expect(path).toEqual('.pulumi.version');
+        return '3.121.0';
+      }),
+      existsSync: jest.fn(() => {
+        return false;
+      }),
+    }));
+    const { makeConfig } = require('../config');
+    expect(() => {
+      makeConfig();
+    }).toThrow(/pulumi-version-file '\.pulumi\.version' does not exist/);
+  });
+
+  it('should fail if pulumi-version-file and pulumi-version are both provided', async () => {
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'pulumi-version-file':
+            return '.pulumi.version';
+          case 'pulumi-version':
+            return '^3';
+        }
+        return defaultConfig[name];
+      }),
+    }));
+    jest.mock('fs', () => ({
+      ...jest.requireActual('fs'),
+      readFileSync: jest.fn((path: string) => {
+        expect(path).toEqual('.pulumi.version');
+        return '3.121.0';
+      }),
+      existsSync: jest.fn(() => {
+        return false;
+      }),
+    }));
+    const { makeConfig } = require('../config');
+    expect(() => {
+      makeConfig();
+    }).toThrow(
+      /Only one of 'pulumi-version' or 'pulumi-version-file' should be provided, got both/,
     );
   });
 });

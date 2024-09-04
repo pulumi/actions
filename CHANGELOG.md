@@ -2,14 +2,65 @@
 
 ## HEAD (Unreleased)
 
+- feat: (breaking change) Update the `refresh` option to runcommands with the
+  `--refresh` flag. ([#1118](https://github.com/pulumi/actions/pull/1118))
+  
+---
+
+## 5.5.1 (2024-08-23)
+
+- fix: `always-include-summary` only logs warning when ouput is too large
+  ([#1263](https://github.com/pulumi/actions/pull/1263))
+
+## 5.5.0 (2024-08-22)
+
+- feat: Allow trimming PR comments from the front, so the summary is always
+  included in the comment ([#1252](https://github.com/pulumi/actions/pull/1252))
+
+## 5.4.0 (2024-07-24)
+
+- feat: strip ansi control characters from pull request comment
+  ([#1231](https://github.com/pulumi/actions/pull/1231))
+
+## 5.3.3 (2024-07-11)
+
+- fix: download latest version only when necessary when 'pulumi-version: latest'
+  is specified ((#1225)[https://github.com/pulumi/actions/pull/1225])
+
+- fix: make `pulumi-version-file` work in non-install mode as well
+  ((#1216)[https://github.com/pulumi/actions/pull/1216])
+
+## 5.3.2 (2024-06-25)
+
+- fix: add 3.120.0 to the list of known-bad versions
+  ((#1210)[https://github.com/pulumi/actions/pull/1210])
+
+## 5.3.1 (2024-06-25)
+
+- fix: remove `pulumi-version` default
+  ((#1208)[https://github.com/pulumi/actions/pull/1208])
+
+## 5.3.0 (2024-06-25)
+
+- feat: add option `pulumi-version-file`
+  ([#1204](https://github.com/pulumi/actions/pull/1204))
+
+## 5.2.4 (2024-05-28)
+
+- fix: `make comment-on-pr-number` option work even outside of pull-request
+  events ([#1178](https://github.com/pulumi/actions/pull/1178))
+
+## 5.2.1 (2024-04-11)
+
+- fix: include the versions in the error message
+  ([#1147](https://github.com/pulumi/actions/pull/1147))
+
+## 5.2.0 (2024-03-26)
+
 - feat: support disabling progress dots and outputs printing
   (--suppress-progress, --suppress-outputs)
   ([#116](https://github.com/pulumi/actions/pull/1116))
 
-- feat: (breaking change) Update the `refresh` option to runcommands with the
-  `--refresh` flag. ([#1118](https://github.com/pulumi/actions/pull/1118))
-
----
 
 ## 5.1.1 (2024-01-24)
 

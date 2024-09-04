@@ -49,11 +49,12 @@
     "@actions/tool-cache": "^2.0.1",
     "@pulumi/pulumi": "3.109.0",
     "actions-parsers": "^1.0.2",
+    "ansi-to-html": "^0.7.2",
     "dedent": "^0.7.0",
     "envalid": "^7.3.1",
     "got": "^11.8.6",
     "runtypes": "^6.7.0",
-    "semver": "^7.5.1",
+    "semver": "^7.6.0",
     "ts-invariant": "^0.10.3",
     "typescript": "4.5"
   }

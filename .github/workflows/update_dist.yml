@@ -3,13 +3,17 @@ on:
   push:
     branches:
       - main
-      - master
+
+env:
+  GITHUB_TOKEN: ${{ secrets.PULUMI_BOT_TOKEN }}
 
 jobs:
   update-dist:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PULUMI_BOT_TOKEN }}
       - uses: actions/setup-node@v4
         with:
           node-version: 20.x

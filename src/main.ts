@@ -29,7 +29,7 @@ const main = async () => {
 
   // If we get here, we're not in install-only mode.
   // Attempt to parse the full configuration and run the action.
-  const config = await makeConfig();
+  const config = makeConfig();
   core.debug('Configuration is loaded');
   runAction(config);
 };
@@ -114,13 +114,12 @@ const runAction = async (config: Config): Promise<void> => {
     }
   }
 
-  if (config.commentOnPrNumber || config.commentOnPr) {
-    const isPullRequest = context.payload.pull_request !== undefined;
-    if (isPullRequest) {
-      core.debug(`Commenting on pull request`);
-      invariant(config.githubToken, 'github-token is missing.');
-      handlePullRequestMessage(config, projectName, output);
-    }
+  const isPullRequest = context.payload.pull_request !== undefined;
+  if (config.commentOnPrNumber ||
+      (config.commentOnPr && isPullRequest)) {
+    core.debug(`Commenting on pull request`);
+    invariant(config.githubToken, 'github-token is missing.');
+    handlePullRequestMessage(config, projectName, output);
   }
 
   if (config.commentOnSummary) {

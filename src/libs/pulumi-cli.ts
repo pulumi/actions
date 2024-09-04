@@ -19,6 +19,7 @@ function isKnownBadVersion(version: string): boolean {
     '3.66.0',
     '3.67.0',
     '3.67.1',
+    '3.120.0',
   ]);
   return knownBadVersions.has(version);
 }
@@ -69,7 +70,7 @@ export async function downloadCli(range: string): Promise<void> {
 
   const isPulumiInstalled = await io.which('pulumi');
 
-  if (isPulumiInstalled) {
+  if (isPulumiInstalled && range != 'latest') {
     // Check for version of Pulumi CLI installed on the runner
     const runnerVersion = await getVersion();
 
@@ -97,6 +98,16 @@ export async function downloadCli(range: string): Promise<void> {
   }
 
   const { version, downloads } = await getVersionObject(range);
+  if (isPulumiInstalled && range === 'latest') {
+    const runnerVersion = await getVersion();
+    if (runnerVersion && runnerVersion === version) {
+      core.info(
+        `Pulumi version ${runnerVersion} is already installed on this machine, and is the latest available. Skipping download`
+      );
+      return;
+    }
+  }
+
 
   core.info(`Matched version: ${version}`);
 
@@ -174,7 +185,12 @@ export async function downloadCli(range: string): Promise<void> {
   const versionExec = await exec.exec(`pulumi`, ['version'], true);
   const pulumiVersion = versionExec.stdout.trim();
   core.debug(`Running pulumi verison returned: ${pulumiVersion}`);
+
+  if (!versionExec.success) {
+    throw new Error(`Failed to verify pulumi version:\n${versionExec.stderr}`);
+  }
+
   if (!semver.satisfies(pulumiVersion, version)) {
-    throw new Error('Installed version did not satisfy the resolved version');
+    throw new Error(`Installed version "${pulumiVersion}" did not satisfy the resolved version "${version}"`);
   }
 }

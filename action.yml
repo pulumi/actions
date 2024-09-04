@@ -14,7 +14,9 @@ inputs:
   pulumi-version:
     description: 'Install a specific version of the Pulumi CLI'
     required: false
-    default: '^3'
+  pulumi-version-file:
+    description: 'File containing the version of the Pulumi CLI to install. Example: .pulumi.version'
+    required: false
   work-dir:
     description: 'Location of your Pulumi files. Defaults to ./'
     required: false
@@ -106,6 +108,10 @@ inputs:
     default: 'false'
   suppress-progress:
     description: 'Suppress display of periodic progress dots to limit logs length'
+    required: false
+    default: 'false'
+  always-include-summary:
+    description: 'If comments must be trimmed, trim them from the front. This ensures the resources summary is always included in the comment'
     required: false
     default: 'false'
 outputs:
