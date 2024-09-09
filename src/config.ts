@@ -86,7 +86,6 @@ export function makeConfig() {
     commentOnSummary: getBooleanInput('comment-on-summary'),
     upsert: getBooleanInput('upsert'),
     remove: getBooleanInput('remove'),
-    refresh: getBooleanInput('refresh'),
     // TODO: Add parser back once pulumi/pulumi#12641 is fixed.
     // @see https://github.com/pulumi/actions/pull/913
     // @see https://github.com/pulumi/actions/pull/912
@@ -99,6 +98,7 @@ export function makeConfig() {
       message: getInput('message'),
       expectNoChanges: getBooleanInput('expect-no-changes'),
       diff: getBooleanInput('diff'),
+      refresh: getBooleanInput('refresh'),
       replace: parseSemicolorToArray(getMultilineInput('replace')),
       target: parseSemicolorToArray(getMultilineInput('target')),
       targetDependents: getBooleanInput('target-dependents'),

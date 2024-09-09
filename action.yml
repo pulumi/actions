@@ -76,7 +76,7 @@ inputs:
     description: 'Path to JSON file containing the config for the policy pack of the corresponding "--policy-pack" flag.'
     required: false
   refresh:
-    description: 'Perform a stack refresh as part of the operation'
+    description: 'Execute the operation with the `--refresh` option'
     required: false
     default: 'false'
   upsert:

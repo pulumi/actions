@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pulumi/actions@v5
+      - uses: pulumi/actions@v6
         with:
           command: preview
           stack-name: org-name/stack-name
@@ -60,8 +60,8 @@ The action can be configured with the following arguments:
 - `github-token` - (optional) A GitHub token that has access levels to allow the
   Action to comment on a PR. Defaults to `${{ github.token }}`
 
-- `refresh` - (optional) If `true`, stack is refreshed before running the
-  `command`.
+- `refresh` - (optional) If `true`, `preview` and `up` commands are called with
+  the `--refresh` flag.
 
 - `secrets-provider` - (optional) The type of the provider that should be used
   to encrypt and decrypt secrets. Possible choices: `default`, `passphrase`,
@@ -165,7 +165,7 @@ If you want to only install the Pulumi CLI, omit the `command` field of the
 action.
 
 ```yaml
-- uses: pulumi/actions@v5
+- uses: pulumi/actions@v6
 ```
 
 This will install Pulumi and exit without performing any other operations.
@@ -199,7 +199,7 @@ We can see that `pet-name` is an output. To get the value of this output in the
 action, we would use code similar to the following:
 
 ```yaml
-- uses: pulumi/actions@v5
+- uses: pulumi/actions@v6
   id: pulumi
   env:
     PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
@@ -247,6 +247,13 @@ As of `v3.18`, we are intending to move to a monthly cadence for minor releases.
 Minor releases will be published around the beginning of the month. We may cut a
 patch release instead, if the changes are small enough not to warrant a minor
 release. We will also cut patch releases periodically as needed to address bugs.
+
+## Migrating from v5
+
+v6 of the Pulumi Action updates the behavior of the `refresh` option.
+Previously, if `refresh` was true, the action would run `pulumi refresh` before
+the desired command. In v6, the `pulumi up` and `pulumi preview` commands will
+be run with the `--refresh` flag if `refresh` is true.
 
 ## Migrating from v4
 
