@@ -6,7 +6,7 @@
 
 ## 6.0.0 (2024-09-09)
 
-- feat: (breaking change) Update the `refresh` option to runcommands with the
+- feat: (breaking change) Update the `refresh` option to run commands with the
   `--refresh` flag. ([#1118](https://github.com/pulumi/actions/pull/1118))
 
 ## 5.5.1 (2024-08-23)
