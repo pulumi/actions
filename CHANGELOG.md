@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- fix: Make `pulumi login` respect configuration in `Pulumi.yaml`
+  ([#1299](https://github.com/pulumi/actions/pull/1299))
+
 ---
 
 ## 6.0.0 (2024-09-27)
