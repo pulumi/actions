@@ -117,10 +117,7 @@ const runAction = async (config: Config): Promise<void> => {
   }
 
   // strip ansi symbols from output because it is not supported in PR comment and Summary
-  let stripped_output = output;
-  if (config.options.color == 'always') {
-    stripped_output = stripAnsi(output)
-  }
+  const stripped_output = stripAnsi(output);
 
   const isPullRequest = context.payload.pull_request !== undefined;
   if (config.commentOnPrNumber ||
