@@ -1,11 +1,10 @@
 import * as core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
-import AnsiToHtml from 'ansi-to-html';
 import dedent from 'dedent';
 import invariant from 'ts-invariant';
 import { Config } from '../config';
 
-function ansiToHtml(
+function trimOutput(
   message: string,
   maxLength: number,
   alwaysIncludeSummary: boolean,
@@ -18,30 +17,24 @@ function ansiToHtml(
    *
    *  return message as html and information if message was trimmed because of length
    */
-  const convert = new AnsiToHtml();
   let trimmed = false;
 
-  let htmlBody: string = convert.toHtml(message);
-
-  // Check if htmlBody exceeds max characters
-  if (htmlBody.length > maxLength) {
+  // Check if message exceeds max characters
+  if (message.length > maxLength) {
 
     // trim input message by number of exceeded characters from front or back as configured
-    const dif: number = htmlBody.length - maxLength;
+    const dif: number = message.length - maxLength;
 
     if (alwaysIncludeSummary) {
-      message = message.substring(dif, htmlBody.length);
+      message = message.substring(dif, message.length);
     } else {
       message = message.substring(0, message.length - dif);
     }
 
     trimmed = true;
-
-    // convert trimmed message to html
-    htmlBody = convert.toHtml(message);
   }
 
-  return [htmlBody, trimmed];
+  return [message, trimmed];
 }
 
 export async function handlePullRequestMessage(
@@ -64,7 +57,7 @@ export async function handlePullRequestMessage(
 
   const summary = '<summary>Pulumi report</summary>';
 
-  const [htmlBody, trimmed]: [string, boolean] = ansiToHtml(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
+  const [htmlBody, trimmed]: [string, boolean] = trimOutput(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
 
   const body = dedent`
     ${heading}

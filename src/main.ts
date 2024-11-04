@@ -6,6 +6,7 @@ import {
   LocalWorkspace,
   LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
+import stripAnsi from 'strip-ansi';
 import invariant from 'ts-invariant';
 import {
   Commands,
@@ -17,6 +18,7 @@ import {
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
+import { handleSummaryMessage } from './libs/summary';
 import { login } from './login';
 
 const main = async () => {
@@ -114,19 +116,22 @@ const runAction = async (config: Config): Promise<void> => {
     }
   }
 
+  // strip ansi symbols from output because it is not supported in PR comment and Summary
+  let stripped_output = output;
+  if (config.options.color == 'always') {
+    stripped_output = stripAnsi(output)
+  }
+
   const isPullRequest = context.payload.pull_request !== undefined;
   if (config.commentOnPrNumber ||
       (config.commentOnPr && isPullRequest)) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
-    handlePullRequestMessage(config, projectName, output);
+    handlePullRequestMessage(config, projectName, stripped_output);
   }
 
   if (config.commentOnSummary) {
-    await core.summary
-      .addHeading(`Pulumi ${config.stackName} results`)
-      .addCodeBlock(output, "diff")
-      .write();
+    handleSummaryMessage(config, projectName, stripped_output)
   }
 
   if (config.remove && config.command === 'destroy') {
