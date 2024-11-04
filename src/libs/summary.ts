@@ -42,6 +42,7 @@ export async function handleSummaryMessage(
   output: string,
 ): Promise<void> {
   const {
+    stackName,
     alwaysIncludeSummary,
   } = config;
 
@@ -53,9 +54,9 @@ export async function handleSummaryMessage(
   let heading;
 
   if (trimmed) {
-    heading = 'Pulumi ${config.stackName} results (trimmed)';
+    heading = `Pulumi ${projectName}/${stackName} results (trimmed)`;
   } else {
-    heading = 'Pulumi ${config.stackName} results';
+    heading = `Pulumi ${config.stackName} results`;
   }
 
   await core.summary
