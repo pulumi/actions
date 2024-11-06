@@ -144,13 +144,13 @@ describe('main.login', () => {
   });
   it('should read self-hosted backend config', async () => {
     const cloudUrl = 's3://my_region.aws.com';
-    await login(cloudUrl);
+    await login('~', cloudUrl);
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('--non-interactive', 'login', cloudUrl);
+    expect(spy).toHaveBeenCalledWith('--non-interactive', '--cwd', '~', 'login', cloudUrl);
   });
   it('should login when no cloud url is provided', async () => {
-    await login('');
+    await login('~', '');
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith('--non-interactive', 'login');
+    expect(spy).toHaveBeenCalledWith('--non-interactive', '--cwd', '~', 'login');
   });
 });

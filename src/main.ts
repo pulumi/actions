@@ -42,16 +42,17 @@ const installOnly = async (config: InstallationConfig): Promise<void> => {
 
 const runAction = async (config: Config): Promise<void> => {
   await pulumiCli.downloadCli(config.pulumiVersion);
-  const result = await login(config.cloudUrl);
-  if (!result.success) {
-    core.warning(`Failed to login to Pulumi service: ${result.stderr}`);
-  }
 
   const workDir = resolve(
     environmentVariables.GITHUB_WORKSPACE,
     config.workDir,
   );
   core.debug(`Working directory resolved at ${workDir}`);
+
+  const result = await login(workDir, config.cloudUrl);
+  if (!result.success) {
+    core.warning(`Failed to login to Pulumi service: ${result.stderr}`);
+  }
 
   const stackArgs: LocalProgramArgs = {
     stackName: config.stackName,
