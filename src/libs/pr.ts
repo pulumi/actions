@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import dedent from 'dedent';
+import stripAnsi from 'strip-ansi';
 import invariant from 'ts-invariant';
 import { Config } from '../config';
 
@@ -10,9 +11,9 @@ function trimOutput(
   alwaysIncludeSummary: boolean,
 ): [string, boolean] {
   /**
-   *  Converts an ansi string to html by for example removing color escape characters.
-   *  message: ansi string to convert
-   *  maxLength: Maximum number of characters of final message incl. HTML tags
+   *  Trim message to maxLength
+   *  message: string to trim
+   *  maxLength: Maximum number of characters of final message
    *  alwaysIncludeSummary: if true, trim message from front (if trimming is needed), otherwise from end
    *
    *  return message as html and information if message was trimmed because of length
@@ -50,6 +51,9 @@ export async function handlePullRequestMessage(
     alwaysIncludeSummary,
   } = config;
 
+  // strip ANSI symbols from output because it is not supported in PR comment
+  output = stripAnsi(output);
+
   // GitHub limits comment characters to 65535, use lower max to keep buffer for variable values
   const MAX_CHARACTER_COMMENT = 64_000;
 
@@ -57,7 +61,7 @@ export async function handlePullRequestMessage(
 
   const summary = '<summary>Pulumi report</summary>';
 
-  const [htmlBody, trimmed]: [string, boolean] = trimOutput(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
+  const [message, trimmed]: [string, boolean] = trimOutput(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
 
   const body = dedent`
     ${heading}
@@ -70,7 +74,7 @@ export async function handlePullRequestMessage(
       : ''
     }
     <pre>
-    ${htmlBody}
+    ${message}
     </pre>
     ${trimmed && !alwaysIncludeSummary
       ? ':warning: **Warn**: The output was too long and trimmed.'

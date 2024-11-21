@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import stripAnsi from 'strip-ansi';
 import { Config } from '../config';
 
 function trimOutput(
@@ -7,8 +8,8 @@ function trimOutput(
   alwaysIncludeSummary: boolean,
 ): [string, boolean] {
   /**
-   *  Trim message to maxSize in bytes
-   *  message: string to convert
+   *  Trim message to maxSize in bytes by for example removing color escape characters
+   *  message: ansi string to trim
    *  maxSize: Maximum number of bytes of final message
    *  alwaysIncludeSummary: if true, trim message from front (if trimming is needed), otherwise from end
    *
@@ -46,17 +47,20 @@ export async function handleSummaryMessage(
     alwaysIncludeSummary,
   } = config;
 
+  // strip ANSI symbols from message because it is not supported in GH step Summary
+  output = stripAnsi(output);
+
   // GitHub limits step Summary to 1 MiB (1_048_576 bytes), use lower max to keep buffer for variable values
   const MAX_SUMMARY_SIZE_BYTES = 1_000_000;
 
   const [message, trimmed]: [string, boolean] = trimOutput(output, MAX_SUMMARY_SIZE_BYTES, alwaysIncludeSummary);
 
-  let heading;
+  let heading = `Pulumi ${projectName}/${stackName} results`;
 
-  if (trimmed) {
-    heading = `Pulumi ${projectName}/${stackName} results (trimmed)`;
-  } else {
-    heading = `Pulumi ${config.stackName} results`;
+  if (trimmed && alwaysIncludeSummary) {
+    heading += ' :warning: **Warn**: The output was too long and trimmed from the front.';
+  } else if (trimmed && !alwaysIncludeSummary) {
+    heading += ' :warning: **Warn**: The output was too long and trimmed.';
   }
 
   await core.summary

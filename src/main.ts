@@ -6,7 +6,6 @@ import {
   LocalWorkspace,
   LocalWorkspaceOptions,
 } from '@pulumi/pulumi/automation';
-import stripAnsi from 'strip-ansi';
 import invariant from 'ts-invariant';
 import {
   Commands,
@@ -116,19 +115,16 @@ const runAction = async (config: Config): Promise<void> => {
     }
   }
 
-  // strip ansi symbols from output because it is not supported in PR comment and Summary
-  const stripped_output = stripAnsi(output);
-
   const isPullRequest = context.payload.pull_request !== undefined;
   if (config.commentOnPrNumber ||
       (config.commentOnPr && isPullRequest)) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
-    handlePullRequestMessage(config, projectName, stripped_output);
+    handlePullRequestMessage(config, projectName, output);
   }
 
   if (config.commentOnSummary) {
-    handleSummaryMessage(config, projectName, stripped_output)
+    handleSummaryMessage(config, projectName, output)
   }
 
   if (config.remove && config.command === 'destroy') {
