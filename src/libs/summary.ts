@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import dedent from 'dedent';
 import { Config } from '../config';
 
 function trimOutput(
@@ -65,6 +66,6 @@ export async function handleSummaryMessage(
 
   await core.summary
   .addHeading(heading)
-  .addCodeBlock(message, "diff")
+  .addCodeBlock(dedent`${message}`, "diff")
   .write();
 }
