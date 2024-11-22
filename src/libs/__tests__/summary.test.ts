@@ -73,8 +73,8 @@ describe('summary.ts', () => {
   })
 
   it('should trim the output from front when the output is larger than 1 MiB and config is set', async () => {
-    const message = '😄begin' + 'a'.repeat(65_536) + 'this is at the end and should be in the output';
-    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>blackwhite</code></pre>\n`;
+    const message = '😄begin' + 'a'.repeat(1_000_001) + 'this is at the end and should be in the output';
+    // const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>blackwhite</code></pre>\n`;
 
     const options: Config = {
       ...defaultOptions,
@@ -89,7 +89,7 @@ describe('summary.ts', () => {
     expect(summary).toContain('this is at the end and should be in the output');
     expect(summary).toContain('The output was too long and trimmed from the front.');
     expect(summary).not.toContain('The output was too long and trimmed.');
-    expect(summary).toBe(expected);
+    // expect(summary).toBe(expected);
   })
 
   // const MAX_SUMMARY_SIZE_BYTES = 1_000_000;

@@ -1,7 +1,6 @@
 import * as core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import dedent from 'dedent';
-import stripAnsi from 'strip-ansi';
 import invariant from 'ts-invariant';
 import { Config } from '../config';
 
@@ -51,8 +50,9 @@ export async function handlePullRequestMessage(
     alwaysIncludeSummary,
   } = config;
 
-  // strip ANSI symbols from output because it is not supported in PR comment
-  output = stripAnsi(output);
+  // strip ANSI symbols from message because it is not supported in GH step Summary
+  const regex = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
+  output = output.replace(regex, '');
 
   // GitHub limits comment characters to 65535, use lower max to keep buffer for variable values
   const MAX_CHARACTER_COMMENT = 64_000;

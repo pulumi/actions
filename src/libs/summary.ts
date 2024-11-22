@@ -1,5 +1,4 @@
 import * as core from '@actions/core';
-import stripAnsi from 'strip-ansi';
 import { Config } from '../config';
 
 function trimOutput(
@@ -26,7 +25,7 @@ function trimOutput(
     const dif: number = messageSize - maxSize;
 
     if (alwaysIncludeSummary) {
-      message = Buffer.from(message).subarray(dif, maxSize).toString()
+      message = Buffer.from(message).subarray(dif, messageSize).toString()
     } else {
       message = Buffer.from(message).subarray(0, messageSize - dif).toString()
     }
@@ -48,7 +47,8 @@ export async function handleSummaryMessage(
   } = config;
 
   // strip ANSI symbols from message because it is not supported in GH step Summary
-  output = stripAnsi(output);
+  const regex = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
+  output = output.replace(regex, '');
 
   // GitHub limits step Summary to 1 MiB (1_048_576 bytes), use lower max to keep buffer for variable values
   const MAX_SUMMARY_SIZE_BYTES = 1_000_000;
