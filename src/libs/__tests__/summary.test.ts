@@ -46,7 +46,7 @@ describe('summary.ts', () => {
 
   it('should add only heading with empty code block to summary', async () => {
     const message = '';
-    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code></pre>\n`;
+    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>\n\n</code></pre>`;
 
     await handleSummaryMessage(defaultOptions, projectName, message);
     const summary = await getSummary()
@@ -55,7 +55,7 @@ describe('summary.ts', () => {
 
   it('should convert ansi control character to plain text and add to summary', async () => {
     const message = '\x1b[30mblack\x1b[37mwhite';
-    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>blackwhite</code></pre>\n`;
+    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>\nblackwhite\n</code></pre>`;
 
     await handleSummaryMessage(defaultOptions, projectName, message);
     const summary = await getSummary()

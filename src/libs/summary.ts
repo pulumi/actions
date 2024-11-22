@@ -65,11 +65,13 @@ export async function handleSummaryMessage(
   }
 
   const body = dedent`
+    <pre lang="diff"><code>
     ${message}
-  `
+    </code></pre>
+  `;
 
   await core.summary
-  .addHeading(heading)
-  .addCodeBlock(body, "diff")
-  .write();
+    .addHeading(heading)
+    .addRaw(body)
+    .write();
 }
