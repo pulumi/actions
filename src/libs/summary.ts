@@ -64,8 +64,12 @@ export async function handleSummaryMessage(
     heading += ' :warning: **Warn**: The output was too long and trimmed.';
   }
 
+  const body = dedent`
+    ${message}
+  `
+
   await core.summary
   .addHeading(heading)
-  .addCodeBlock(dedent`${message}`, "diff")
+  .addCodeBlock(body, "diff")
   .write();
 }
