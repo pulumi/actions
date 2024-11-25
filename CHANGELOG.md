@@ -4,6 +4,8 @@
 
 - fix: Make `pulumi login` respect configuration in `Pulumi.yaml`
   ([#1299](https://github.com/pulumi/actions/pull/1299))
+- feat: Strip ansi control characters from GitHub step Summary and PR comment
+  ([]())
 
 ---
 
