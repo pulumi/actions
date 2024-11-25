@@ -48,8 +48,11 @@ export async function handleSummaryMessage(
   } = config;
 
   // strip ANSI symbols from message because it is not supported in GH step Summary
-  const regex = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
-  output = output.replace(regex, '');
+  const regex_ansi = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
+  output = output.replace(regex_ansi, '');
+
+  const regex_space = RegExp(`^[ ]`, 'gm');
+  output = output.replace(regex_space, '&nbsp;');
 
   // GitHub limits step Summary to 1 MiB (1_048_576 bytes), use lower max to keep buffer for variable values
   const MAX_SUMMARY_SIZE_BYTES = 1_000_000;
@@ -64,11 +67,7 @@ export async function handleSummaryMessage(
     heading += ' :warning: **Warn**: The output was too long and trimmed.';
   }
 
-  const body = dedent`
-    <pre lang="diff"><code>
-    ${message}
-    </code></pre>
-  `;
+  const body = dedent`<pre lang="diff"><code>${message}</code></pre>`;
 
   await core.summary
     .addHeading(heading)

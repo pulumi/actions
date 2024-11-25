@@ -55,7 +55,7 @@ describe('summary.ts', () => {
 
   it('should convert ansi control character to plain text and add to summary', async () => {
     const message = '\x1b[30mblack\x1b[37mwhite';
-    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>\nblackwhite\n</code></pre>`;
+    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>blackwhite</code></pre>`;
 
     await handleSummaryMessage(defaultOptions, projectName, message);
     const summary = await getSummary()
