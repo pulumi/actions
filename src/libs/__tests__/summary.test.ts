@@ -10,7 +10,7 @@ const testFilePath = path.join(testDirectoryPath, 'test-summary.md')
 
 async function getSummary(): Promise<string> {
   const file = await fs.promises.readFile(testFilePath, {encoding: 'utf8'});
-  return file.replace(/\r\n/g, "\n");
+  return file.replace(/\r\n/g, '\n');
 }
 
 const projectName = 'myFirstProject';
@@ -46,35 +46,39 @@ describe('summary.ts', () => {
 
   it('should add only heading with empty code block to summary', async () => {
     const message = '';
-    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>\n\n</code></pre>`;
+    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code></pre>\n`;
 
     await handleSummaryMessage(defaultOptions, projectName, message);
     const summary = await getSummary()
-    await expect(summary).toBe(expected);
+
+    expect(summary).toBe(expected);
   })
 
   it('should convert ansi control character to plain text and add to summary', async () => {
     const message = '\x1b[30mblack\x1b[37mwhite';
-    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>blackwhite</code></pre>`;
+    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>blackwhite</code></pre>\n`;
 
     await handleSummaryMessage(defaultOptions, projectName, message);
     const summary = await getSummary()
-    await expect(summary).toBe(expected);
+
+    expect(summary).toBe(expected);
   })
 
   it('should trim the output when the output is larger than 1 MiB', async () => {
-    const message = 'a'.repeat(1_000_001);
+    const message = 'this is at the begining and should not be in the output' + 'a'.repeat(1_048_576) + 'this is at the end and should be in the output';
 
     await handleSummaryMessage(defaultOptions, projectName, message);
     const summary = await getSummary()
+
     expect(Buffer.byteLength(summary, 'utf8')).toBeLessThan(1_048_576);
+    expect(summary).toContain('this is at the begining and should not be in the output')
     expect(summary).toContain('The output was too long and trimmed.');
+    expect(summary).not.toContain('this is at the end and should be in the output');
     expect(summary).not.toContain('The output was too long and trimmed from the front.');
   })
 
   it('should trim the output from front when the output is larger than 1 MiB and config is set', async () => {
-    const message = '😄begin' + 'a'.repeat(1_000_001) + 'this is at the end and should be in the output';
-    // const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>blackwhite</code></pre>\n`;
+    const message = 'this is at the begining and should not be in the output' + 'a'.repeat(1_048_576) + 'this is at the end and should be in the output';
 
     const options: Config = {
       ...defaultOptions,
@@ -83,14 +87,26 @@ describe('summary.ts', () => {
 
     await handleSummaryMessage(options, projectName, message);
     const summary = await getSummary()
-    // expect(summary.length).toBeLessThan(1);
-    // expect([...summary].length).toBeLessThan(1);
-    // expect(Buffer.byteLength(summary, 'utf8')).toBeLessThan(1);
+
+    expect(Buffer.byteLength(summary, 'utf8')).toBeLessThan(1_048_576);
     expect(summary).toContain('this is at the end and should be in the output');
     expect(summary).toContain('The output was too long and trimmed from the front.');
+    expect(summary).not.toContain('this is at the begining and should not be in the output')
     expect(summary).not.toContain('The output was too long and trimmed.');
-    // expect(summary).toBe(expected);
   })
 
-  // const MAX_SUMMARY_SIZE_BYTES = 1_000_000;
+  it('should replace first leading space with non-breaking space character to preserve the formatting', async () => {
+    const message = 
+`begin
+      some leading spaces in this line
+`;
+
+    const expected = `<h1>Pulumi ${projectName}/${defaultOptions.stackName} results</h1>\n<pre lang="diff"><code>begin\n&nbsp;     some leading spaces in this line\n</code></pre>\n`;
+
+    await handleSummaryMessage(defaultOptions, projectName, message);
+    const summary = await getSummary()
+
+    expect(summary).toBe(expected);
+  })
+
 })

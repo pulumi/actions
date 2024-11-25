@@ -15,14 +15,14 @@ function trimOutput(
    *  maxLength: Maximum number of characters of final message
    *  alwaysIncludeSummary: if true, trim message from front (if trimming is needed), otherwise from end
    *
-   *  return message as html and information if message was trimmed because of length
+   *  return message and information if message was trimmed
    */
   let trimmed = false;
 
   // Check if message exceeds max characters
   if (message.length > maxLength) {
 
-    // trim input message by number of exceeded characters from front or back as configured
+    // Trim input message by number of exceeded characters from front or back as configured
     const dif: number = message.length - maxLength;
 
     if (alwaysIncludeSummary) {
@@ -50,11 +50,11 @@ export async function handlePullRequestMessage(
     alwaysIncludeSummary,
   } = config;
 
-  // strip ANSI symbols from message because it is not supported in GH step Summary
+  // Remove ANSI symbols from output because they are not supported in GitHub PR message
   const regex = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
   output = output.replace(regex, '');
 
-  // GitHub limits comment characters to 65535, use lower max to keep buffer for variable values
+  // GitHub limits PR comment characters to 65_535, use lower max to keep buffer for variable values
   const MAX_CHARACTER_COMMENT = 64_000;
 
   const heading = `#### :tropical_drink: \`${command}\` on ${projectName}/${stackName}`;

@@ -1,5 +1,4 @@
 import * as core from '@actions/core';
-import dedent from 'dedent';
 import { Config } from '../config';
 
 function trimOutput(
@@ -8,12 +7,12 @@ function trimOutput(
   alwaysIncludeSummary: boolean,
 ): [string, boolean] {
   /**
-   *  Trim message to maxSize in bytes by for example removing color escape characters
-   *  message: ansi string to trim
+   *  Trim message to maxSize in bytes
+   *  message: string to trim
    *  maxSize: Maximum number of bytes of final message
    *  alwaysIncludeSummary: if true, trim message from front (if trimming is needed), otherwise from end
    *
-   *  return message and information if message was trimmed because of size
+   *  return message and information if message was trimmed
    */
   let trimmed = false;
 
@@ -22,7 +21,7 @@ function trimOutput(
   // Check if message exceeds max size
   if (messageSize > maxSize) {
 
-    // trim input message by number of exceeded bytes from front or back as configured
+    // Trim input message by number of exceeded bytes from front or back as configured
     const dif: number = messageSize - maxSize;
 
     if (alwaysIncludeSummary) {
@@ -47,10 +46,11 @@ export async function handleSummaryMessage(
     alwaysIncludeSummary,
   } = config;
 
-  // strip ANSI symbols from message because it is not supported in GH step Summary
+  // Remove ANSI symbols from output because they are not supported in GitHub step Summary
   const regex_ansi = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
   output = output.replace(regex_ansi, '');
 
+  // Replace the first leading space in each line with a non-breaking space character to preserve the formatting
   const regex_space = RegExp(`^[ ]`, 'gm');
   output = output.replace(regex_space, '&nbsp;');
 
@@ -67,10 +67,8 @@ export async function handleSummaryMessage(
     heading += ' :warning: **Warn**: The output was too long and trimmed.';
   }
 
-  const body = dedent`<pre lang="diff"><code>${message}</code></pre>`;
-
   await core.summary
     .addHeading(heading)
-    .addRaw(body)
+    .addCodeBlock(message, "diff")
     .write();
 }
