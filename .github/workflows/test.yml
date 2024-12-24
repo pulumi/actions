@@ -55,6 +55,26 @@ jobs:
           work-dir: .github/test-stacks/golang
           config-map: "{name: {value: test, secret: false}}"
       - run: echo 'The random string is `${{ steps.pulumi.outputs.name }}`'
+      - uses: ./
+        if: always()
+        id: pulumioutput
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: output
+          cloud-url: file://~
+          stack-name: organization/golang/dev
+      - run: echo 'The random string is `${{ steps.pulumioutput.outputs.name }}`'
+      - name: Compare Outputs
+        id: compare
+        run: |
+          if [[ "$OUTPUT1" != "$OUTPUT2" ]]; then
+            echo "Outputs are not equal!"
+            exit 1
+          fi
+        env:
+          OUTPUT1: ${{ steps.pulumi.outputs.name }}
+          OUTPUT2: ${{ steps.pulumioutput.outputs.name }}
   test-update-plan: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
