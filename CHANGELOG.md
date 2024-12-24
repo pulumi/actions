@@ -4,6 +4,8 @@
 
 - fix: Make `pulumi login` respect configuration in `Pulumi.yaml`
   ([#1299](https://github.com/pulumi/actions/pull/1299))
+- fix: Log stderr from commands
+  ([#1316](https://github.com/pulumi/actions/issues/1316))
 
 ---
 

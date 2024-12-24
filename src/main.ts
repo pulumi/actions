@@ -83,28 +83,31 @@ const runAction = async (config: Config): Promise<void> => {
 
   core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
 
-  const actions: Record<Commands, () => Promise<string>> = {
-    up: () => stack.up({ onOutput, ...config.options }).then((r) => r.stdout),
+  const actions: Record<Commands, () => Promise<[string, string]>> = {
+    up: () => stack.up({ onOutput, ...config.options }).then((r) => [r.stdout, r.stderr]),
     update: () =>
-      stack.up({ onOutput, ...config.options }).then((r) => r.stdout),
+      stack.up({ onOutput, ...config.options }).then((r) => [r.stdout, r.stderr]),
     refresh: () =>
-      stack.refresh({ onOutput, ...config.options }).then((r) => r.stdout),
+      stack.refresh({ onOutput, ...config.options }).then((r) => [r.stdout, r.stderr]),
     destroy: () =>
-      stack.destroy({ onOutput, ...config.options }).then((r) => r.stdout),
+      stack.destroy({ onOutput, ...config.options }).then((r) => [r.stdout, r.stderr]),
     preview: async () => {
       const { stdout, stderr } = await stack.preview(config.options);
       onOutput(stdout);
       onOutput(stderr);
-      return stdout;
+      return [stdout, stderr];
     },
     output: () => new Promise(() => '') //do nothing, outputs are fetched anyway afterwards
   };
 
   core.debug(`Running action ${config.command}`);
-  const output = await actions[config.command]();
+  const [stdout, stderr] = await actions[config.command]();
   core.debug(`Done running action ${config.command}`);
+  if (stderr !== '') {
+    core.warning(stderr);
+  }
 
-  core.setOutput('output', output);
+  core.setOutput('output', stdout);
 
   const outputs = await stack.outputs();
 
@@ -120,13 +123,13 @@ const runAction = async (config: Config): Promise<void> => {
       (config.commentOnPr && isPullRequest)) {
     core.debug(`Commenting on pull request`);
     invariant(config.githubToken, 'github-token is missing.');
-    handlePullRequestMessage(config, projectName, output);
+    handlePullRequestMessage(config, projectName, stdout);
   }
 
   if (config.commentOnSummary) {
     await core.summary
       .addHeading(`Pulumi ${config.stackName} results`)
-      .addCodeBlock(output, "diff")
+      .addCodeBlock(stdout, "diff")
       .write();
   }
 
