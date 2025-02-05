@@ -77,7 +77,7 @@ export function makeConfig() {
     }),
     stackName: getInput('stack-name', { required: true }),
     pulumiVersion: pulumiVersion ?? '^3',
-    workDir: getInput('work-dir', { required: true }),
+    workDir: getInput('working-directory') || getInput('work-dir', { required: true }),
     secretsProvider: getInput('secrets-provider'),
     cloudUrl: getInput('cloud-url'),
     githubToken: getInput('github-token'),
