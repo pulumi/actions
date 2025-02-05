@@ -199,4 +199,76 @@ describe('config.ts', () => {
       /Only one of 'pulumi-version' or 'pulumi-version-file' should be provided, got both/,
     );
   });
+
+  it('should use working-directory when work-dir is not provided', async () => {
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'work-dir':
+            return '';
+          case 'working-directory':
+            return '/custom/path';
+          default:
+            return defaultConfig[name];
+        }
+      }),
+      getBooleanInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+    }));
+    const { makeConfig } = require('../config');
+    const c = makeConfig();
+    expect(c.workDir).toBe('/custom/path');
+  });
+
+  it('should use work-dir when working-directory is not provided', async () => {
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'work-dir':
+            return '/custom/path';
+          case 'working-directory':
+            return '';
+          default:
+            return defaultConfig[name];
+        }
+      }),
+      getBooleanInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+    }));
+    const { makeConfig } = require('../config');
+    const c = makeConfig();
+    expect(c.workDir).toBe('/custom/path');
+  });
+
+  it('should prefer work-dir over working-directory when both are provided', async () => {
+    jest.mock('@actions/core', () => ({
+      getInput: jest.fn((name: string) => {
+        switch (name) {
+          case 'work-dir':
+            return '/work/dir/path';
+          case 'working-directory':
+            return '/working/directory/path';
+          default:
+            return defaultConfig[name];
+        }
+      }),
+      getBooleanInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+      getMultilineInput: jest.fn((name: string) => {
+        return defaultConfig[name];
+      }),
+    }));
+    const { makeConfig } = require('../config');
+    const c = makeConfig();
+    expect(c.workDir).toBe('/work/dir/path');
+  });
 });
