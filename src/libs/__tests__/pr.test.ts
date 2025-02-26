@@ -195,4 +195,26 @@ describe('pr.ts', () => {
       body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>',
     });
   });
+
+  it('should add a clickable link to the update run', async () => {
+    // @ts-ignore
+    gh.context = {
+      payload: {
+        pull_request: {
+          number: 123,
+        },
+      },
+    };
+
+    const options: Config = {
+      ...defaultOptions,
+      commentOnPrNumber: 87,
+    };
+
+    await handlePullRequestMessage(options, projectName, 'View Live: https://example.com/update/1\ntest');
+    expect(createComment).toHaveBeenCalledWith({
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n[View Live](https://example.com/update/1)\n\n\n<pre>\nView Live: https://example.com/update/1\ntest\n</pre>\n\n</details>',
+      issue_number: 87,
+    });
+  });
 });

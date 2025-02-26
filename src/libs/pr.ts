@@ -44,6 +44,21 @@ function ansiToHtml(
   return [htmlBody, trimmed];
 }
 
+function extractViewLiveLink(output: string) {
+  /**
+   *  Extracts the Pulumi preview link from the output
+   *  output: pulumi preview output
+   *
+   *  return link to the Pulumi preview
+   */
+  const lines = output.split('\n');
+  const linkLine = lines.find((line) => line.includes('View Live:'));
+  if (!linkLine) {
+    return '';
+  }
+  return linkLine.split('View Live: ')[1];
+}
+
 export async function handlePullRequestMessage(
   config: Config,
   projectName: string,
@@ -66,12 +81,14 @@ export async function handlePullRequestMessage(
 
   const [htmlBody, trimmed]: [string, boolean] = ansiToHtml(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
 
+  const viewLiveLink = extractViewLiveLink(output);
+
   const body = dedent`
     ${heading}
 
     <details>
     ${summary}
-
+    ${viewLiveLink ? `[View Live](${viewLiveLink})\n` : ''}
     ${trimmed && alwaysIncludeSummary
       ? ':warning: **Warn**: The output was too long and trimmed from the front.'
       : ''
