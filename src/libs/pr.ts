@@ -88,7 +88,7 @@ export async function handlePullRequestMessage(
 
     <details>
     ${summary}
-    ${viewLiveLink ? `[View in Pulumi Cloud](${viewLiveLink})\n` : ''}
+    ${viewLiveLink ? `\n[View in Pulumi Cloud](${viewLiveLink})\n` : ''}
     ${trimmed && alwaysIncludeSummary
       ? ':warning: **Warn**: The output was too long and trimmed from the front.'
       : ''

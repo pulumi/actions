@@ -213,7 +213,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(options, projectName, 'View Live: https://example.com/update/1\ntest');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n[View Live](https://example.com/update/1)\n\n\n<pre>\nView Live: https://example.com/update/1\ntest\n</pre>\n\n</details>',
+      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n[View in Pulumi Cloud](https://example.com/update/1)\n\n\n<pre>\nView Live: https://example.com/update/1\ntest\n</pre>\n\n</details>',
       issue_number: 87,
     });
   });
