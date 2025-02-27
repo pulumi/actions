@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: Add clickable View Live link to PR comments
+  ([#1355](https://github.com/pulumi/actions/pull/1355))
 
 ---
 
