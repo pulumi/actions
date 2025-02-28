@@ -2,10 +2,14 @@
 
 ## HEAD (Unreleased)
 
-- feat: Add clickable View Live link to PR comments
-  ([#1355](https://github.com/pulumi/actions/pull/1355))
+**(none)**
 
 ---
+
+## 6.1.0 (2025-02-27)
+
+- feat: Add clickable View Live link to PR comments
+  ([#1355](https://github.com/pulumi/actions/pull/1355))
 
 ## 6.0.1 (2025-01-13)
 
