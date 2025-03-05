@@ -114,6 +114,7 @@ export function makeConfig() {
       plan: getInput('plan'),
       suppressOutputs: getBooleanInput('suppress-outputs'),
       suppressProgress: getBooleanInput('suppress-progress'),
+      continueOnError: getBooleanInput('continue-on-error'),
     },
   };
 }

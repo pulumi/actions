@@ -21,6 +21,7 @@ const defaultConfig: Record<string, string> = {
   plan: '',
   'suppress-outputs': 'false',
   'suppress-progress': 'false',
+  'continue-on-error': 'false',
 };
 
 function setupMockedConfig(config: Record<string, string>) {
