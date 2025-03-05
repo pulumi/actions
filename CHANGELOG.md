@@ -2,10 +2,14 @@
 
 ## HEAD (Unreleased)
 
-- feat: support continue on error flag (--continue-on-error)
-  ([#1357](https://github.com/pulumi/actions/pull/1357))
+**(none)**
 
 ---
+
+## 6.2.0 (2025-03-05)
+
+- feat: support continue on error flag (--continue-on-error)
+  ([#1357](https://github.com/pulumi/actions/pull/1357))
 
 ## 6.1.0 (2025-02-27)
 
