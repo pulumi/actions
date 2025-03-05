@@ -52,6 +52,7 @@ describe('config.ts', () => {
         "githubToken": "n/a",
         "options": Object {
           "color": undefined,
+          "continueOnError": false,
           "diff": false,
           "excludeProtected": false,
           "expectNoChanges": false,
