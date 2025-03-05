@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: support continue on error flag (--continue-on-error)
+  ([#1357](https://github.com/pulumi/actions/pull/1357))
 
 ---
 

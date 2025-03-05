@@ -21,6 +21,7 @@ const defaultConfig: Record<string, string> = {
   plan: '',
   'suppress-outputs': 'false',
   'suppress-progress': 'false',
+  'continue-on-error': 'false',
 };
 
 function setupMockedConfig(config: Record<string, string>) {
@@ -51,6 +52,7 @@ describe('config.ts', () => {
         "githubToken": "n/a",
         "options": Object {
           "color": undefined,
+          "continueOnError": false,
           "diff": false,
           "excludeProtected": false,
           "expectNoChanges": false,

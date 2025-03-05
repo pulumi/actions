@@ -154,6 +154,9 @@ The action can be configured with the following arguments:
   long pr comments from the front instead of the back. This ensures that the
   resources summary is always included in the comment.
 
+- `continue-on-error` - (optional) If `true`, then the action will continue
+  running even if an error occurs.
+
 By default, this action will try to authenticate Pulumi with
 [Pulumi Cloud](https://app.pulumi.com/). If you have not specified a
 `PULUMI_ACCESS_TOKEN` then you will need to specify an alternative backend via
