@@ -21,6 +21,10 @@ inputs:
     description: 'Location of your Pulumi files. Defaults to ./'
     required: false
     default: ./
+  working-directory:
+    description: 'Alias for work-dir. Location of your Pulumi files. Defaults to ./'
+    required: false
+    default: ./
   comment-on-pr:
     description: 'If true, a comment will be created with results'
     required: false

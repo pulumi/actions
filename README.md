@@ -43,7 +43,7 @@ The action can be configured with the following arguments:
   outside of your individual account. This field is required if a `command` was
   specified.
 
-- `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`.
+- `work-dir` (optional) - The location of your Pulumi files. Defaults to `./`. Also accepts `working-directory` as an alias to maintain compatibility with other GitHub Actions.
 
 - `cloud-url` - (optional) - the Pulumi backend to login to. This would be the
   equivalent of what would be passed to the `pulumi login` command. The action
@@ -257,6 +257,10 @@ v6 of the Pulumi Action updates the behavior of the `refresh` option.
 Previously, if `refresh` was true, the action would run `pulumi refresh` before
 the desired command. In v6, the `pulumi up` and `pulumi preview` commands will
 be run with the `--refresh` flag if `refresh` is true.
+
+Additionally, v6 introduces `working-directory` as an alias for `work-dir` input
+to improve compatibility with other GitHub Actions that commonly use
+`working-directory` as the standard parameter name.
 
 ## Migrating from v4
 
