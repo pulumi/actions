@@ -155,10 +155,10 @@ const runAction = async (config: Config): Promise<void> => {
       invariant(config.githubToken, 'github-token is missing.');
       handlePullRequestMessage(config, projectName, stdout);
     }
-  }
 
-  if (config.commentOnSummary) {
-    handleSummaryMessage(config, projectName, stdout)
+    if (config.commentOnSummary) {
+      handleSummaryMessage(config, projectName, stdout)
+    }
   }
 
   if (config.remove && config.command === 'destroy') {
