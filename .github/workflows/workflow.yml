@@ -162,6 +162,19 @@ jobs:
         with:
           dotnet-version: 6.x
 
+      - name: Ensure Stack Exists
+        if: matrix.command == 'output'
+        uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: preview
+          cloud-url: file://~
+          upsert: true
+          stack-name: dev
+          work-dir: .github/test-stacks/dotnet
+          config-map: '{name: {value: my-pet, secret: false}}'
+
       - uses: ./
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
@@ -241,6 +254,19 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.22.x
+
+      - name: Ensure Stack Exists
+        if: matrix.command == 'output'
+        uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: preview
+          cloud-url: file://~
+          upsert: true
+          stack-name: dev
+          work-dir: .github/test-stacks/golang
+          config-map: '{name: {value: my-user-name, secret: false}}'
 
       - uses: ./
         env:
@@ -325,6 +351,19 @@ jobs:
 
       - run: npm install
         working-directory: .github/test-stacks/nodejs
+
+      - name: Ensure Stack Exists
+        if: matrix.command == 'output'
+        uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: preview
+          cloud-url: file://~
+          upsert: true
+          stack-name: dev
+          work-dir: .github/test-stacks/nodejs
+          config-map: '{name: {value: hostname, secret: false}}'
 
       - uses: ./
         env:
@@ -433,6 +472,19 @@ jobs:
 
       - run: pip install -r requirements.txt
         working-directory: .github/test-stacks/python
+
+      - name: Ensure Stack Exists
+        if: matrix.command == 'output'
+        uses: ./
+        env:
+          PULUMI_CONFIG_PASSPHRASE: not-a-secret
+        with:
+          command: preview
+          cloud-url: file://~
+          upsert: true
+          stack-name: dev
+          work-dir: .github/test-stacks/python
+          config-map: '{name: {value: hostname, secret: false}}'
 
       - uses: ./
         env:

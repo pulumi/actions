@@ -37,6 +37,21 @@ function trimOutput(
   return [message, trimmed];
 }
 
+function extractViewLiveLink(output: string) {
+  /**
+   *  Extracts the Pulumi preview link from the output
+   *  output: pulumi preview output
+   *
+   *  return link to the Pulumi preview
+   */
+  const lines = output.split('\n');
+  const linkLine = lines.find((line) => line.includes('View Live:'));
+  if (!linkLine) {
+    return '';
+  }
+  return linkLine.split('View Live: ')[1];
+}
+
 export async function handlePullRequestMessage(
   config: Config,
   projectName: string,
@@ -63,12 +78,14 @@ export async function handlePullRequestMessage(
 
   const [message, trimmed]: [string, boolean] = trimOutput(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
 
+  const viewLiveLink = extractViewLiveLink(output);
+
   const body = dedent`
     ${heading}
 
     <details>
     ${summary}
-
+    ${viewLiveLink ? `\n[View in Pulumi Cloud](${viewLiveLink})\n` : ''}
     ${trimmed && alwaysIncludeSummary
       ? ':warning: **Warn**: The output was too long and trimmed from the front.'
       : ''

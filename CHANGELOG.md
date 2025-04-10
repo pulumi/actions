@@ -2,12 +2,33 @@
 
 ## HEAD (Unreleased)
 
+**(none)**
+
+---
+
+## 6.2.0 (2025-03-05)
+
+- feat: support continue on error flag (--continue-on-error)
+  ([#1357](https://github.com/pulumi/actions/pull/1357))
+
+## 6.1.0 (2025-02-27)
+
+- feat: Add clickable View Live link to PR comments
+  ([#1355](https://github.com/pulumi/actions/pull/1355))
+
+## 6.0.1 (2025-01-13)
+
 - fix: Make `pulumi login` respect configuration in `Pulumi.yaml`
   ([#1299](https://github.com/pulumi/actions/pull/1299))
 - feat: Strip ansi control characters from GitHub step Summary and PR comment
   ([#1312](https://github.com/pulumi/actions/pull/1312))
 
----
+- fix: Log stderr from commands
+  ([#1316](https://github.com/pulumi/actions/issues/1316))
+
+- fix: Make the `output` command work without having to be in a working
+  directory that contains a Pulumi.yaml file.
+  ([#1327](https://github.com/pulumi/actions/pull/1327))
 
 ## 6.0.0 (2024-09-27)
 
