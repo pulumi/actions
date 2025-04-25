@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: support `--exclude` and `--exclude-dependents` flags
+  ([#1363](https://github.com/pulumi/actions/pull/1363))
 
 ---
 
