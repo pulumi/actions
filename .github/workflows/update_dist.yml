@@ -5,15 +5,22 @@ on:
       - main
 
 env:
-  GITHUB_TOKEN: ${{ secrets.PULUMI_BOT_TOKEN }}
+  ESC_ACTION_OIDC_AUTH: true
+  ESC_ACTION_OIDC_ORGANIZATION: pulumi
+  ESC_ACTION_OIDC_REQUESTED_TOKEN_TYPE: urn:pulumi:token-type:access_token:organization
+  ESC_ACTION_ENVIRONMENT: imports/github-secrets
+  ESC_ACTION_EXPORT_ENVIRONMENT_VARIABLES: GITHUB_TOKEN=PULUMI_BOT_TOKEN
 
 jobs:
   update-dist:
     runs-on: ubuntu-latest
     steps:
+      - name: Fetch secrets from ESC
+        id: esc-secrets
+        uses: pulumi/esc-action@v1
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PULUMI_BOT_TOKEN }}
+          token: ${{ steps.esc-secrets.outputs.PULUMI_BOT_TOKEN }}
       - uses: actions/setup-node@v4
         with:
           node-version: 20.x
@@ -27,3 +34,4 @@ jobs:
           commit_message: 'chore(dist): Update dist [automated commit]'
           commit_user_name: Pulumi Bot
           commit_user_email: pulumi-bot@users.noreply.github.com
+permissions: write-all # Equivalent to default permissions plus id-token: write
