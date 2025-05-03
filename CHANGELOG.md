@@ -2,9 +2,8 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
-
----
+- feat: Add `working-directory` as an alias for `work-dir` input to improve compatibility with other GitHub Actions
+  ([#1352](https://github.com/pulumi/actions/pull/1352))
 
 ## 6.2.0 (2025-03-05)
 
