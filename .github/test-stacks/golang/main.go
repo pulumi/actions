@@ -16,6 +16,9 @@ func main() {
 		if err != nil {
 			return err
 		}
+		ctx.Log.Debug("I'm a random string", &pulumi.LogArgs{
+			Resource: s,
+		})
 		ctx.Export("name", s.Result)
 		return nil
 	})

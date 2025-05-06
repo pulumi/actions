@@ -115,9 +115,10 @@ export function makeConfig() {
       suppressOutputs: getBooleanInput('suppress-outputs'),
       suppressProgress: getBooleanInput('suppress-progress'),
       continueOnError: getBooleanInput('continue-on-error'),
-      logVerbosity: getInput('log-verbosity'),
-      logToStdErr: getInput('log-to-std-err'),
-      debug: getInput('debug'),
+      logVerbosity: getNumberInput('log-verbosity'),
+      logFlow: getBooleanInput('log-flow'),
+      logToStdErr: !!getInput('log-verbosity'),  // logToStdErr is true if logVerbosity has a truthy value
+      debug: getBooleanInput('debug'),
     },
   };
 }
