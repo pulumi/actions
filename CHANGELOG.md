@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: verbosity and debug inputs to enable debug options
 
 ---
 

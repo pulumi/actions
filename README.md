@@ -71,6 +71,14 @@ The action can be configured with the following arguments:
 - `color` - (optional) Colorize output. Choices are: always, never, raw, auto
   (default "auto").
 
+- `log-verbosity` - (optional) Enable verbose logging (1-11; >3 is very
+  verbose).
+
+- `log-flow` - (optional) Flow log settings to child processes (like plugins).
+
+- `debug` - (optional) Print detailed debugging output during resource
+  operations.
+
 ### Extra options
 
 - `config-map` - (optional) Configuration of the stack. Format Yaml string:

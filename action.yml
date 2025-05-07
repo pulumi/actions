@@ -118,6 +118,17 @@ inputs:
     description: 'Continue running the update even if an error is encountered'
     required: false
     default: 'false'
+  log-verbosity:
+    description: 'Enable verbose logging (1-11; >3 is very verbose)'
+    required: false
+  log-flow:
+    description: 'Flow log settings to child processes (like plugins)'
+    required: false
+    default: 'false'
+  debug:
+    description: 'Print detailed debugging output during resource operations'
+    required: false
+    default: 'false'
 outputs:
   output:
     description: Output from running command
