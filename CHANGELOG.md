@@ -3,6 +3,10 @@
 ## HEAD (Unreleased)
 
 - feat: verbosity and debug inputs to enable debug options
+  ([#1046](https://github.com/pulumi/actions/pull/1046))
+
+- fix: update "user agent" string to pulumi/actions@v6
+  ([#1357](https://github.com/pulumi/actions/pull/1367))
 
 ---
 
