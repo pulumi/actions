@@ -108,7 +108,7 @@ export function makeConfig() {
       policyPackConfigs: parseSemicolorToArray(
         getMultilineInput('policyPackConfigs'),
       ),
-      userAgent: 'pulumi/actions@v5',
+      userAgent: 'pulumi/actions@v6',
       color: getUnionInput('color', {
         alternatives: ['always', 'never', 'raw', 'auto'] as const,
       }),
@@ -117,6 +117,10 @@ export function makeConfig() {
       suppressOutputs: getBooleanInput('suppress-outputs'),
       suppressProgress: getBooleanInput('suppress-progress'),
       continueOnError: getBooleanInput('continue-on-error'),
+      logVerbosity: getNumberInput('log-verbosity'),
+      logFlow: getBooleanInput('log-flow'),
+      logToStdErr: !!getInput('log-verbosity'),  // logToStdErr is true if logVerbosity has a truthy value
+      debug: getBooleanInput('debug'),
     },
   };
 }
