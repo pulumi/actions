@@ -1,47 +1,40 @@
 import * as core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
-import AnsiToHtml from 'ansi-to-html';
 import dedent from 'dedent';
 import invariant from 'ts-invariant';
 import { Config } from '../config';
 
-function ansiToHtml(
+function trimOutput(
   message: string,
   maxLength: number,
   alwaysIncludeSummary: boolean,
 ): [string, boolean] {
   /**
-   *  Converts an ansi string to html by for example removing color escape characters.
-   *  message: ansi string to convert
-   *  maxLength: Maximum number of characters of final message incl. HTML tags
+   *  Trim message to maxLength
+   *  message: string to trim
+   *  maxLength: Maximum number of characters of final message
    *  alwaysIncludeSummary: if true, trim message from front (if trimming is needed), otherwise from end
    *
-   *  return message as html and information if message was trimmed because of length
+   *  return message and information if message was trimmed
    */
-  const convert = new AnsiToHtml();
   let trimmed = false;
 
-  let htmlBody: string = convert.toHtml(message);
+  // Check if message exceeds max characters
+  if (message.length > maxLength) {
 
-  // Check if htmlBody exceeds max characters
-  if (htmlBody.length > maxLength) {
-
-    // trim input message by number of exceeded characters from front or back as configured
-    const dif: number = htmlBody.length - maxLength;
+    // Trim input message by number of exceeded characters from front or back as configured
+    const dif: number = message.length - maxLength;
 
     if (alwaysIncludeSummary) {
-      message = message.substring(dif, htmlBody.length);
+      message = message.substring(dif, message.length);
     } else {
       message = message.substring(0, message.length - dif);
     }
 
     trimmed = true;
-
-    // convert trimmed message to html
-    htmlBody = convert.toHtml(message);
   }
 
-  return [htmlBody, trimmed];
+  return [message, trimmed];
 }
 
 function extractViewLiveLink(output: string) {
@@ -72,14 +65,18 @@ export async function handlePullRequestMessage(
     alwaysIncludeSummary,
   } = config;
 
-  // GitHub limits comment characters to 65535, use lower max to keep buffer for variable values
+  // Remove ANSI symbols from output because they are not supported in GitHub PR message
+  const regex = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
+  output = output.replace(regex, '');
+
+  // GitHub limits PR comment characters to 65_535, use lower max to keep buffer for variable values
   const MAX_CHARACTER_COMMENT = 64_000;
 
   const heading = `#### :tropical_drink: \`${command}\` on ${projectName}/${stackName}`;
 
   const summary = '<summary>Pulumi report</summary>';
 
-  const [htmlBody, trimmed]: [string, boolean] = ansiToHtml(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
+  const [message, trimmed]: [string, boolean] = trimOutput(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
 
   const viewLiveLink = extractViewLiveLink(output);
 
@@ -94,7 +91,7 @@ export async function handlePullRequestMessage(
       : ''
     }
     <pre>
-    ${htmlBody}
+    ${message}
     </pre>
     ${trimmed && !alwaysIncludeSummary
       ? ':warning: **Warn**: The output was too long and trimmed.'
