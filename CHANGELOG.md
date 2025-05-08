@@ -2,6 +2,12 @@
 
 ## HEAD (Unreleased)
 
+**(none)**
+
+---
+
+## 6.3.0 (2025-05-08)
+
 - feat: support `--exclude` and `--exclude-dependents` flags
   ([#1363](https://github.com/pulumi/actions/pull/1363))
 
@@ -10,8 +16,6 @@
 
 - fix: update "user agent" string to pulumi/actions@v6
   ([#1357](https://github.com/pulumi/actions/pull/1367))
-
----
 
 ## 6.2.0 (2025-03-05)
 
