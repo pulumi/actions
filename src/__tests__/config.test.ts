@@ -74,7 +74,7 @@ describe('config.ts', () => {
           "suppressProgress": false,
           "target": Array [],
           "targetDependents": false,
-          "userAgent": "pulumi/actions@v5",
+          "userAgent": "pulumi/actions@v6",
         },
         "pulumiVersion": "^3",
         "remove": false,
