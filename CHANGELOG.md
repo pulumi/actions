@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- feat: support `--exclude` and `--exclude-dependents` flags
+  ([#1363](https://github.com/pulumi/actions/pull/1363))
+
 - feat: verbosity and debug inputs to enable debug options
   ([#1046](https://github.com/pulumi/actions/pull/1046))
 

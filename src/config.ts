@@ -100,6 +100,8 @@ export function makeConfig() {
       diff: getBooleanInput('diff'),
       refresh: getBooleanInput('refresh'),
       replace: parseSemicolorToArray(getMultilineInput('replace')),
+      exclude: parseSemicolorToArray(getMultilineInput('exclude')),
+      excludeDependents: getBooleanInput('exclude-dependents'),
       target: parseSemicolorToArray(getMultilineInput('target')),
       targetDependents: getBooleanInput('target-dependents'),
       policyPacks: parseSemicolorToArray(getMultilineInput('policyPacks')),
