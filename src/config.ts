@@ -92,6 +92,8 @@ export function makeConfig() {
     configMap: getYAMLInput<ConfigMap>('config-map'),
     editCommentOnPr: getBooleanInput('edit-pr-comment'),
     alwaysIncludeSummary: getBooleanInput('always-include-summary'),
+    cachePlugins: getBooleanInput('cache-plugins'),
+    cachePluginsPath: getInput('cache-plugins-path'),
 
     options: {
       parallel: getNumberInput('parallel', {}),

@@ -79,6 +79,12 @@ The action can be configured with the following arguments:
 - `debug` - (optional) Print detailed debugging output during resource
   operations.
 
+- `cache-plugins` - (optional) Enable caching of Pulumi plugins to speed up
+  future runs. Defaults to `true`.
+
+- `cache-plugins-path` - (optional) Path where Pulumi plugins are stored.
+  Defaults to `~/.pulumi/plugins`.
+
 ### Extra options
 
 - `config-map` - (optional) Configuration of the stack. Format Yaml string:
@@ -234,6 +240,27 @@ We suggest that any sensitive environment variables be referenced using
 and consuming them using
 [the `secrets` attribute](https://developer.github.com/actions/creating-workflows/workflow-configuration-options/#actions-attributes)
 on your workflow's action.
+
+## Plugin Caching
+
+By default, the action caches Pulumi plugins to `~/.pulumi/plugins` to speed up
+subsequent runs. This significantly reduces the time spent downloading plugins,
+especially for workflows that use the same providers consistently.
+
+Caching is enabled by default but can be controlled with:
+
+```yaml
+- uses: pulumi/actions@v6
+  with:
+    command: up
+    stack-name: dev
+    cache-plugins: true # Enable/disable caching (default: true)
+    cache-plugins-path: ~/.pulumi/plugins # Custom cache path (default: ~/.pulumi/plugins)
+```
+
+The cache key is generated based on your stack name, work directory, and Pulumi
+version, ensuring different projects can maintain separate plugin caches while
+sharing common providers when possible.
 
 ## Example workflows
 

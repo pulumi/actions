@@ -17,6 +17,11 @@ import {
   makeInstallationConfig,
 } from './config';
 import { environmentVariables } from './libs/envs';
+import {
+  generateCacheKey,
+  restorePluginsCache,
+  savePluginsCache,
+} from './libs/plugin-cache';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
 import { login } from './login';
@@ -55,6 +60,16 @@ const runAction = async (config: Config): Promise<void> => {
   if (!result.success) {
     core.warning(`Failed to login to Pulumi service: ${result.stderr}`);
   }
+
+  // Setup plugin caching
+  const cacheConfig = {
+    enabled: config.cachePlugins,
+    pluginsPath: config.cachePluginsPath,
+  };
+
+  // Generate cache key and attempt to restore plugins cache
+  const cacheKey = generateCacheKey(config.stackName, workDir, config.pulumiVersion);
+  const restoredCacheKey = await restorePluginsCache(cacheConfig, cacheKey);
 
   const wsOpts: LocalWorkspaceOptions = {};
   if (config.secretsProvider != '') {
@@ -170,6 +185,9 @@ const runAction = async (config: Config): Promise<void> => {
   if (config.remove && config.command === 'destroy') {
     stack.workspace.removeStack(stack.name);
   }
+
+  // Save plugins cache after operations complete
+  await savePluginsCache(cacheConfig, cacheKey, restoredCacheKey);
 
   core.endGroup();
 };

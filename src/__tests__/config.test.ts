@@ -25,7 +25,9 @@ const defaultConfig: Record<string, string> = {
   'continue-on-error': 'false',
   'log-verbosity': '',
   'log-flow': 'false',
-  'debug': 'false',
+  debug: 'false',
+  'cache-plugins': 'true',
+  'cache-plugins-path': '~/.pulumi/plugins',
 };
 
 function setupMockedConfig(config: Record<string, string>) {
@@ -46,6 +48,8 @@ describe('config.ts', () => {
     expect(c).toMatchInlineSnapshot(`
       Object {
         "alwaysIncludeSummary": false,
+        "cachePlugins": true,
+        "cachePluginsPath": "~/.pulumi/plugins",
         "cloudUrl": "file://~",
         "command": "up",
         "commentOnPr": false,

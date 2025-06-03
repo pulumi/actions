@@ -136,6 +136,14 @@ inputs:
     description: 'Print detailed debugging output during resource operations'
     required: false
     default: 'false'
+  cache-plugins:
+    description: 'Enable caching of Pulumi plugins to speed up future runs'
+    required: false
+    default: 'true'
+  cache-plugins-path:
+    description: 'Path where Pulumi plugins are stored'
+    required: false
+    default: '~/.pulumi/plugins'
 outputs:
   output:
     description: Output from running command
