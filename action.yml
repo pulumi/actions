@@ -137,7 +137,7 @@ inputs:
     required: false
     default: 'false'
   run-program:
-    description: 'Run the Pulumi program before refreshing or destroying resources. Only valid for refresh, destroy, and preview (with --refresh) commands'
+    description: 'Run the Pulumi program before refreshing or destroying resources. Only valid for refresh, destroy, preview (with --refresh), and up/update (with --refresh) commands'
     required: false
     default: 'false'
 outputs:

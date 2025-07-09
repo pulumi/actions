@@ -99,8 +99,9 @@ const runAction = async (config: Config): Promise<void> => {
   if (stack && config.options.runProgram) {
     const validCommands = ['refresh', 'destroy', 'preview'];
     const isPreviewWithRefresh = config.command === 'preview' && config.options.refresh;
+    const isUpWithRefresh = (config.command === 'up' || config.command === 'update') && config.options.refresh;
     
-    if (validCommands.includes(config.command) || isPreviewWithRefresh) {
+    if (validCommands.includes(config.command) || isPreviewWithRefresh || isUpWithRefresh) {
       core.startGroup(`Running Pulumi program before ${config.command}`);
       try {
         await stack.up({ onOutput, ...config.options });
