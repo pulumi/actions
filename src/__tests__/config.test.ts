@@ -26,6 +26,7 @@ const defaultConfig: Record<string, string> = {
   'log-verbosity': '',
   'log-flow': 'false',
   'debug': 'false',
+  'run-program': 'false',
 };
 
 function setupMockedConfig(config: Record<string, string>) {
@@ -73,6 +74,7 @@ describe('config.ts', () => {
           "policyPacks": Array [],
           "refresh": false,
           "replace": Array [],
+          "runProgram": false,
           "suppressOutputs": false,
           "suppressProgress": false,
           "target": Array [],
