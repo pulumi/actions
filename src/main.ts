@@ -95,6 +95,22 @@ const runAction = async (config: Config): Promise<void> => {
     await stack.setAllConfig(config.configMap);
   }
 
+  // Run the program if run-program flag is set for valid commands
+  if (stack && config.options.runProgram) {
+    const validCommands = ['refresh', 'destroy', 'preview'];
+    const isPreviewWithRefresh = config.command === 'preview' && config.options.refresh;
+    
+    if (validCommands.includes(config.command) || isPreviewWithRefresh) {
+      core.startGroup(`Running Pulumi program before ${config.command}`);
+      try {
+        await stack.up({ onOutput, ...config.options });
+        core.info('Pulumi program executed successfully');
+      } catch (error) {
+        core.warning(`Failed to run Pulumi program: ${error.message}`);
+      }
+      core.endGroup();
+    }
+  }
 
   core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
 

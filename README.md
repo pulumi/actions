@@ -165,6 +165,10 @@ The action can be configured with the following arguments:
 - `continue-on-error` - (optional) If `true`, then the action will continue
   running even if an error occurs.
 
+- `run-program` - (optional) Run the Pulumi program before refreshing or
+  destroying resources. Only valid for refresh, destroy, and preview (with
+  --refresh) commands.
+
 By default, this action will try to authenticate Pulumi with
 [Pulumi Cloud](https://app.pulumi.com/). If you have not specified a
 `PULUMI_ACCESS_TOKEN` then you will need to specify an alternative backend via
