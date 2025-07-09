@@ -95,6 +95,7 @@ const runAction = async (config: Config): Promise<void> => {
     await stack.setAllConfig(config.configMap);
   }
 
+
   core.startGroup(`pulumi ${config.command} on ${config.stackName}`);
 
   const actions: Record<Commands, () => Promise<[string, string]>> = {
