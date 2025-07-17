@@ -2,10 +2,14 @@
 
 ## HEAD (Unreleased)
 
-- feat: Add `run-program` flag support for refresh, destroy, preview, and
-  up/update commands ([#1376](https://github.com/pulumi/actions/pull/1376))
+**(none)**
 
 ---
+
+## 6.4.0 (2025-07-16)
+
+- feat: Add `run-program` flag support for refresh, destroy, preview, and
+  up/update commands ([#1376](https://github.com/pulumi/actions/pull/1376))
 
 ## 6.3.0 (2025-05-08)
 
