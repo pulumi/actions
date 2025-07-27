@@ -50,12 +50,12 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(defaultOptions, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>',
+      body: `#### :tropical_drink: \`preview\` on ${projectName}/${defaultOptions.stackName}\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>`,
       issue_number: 123,
     });
   });
 
-  it('should convert ansi control character to html and add to pull request message', async () => {
+  it('should convert ansi control character to plain text and add to pull request message', async () => {
     // @ts-ignore
     gh.context = {
       payload: {
@@ -69,7 +69,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(defaultOptions, projectName, '\x1b[30mblack\x1b[37mwhite');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\n<span style="color:#000">black<span style="color:#AAA">white</span></span>\n</pre>\n\n</details>',
+      body: `#### :tropical_drink: \`preview\` on ${projectName}/${defaultOptions.stackName}\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\nblackwhite\n</pre>\n\n</details>`,
       issue_number: 123,
     });
   });
@@ -93,7 +93,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(options, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>',
+      body: `#### :tropical_drink: \`preview\` on ${projectName}/${options.stackName}\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>`,
       issue_number: 87,
     });
   });
@@ -120,7 +120,7 @@ describe('pr.ts', () => {
 
     await handlePullRequestMessage(options, projectName, 'test');
     expect(createComment).toHaveBeenCalledWith({
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>',
+      body: `#### :tropical_drink: \`preview\` on ${projectName}/${options.stackName}\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>`,
       issue_number: 87,
     });
   });
@@ -158,15 +158,14 @@ describe('pr.ts', () => {
         },
       },
     };
-    const alwaysIncludeSummaryOptions = {
-      command: 'preview',
-      stackName: 'staging',
+
+    const options: Config = {
+      ...defaultOptions,
       alwaysIncludeSummary: true,
-      options: {},
-    } as Config;
+    };
 
     await handlePullRequestMessage(
-      alwaysIncludeSummaryOptions,
+      options,
       projectName,
       'a'.repeat(65_000) + '\n' + 'this is at the end and should be in the output',
     );
@@ -182,17 +181,16 @@ describe('pr.ts', () => {
     // @ts-ignore
     gh.context = { repo: {} };
 
-    const options = {
-      command: 'preview',
-      stackName: 'staging',
+    const options: Config = {
+      ...defaultOptions,
       commentOnPrNumber: 123,
       editCommentOnPr: true,
-    } as Config;
+    };
 
     await handlePullRequestMessage(options, projectName, 'test');
     expect(updateComment).toHaveBeenCalledWith({
       comment_id: 2,
-      body: '#### :tropical_drink: `preview` on myFirstProject/staging\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>',
+      body: `#### :tropical_drink: \`preview\` on ${projectName}/${options.stackName}\n\n<details>\n<summary>Pulumi report</summary>\n\n\n<pre>\ntest\n</pre>\n\n</details>`,
     });
   });
 
