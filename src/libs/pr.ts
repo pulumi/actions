@@ -3,8 +3,9 @@ import { context, getOctokit } from '@actions/github';
 import dedent from 'dedent';
 import invariant from 'ts-invariant';
 import { Config } from '../config';
+import { stripAnsiControlCodes } from './utils';
 
-function trimOutput(
+function trimOutputByCharacters(
   message: string,
   maxLength: number,
   alwaysIncludeSummary: boolean,
@@ -66,8 +67,7 @@ export async function handlePullRequestMessage(
   } = config;
 
   // Remove ANSI symbols from output because they are not supported in GitHub PR message
-  const regex = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
-  output = output.replace(regex, '');
+  output = stripAnsiControlCodes(output);
 
   // GitHub limits PR comment characters to 65_535, use lower max to keep buffer for variable values
   const MAX_CHARACTER_COMMENT = 64_000;
@@ -76,7 +76,7 @@ export async function handlePullRequestMessage(
 
   const summary = '<summary>Pulumi report</summary>';
 
-  const [message, trimmed]: [string, boolean] = trimOutput(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
+  const [message, trimmed]: [string, boolean] = trimOutputByCharacters(output, MAX_CHARACTER_COMMENT, alwaysIncludeSummary);
 
   const viewLiveLink = extractViewLiveLink(output);
 

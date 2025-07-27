@@ -13,3 +13,8 @@ export function parseSemicolorToArray(input?: string[]): undefined | string[] {
     [],
   );
 }
+
+export function stripAnsiControlCodes(text: string): string {
+  const regex_ansi = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
+  return text.replace(regex_ansi, '');
+}

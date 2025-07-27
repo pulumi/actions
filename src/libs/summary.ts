@@ -1,7 +1,8 @@
 import * as core from '@actions/core';
 import { Config } from '../config';
+import { stripAnsiControlCodes } from './utils';
 
-function trimOutput(
+function trimOutputByBytes(
   message: string,
   maxSize: number,
   alwaysIncludeSummary: boolean,
@@ -47,8 +48,7 @@ export async function handleSummaryMessage(
   } = config;
 
   // Remove ANSI symbols from output because they are not supported in GitHub step Summary
-  const regex_ansi = RegExp(`\x1B(?:[@-Z\\-_]|[[0-?]*[ -/]*[@-~])`, 'g');
-  output = output.replace(regex_ansi, '');
+  output = stripAnsiControlCodes(output);
 
   // Replace the first leading space in each line with a non-breaking space character to preserve the formatting
   const regex_space = RegExp(`^[ ]`, 'gm');
@@ -57,7 +57,7 @@ export async function handleSummaryMessage(
   // GitHub limits step Summary to 1 MiB (1_048_576 bytes), use lower max to keep buffer for variable values
   const MAX_SUMMARY_SIZE_BYTES = 1_000_000;
 
-  const [message, trimmed]: [string, boolean] = trimOutput(output, MAX_SUMMARY_SIZE_BYTES, alwaysIncludeSummary);
+  const [message, trimmed]: [string, boolean] = trimOutputByBytes(output, MAX_SUMMARY_SIZE_BYTES, alwaysIncludeSummary);
 
   let heading = `Pulumi ${projectName}/${stackName} results`;
 
