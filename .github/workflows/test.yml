@@ -42,7 +42,8 @@ jobs:
           cache: yarn
       - run: yarn install
       - run: yarn build
-      - uses: ./
+      - name: Run Pulumi Up
+        uses: ./
         if: always()
         id: pulumi
         env:
@@ -54,8 +55,12 @@ jobs:
           upsert: true
           work-dir: .github/test-stacks/golang
           config-map: "{name: {value: test, secret: false}}"
+          suppress-progress: true
+          log-verbosity: 6
+          debug: true
       - run: echo 'The random string is `${{ steps.pulumi.outputs.name }}`'
-      - uses: ./
+      - name: Get Outputs
+        uses: ./
         if: always()
         id: pulumioutput
         env:
@@ -108,6 +113,9 @@ jobs:
           work-dir: .github/test-stacks/golang
           config-map: "{name: {value: test, secret: false}}"
           plan: /tmp/update-plan.json
+          suppress-progress: true
+          log-verbosity: 6
+          debug: true
       - name: Apply Update Plan via Pulumi Up
         uses: ./
         if: always()
@@ -122,4 +130,7 @@ jobs:
           work-dir: .github/test-stacks/golang
           config-map: "{name: {value: test, secret: false}}"
           plan: /tmp/update-plan.json
+          suppress-progress: true
+          log-verbosity: 6
+          debug: true
       - run: echo 'The random string is `${{ steps.pulumi-up.outputs.name }}`'

@@ -120,7 +120,11 @@ const runAction = async (config: Config): Promise<void> => {
   const [stdout, stderr] = await actions[config.command]();
   core.debug(`Done running action ${config.command}`);
   if (stderr !== '') {
-    core.warning(stderr);
+    if (config.options.logToStdErr) {
+      core.info(stderr);
+    } else {
+      core.warning(stderr);
+    }
   }
 
   core.setOutput('output', stdout);

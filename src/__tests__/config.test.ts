@@ -17,11 +17,15 @@ const defaultConfig: Record<string, string> = {
   'expect-no-changes': 'false',
   diff: 'false',
   'target-dependents': 'false',
+  'exclude-dependents': 'false',
   'exclude-protected': 'false',
   plan: '',
   'suppress-outputs': 'false',
   'suppress-progress': 'false',
   'continue-on-error': 'false',
+  'log-verbosity': '',
+  'log-flow': 'false',
+  'debug': 'false',
 };
 
 function setupMockedConfig(config: Record<string, string>) {
@@ -53,9 +57,15 @@ describe('config.ts', () => {
         "options": Object {
           "color": undefined,
           "continueOnError": false,
+          "debug": false,
           "diff": false,
+          "exclude": Array [],
+          "excludeDependents": false,
           "excludeProtected": false,
           "expectNoChanges": false,
+          "logFlow": false,
+          "logToStdErr": false,
+          "logVerbosity": undefined,
           "message": "",
           "parallel": undefined,
           "plan": "",
@@ -67,7 +77,7 @@ describe('config.ts', () => {
           "suppressProgress": false,
           "target": Array [],
           "targetDependents": false,
-          "userAgent": "pulumi/actions@v5",
+          "userAgent": "pulumi/actions@v6",
         },
         "pulumiVersion": "^3",
         "remove": false,
@@ -200,5 +210,15 @@ describe('config.ts', () => {
     }).toThrow(
       /Only one of 'pulumi-version' or 'pulumi-version-file' should be provided, got both/,
     );
+  });
+
+  it('should log to stderr when log verbosity is set', async () => {
+    setupMockedConfig({
+      ...defaultConfig,
+      'log-verbosity': '9',
+    });
+
+    const c = makeConfig();
+    expect(c.options.logToStdErr).toBe(true);
   });
 });

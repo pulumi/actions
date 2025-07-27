@@ -62,6 +62,13 @@ inputs:
   replace:
     description: 'Specify resources to replace. Multiple resources can be specified one per line'
     required: false
+  exclude:
+    description: 'Specify a single resource URN to ignore. Multiple resources can be specified one per line'
+    required: false
+  exclude-dependents:
+    description: 'Allows ignoring of dependent targets discovered but not specified in exclude.'
+    required: false
+    default: 'false'
   target:
     description: 'Specify a single resource URN to update. Other resources will not be updated. Multiple resources can be specified one per line'
     required: false
@@ -116,6 +123,17 @@ inputs:
     default: 'false'
   continue-on-error:
     description: 'Continue running the update even if an error is encountered'
+    required: false
+    default: 'false'
+  log-verbosity:
+    description: 'Enable verbose logging (1-11; >3 is very verbose)'
+    required: false
+  log-flow:
+    description: 'Flow log settings to child processes (like plugins)'
+    required: false
+    default: 'false'
+  debug:
+    description: 'Print detailed debugging output during resource operations'
     required: false
     default: 'false'
 outputs:

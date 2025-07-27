@@ -5,6 +5,22 @@
 - feat: Strip ansi control characters from GitHub step Summary and PR comment
   ([#1312](https://github.com/pulumi/actions/pull/1312))
 
+## 6.4.0 (2025-07-16)
+
+- feat: Add `run-program` flag support for refresh, destroy, preview, and
+  up/update commands ([#1376](https://github.com/pulumi/actions/pull/1376))
+
+## 6.3.0 (2025-05-08)
+
+- feat: support `--exclude` and `--exclude-dependents` flags
+  ([#1363](https://github.com/pulumi/actions/pull/1363))
+
+- feat: verbosity and debug inputs to enable debug options
+  ([#1046](https://github.com/pulumi/actions/pull/1046))
+
+- fix: update "user agent" string to pulumi/actions@v6
+  ([#1357](https://github.com/pulumi/actions/pull/1367))
+
 ## 6.2.0 (2025-03-05)
 
 - feat: support continue on error flag (--continue-on-error)
