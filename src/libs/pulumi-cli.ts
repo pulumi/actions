@@ -48,6 +48,7 @@ export function getPlatform(): string | undefined {
     'darwin-x64': 'darwin-x64',
     'darwin-arm64': 'darwin-arm64',
     'win32-x64': 'windows-x64',
+    'win32-arm64': 'windows-arm64',
   };
 
   const runnerPlatform = os.platform();
@@ -62,7 +63,7 @@ export async function downloadCli(range: string): Promise<void> {
 
   if (!platform) {
     throw new Error(
-      'Unsupported operating system - Pulumi CLI is only released for Darwin (x64, arm64), Linux (x64, arm64) and Windows (x64)',
+      'Unsupported operating system - Pulumi CLI is only released for Darwin (x64, arm64), Linux (x64, arm64) and Windows (x64, arm64)',
     );
   }
 
