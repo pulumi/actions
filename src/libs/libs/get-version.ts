@@ -13,6 +13,7 @@ const VersionRt = rt.Record({
     'darwin-x64': rt.String,
     'darwin-arm64': rt.String,
     'windows-x64': rt.String,
+    'windows-arm64': rt.String,
   }),
   checksums: rt.String,
   latest: rt.Boolean.optional(),
@@ -31,6 +32,7 @@ export async function getVersionObject(range: string): Promise<Version> {
       'darwin-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-x64.tar.gz`,
       'darwin-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-arm64.tar.gz`,
       'windows-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-windows-x64.zip`,
+      'windows-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-windows-arm64.zip`,
     };
     const checksums = 'https://get.pulumi.com/releases/sdk/pulumi-${version}-checksums.txt';
     const latest = false;
