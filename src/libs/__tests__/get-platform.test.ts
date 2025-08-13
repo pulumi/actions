@@ -17,6 +17,7 @@ describe('get-platform', () => {
     ['linux', 'arm64', 'linux-arm64'],
     ['linux', 'x32', undefined],
     ['win32', 'x64', 'windows-x64'],
+    ['win32', 'arm64', 'windows-arm64'],
     ['win32', 'x32', undefined],
     ['android', 'x32', undefined],
   ] as const)(
