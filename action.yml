@@ -106,6 +106,10 @@ inputs:
     description: 'Skip destroying protected resources. Only valid when command is destroy.'
     required: false
     default: 'false'
+  preview-only:
+    description: 'Only show a preview of the operation, but do not perform it. Only valid when command is destroy.'
+    required: false
+    default: 'false'
   plan:
     description: 'Where to either save an Update Plan or read an Update Plan from'
     required: false
