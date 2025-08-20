@@ -143,6 +143,9 @@ The action can be configured with the following arguments:
 - `exclude-protected` - (optional) Skip destroying protected resources. Only
   valid when `command` is `destroy`.
 
+- `preview-only` - (optional) Only show a preview of the operation, but do not
+  perform it. Only valid when `command` is `destroy`.
+
 - `suppress-outputs` - (optional) Suppress display of stack outputs (in case
   they contain sensitive values).
 
