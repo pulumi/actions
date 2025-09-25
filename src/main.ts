@@ -126,7 +126,9 @@ const runAction = async (config: Config): Promise<void> => {
     }
   }
 
-  core.setOutput('output', stdout);
+  if (!config.options.omitStdout) {
+    core.setOutput('output', stdout);
+  }
 
   let outputs: OutputMap;
   if (config.command === "output") {
@@ -141,6 +143,7 @@ const runAction = async (config: Config): Promise<void> => {
     // initialized, so `stack.outputs()` can be used to get the stack's outputs.
     outputs = await stack.outputs();
   }
+
 
   for (const [outKey, outExport] of Object.entries(outputs)) {
     core.setOutput(outKey, outExport.value);
