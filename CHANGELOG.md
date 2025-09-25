@@ -2,7 +2,7 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: Add option to omit the captured stdout from the action's outputs
 
 ---
 

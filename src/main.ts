@@ -127,7 +127,9 @@ const runAction = async (config: Config): Promise<void> => {
     }
   }
 
-  core.setOutput('output', stdout);
+  if (!config.options.omitStdout) {
+    core.setOutput('output', stdout);
+  }
 
   let outputs: OutputMap;
   if (config.command === "output") {
