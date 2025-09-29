@@ -254,10 +254,8 @@ the correct GitHub Marketplace actions that support it.
 
 ## Release Cadence
 
-As of `v3.18`, we are intending to move to a monthly cadence for minor releases.
-Minor releases will be published around the beginning of the month. We may cut a
-patch release instead, if the changes are small enough not to warrant a minor
-release. We will also cut patch releases periodically as needed to address bugs.
+We're releasing new version of the actions as needed, releasing minor versions
+whenever new features are introduced, and patch releases for bug fixes only.
 
 ## Migrating from v5
 
