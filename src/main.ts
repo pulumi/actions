@@ -19,6 +19,7 @@ import {
 import { environmentVariables } from './libs/envs';
 import { handlePullRequestMessage } from './libs/pr';
 import * as pulumiCli from './libs/pulumi-cli';
+import { handleSummaryMessage } from './libs/summary';
 import { login } from './login';
 
 const main = async () => {
@@ -160,10 +161,7 @@ const runAction = async (config: Config): Promise<void> => {
     }
 
     if (config.commentOnSummary) {
-      await core.summary
-        .addHeading(`Pulumi ${config.stackName} results`)
-        .addCodeBlock(stdout, "diff")
-        .write();
+      handleSummaryMessage(config, projectName, stdout)
     }
   }
 
