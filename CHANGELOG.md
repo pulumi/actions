@@ -2,6 +2,12 @@
 
 ## HEAD (Unreleased)
 
+**(none)**
+
+---
+
+## 6.6.0 (2025-09-29)
+
 - feat: Strip ansi control characters from GitHub step Summary and PR comment
   ([#1312](https://github.com/pulumi/actions/pull/1312))
 
