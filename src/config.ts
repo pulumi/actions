@@ -116,6 +116,7 @@ export function makeConfig() {
       plan: getInput('plan'),
       suppressOutputs: getBooleanInput('suppress-outputs'),
       suppressProgress: getBooleanInput('suppress-progress'),
+      omitStdout: getBooleanInput('omit-stdout'),
       continueOnError: getBooleanInput('continue-on-error'),
       logVerbosity: getNumberInput('log-verbosity'),
       logFlow: getBooleanInput('log-flow'),

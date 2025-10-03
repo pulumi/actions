@@ -149,6 +149,11 @@ The action can be configured with the following arguments:
 - `suppress-progress` - (optional) Suppress display of periodic progress dots to
   limit logs length.
 
+- `omit-stdout` - (optional) Do not include the captured stdout in the action's output.
+  This can be useful if you use the action's output to populate the environment of
+  subsequent workflow steps by setting `env: ${{ steps.pulumi.outputs }}` or jointly exporting
+  the stack outputs to other steps and jobs via `toJSON(steps.pulumi.outputs)`.
+
 - `plan` - (optional) Used for
   [update plans](https://www.pulumi.com/docs/concepts/update-plans/)
 
