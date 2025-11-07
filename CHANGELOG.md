@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- chore: Update pulumi/pulumi dependency
+  ([#1394](https://github.com/pulumi/actions/pull/1394))
 
 ---
 
