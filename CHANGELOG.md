@@ -2,10 +2,14 @@
 
 ## HEAD (Unreleased)
 
-- chore: Update pulumi/pulumi dependency
-  ([#1394](https://github.com/pulumi/actions/pull/1394))
+**(none)**
 
 ---
+
+## 6.6.1 (2025-11-12)
+
+- chore: Update pulumi/pulumi dependency
+  ([#1394](https://github.com/pulumi/actions/pull/1394))
 
 ## 6.6.0 (2025-09-29)
 
