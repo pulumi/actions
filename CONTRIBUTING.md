@@ -11,7 +11,7 @@ Finally, please limit your pull requests to contain only one feature at a time. 
 ## Release Process
 
 This section details the steps necessary to cut a new release. Suppose the
-latest release is `v3.18.1`, and you wish to cut `v.3.19.0`.
+latest release is `v3.18.1`, and you wish to cut `v3.19.0`.
 
 1. Checkout the default branch.
 
@@ -58,7 +58,7 @@ latest release is `v3.18.1`, and you wish to cut `v.3.19.0`.
 7. Under the `Choose a tag` dropdown, enter in the name of your new tag, which
    should the release name, `v3.19.0`.
 
-8. Under `Release Title`, enter the name of your release, v3.19.0
+8. Under `Release Title`, enter the name of your release, `v3.19.0`
 
 9. Press the button `Geneate release notes`. Replace the section `What's New`
    with the changes you added to `CHANGELOG.md`.
