@@ -117,6 +117,10 @@ inputs:
     description: 'Suppress display of periodic progress dots to limit logs length'
     required: false
     default: 'false'
+  omit-stdout:
+    description: 'Omit captured stdout from the action´s outputs.'
+    required: false
+    default: 'false'
   always-include-summary:
     description: 'If comments must be trimmed, trim them from the front. This ensures the resources summary is always included in the comment'
     required: false
