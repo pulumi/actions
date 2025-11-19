@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as core from '@actions/core';
@@ -57,6 +58,10 @@ export function getPlatform(): string | undefined {
   return platforms[`${runnerPlatform}-${runnerArch}`];
 }
 
+function isDynamicVersion(range: string): boolean {
+  return range === 'dev' || range.toLowerCase().startsWith('pr#');
+}
+
 export async function downloadCli(range: string): Promise<void> {
   const platform = getPlatform();
   core.debug(`Platform: ${platform}`);
@@ -71,7 +76,7 @@ export async function downloadCli(range: string): Promise<void> {
 
   const isPulumiInstalled = await io.which('pulumi');
 
-  if (isPulumiInstalled && range != 'latest') {
+  if (isPulumiInstalled && range != 'latest' && !isDynamicVersion(range)) {
     // Check for version of Pulumi CLI installed on the runner
     const runnerVersion = await getVersion();
 
@@ -113,7 +118,7 @@ export async function downloadCli(range: string): Promise<void> {
   core.info(`Matched version: ${version}`);
 
   let isUnsupportedVersion;
-  if (range == 'dev') {
+  if (isDynamicVersion(range)) {
     isUnsupportedVersion = false;
   } else {
     isUnsupportedVersion = semver.lt(version, '3.0.0');
@@ -137,16 +142,42 @@ export async function downloadCli(range: string): Promise<void> {
       );
     });
 
-  const downloaded = await tc.downloadTool(downloads[platform]);
+  // For PR builds, we need to authenticate the download
+  const isPrBuild = range.toLowerCase().startsWith('pr#');
+  const auth = isPrBuild && process.env.GITHUB_TOKEN ? `Bearer ${process.env.GITHUB_TOKEN}` : undefined;
+
+  const downloaded = await tc.downloadTool(downloads[platform], undefined, auth);
   core.debug(`successfully downloaded ${downloads[platform]} to ${downloaded}`);
 
   await io.mkdirP(destination);
   core.debug(`Successfully created ${destination}`);
 
+  // PR builds are zip files containing tarballs, regular builds are tarballs/zips directly
+  let fileToExtract = downloaded;
+  if (isPrBuild) {
+    // First extract the zip to get the tarball inside
+    const zipExtractDir = path.join(destination, 'zip-extract');
+    await io.mkdirP(zipExtractDir);
+    const zipExtracted = await tc.extractZip(downloaded, zipExtractDir);
+    core.debug(`Extracted PR artifact zip to ${zipExtracted}`);
+
+    // Find the tarball inside the zip
+    const files = fs.readdirSync(zipExtractDir).filter(f => f.startsWith('pulumi-') && f.endsWith('.tar.gz'));
+    if (files.length === 0) {
+      throw new Error(`Could not find tarball in PR artifact zip at ${zipExtractDir}`);
+    }
+    fileToExtract = path.join(zipExtractDir, files[0]);
+    core.debug(`Found tarball in PR artifact: ${fileToExtract}`);
+  }
+
   switch (platform) {
-    case 'windows-x64': {
-      const extractedPath = await tc.extractZip(downloaded, destination);
-      core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`);
+    case 'windows-x64':
+    case 'windows-arm64': {
+      // Windows uses zip format (unless it's a PR build which we already extracted above)
+      const extractedPath = isPrBuild
+        ? await tc.extractTar(fileToExtract, destination)
+        : await tc.extractZip(fileToExtract, destination);
+      core.debug(`Successfully extracted to ${extractedPath}`);
       const oldPath = path.join(destination, 'pulumi', 'bin');
       const newPath = path.join(destination, 'bin');
       await io.mv(oldPath, newPath);
@@ -162,36 +193,57 @@ export async function downloadCli(range: string): Promise<void> {
             )}`,
           );
         });
+      if (isPrBuild) {
+        await io.rmRF(path.join(destination, 'zip-extract'));
+      }
       break;
     }
     default: {
-      const extractedPath = await tc.extractTar(downloaded, destination);
-      core.debug(`Successfully extracted ${downloaded} to ${extractedPath}`);
+      const extractedPath = await tc.extractTar(fileToExtract, destination);
+      core.debug(`Successfully extracted to ${extractedPath}`);
       const oldPath = path.join(destination, 'pulumi');
       const newPath = path.join(destination, 'bin');
       await io.mv(oldPath, newPath);
       core.debug(`Successfully renamed ${oldPath} to ${newPath}`);
+      if (isPrBuild) {
+        await io.rmRF(path.join(destination, 'zip-extract'));
+      }
       break;
     }
+  }
+
+  // For dynamic versions (dev/PR), we need to get the version from the binary we just installed
+  // For other builds, we know the version already
+  let cacheVersion = version;
+  if (isDynamicVersion(range)) {
+    // Run the binary directly from the installation directory to get its version
+    const pulumiPath = path.join(destination, 'bin', 'pulumi');
+    const versionExec = await exec.exec(pulumiPath, ['version'], true);
+    if (!versionExec.success) {
+      throw new Error(`Failed to get version from installed pulumi binary:\n${versionExec.stderr}`);
+    }
+    cacheVersion = versionExec.stdout.trim();
   }
 
   const cachedPath = await tc.cacheDir(
     path.join(destination, 'bin'),
     'pulumi',
-    version,
+    cacheVersion,
   );
   core.addPath(cachedPath);
 
-  // Check that running pulumi now returns a version we expect
+  // Verify the installed version
   const versionExec = await exec.exec(`pulumi`, ['version'], true);
-  const pulumiVersion = versionExec.stdout.trim();
-  core.debug(`Running pulumi verison returned: ${pulumiVersion}`);
+  const installedVersion = versionExec.stdout.trim();
+  core.debug(`Running pulumi version returned: ${installedVersion}`);
 
   if (!versionExec.success) {
     throw new Error(`Failed to verify pulumi version:\n${versionExec.stderr}`);
   }
 
-  if (!semver.satisfies(pulumiVersion, version)) {
-    throw new Error(`Installed version "${pulumiVersion}" did not satisfy the resolved version "${version}"`);
+  if (isDynamicVersion(range)) {
+    core.info(`Installed ${range} build with version: ${installedVersion}`);
+  } else if (!semver.satisfies(installedVersion, version)) {
+    throw new Error(`Installed version "${installedVersion}" did not satisfy the resolved version "${version}"`);
   }
 }

@@ -115,7 +115,8 @@ The action can be configured with the following arguments:
 - `pulumi-version` - (optional) Install a specific version of the Pulumi CLI.
   Defaults to "^3". Specifying a version range will ensure a version within that
   range is installed. Use "latest" to fetch the latest published release or
-  "dev" to download the latest development pre-release.
+  "dev" to download the latest development pre-release. You can also use
+  `pr#<number>` to download artifacts from a specific pull request.
 
 - `pulumi-version-file` - (optional) File containing the version of the Pulumi
   CLI to install. Example: .pulumi.version. Only one `pulumi-version` or
