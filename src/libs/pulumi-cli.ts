@@ -178,7 +178,11 @@ export async function downloadCli(range: string): Promise<void> {
   }
   core.debug(`Successfully extracted to ${extractedPath}`);
 
-  const oldPath = path.join(destination, 'pulumi');
+  // Windows zip files have a different structure: pulumi/bin instead of pulumi
+  const isWindowsPlatform = platform.startsWith('windows');
+  const oldPath = isWindowsPlatform
+    ? path.join(destination, 'pulumi', 'bin')
+    : path.join(destination, 'pulumi');
   const newPath = path.join(destination, 'bin');
   await io.mv(oldPath, newPath);
   core.debug(`Successfully renamed ${oldPath} to ${newPath}`);
@@ -201,7 +205,8 @@ export async function downloadCli(range: string): Promise<void> {
   let cacheVersion = version;
   if (isDynamicVersion(range)) {
     // Run the binary directly from the installation directory to get its version
-    const pulumiPath = path.join(destination, 'bin', 'pulumi');
+    const pulumiExecutable = platform.startsWith('windows') ? 'pulumi.exe' : 'pulumi';
+    const pulumiPath = path.join(destination, 'bin', pulumiExecutable);
     const versionExec = await exec.exec(pulumiPath, ['version'], true);
     if (!versionExec.success) {
       throw new Error(`Failed to get version from installed pulumi binary:\n${versionExec.stderr}`);
@@ -217,7 +222,11 @@ export async function downloadCli(range: string): Promise<void> {
   core.addPath(cachedPath);
 
   // Verify the installed version
-  const versionExec = await exec.exec(`pulumi`, ['version'], true);
+  // On Windows, we need to use the full path to the executable since core.addPath()
+  // might not take effect immediately for the current process
+  const pulumiExecutable = platform.startsWith('windows') ? 'pulumi.exe' : 'pulumi';
+  const pulumiFullPath = path.join(cachedPath, pulumiExecutable);
+  const versionExec = await exec.exec(pulumiFullPath, ['version'], true);
   const installedVersion = versionExec.stdout.trim();
   core.debug(`Running pulumi version returned: ${installedVersion}`);
 
