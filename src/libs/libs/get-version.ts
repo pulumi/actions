@@ -5,6 +5,7 @@ import got from 'got';
 import * as rt from 'runtypes';
 import { maxSatisfying } from 'semver';
 import invariant from 'ts-invariant';
+import { getPlatform } from '../pulumi-cli';
 
 const VersionRt = rt.Record({
   version: rt.String,
@@ -22,23 +23,6 @@ const VersionRt = rt.Record({
 });
 export type Version = rt.Static<typeof VersionRt>;
 const VersionsRt = rt.Array(VersionRt);
-
-function getPlatformString(): string {
-  if (process.platform === 'win32') {
-    return 'windows';
-  }
-  if (process.platform === 'linux' || process.platform === 'darwin') {
-    return process.platform;
-  }
-  throw new Error(`Unsupported platform: ${process.platform}`);
-}
-
-function getArchString(): string {
-  if (process.arch === 'x64' || process.arch === 'arm64') {
-    return process.arch;
-  }
-  throw new Error(`Unsupported architecture: ${process.arch}`);
-}
 
 async function getPrHeadSha(octokit: ReturnType<typeof getOctokit>, prNumber: string): Promise<string> {
   const { data: pr } = await octokit.rest.pulls.get({
@@ -84,9 +68,9 @@ async function getWorkflowRunId(octokit: ReturnType<typeof getOctokit>, headSha:
 async function getArtifactUrl(
   octokit: ReturnType<typeof getOctokit>,
   workflowRunId: number,
-  os: string,
-  arch: string,
+  platform: string,
 ): Promise<string> {
+  const [os, arch] = platform.split('-');
   const goArch = arch === 'x64' ? 'amd64' : arch;
   const artifactName = `artifacts-cli-${os}-${goArch}`;
 
@@ -104,7 +88,7 @@ async function getArtifactUrl(
   return data.artifacts[0].archive_download_url;
 }
 
-async function getPrArtifactUrl(prNumber: string, os: string, arch: string): Promise<string> {
+async function getPrArtifactUrl(prNumber: string, platform: string): Promise<string> {
   const githubToken = process.env.GITHUB_TOKEN;
   if (!githubToken) {
     throw new Error(
@@ -117,7 +101,7 @@ async function getPrArtifactUrl(prNumber: string, os: string, arch: string): Pro
   const octokit = getOctokit(githubToken);
   const headSha = await getPrHeadSha(octokit, prNumber);
   const workflowRunId = await getWorkflowRunId(octokit, headSha);
-  return getArtifactUrl(octokit, workflowRunId, os, arch);
+  return getArtifactUrl(octokit, workflowRunId, platform);
 }
 
 function createPrVersion(range: string, artifactUrl: string): Version {
@@ -155,9 +139,13 @@ export async function getVersionObject(range: string): Promise<Version> {
   }
   if (range.toLowerCase().startsWith('pr#')) {
     const prNumber = range.substring(3);
-    const os = getPlatformString();
-    const arch = getArchString();
-    const artifactUrl = await getPrArtifactUrl(prNumber, os, arch);
+    const platform = getPlatform();
+    if (!platform) {
+      throw new Error(
+        'Unsupported operating system - Pulumi CLI is only released for Darwin (x64, arm64), Linux (x64, arm64) and Windows (x64, arm64)',
+      );
+    }
+    const artifactUrl = await getPrArtifactUrl(prNumber, platform);
     return createPrVersion(range, artifactUrl);
   }
 

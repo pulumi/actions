@@ -152,16 +152,15 @@ export async function downloadCli(range: string): Promise<void> {
   await io.mkdirP(destination);
   core.debug(`Successfully created ${destination}`);
 
-  // PR builds are zip files containing tarballs, regular builds are tarballs/zips directly
+  // PR builds are zip files containing tarballs, extract to get the tarball
   let fileToExtract = downloaded;
+  let zipExtractDir: string | undefined;
   if (isPrBuild) {
-    // First extract the zip to get the tarball inside
-    const zipExtractDir = path.join(destination, 'zip-extract');
+    zipExtractDir = path.join(destination, 'zip-extract');
     await io.mkdirP(zipExtractDir);
-    const zipExtracted = await tc.extractZip(downloaded, zipExtractDir);
-    core.debug(`Extracted PR artifact zip to ${zipExtracted}`);
+    await tc.extractZip(downloaded, zipExtractDir);
+    core.debug(`Extracted PR artifact zip to ${zipExtractDir}`);
 
-    // Find the tarball inside the zip
     const files = fs.readdirSync(zipExtractDir).filter(f => f.startsWith('pulumi-') && f.endsWith('.tar.gz'));
     if (files.length === 0) {
       throw new Error(`Could not find tarball in PR artifact zip at ${zipExtractDir}`);
@@ -170,46 +169,31 @@ export async function downloadCli(range: string): Promise<void> {
     core.debug(`Found tarball in PR artifact: ${fileToExtract}`);
   }
 
-  switch (platform) {
-    case 'windows-x64':
-    case 'windows-arm64': {
-      // Windows uses zip format (unless it's a PR build which we already extracted above)
-      const extractedPath = isPrBuild
-        ? await tc.extractTar(fileToExtract, destination)
-        : await tc.extractZip(fileToExtract, destination);
-      core.debug(`Successfully extracted to ${extractedPath}`);
-      const oldPath = path.join(destination, 'pulumi', 'bin');
-      const newPath = path.join(destination, 'bin');
-      await io.mv(oldPath, newPath);
-      core.debug(`Successfully renamed ${oldPath} to ${newPath}`);
-      await io
-        .rmRF(path.join(destination, 'pulumi'))
-        .catch()
-        .then(() => {
-          core.info(
-            `Successfully deleted left-over ${path.join(
-              destination,
-              'pulumi',
-            )}`,
-          );
-        });
-      if (isPrBuild) {
-        await io.rmRF(path.join(destination, 'zip-extract'));
-      }
-      break;
-    }
-    default: {
-      const extractedPath = await tc.extractTar(fileToExtract, destination);
-      core.debug(`Successfully extracted to ${extractedPath}`);
-      const oldPath = path.join(destination, 'pulumi');
-      const newPath = path.join(destination, 'bin');
-      await io.mv(oldPath, newPath);
-      core.debug(`Successfully renamed ${oldPath} to ${newPath}`);
-      if (isPrBuild) {
-        await io.rmRF(path.join(destination, 'zip-extract'));
-      }
-      break;
-    }
+  // Extract the pulumi CLI to destination
+  let extractedPath: string;
+  if (isPrBuild || platform === 'linux-x64' || platform === 'linux-arm64' || platform === 'darwin-x64' || platform === 'darwin-arm64') {
+    extractedPath = await tc.extractTar(fileToExtract, destination);
+  } else {
+    extractedPath = await tc.extractZip(fileToExtract, destination);
+  }
+  core.debug(`Successfully extracted to ${extractedPath}`);
+
+  const oldPath = path.join(destination, 'pulumi', 'bin');
+  const newPath = path.join(destination, 'bin');
+  await io.mv(oldPath, newPath);
+  core.debug(`Successfully renamed ${oldPath} to ${newPath}`);
+
+  await io
+    .rmRF(path.join(destination, 'pulumi'))
+    .catch()
+    .then(() => {
+      core.info(
+        `Successfully deleted left-over ${path.join(destination, 'pulumi')}`,
+      );
+    });
+
+  if (zipExtractDir) {
+    await io.rmRF(zipExtractDir);
   }
 
   // For dynamic versions (dev/PR), we need to get the version from the binary we just installed
