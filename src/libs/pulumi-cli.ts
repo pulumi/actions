@@ -178,7 +178,7 @@ export async function downloadCli(range: string): Promise<void> {
   }
   core.debug(`Successfully extracted to ${extractedPath}`);
 
-  const oldPath = path.join(destination, 'pulumi', 'bin');
+  const oldPath = path.join(destination, 'pulumi');
   const newPath = path.join(destination, 'bin');
   await io.mv(oldPath, newPath);
   core.debug(`Successfully renamed ${oldPath} to ${newPath}`);
