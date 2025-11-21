@@ -113,6 +113,7 @@ export function makeConfig() {
         alternatives: ['always', 'never', 'raw', 'auto'] as const,
       }),
       excludeProtected: getBooleanInput('exclude-protected'),
+      previewOnly: getBooleanInput('preview-only'),
       plan: getInput('plan'),
       suppressOutputs: getBooleanInput('suppress-outputs'),
       suppressProgress: getBooleanInput('suppress-progress'),
