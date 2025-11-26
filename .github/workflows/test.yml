@@ -144,10 +144,21 @@ jobs:
           cache: yarn
       - run: yarn install
       - run: yarn build
+      # We use the last merged PR to guarantee we are not trying to access an artifact that has been deleted.
+      # GitHub automatically deletes workflow artifacts after a retention period, so using a recent merged PR
+      # ensures the PR build artifacts are still available for testing.
+      - name: Get last merged PR number
+        id: get-pr
+        run: |
+          PR_NUMBER=$(gh pr list --repo pulumi/pulumi --state merged --limit 1 --json number --jq '.[0].number')
+          echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "Using PR #$PR_NUMBER"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Install Pulumi from PR
         uses: ./
         with:
-          pulumi-version: pr#20572
+          pulumi-version: pr#${{ steps.get-pr.outputs.pr-number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Verify Pulumi version
