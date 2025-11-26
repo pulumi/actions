@@ -134,3 +134,40 @@ jobs:
           log-verbosity: 6
           debug: true
       - run: echo 'The random string is `${{ steps.pulumi-up.outputs.name }}`'
+  test-pr-version: # test installing Pulumi from a PR build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: yarn
+      - run: yarn install
+      - run: yarn build
+      # We use the last merged PR to guarantee we are not trying to access an artifact that has been deleted.
+      # GitHub automatically deletes workflow artifacts after a retention period, so using a recent merged PR
+      # ensures the PR build artifacts are still available for testing.
+      - name: Get last merged PR number
+        id: get-pr
+        run: |
+          PR_NUMBER=$(gh pr list --repo pulumi/pulumi --state merged --limit 1 --json number --jq '.[0].number')
+          echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "Using PR #$PR_NUMBER"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Pulumi from PR
+        uses: ./
+        with:
+          pulumi-version: pr#${{ steps.get-pr.outputs.pr-number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify Pulumi version
+        run: |
+          INSTALLED_VERSION=$(pulumi version)
+          echo "Installed version: $INSTALLED_VERSION"
+          # Verify the version starts with 'v' and contains 'alpha' (PR builds are alpha versions)
+          if [[ ! "$INSTALLED_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-alpha ]]; then
+            echo "Error: Expected PR build version format (v*.*.*-alpha*), got $INSTALLED_VERSION"
+            exit 1
+          fi
+          echo "Successfully installed PR build: $INSTALLED_VERSION"
