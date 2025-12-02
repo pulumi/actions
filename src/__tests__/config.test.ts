@@ -19,6 +19,7 @@ const defaultConfig: Record<string, string> = {
   'target-dependents': 'false',
   'exclude-dependents': 'false',
   'exclude-protected': 'false',
+  'preview-only': 'false',
   plan: '',
   'suppress-outputs': 'false',
   'suppress-progress': 'false',
@@ -70,6 +71,7 @@ describe('config.ts', () => {
           "parallel": undefined,
           "plan": "",
           "policyPackConfigs": Array [],
+          "previewOnly": false,
           "policyPacks": Array [],
           "refresh": false,
           "replace": Array [],
@@ -98,6 +100,16 @@ describe('config.ts', () => {
     expect(() => makeConfig()).toThrowErrorMatchingInlineSnapshot(
       `"Input was not correct for command. Valid alternatives are: up, update, refresh, destroy, preview, output"`,
     );
+  });
+
+  it('should handle preview-only option correctly', async () => {
+    setupMockedConfig({
+      ...defaultConfig,
+      'preview-only': 'true',
+    });
+
+    const config = makeConfig();
+    expect(config.options.previewOnly).toBe(true);
   });
 
   it('should return ^3 if pulumi-version is undefined', async () => {
