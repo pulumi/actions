@@ -259,6 +259,12 @@ the correct GitHub Marketplace actions that support it.
 We're releasing new version of the actions as needed, releasing minor versions
 whenever new features are introduced, and patch releases for bug fixes only.
 
+## Migrating from v6
+
+v7 of the Pulumi Action updates the NodeJS runtime from Node 20 to Node 24.
+Users of GitHub Enterprise will have to upgrade to v3.18 or newer. All other
+users are unaffected.
+
 ## Migrating from v5
 
 v6 of the Pulumi Action updates the behavior of the `refresh` option.
