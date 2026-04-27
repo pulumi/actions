@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- chore: update Action runtime to node 24
+  ([#1404](https://github.com/pulumi/actions/pull/1404))
 
 ---
 
