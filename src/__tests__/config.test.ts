@@ -25,7 +25,7 @@ const defaultConfig: Record<string, string> = {
   'continue-on-error': 'false',
   'log-verbosity': '',
   'log-flow': 'false',
-  'debug': 'false',
+  debug: 'false',
 };
 
 function setupMockedConfig(config: Record<string, string>) {
@@ -44,7 +44,7 @@ describe('config.ts', () => {
 
     expect(c).toBeTruthy();
     expect(c).toMatchInlineSnapshot(`
-      Object {
+      {
         "alwaysIncludeSummary": false,
         "cloudUrl": "file://~",
         "command": "up",
@@ -54,12 +54,12 @@ describe('config.ts', () => {
         "configMap": undefined,
         "editCommentOnPr": false,
         "githubToken": "n/a",
-        "options": Object {
+        "options": {
           "color": undefined,
           "continueOnError": false,
           "debug": false,
           "diff": false,
-          "exclude": Array [],
+          "exclude": [],
           "excludeDependents": false,
           "excludeProtected": false,
           "expectNoChanges": false,
@@ -69,13 +69,13 @@ describe('config.ts', () => {
           "message": "",
           "parallel": undefined,
           "plan": "",
-          "policyPackConfigs": Array [],
-          "policyPacks": Array [],
+          "policyPackConfigs": [],
+          "policyPacks": [],
           "refresh": false,
-          "replace": Array [],
+          "replace": [],
           "suppressOutputs": false,
           "suppressProgress": false,
-          "target": Array [],
+          "target": [],
           "targetDependents": false,
           "userAgent": "pulumi/actions@v6",
         },
