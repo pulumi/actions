@@ -6,6 +6,8 @@
   ([#1404](https://github.com/pulumi/actions/pull/1404))
 - chore: bump `typescript`, `jest`, `ts-jest`, `@types/jest`, `@types/node`
   ([#1405](https://github.com/pulumi/actions/pull/1405))
+- chore: update ESLint stack and migrate to flat config
+  ([#1406](https://github.com/pulumi/actions/pull/1406))
 
 ---
 
