@@ -45,7 +45,6 @@ export function makeInstallationConfig(): rt.Result<InstallationConfig> {
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function makeConfig() {
   let pulumiVersion = getInput('pulumi-version');
   const versionFile = getInput('pulumi-version-file');
