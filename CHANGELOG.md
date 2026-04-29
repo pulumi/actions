@@ -5,7 +5,7 @@
 - chore: update Action runtime to node 24
   ([#1404](https://github.com/pulumi/actions/pull/1404))
 - chore: bump `typescript`, `jest`, `ts-jest`, `@types/jest`, `@types/node`
-  ([#TBD](https://github.com/pulumi/actions/pull/1405))
+  ([#1405](https://github.com/pulumi/actions/pull/1405))
 
 ---
 
