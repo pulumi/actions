@@ -2,14 +2,18 @@
 
 ## HEAD (Unreleased)
 
+**(none)**
+
+---
+
+## 7.0.0 (2026-05-01)
+
 - chore: update Action runtime to node 24
   ([#1404](https://github.com/pulumi/actions/pull/1404))
 - chore: bump `typescript`, `jest`, `ts-jest`, `@types/jest`, `@types/node`
   ([#1405](https://github.com/pulumi/actions/pull/1405))
 - chore: update ESLint stack and migrate to flat config
   ([#1406](https://github.com/pulumi/actions/pull/1406))
-
----
 
 ## 6.6.1 (2025-11-12)
 
