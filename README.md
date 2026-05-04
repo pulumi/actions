@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pulumi/actions@v6
+      - uses: pulumi/actions@v7
         with:
           command: preview
           stack-name: org-name/stack-name
@@ -178,7 +178,7 @@ If you want to only install the Pulumi CLI, omit the `command` field of the
 action.
 
 ```yaml
-- uses: pulumi/actions@v6
+- uses: pulumi/actions@v7
 ```
 
 This will install Pulumi and exit without performing any other operations.
@@ -212,7 +212,7 @@ We can see that `pet-name` is an output. To get the value of this output in the
 action, we would use code similar to the following:
 
 ```yaml
-- uses: pulumi/actions@v6
+- uses: pulumi/actions@v7
   id: pulumi
   env:
     PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
