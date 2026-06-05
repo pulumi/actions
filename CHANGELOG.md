@@ -25,6 +25,11 @@
 - feat: Strip ansi control characters from GitHub step Summary and PR comment
   ([#1312](https://github.com/pulumi/actions/pull/1312))
 
+## 6.5.0 (2025-07-17)
+
+- revert: Remove `run-program` flag support
+  ([#1381](https://github.com/pulumi/actions/pull/1381))
+
 ## 6.4.0 (2025-07-16)
 
 - feat: Add `run-program` flag support for refresh, destroy, preview, and
