@@ -17,17 +17,17 @@ jobs:
     steps:
       - name: Fetch secrets from ESC
         id: esc-secrets
-        uses: pulumi/esc-action@v1
-      - uses: actions/checkout@v4
+        uses: pulumi/esc-action@v3
+      - uses: actions/checkout@v6
         with:
           token: ${{ steps.esc-secrets.outputs.PULUMI_BOT_TOKEN }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 24.x
           cache: yarn
       - run: yarn install
       - run: yarn build
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: dist/**
           add_options: -u --force
