@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "rootDir": ".",
-    "target": "es2015",
-    "moduleResolution": "node",
+    "target": "es2020",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "allowJs": false,

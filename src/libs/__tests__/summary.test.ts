@@ -1,11 +1,13 @@
 import * as fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import * as core from '@actions/core';
 import { SUMMARY_ENV_VAR } from '@actions/core/lib/summary'
 import { Config } from '../../config';
 import { handleSummaryMessage } from '../summary';
 
-const testDirectoryPath = path.join(__dirname, 'test')
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const testDirectoryPath = path.join(dirname, 'test')
 const testFilePath = path.join(testDirectoryPath, 'test-summary.md')
 
 async function getSummary(): Promise<string> {
