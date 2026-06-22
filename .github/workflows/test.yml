@@ -15,8 +15,8 @@ jobs:
   build-test: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 24.x
           cache: yarn
@@ -26,8 +26,8 @@ jobs:
   test-output: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
         with:
           go-version: '^1.13.1'
       - run: |
@@ -36,7 +36,7 @@ jobs:
         working-directory: .github/test-stacks/golang
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 24.x
           cache: yarn
@@ -83,8 +83,8 @@ jobs:
   test-update-plan: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
         with:
           go-version: '^1.13.1'
       - run: |
@@ -93,7 +93,7 @@ jobs:
         working-directory: .github/test-stacks/golang
         env:
           PULUMI_CONFIG_PASSPHRASE: not-a-secret
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 24.x
           cache: yarn
@@ -137,8 +137,8 @@ jobs:
   test-pr-version: # test installing Pulumi from a PR build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 24.x
           cache: yarn
