@@ -102,7 +102,7 @@ describe('config.ts', () => {
   });
 
   it('should return ^3 if pulumi-version is undefined', async () => {
-    jest.mock('@actions/core', () => ({
+    jest.unstable_mockModule('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
         switch (name) {
           case 'pulumi-version':
@@ -123,7 +123,7 @@ describe('config.ts', () => {
   });
 
   it('should read version from pulumi-version-file', async () => {
-    jest.mock('@actions/core', () => ({
+    jest.unstable_mockModule('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
         switch (name) {
           case 'pulumi-version-file':
@@ -156,7 +156,7 @@ describe('config.ts', () => {
   });
 
   it('should fail if pulumi-version-file does not exist', async () => {
-    jest.mock('@actions/core', () => ({
+    jest.unstable_mockModule('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
         switch (name) {
           case 'pulumi-version-file':
@@ -184,7 +184,7 @@ describe('config.ts', () => {
   });
 
   it('should fail if pulumi-version-file and pulumi-version are both provided', async () => {
-    jest.mock('@actions/core', () => ({
+    jest.unstable_mockModule('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
         switch (name) {
           case 'pulumi-version-file':
