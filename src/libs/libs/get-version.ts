@@ -7,10 +7,10 @@ import { maxSatisfying } from 'semver';
 import invariant from 'ts-invariant';
 import { getPlatform } from '../pulumi-cli';
 
-const VersionRt = rt.Record({
+const VersionRt = rt.Object({
   version: rt.String,
   date: rt.String,
-  downloads: rt.Record({
+  downloads: rt.Object({
     'linux-x64': rt.String,
     'linux-arm64': rt.String,
     'darwin-x64': rt.String,
