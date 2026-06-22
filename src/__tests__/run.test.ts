@@ -1,7 +1,12 @@
-import * as pulumiCli from '../libs/pulumi-cli';
-import { login } from '../login';
+import { jest } from '@jest/globals';
 
-const spy = jest.spyOn(pulumiCli, 'run');
+// login() calls pulumiCli.run; ESM namespaces can't be spied on, so mock the
+// module and assert against the mock function directly.
+const run = jest.fn();
+jest.unstable_mockModule('../libs/pulumi-cli', () => ({ run }));
+
+const { login } = await import('../login');
+const spy = run;
 
 const installConfig: Record<string, string> = {
   command: undefined,
@@ -25,7 +30,7 @@ describe('Config without a provided command', () => {
     jest.mock('@actions/github', () => ({
       context: {},
     }));
-    const { makeConfig } = require('../config');
+    const { makeConfig } = await import('../config');
     await expect(() => makeConfig()).toThrow();
   });
 
@@ -39,9 +44,12 @@ describe('Config without a provided command', () => {
       }),
       info: jest.fn(),
     }));
-    const { makeInstallationConfig } = require('../config');
+    const { makeInstallationConfig } = await import('../config');
     const conf = makeInstallationConfig();
     expect(conf.success).toBeTruthy();
+    if (!conf.success) {
+      return;
+    }
     expect(conf.value).toEqual({
       command: undefined,
       pulumiVersion: '^2',
@@ -49,8 +57,8 @@ describe('Config without a provided command', () => {
   });
 
   it('should read version from pulumi-version-file', async () => {
-    jest.mock('fs', () => ({
-      ...jest.requireActual('fs'),
+    jest.unstable_mockModule('fs', () => ({
+      ...jest.requireActual<typeof import('fs')>('fs'),
       readFileSync: jest.fn((path: string) => {
         expect(path).toEqual('.pulumi.version');
         return '3.121.0';
@@ -71,9 +79,12 @@ describe('Config without a provided command', () => {
       }),
     }));
 
-    const { makeInstallationConfig } = require('../config');
+    const { makeInstallationConfig } = await import('../config');
     const conf = makeInstallationConfig();
     expect(conf.success).toBeTruthy();
+    if (!conf.success) {
+      return;
+    }
     expect(conf.value).toEqual({
       command: undefined,
       pulumiVersion: '3.121.0',
@@ -81,8 +92,8 @@ describe('Config without a provided command', () => {
   });
 
   it('should fail if pulumi-version-file does not exist', async () => {
-    jest.mock('fs', () => ({
-      ...jest.requireActual('fs'),
+    jest.unstable_mockModule('fs', () => ({
+      ...jest.requireActual<typeof import('fs')>('fs'),
       readFileSync: jest.fn((path: string) => {
         expect(path).toEqual('.pulumi.version');
         return '3.121.0';
@@ -103,15 +114,15 @@ describe('Config without a provided command', () => {
       }),
     }));
 
-    const { makeInstallationConfig } = require('../config');
+    const { makeInstallationConfig } = await import('../config');
     expect(() => {
       makeInstallationConfig();
     }).toThrow(/pulumi-version-file '\.pulumi\.version' does not exist/);
   });
 
   it('should fail if pulumi-version-file and pulumi-version are both provided', async () => {
-    jest.mock('fs', () => ({
-      ...jest.requireActual('fs'),
+    jest.unstable_mockModule('fs', () => ({
+      ...jest.requireActual<typeof import('fs')>('fs'),
       readFileSync: jest.fn((path: string) => {
         expect(path).toEqual('.pulumi.version');
         return '3.121.0';
@@ -129,7 +140,7 @@ describe('Config without a provided command', () => {
       }),
     }));
 
-    const { makeInstallationConfig } = require('../config');
+    const { makeInstallationConfig } = await import('../config');
     expect(() => {
       makeInstallationConfig();
     }).toThrow(

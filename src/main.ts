@@ -8,7 +8,7 @@ import {
   OutputMap,
   Stack,
 } from '@pulumi/pulumi/automation';
-import invariant from 'ts-invariant';
+import { invariant } from 'ts-invariant';
 import {
   Commands,
   Config,

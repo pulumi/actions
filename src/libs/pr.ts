@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import dedent from 'dedent';
-import invariant from 'ts-invariant';
+import { invariant } from 'ts-invariant';
 import { Config } from '../config';
 import { stripAnsiControlCodes } from './utils';
 

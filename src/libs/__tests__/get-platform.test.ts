@@ -1,11 +1,16 @@
-import * as os from 'os';
+import { jest } from '@jest/globals';
 import * as playback from 'jest-playback';
-import { getPlatform } from '../pulumi-cli';
-playback.setup(__dirname);
+playback.setup();
 
-jest.mock('os');
+const platform = jest.fn<() => string>();
+const arch = jest.fn<() => string>();
+jest.unstable_mockModule('os', () => ({
+  platform,
+  arch,
+  homedir: jest.fn(() => '/home/test'),
+}));
 
-const mockedOs = jest.mocked(os);
+const { getPlatform } = await import('../pulumi-cli');
 
 describe('get-platform', () => {
   it.each([
@@ -21,9 +26,9 @@ describe('get-platform', () => {
     ['android', 'ia32', undefined],
   ] as const)(
     'should return platform for %s %s',
-    async (platform, arch, expected) => {
-      mockedOs.platform.mockReturnValue(platform);
-      mockedOs.arch.mockReturnValue(arch);
+    async (platformName, archName, expected) => {
+      platform.mockReturnValue(platformName);
+      arch.mockReturnValue(archName);
 
       const p = getPlatform();
       expect(p).toEqual(expected);

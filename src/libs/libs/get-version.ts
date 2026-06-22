@@ -1,10 +1,9 @@
 import * as core from "@actions/core";
 import { getOctokit } from '@actions/github';
 import type { RestEndpointMethodTypes } from '@octokit/plugin-rest-endpoint-methods';
-import got from 'got';
 import * as rt from 'runtypes';
 import { maxSatisfying } from 'semver';
-import invariant from 'ts-invariant';
+import { invariant } from 'ts-invariant';
 import { getPlatform } from '../pulumi-cli';
 
 const VersionRt = rt.Object({
@@ -120,10 +119,18 @@ function createPrVersion(range: string, artifactUrl: string): Version {
   };
 }
 
+async function httpGet(url: string): Promise<Response> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`GET ${url} failed: ${response.status} ${response.statusText}`);
+  }
+  return response;
+}
+
 export async function getVersionObject(range: string): Promise<Version> {
   if (range == 'dev') {
-    const result = await got('https://www.pulumi.com/latest-dev-version');
-    const version = 'v' + result.body.trim();
+    const result = await httpGet('https://www.pulumi.com/latest-dev-version');
+    const version = 'v' + (await result.text()).trim();
     const date = new Date().toISOString();
     const downloads = {
       'linux-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-linux-x64.tar.gz`,
@@ -149,13 +156,19 @@ export async function getVersionObject(range: string): Promise<Version> {
     return createPrVersion(range, artifactUrl);
   }
 
-  const result = await got(
+  const versions = await fetchVersions();
+  return resolveVersion(versions, range);
+}
+
+export async function fetchVersions(): Promise<Version[]> {
+  const result = await httpGet(
     'https://raw.githubusercontent.com/pulumi/docs/master/data/versions.json',
-    { responseType: 'json' },
   );
 
-  const versions = VersionsRt.check(result.body);
+  return VersionsRt.check(await result.json());
+}
 
+export function resolveVersion(versions: Version[], range: string): Version {
   if (range == 'latest') {
     const latest = versions.find((v) => v.latest);
     invariant(latest, 'expect a latest version to exists');

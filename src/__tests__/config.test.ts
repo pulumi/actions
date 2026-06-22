@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { makeConfig } from '../config';
 
 const defaultConfig: Record<string, string> = {
@@ -116,7 +117,7 @@ describe('config.ts', () => {
         return defaultConfig[name];
       }),
     }));
-    const { makeConfig } = require('../config');
+    const { makeConfig } = await import('../config');
     const conf = makeConfig();
     expect(conf.pulumiVersion).toEqual('^3');
   });
@@ -139,8 +140,8 @@ describe('config.ts', () => {
         return defaultConfig[name];
       }),
     }));
-    jest.mock('fs', () => ({
-      ...jest.requireActual('fs'),
+    jest.unstable_mockModule('fs', () => ({
+      ...jest.requireActual<typeof import('fs')>('fs'),
       readFileSync: jest.fn((path: string) => {
         expect(path).toEqual('.pulumi.version');
         return '3.121.0';
@@ -149,7 +150,7 @@ describe('config.ts', () => {
         return true;
       }),
     }));
-    const { makeConfig } = require('../config');
+    const { makeConfig } = await import('../config');
     const conf = makeConfig();
     expect(conf.pulumiVersion).toEqual('3.121.0');
   });
@@ -166,8 +167,8 @@ describe('config.ts', () => {
         return defaultConfig[name];
       }),
     }));
-    jest.mock('fs', () => ({
-      ...jest.requireActual('fs'),
+    jest.unstable_mockModule('fs', () => ({
+      ...jest.requireActual<typeof import('fs')>('fs'),
       readFileSync: jest.fn((path: string) => {
         expect(path).toEqual('.pulumi.version');
         return '3.121.0';
@@ -176,7 +177,7 @@ describe('config.ts', () => {
         return false;
       }),
     }));
-    const { makeConfig } = require('../config');
+    const { makeConfig } = await import('../config');
     expect(() => {
       makeConfig();
     }).toThrow(/pulumi-version-file '\.pulumi\.version' does not exist/);
@@ -194,8 +195,8 @@ describe('config.ts', () => {
         return defaultConfig[name];
       }),
     }));
-    jest.mock('fs', () => ({
-      ...jest.requireActual('fs'),
+    jest.unstable_mockModule('fs', () => ({
+      ...jest.requireActual<typeof import('fs')>('fs'),
       readFileSync: jest.fn((path: string) => {
         expect(path).toEqual('.pulumi.version');
         return '3.121.0';
@@ -204,7 +205,7 @@ describe('config.ts', () => {
         return false;
       }),
     }));
-    const { makeConfig } = require('../config');
+    const { makeConfig } = await import('../config');
     expect(() => {
       makeConfig();
     }).toThrow(
