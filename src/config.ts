@@ -15,7 +15,7 @@ import { parseSemicolorToArray } from './libs/utils';
 // the user intends to download the Pulumi CLI without
 // running any other Pulumi operations.
 // We expect command NOT to be provided.
-export const installationConfig = rt.Record({
+export const installationConfig = rt.Object({
   command: rt.Undefined,
   pulumiVersion: rt.String,
 });
@@ -39,7 +39,7 @@ export function makeInstallationConfig(): rt.Result<InstallationConfig> {
       throw new Error(`pulumi-version-file '${versionFile}' does not exist`);
     }
   }
-  return installationConfig.validate({
+  return installationConfig.inspect({
     command: getInput('command') || undefined,
     pulumiVersion: pulumiVersion ?? '^3',
   });
