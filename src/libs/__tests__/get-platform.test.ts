@@ -2,12 +2,14 @@ import { jest } from '@jest/globals';
 import * as playback from 'jest-playback';
 playback.setup();
 
+const actualOs = jest.requireActual<typeof import('os')>('os');
 const platform = jest.fn<() => string>();
 const arch = jest.fn<() => string>();
 jest.unstable_mockModule('os', () => ({
+  ...actualOs,
+  default: { ...actualOs, platform, arch },
   platform,
   arch,
-  homedir: jest.fn(() => '/home/test'),
 }));
 
 const { getPlatform } = await import('../pulumi-cli');

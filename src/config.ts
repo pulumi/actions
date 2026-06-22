@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { ConfigMap } from '@pulumi/pulumi/automation';
+import * as rt from 'runtypes';
 import {
   getBooleanInput,
   getInput,
@@ -7,8 +8,7 @@ import {
   getNumberInput,
   getUnionInput,
   getYAMLInput,
-} from 'actions-parsers';
-import * as rt from 'runtypes';
+} from './libs/inputs';
 import { parseSemicolorToArray } from './libs/utils';
 
 // installationConfig is the expected Action inputs when

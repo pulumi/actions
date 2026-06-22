@@ -27,7 +27,7 @@ describe('Config without a provided command', () => {
   });
 
   it('should not be validated by makeConfig', async () => {
-    jest.mock('@actions/github', () => ({
+    jest.unstable_mockModule('@actions/github', () => ({
       context: {},
     }));
     const { makeConfig } = await import('../config');
@@ -35,7 +35,7 @@ describe('Config without a provided command', () => {
   });
 
   it('should be validated by makeInstallationConfig', async () => {
-    jest.mock('@actions/core', () => ({
+    jest.unstable_mockModule('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
         return installConfig[name];
       }),
@@ -67,7 +67,7 @@ describe('Config without a provided command', () => {
         return true;
       }),
     }));
-    jest.mock('@actions/core', () => ({
+    jest.unstable_mockModule('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
         switch (name) {
           case 'pulumi-version-file':
@@ -102,7 +102,7 @@ describe('Config without a provided command', () => {
         return false;
       }),
     }));
-    jest.mock('@actions/core', () => ({
+    jest.unstable_mockModule('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
         switch (name) {
           case 'pulumi-version-file':
@@ -131,7 +131,7 @@ describe('Config without a provided command', () => {
         return false;
       }),
     }));
-    jest.mock('@actions/core', () => ({
+    jest.unstable_mockModule('@actions/core', () => ({
       getInput: jest.fn((name: string) => {
         if (name === 'pulumi-version-file') {
           return '.pulumi.version';
