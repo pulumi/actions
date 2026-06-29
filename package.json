@@ -49,7 +49,7 @@
     "@actions/github": "^9.1.1",
     "@actions/io": "^3.0.2",
     "@actions/tool-cache": "^4.0.0",
-    "@pulumi/pulumi": "~3.248.0",
+    "@pulumi/pulumi": "~3.206.0",
     "dedent": "^1.7.2",
     "envalid": "^8.2.0",
     "runtypes": "^7.0.4",
