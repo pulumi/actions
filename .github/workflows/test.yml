@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v6
         with:
-          go-version: '^1.13.1'
+          go-version: oldstable
       - run: |
           pulumi login --local
           pulumi stack init dev
@@ -86,7 +86,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v6
         with:
-          go-version: '^1.13.1'
+          go-version: oldstable
       - run: |
           pulumi login --local
           pulumi stack init dev
