@@ -253,7 +253,7 @@ jobs:
 
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.22.x
+          go-version: oldstable
 
       - name: Ensure Stack Exists
         if: matrix.command == 'output'
