@@ -69,20 +69,20 @@ describe('summary.ts', () => {
   })
 
   it('should trim the output when the output is larger than 1 MiB', async () => {
-    const message = 'this is at the begining and should not be in the output' + 'a'.repeat(1_048_576) + 'this is at the end and should be in the output';
+    const message = 'this is at the beginning and should not be in the output' + 'a'.repeat(1_048_576) + 'this is at the end and should be in the output';
 
     await handleSummaryMessage(defaultOptions, projectName, message);
     const summary = await getSummary()
 
     expect(Buffer.byteLength(summary, 'utf8')).toBeLessThan(1_048_576);
-    expect(summary).toContain('this is at the begining and should not be in the output')
+    expect(summary).toContain('this is at the beginning and should not be in the output')
     expect(summary).toContain('The output was too long and trimmed.');
     expect(summary).not.toContain('this is at the end and should be in the output');
     expect(summary).not.toContain('The output was too long and trimmed from the front.');
   })
 
   it('should trim the output from front when the output is larger than 1 MiB and config is set', async () => {
-    const message = 'this is at the begining and should not be in the output' + 'a'.repeat(1_048_576) + 'this is at the end and should be in the output';
+    const message = 'this is at the beginning and should not be in the output' + 'a'.repeat(1_048_576) + 'this is at the end and should be in the output';
 
     const options: Config = {
       ...defaultOptions,
@@ -95,7 +95,7 @@ describe('summary.ts', () => {
     expect(Buffer.byteLength(summary, 'utf8')).toBeLessThan(1_048_576);
     expect(summary).toContain('this is at the end and should be in the output');
     expect(summary).toContain('The output was too long and trimmed from the front.');
-    expect(summary).not.toContain('this is at the begining and should not be in the output')
+    expect(summary).not.toContain('this is at the beginning and should not be in the output')
     expect(summary).not.toContain('The output was too long and trimmed.');
   })
 
