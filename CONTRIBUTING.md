@@ -60,7 +60,7 @@ latest release is `v3.18.1`, and you wish to cut `v3.19.0`.
 
 8. Under `Release Title`, enter the name of your release, `v3.19.0`
 
-9. Press the button `Geneate release notes`. Replace the section `What's New`
+9. Press the button `Generate release notes`. Replace the section `What's New`
    with the changes you added to `CHANGELOG.md`.
 
 10. Press the `Publish release` button.
