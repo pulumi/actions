@@ -1440,10 +1440,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.1.tgz#eaee5900122c110a3dbcb728c0597014a2621774"
   integrity sha512-oOAWABowe8EAbMyWKM0tYDKi8Yaox52D+HWZhAIJqQXbqe0xI/GV7FhLWqlEKreMkfDjshR5FKgi3mnle0h6Eg==
 
-"@pulumi/pulumi@~3.257.0":
-  version "3.257.0"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.257.0.tgz#69e3f3005186edbaa335a51c78f46ab69bdf59f2"
-  integrity sha512-YjI+4ClA3AwGoMR1J58GZpt81P0vTJQHi22l4JGSl8YAnPjuJPcvpuOFt8BJrY659bznBUnIS/fDTiCHcEWxCA==
+"@pulumi/pulumi@~3.259.0":
+  version "3.259.0"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.259.0.tgz#d300bc9e9038153c41f3f6cb99fed7e9835cee12"
+  integrity sha512-DRc1bDHWTofZGkKcs/bx98LujCZJNoKRkOdeEhQZNz7wPUX/obhuzmWJezew2FUCEAy1xXHtQj1CTcANHoLn3A==
   dependencies:
     "@grpc/grpc-js" "^1.10.1"
     "@logdna/tail-file" "^2.0.6"
@@ -2445,10 +2445,10 @@ eslint-visitor-keys@^5.0.0, eslint-visitor-keys@^5.0.1:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-5.0.1.tgz#9e3c9489697824d2d4ce3a8ad12628f91e9f59be"
   integrity sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA==
 
-eslint@~10.8.1:
-  version "10.8.1"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-10.8.1.tgz#fb37d514c19b6dd5b2d6b70169fd26fddfa97967"
-  integrity sha512-wqA7W2jbsC/BnV9Iv1UZpKVFkO1AdNoSmYW8NWG4HNOBbkAMvIqDZ27pI2f07dqn583NcIC44ckjAcOXDL1QbQ==
+eslint@~10.9.0:
+  version "10.9.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-10.9.0.tgz#3d86068a06c6c78161a4062e69874d38f59d498b"
+  integrity sha512-5KeEOJZBfEVA47boFiBsf+6MmmJpffM7qEBg4pLla2e4nlKgdKlqCW0oSLOGsT8Wl5uCGJptLV1bkaiShj90Gw==
   dependencies:
     "@eslint-community/eslint-utils" "^4.8.0"
     "@eslint-community/regexpp" "^4.12.2"
