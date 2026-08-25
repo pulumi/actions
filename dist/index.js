@@ -372492,7 +372492,7 @@ const Void = (/* unused pure expression or super */ null && (Unknown));
 
 
 ;// CONCATENATED MODULE: ./node_modules/js-yaml/dist/js-yaml.mjs
-/*! js-yaml 5.3.0 https://github.com/nodeca/js-yaml @license MIT */
+/*! js-yaml 5.4.0 https://github.com/nodeca/js-yaml @license MIT */
 //#region src/tag.ts
 /**
 * Returned by a scalar resolver when the source does not match its tag.
@@ -374411,6 +374411,24 @@ function testDocumentSeparator(state, position = state.position) {
 	}
 	return false;
 }
+function skipByteOrderMark(state) {
+	if (state.position === state.lineStart && state.input.charCodeAt(state.position) === 65279) {
+		state.position++;
+		state.lineStart = state.position;
+	}
+}
+function testDocumentBoundary(state) {
+	if (state.position !== state.lineStart) return false;
+	if (testDocumentSeparator(state)) return true;
+	if (state.input.charCodeAt(state.position) !== 65279) return false;
+	const snapshot = snapshotState(state);
+	skipByteOrderMark(state);
+	skipSeparationSpace(state, true);
+	const ch = state.input.charCodeAt(state.position);
+	const result = state.position === state.lineStart && (ch === 37 || ch === 45 && testDocumentSeparator(state));
+	restoreState(state, snapshot);
+	return result;
+}
 function skipUntilLineEnd(state) {
 	let ch = state.input.charCodeAt(state.position);
 	while (ch !== 0 && !isEol(ch)) ch = state.input.charCodeAt(++state.position);
@@ -374594,7 +374612,7 @@ function readBlockScalar(state, parentIndent, props) {
 			} else if (column > 0) valueEnd = linePosition + column;
 			break;
 		}
-		if (linePosition === state.lineStart && testDocumentSeparator(state, linePosition)) break;
+		if (testDocumentBoundary(state)) break;
 		if (!detectedIndent && contentIndent === -1 && isEol(first)) maxLeadingIndent = Math.max(maxLeadingIndent, column);
 		if (!detectedIndent && contentIndent === -1 && !isEol(first)) {
 			if (first === 9 && column < parentIndent) {
@@ -374647,7 +374665,7 @@ function readPlainScalar(state, nodeIndent, nodeContext, props) {
 	const inFlow = nodeContext === CONTEXT_FLOW_IN;
 	let multiline = false;
 	while (ch !== 0) {
-		if (state.position === state.lineStart && testDocumentSeparator(state)) break;
+		if (testDocumentBoundary(state)) break;
 		if (ch === 58) {
 			const following = state.input.charCodeAt(state.position + 1);
 			if (isWsOrEolOrEnd(following) || inFlow && isFlowIndicator(following)) break;
@@ -375004,7 +375022,7 @@ function readDocument(state) {
 	const documentEvent = state.events[documentEventIndex];
 	if (documentEvent?.type === EVENT_ID.DOCUMENT) documentEvent.explicitEnd = explicitEnd;
 	addPopEvent(state);
-	if (!explicitEnd && state.position < state.length && !(state.position === state.lineStart && testDocumentSeparator(state))) throwError(state, "end of the stream or a document separator is expected");
+	if (!explicitEnd && state.position < state.length && !testDocumentBoundary(state)) throwError(state, "end of the stream or a document separator is expected");
 }
 /**
 * Parses YAML into a flat event stream referencing source text by offsets.
@@ -375030,8 +375048,8 @@ function parseEvents(input, options) {
 	};
 	const nullpos = input.indexOf("\0");
 	if (nullpos !== -1) YAMLException.throwAt(input, nullpos, "null byte is not allowed in input", state.filename);
-	if (state.input.charCodeAt(state.position) === 65279) state.position++;
 	while (state.position < state.length) {
+		skipByteOrderMark(state);
 		skipSeparationSpace(state, true);
 		if (state.position >= state.length) break;
 		const documentStart = state.position;
@@ -375106,25 +375124,6 @@ function load(input, options) {
 	throw new YAMLException("expected a single document in the stream, but found more");
 }
 //#endregion
-//#region src/ast/nodes.ts
-/**
-* Style bitfields, defined as a class only to initialize their defaults.
-*
-* Manually assigned styles are hints; the presenter may use a fallback when
-* needed to produce valid YAML.
-*
-* @category Nodes
-*/
-var Style = class {
-	/** Whether to print the node's tag explicitly. */
-	tagged = false;
-	flow = false;
-	singleQuoted = false;
-	doubleQuoted = false;
-	literal = false;
-	folded = false;
-};
-//#endregion
 //#region src/ast/from_js.ts
 var INVALID = Symbol("INVALID");
 function buildRepresentTypes(schema) {
@@ -375174,8 +375173,6 @@ function build(state, object) {
 			if (existing.anchor === void 0) existing.anchor = `ref_${state.refCounter++}`;
 			return {
 				kind: "alias",
-				tag: "",
-				style: new Style(),
 				anchor: existing.anchor
 			};
 		}
@@ -375188,24 +375185,20 @@ function build(state, object) {
 	}
 	const { tag, tagName, implicitTag } = matched;
 	const nodeTagName = implicitTag ? tagName : tagNameShort(tagName);
-	if (tag.nodeKind === "scalar") {
-		const style = new Style();
-		style.tagged = !implicitTag;
-		return {
-			kind: "scalar",
-			tag: nodeTagName,
-			style,
-			value: tag.represent(object)
-		};
-	}
+	if (tag.nodeKind === "scalar") return {
+		kind: "scalar",
+		tag: nodeTagName,
+		tagged: !implicitTag,
+		style: SCALAR_STYLE.PLAIN,
+		value: tag.represent(object)
+	};
 	if (tag.nodeKind === "sequence") {
 		const container = tag.represent(object);
-		const style = new Style();
-		style.tagged = !implicitTag;
 		const node = {
 			kind: "sequence",
 			tag: nodeTagName,
-			style,
+			tagged: !implicitTag,
+			style: COLLECTION_STYLE.BLOCK,
 			items: []
 		};
 		if (!state.noRefs) state.refs.set(object, node);
@@ -375218,12 +375211,11 @@ function build(state, object) {
 		return node;
 	}
 	const map = tag.represent(object);
-	const style = new Style();
-	style.tagged = !implicitTag;
 	const node = {
 		kind: "mapping",
 		tag: nodeTagName,
-		style,
+		tagged: !implicitTag,
+		style: COLLECTION_STYLE.BLOCK,
 		items: []
 	};
 	if (!state.noRefs) state.refs.set(object, node);
@@ -375317,83 +375309,207 @@ function visit(documents, visitor) {
 	})) return;
 }
 //#endregion
-//#region src/ast/presenter.ts
-var CHAR_BOM = 65279;
-var CHAR_TAB = 9;
-var CHAR_LINE_FEED = 10;
-var CHAR_CARRIAGE_RETURN = 13;
-var CHAR_SPACE = 32;
-var CHAR_EXCLAMATION = 33;
-var CHAR_DOUBLE_QUOTE = 34;
-var CHAR_SHARP = 35;
-var CHAR_PERCENT = 37;
-var CHAR_AMPERSAND = 38;
-var CHAR_SINGLE_QUOTE = 39;
-var CHAR_ASTERISK = 42;
-var CHAR_COMMA = 44;
-var CHAR_MINUS = 45;
-var CHAR_COLON = 58;
-var CHAR_EQUALS = 61;
-var CHAR_GREATER_THAN = 62;
-var CHAR_QUESTION = 63;
-var CHAR_COMMERCIAL_AT = 64;
-var CHAR_LEFT_SQUARE_BRACKET = 91;
-var CHAR_RIGHT_SQUARE_BRACKET = 93;
-var CHAR_GRAVE_ACCENT = 96;
-var CHAR_LEFT_CURLY_BRACKET = 123;
-var CHAR_VERTICAL_LINE = 124;
-var CHAR_RIGHT_CURLY_BRACKET = 125;
-var ESCAPE_SEQUENCES = {};
-ESCAPE_SEQUENCES[0] = "\\0";
-ESCAPE_SEQUENCES[7] = "\\a";
-ESCAPE_SEQUENCES[8] = "\\b";
-ESCAPE_SEQUENCES[9] = "\\t";
-ESCAPE_SEQUENCES[10] = "\\n";
-ESCAPE_SEQUENCES[11] = "\\v";
-ESCAPE_SEQUENCES[12] = "\\f";
-ESCAPE_SEQUENCES[13] = "\\r";
-ESCAPE_SEQUENCES[27] = "\\e";
-ESCAPE_SEQUENCES[34] = "\\\"";
-ESCAPE_SEQUENCES[92] = "\\\\";
-ESCAPE_SEQUENCES[133] = "\\N";
-ESCAPE_SEQUENCES[160] = "\\_";
-ESCAPE_SEQUENCES[8232] = "\\L";
-ESCAPE_SEQUENCES[8233] = "\\P";
-var DEFAULT_PRESENTER_OPTIONS = {
-	indent: 2,
-	seqNoIndent: false,
-	seqInlineFirst: true,
-	sortKeys: false,
-	lineWidth: 80,
-	flowBracketPadding: false,
-	flowSkipCommaSpace: false,
-	flowSkipColonSpace: false,
-	quoteFlowKeys: false,
-	quoteStyle: "single",
-	forceQuotes: false,
-	tagBeforeAnchor: false
+//#region src/ast/styler_defaults.ts
+function hasBit(mask, bit) {
+	return (mask & 1 << bit) !== 0;
+}
+/**
+* Default scalar styling rules in application order.
+* See [Scalar styling](../../docs/scalar_styling.md) for usage details.
+*
+* @category AST
+*/
+var DEFAULT_SCALAR_STYLE_RULES = {
+	applyQuoteFlowKeysOption,
+	doubleQuoteForInvisibles,
+	doubleQuoteWhitespaceOnly,
+	applyForceQuotesOption,
+	tryLongOrMultilineAsBlock,
+	quoteInvalidPlain,
+	fallbackToDoubleQuoted
 };
-function nodeTagShort(node) {
-	return node.style.tagged ? node.tag : tagNameShort(node.tag);
+function _preferredQuotedStyle(layout) {
+	if (layout.presenterOptions.quoteStyle === "single" && hasBit(layout.allowedStylesMask, SCALAR_STYLE.SINGLE_QUOTED)) return SCALAR_STYLE.SINGLE_QUOTED;
+	return SCALAR_STYLE.DOUBLE_QUOTED;
 }
-function createPresenterState(options) {
-	const opts = {
-		...DEFAULT_PRESENTER_OPTIONS,
-		...options
-	};
-	return {
-		...opts,
-		defaultScalarTagName: opts.schema.defaultScalarTag.tagName
-	};
+function applyQuoteFlowKeysOption(layout) {
+	if (!layout.presenterOptions.quoteFlowKeys) return;
+	if (!layout.isKey || !layout.flowOnly || layout.style !== SCALAR_STYLE.PLAIN) return;
+	layout.style = SCALAR_STYLE.DOUBLE_QUOTED;
 }
-function encodeNonPrintable(character) {
-	const string = character.toString(16).toUpperCase();
-	const handle = character <= 255 ? "x" : "u";
-	const length = character <= 255 ? 2 : 4;
-	return `\\${handle}${"0".repeat(length - string.length)}${string}`;
+function doubleQuoteForInvisibles(layout) {
+	if (layout.style === SCALAR_STYLE.PLAIN && /[\t\x7F-\xA0\u2028\u2029\uFEFF\uFFFE\uFFFF]/.test(layout.node.value)) layout.style = SCALAR_STYLE.DOUBLE_QUOTED;
+}
+function doubleQuoteWhitespaceOnly(layout) {
+	if (layout.style === SCALAR_STYLE.PLAIN && /^\s+$/.test(layout.node.value)) layout.style = SCALAR_STYLE.DOUBLE_QUOTED;
+}
+function applyForceQuotesOption(layout) {
+	if (!layout.presenterOptions.forceQuotes) return;
+	if (layout.isKey || layout.style !== SCALAR_STYLE.PLAIN) return;
+	layout.style = layout.node.value.includes("\n") ? SCALAR_STYLE.DOUBLE_QUOTED : _preferredQuotedStyle(layout);
+}
+function tryLongOrMultilineAsBlock(layout) {
+	if (layout.style !== SCALAR_STYLE.PLAIN || layout.isKey) return;
+	const value = layout.node.value;
+	const multiline = value.indexOf("\n") !== -1;
+	if (!hasBit(layout.allowedStylesMask, SCALAR_STYLE.LITERAL_BLOCK)) {
+		if (multiline) layout.style = SCALAR_STYLE.DOUBLE_QUOTED;
+		return;
+	}
+	const w = layout.presenterOptions.lineWidth;
+	if (w === -1) {
+		if (multiline) layout.style = SCALAR_STYLE.LITERAL_BLOCK;
+		return;
+	}
+	const availableWidth = Math.max(Math.min(w, 40), w - layout.shiftOfContent);
+	let position = 0;
+	let shouldFold = false;
+	while (position <= value.length) {
+		let lineEnd = value.length;
+		const nextLineBreak = value.indexOf("\n", position);
+		if (nextLineBreak !== -1) lineEnd = nextLineBreak;
+		const line = value.slice(position, lineEnd);
+		if (line.length > availableWidth && line[0] !== " " && / [^ \t]/.test(line)) shouldFold = true;
+		if (nextLineBreak === -1) break;
+		position = nextLineBreak + 1;
+	}
+	if (shouldFold) layout.style = SCALAR_STYLE.FOLDED_BLOCK;
+	else if (multiline) layout.style = SCALAR_STYLE.LITERAL_BLOCK;
+}
+function quoteInvalidPlain(layout) {
+	if (layout.style === SCALAR_STYLE.PLAIN && !hasBit(layout.allowedStylesMask, SCALAR_STYLE.PLAIN)) layout.style = _preferredQuotedStyle(layout);
+}
+function fallbackToDoubleQuoted(layout) {
+	if (!hasBit(layout.allowedStylesMask, layout.style)) layout.style = SCALAR_STYLE.DOUBLE_QUOTED;
+}
+//#endregion
+//#region src/ast/scalar_styler.ts
+function setBit(mask, bit) {
+	return mask | 1 << bit;
+}
+var SRC_C_PRINTABLE = "[\\x09\\x0A\\x0D\\x20-\\x7E\\x85\\xA0-\\uD7FF\\uE000-\\uFFFD\\u{10000}-\\u{10FFFF}]";
+var SRC_B_CHAR = "[\\n\\r]";
+var SRC_C_BYTE_ORDER_MARK = "\\uFEFF";
+var SRC_S_WHITE = "[ \\t]";
+var SRC_NB_CHAR = `(?:(?!(?:${SRC_B_CHAR}|${SRC_C_BYTE_ORDER_MARK}))${SRC_C_PRINTABLE})`;
+var SRC_NS_CHAR = `(?:(?!${SRC_S_WHITE})${SRC_NB_CHAR})`;
+var SRC_NB_JSON = "[\\x09\\x20-\\uD7FF\\uE000-\\uFFFF\\u{10000}-\\u{10FFFF}]";
+var SRC_C_INDICATOR = "[-?:,\\[\\]{}#&*!|>'\"%@`]";
+var SRC_C_FLOW_INDICATOR = "[,\\[\\]{}]";
+var SRC_NS_PLAIN_SAFE_FLOW_OUT = SRC_NS_CHAR;
+var SRC_NS_PLAIN_SAFE_FLOW_IN = `(?:(?!${SRC_C_FLOW_INDICATOR})${SRC_NS_CHAR})`;
+var SRC_NS_PLAIN_FIRST_FLOW_OUT = `(?:(?:(?!${SRC_C_INDICATOR})${SRC_NS_CHAR})|[?:-](?=${SRC_NS_PLAIN_SAFE_FLOW_OUT}))`;
+var SRC_NS_PLAIN_FIRST_FLOW_IN = `(?:(?:(?!${SRC_C_INDICATOR})${SRC_NS_CHAR})|[?:-](?=${SRC_NS_PLAIN_SAFE_FLOW_IN}))`;
+var SRC_NS_PLAIN_CHAR_FLOW_OUT = `(?:(?:(?![:#])${SRC_NS_PLAIN_SAFE_FLOW_OUT})|:(?=${SRC_NS_PLAIN_SAFE_FLOW_OUT}))#*`;
+var SRC_NS_PLAIN_CHAR_FLOW_IN = `(?:(?:(?![:#])${SRC_NS_PLAIN_SAFE_FLOW_IN})|:(?=${SRC_NS_PLAIN_SAFE_FLOW_IN}))#*`;
+var SRC_NB_NS_PLAIN_IN_LINE_FLOW_OUT = `(?:${SRC_S_WHITE}*${SRC_NS_PLAIN_CHAR_FLOW_OUT})*`;
+var SRC_NB_NS_PLAIN_IN_LINE_FLOW_IN = `(?:${SRC_S_WHITE}*${SRC_NS_PLAIN_CHAR_FLOW_IN})*`;
+var SRC_NS_PLAIN_ONE_LINE_FLOW_OUT = `${SRC_NS_PLAIN_FIRST_FLOW_OUT}#*${SRC_NB_NS_PLAIN_IN_LINE_FLOW_OUT}`;
+var SRC_NS_PLAIN_ONE_LINE_FLOW_IN = `${SRC_NS_PLAIN_FIRST_FLOW_IN}#*${SRC_NB_NS_PLAIN_IN_LINE_FLOW_IN}`;
+var SRC_NS_PLAIN_ONE_LINE_BLOCK_KEY = SRC_NS_PLAIN_ONE_LINE_FLOW_OUT;
+var SRC_NS_PLAIN_ONE_LINE_FLOW_KEY = SRC_NS_PLAIN_ONE_LINE_FLOW_IN;
+var SRC_S_NS_PLAIN_NEXT_LINE_FLOW_OUT = `\\n+${SRC_NS_PLAIN_CHAR_FLOW_OUT}${SRC_NB_NS_PLAIN_IN_LINE_FLOW_OUT}`;
+var SRC_S_NS_PLAIN_NEXT_LINE_FLOW_IN = `\\n+${SRC_NS_PLAIN_CHAR_FLOW_IN}${SRC_NB_NS_PLAIN_IN_LINE_FLOW_IN}`;
+var SRC_NS_PLAIN_MULTI_LINE_FLOW_OUT = `${SRC_NS_PLAIN_ONE_LINE_FLOW_OUT}(?:${SRC_S_NS_PLAIN_NEXT_LINE_FLOW_OUT})*`;
+var SRC_NS_PLAIN_MULTI_LINE_FLOW_IN = `${SRC_NS_PLAIN_ONE_LINE_FLOW_IN}(?:${SRC_S_NS_PLAIN_NEXT_LINE_FLOW_IN})*`;
+var NS_PLAIN_FLOW_OUT = new RegExp(`^(?:${SRC_NS_PLAIN_MULTI_LINE_FLOW_OUT})$`, "u");
+var NS_PLAIN_FLOW_IN = new RegExp(`^(?:${SRC_NS_PLAIN_MULTI_LINE_FLOW_IN})$`, "u");
+var NS_PLAIN_BLOCK_KEY = new RegExp(`^(?:${SRC_NS_PLAIN_ONE_LINE_BLOCK_KEY})$`, "u");
+var NS_PLAIN_FLOW_KEY = new RegExp(`^(?:${SRC_NS_PLAIN_ONE_LINE_FLOW_KEY})$`, "u");
+var NB_SINGLE_ONE_LINE = new RegExp(`^(?:${SRC_NB_JSON})*$`, "u");
+var NB_SINGLE_MULTI_LINE = new RegExp(`^(?:${SRC_NB_JSON}|\\n)*$`, "u");
+var BLOCK_SCALAR_CONTENT = new RegExp(`^(?:${SRC_NB_CHAR}|\\n)*$`, "u");
+var C_FORBIDDEN_FIRST_LINE = /^(?:---|\.\.\.)(?=$|[ \t\n\r])/;
+var C_FORBIDDEN_CONTENT = /^(?:---|\.\.\.)(?=$|[ \t\n\r])/m;
+function canUsePlain(layout) {
+	const str = layout.node.value;
+	if (str !== "") {
+		if (!(layout.isKey ? layout.flowOnly ? NS_PLAIN_FLOW_KEY : NS_PLAIN_BLOCK_KEY : layout.flowOnly ? NS_PLAIN_FLOW_IN : NS_PLAIN_FLOW_OUT).test(str)) return false;
+		if (layout.shiftOfFirstLine === 0 && C_FORBIDDEN_FIRST_LINE.test(str)) return false;
+		if (layout.shiftOfContent === 0) {
+			const firstLineBreak = str.indexOf("\n");
+			if (firstLineBreak !== -1) {
+				const content = str.slice(firstLineBreak + 1);
+				if (C_FORBIDDEN_CONTENT.test(content)) return false;
+			}
+		}
+	}
+	const resolvedTag = layout.presenterOptions.schema.resolveImplicitScalarTag(str).tag.tagName;
+	if (!layout.node.tagged && resolvedTag !== layout.node.tag) return false;
+	if (!layout.node.tagged && str === "=" && resolvedTag === layout.presenterOptions.schema.defaultScalarTag.tagName) return false;
+	return true;
+}
+function canUseSingleQuoted(layout) {
+	const str = layout.node.value;
+	if (!(layout.isKey ? NB_SINGLE_ONE_LINE : NB_SINGLE_MULTI_LINE).test(str)) return false;
+	if (/[ \t]\n|\n[ \t]/.test(str)) return false;
+	if (!layout.isKey && layout.shiftOfContent === 0) {
+		const firstLineBreak = str.indexOf("\n");
+		if (firstLineBreak !== -1 && C_FORBIDDEN_CONTENT.test(str.slice(firstLineBreak + 1))) return false;
+	}
+	return true;
+}
+function canUseBlock(layout) {
+	if (layout.flowOnly || !BLOCK_SCALAR_CONTENT.test(layout.node.value)) return false;
+	const contentIndent = layout.shiftOfContent - layout.shiftOfParent;
+	if (contentIndent < 1) return false;
+	if (contentIndent > 9 && /^\n* /.test(layout.node.value)) return false;
+	if (layout.shiftOfContent === 0 && C_FORBIDDEN_CONTENT.test(layout.node.value)) return false;
+	return true;
+}
+function detectAllowedStyles(layout) {
+	let mask = setBit(0, SCALAR_STYLE.DOUBLE_QUOTED);
+	if (canUsePlain(layout)) mask = setBit(mask, SCALAR_STYLE.PLAIN);
+	if (canUseSingleQuoted(layout)) mask = setBit(mask, SCALAR_STYLE.SINGLE_QUOTED);
+	if (canUseBlock(layout)) mask = setBit(setBit(mask, SCALAR_STYLE.LITERAL_BLOCK), SCALAR_STYLE.FOLDED_BLOCK);
+	layout.allowedStylesMask = mask;
+}
+function renderScalar(layout) {
+	switch (layout.style) {
+		case SCALAR_STYLE.PLAIN: return renderPlain(layout);
+		case SCALAR_STYLE.SINGLE_QUOTED: return renderSingleQuoted(layout);
+		case SCALAR_STYLE.LITERAL_BLOCK: return renderLiteralBlock(layout);
+		case SCALAR_STYLE.FOLDED_BLOCK: return renderFoldedBlock(layout);
+		case SCALAR_STYLE.DOUBLE_QUOTED: return renderDoubleQuoted(layout);
+	}
+}
+function renderPlain(layout) {
+	return encodeFlowBreaks(layout.node.value, layout.shiftOfContent);
+}
+function renderSingleQuoted(layout) {
+	return `'${encodeFlowBreaks(layout.node.value, layout.shiftOfContent).replace(/'/g, "''")}'`;
+}
+function renderLiteralBlock(layout) {
+	const value = layout.node.value;
+	return "|" + blockHeader(value, layout.shiftOfParent, layout.shiftOfContent) + dropEndingNewline(indentString(value, layout.shiftOfContent));
+}
+function renderFoldedBlock(layout) {
+	const value = layout.node.value;
+	const w = layout.presenterOptions.lineWidth;
+	let availableWidth = Infinity;
+	if (w !== -1) availableWidth = Math.max(Math.min(w, 40), w - layout.shiftOfContent);
+	return ">" + blockHeader(value, layout.shiftOfParent, layout.shiftOfContent) + dropEndingNewline(indentString(foldBlockScalar(value, availableWidth), layout.shiftOfContent));
+}
+function renderDoubleQuoted(layout) {
+	return `"${escapeString(layout.node.value)}"`;
+}
+function encodeFlowBreaks(string, shiftOfContent) {
+	let nextLF = string.indexOf("\n");
+	if (nextLF === -1) return string;
+	const pad = " ".repeat(shiftOfContent);
+	let result = string.slice(0, nextLF);
+	const lineRe = /(\n+)([^\n]*)/g;
+	lineRe.lastIndex = nextLF;
+	let match;
+	while (match = lineRe.exec(string)) {
+		const breaks = match[1].length;
+		const line = match[2];
+		result += "\n".repeat(breaks + 1) + pad + line;
+	}
+	return result;
 }
 function indentString(string, spaces) {
-	const ind = " ".repeat(spaces);
+	const indent = " ".repeat(spaces);
 	let position = 0;
 	let result = "";
 	const length = string.length;
@@ -375407,183 +375523,24 @@ function indentString(string, spaces) {
 			line = string.slice(position, next + 1);
 			position = next + 1;
 		}
-		if (line.length && line !== "\n") result += ind;
+		if (line.length && line !== "\n") result += indent;
 		result += line;
 	}
 	return result;
 }
-function generateNextLine(state, level) {
-	return `\n${" ".repeat(state.indent * level)}`;
-}
-function scalarLayout(state, level) {
-	const indent = state.indent * Math.max(1, level);
-	return {
-		indent,
-		blockIndent: level === 0 ? state.indent + 1 : state.indent,
-		lineWidth: state.lineWidth === -1 ? -1 : Math.max(Math.min(state.lineWidth, 40), state.lineWidth - indent)
-	};
-}
-function isWhitespace(c) {
-	return c === CHAR_SPACE || c === CHAR_TAB;
-}
-function startsWithDocumentSeparator(string) {
-	const marker = string.charCodeAt(0);
-	if (marker !== CHAR_MINUS && marker !== 46 || string.charCodeAt(1) !== marker || string.charCodeAt(2) !== marker) return false;
-	if (string.length === 3) return true;
-	const following = string.charCodeAt(3);
-	return isWhitespace(following) || following === CHAR_CARRIAGE_RETURN || following === CHAR_LINE_FEED;
-}
-function isPrintable(c) {
-	return c >= 32 && c <= 126 || c >= 161 && c <= 55295 && c !== 8232 && c !== 8233 || c >= 57344 && c <= 65533 && c !== CHAR_BOM || c >= 65536 && c <= 1114111;
-}
-function isNsCharOrWhitespace(c) {
-	return isPrintable(c) && c !== CHAR_BOM && c !== CHAR_CARRIAGE_RETURN && c !== CHAR_LINE_FEED;
-}
-function isPlainSafe(c, prev, inblock) {
-	const cIsNsCharOrWhitespace = isNsCharOrWhitespace(c);
-	const cIsNsChar = cIsNsCharOrWhitespace && !isWhitespace(c);
-	return (inblock ? cIsNsCharOrWhitespace : cIsNsCharOrWhitespace && c !== CHAR_COMMA && c !== CHAR_LEFT_SQUARE_BRACKET && c !== CHAR_RIGHT_SQUARE_BRACKET && c !== CHAR_LEFT_CURLY_BRACKET && c !== CHAR_RIGHT_CURLY_BRACKET) && c !== CHAR_SHARP && !(prev === CHAR_COLON && !cIsNsChar) || isNsCharOrWhitespace(prev) && !isWhitespace(prev) && c === CHAR_SHARP || prev === CHAR_COLON && cIsNsChar && (inblock || c !== CHAR_COMMA && c !== CHAR_LEFT_SQUARE_BRACKET && c !== CHAR_RIGHT_SQUARE_BRACKET && c !== CHAR_LEFT_CURLY_BRACKET && c !== CHAR_RIGHT_CURLY_BRACKET);
-}
-function isPlainSafeFirst(c) {
-	return isPrintable(c) && c !== CHAR_BOM && !isWhitespace(c) && c !== CHAR_MINUS && c !== CHAR_QUESTION && c !== CHAR_COLON && c !== CHAR_COMMA && c !== CHAR_LEFT_SQUARE_BRACKET && c !== CHAR_RIGHT_SQUARE_BRACKET && c !== CHAR_LEFT_CURLY_BRACKET && c !== CHAR_RIGHT_CURLY_BRACKET && c !== CHAR_SHARP && c !== CHAR_AMPERSAND && c !== CHAR_ASTERISK && c !== CHAR_EXCLAMATION && c !== CHAR_VERTICAL_LINE && c !== CHAR_EQUALS && c !== CHAR_GREATER_THAN && c !== CHAR_SINGLE_QUOTE && c !== CHAR_DOUBLE_QUOTE && c !== CHAR_PERCENT && c !== CHAR_COMMERCIAL_AT && c !== CHAR_GRAVE_ACCENT;
-}
-function isPlainSafeAtStart(string, inblock) {
-	const first = codePointAt(string, 0);
-	if (isPlainSafeFirst(first)) return true;
-	if (string.length > 1 && (first === CHAR_MINUS || first === CHAR_QUESTION || first === CHAR_COLON)) {
-		const second = codePointAt(string, 1);
-		return !isWhitespace(second) && isPlainSafe(second, first, inblock);
-	}
-	return false;
-}
-function isPlainSafeLast(c) {
-	return !isWhitespace(c) && c !== CHAR_COLON;
-}
-function codePointAt(string, pos) {
-	const first = string.charCodeAt(pos);
-	let second;
-	if (first >= 55296 && first <= 56319 && pos + 1 < string.length) {
-		second = string.charCodeAt(pos + 1);
-		if (second >= 56320 && second <= 57343) return (first - 55296) * 1024 + second - 56320 + 65536;
-	}
-	return first;
-}
 function needIndentIndicator(string) {
 	return /^\n* /.test(string);
 }
-var STYLE_PLAIN = 1;
-var STYLE_SINGLE = 2;
-var STYLE_LITERAL = 3;
-var STYLE_FOLDED = 4;
-var STYLE_DOUBLE = 5;
-function chooseScalarStyle(state, string, layout, singleLineOnly, forceQuote, inblock) {
-	const { blockIndent, lineWidth } = layout;
-	let i;
-	let char = 0;
-	let prevChar = -1;
-	let hasLineBreak = false;
-	let hasFoldableLine = false;
-	const shouldTrackWidth = lineWidth !== -1;
-	let previousLineBreak = -1;
-	let plain = !startsWithDocumentSeparator(string) && isPlainSafeAtStart(string, inblock) && isPlainSafeLast(codePointAt(string, string.length - 1));
-	if (singleLineOnly || forceQuote) for (i = 0; i < string.length; char >= 65536 ? i += 2 : i++) {
-		char = codePointAt(string, i);
-		if (!isPrintable(char)) return STYLE_DOUBLE;
-		plain = plain && isPlainSafe(char, prevChar, inblock);
-		prevChar = char;
-	}
-	else {
-		for (i = 0; i < string.length; char >= 65536 ? i += 2 : i++) {
-			char = codePointAt(string, i);
-			if (char === CHAR_LINE_FEED) {
-				hasLineBreak = true;
-				if (shouldTrackWidth) {
-					hasFoldableLine = hasFoldableLine || i - previousLineBreak - 1 > lineWidth && !isMoreIndented(string[previousLineBreak + 1]);
-					previousLineBreak = i;
-				}
-			} else if (!isPrintable(char)) return STYLE_DOUBLE;
-			plain = plain && isPlainSafe(char, prevChar, inblock);
-			prevChar = char;
-		}
-		hasFoldableLine = hasFoldableLine || shouldTrackWidth && i - previousLineBreak - 1 > lineWidth && !isMoreIndented(string[previousLineBreak + 1]);
-	}
-	if (!hasLineBreak && !hasFoldableLine) {
-		if (plain && !forceQuote) return STYLE_PLAIN;
-		return state.quoteStyle === "double" ? STYLE_DOUBLE : STYLE_SINGLE;
-	}
-	if (blockIndent > 9 && needIndentIndicator(string)) return STYLE_DOUBLE;
-	return hasFoldableLine ? STYLE_FOLDED : STYLE_LITERAL;
-}
-function renderScalarStyle(string, style, layout) {
-	const { indent, blockIndent, lineWidth } = layout;
-	switch (style) {
-		case STYLE_PLAIN: return encodeFlowBreaks(string, indent);
-		case STYLE_SINGLE: return `'${encodeFlowBreaks(string, indent).replace(/'/g, "''")}'`;
-		case STYLE_LITERAL: return "|" + blockHeader(string, blockIndent) + dropEndingNewline(indentString(string, indent));
-		case STYLE_FOLDED: return ">" + blockHeader(string, blockIndent) + dropEndingNewline(indentString(foldBlockScalar(string, lineWidth), indent));
-		case STYLE_DOUBLE: return `"${escapeString(string)}"`;
-	}
-}
-function resolveScalarStyle(state, node, layout, iskey, inblock) {
-	const singleLineOnly = iskey || !inblock;
-	if (node.style.singleQuoted) return STYLE_SINGLE;
-	if (node.style.doubleQuoted) return STYLE_DOUBLE;
-	if (!singleLineOnly) {
-		if (node.style.literal) return STYLE_LITERAL;
-		if (node.style.folded) return STYLE_FOLDED;
-	}
-	const string = node.value;
-	if (string.length === 0) {
-		if (node.style.tagged || state.schema.resolveImplicitScalarTag(string).tag.tagName === node.tag) return STYLE_PLAIN;
-		return state.quoteStyle === "double" ? STYLE_DOUBLE : STYLE_SINGLE;
-	}
-	const style = chooseScalarStyle(state, string, layout, singleLineOnly, state.forceQuotes && !iskey, inblock);
-	if (style === STYLE_PLAIN && !node.style.tagged && state.schema.resolveImplicitScalarTag(string).tag.tagName !== node.tag) return state.quoteStyle === "double" ? STYLE_DOUBLE : STYLE_SINGLE;
-	return style;
-}
-function blockHeader(string, indentPerLevel) {
-	const indentIndicator = needIndentIndicator(string) ? String(indentPerLevel) : "";
+function blockHeader(string, shiftOfParent, shiftOfContent) {
+	const indentIndicator = needIndentIndicator(string) ? String(shiftOfContent - shiftOfParent) : "";
 	const clip = string[string.length - 1] === "\n";
 	return `${indentIndicator}${clip && (string[string.length - 2] === "\n" || string === "\n") ? "+" : clip ? "" : "-"}\n`;
-}
-function encodeFlowBreaks(string, indent) {
-	let nextLF = string.indexOf("\n");
-	if (nextLF === -1) return string;
-	const pad = " ".repeat(indent);
-	let result = string.slice(0, nextLF);
-	const lineRe = /(\n+)([^\n]*)/g;
-	lineRe.lastIndex = nextLF;
-	let match;
-	while (match = lineRe.exec(string)) {
-		const breaks = match[1].length;
-		const line = match[2];
-		result += "\n".repeat(breaks + 1) + pad + line;
-	}
-	return result;
 }
 function dropEndingNewline(string) {
 	return string[string.length - 1] === "\n" ? string.slice(0, -1) : string;
 }
 function isMoreIndented(char) {
 	return char === " " || char === "	";
-}
-function foldBlockScalar(string, width) {
-	const lineRe = /(\n+)([^\n]*)/g;
-	let nextLF = string.indexOf("\n");
-	if (nextLF === -1) nextLF = string.length;
-	lineRe.lastIndex = nextLF;
-	let result = foldLine(string.slice(0, nextLF), width);
-	let prevMoreIndented = string[0] === "\n" || isMoreIndented(string[0]);
-	let moreIndented;
-	let match;
-	while (match = lineRe.exec(string)) {
-		const prefix = match[1];
-		const line = match[2];
-		moreIndented = line !== "" && isMoreIndented(line[0]);
-		result += prefix + (!prevMoreIndented && !moreIndented && line !== "" ? "\n" : "") + foldLine(line, width);
-		prevMoreIndented = moreIndented;
-	}
-	return result;
 }
 function foldLine(line, width) {
 	if (line === "" || isMoreIndented(line[0])) return line;
@@ -375608,43 +375565,119 @@ function foldLine(line, width) {
 	else result += line.slice(start);
 	return result.slice(1);
 }
-function escapeString(string) {
-	let result = "";
-	let char = 0;
-	for (let i = 0; i < string.length; char >= 65536 ? i += 2 : i++) {
-		char = codePointAt(string, i);
-		const escapeSeq = ESCAPE_SEQUENCES[char];
-		if (escapeSeq) {
-			result += escapeSeq;
-			continue;
-		}
-		if (isPrintable(char)) {
-			result += string[i];
-			if (char >= 65536) result += string[i + 1];
-			continue;
-		}
-		result += encodeNonPrintable(char);
+function foldBlockScalar(string, width) {
+	const lineRe = /(\n+)([^\n]*)/g;
+	let nextLF = string.indexOf("\n");
+	if (nextLF === -1) nextLF = string.length;
+	lineRe.lastIndex = nextLF;
+	let result = foldLine(string.slice(0, nextLF), width);
+	let prevMoreIndented = string[0] === "\n" || isMoreIndented(string[0]);
+	let moreIndented;
+	let match;
+	while (match = lineRe.exec(string)) {
+		const prefix = match[1];
+		const line = match[2];
+		moreIndented = line !== "" && isMoreIndented(line[0]);
+		result += prefix + (!prevMoreIndented && !moreIndented && line !== "" ? "\n" : "") + foldLine(line, width);
+		prevMoreIndented = moreIndented;
 	}
 	return result;
+}
+var CHARACTERS_TO_ESCAPE = /["\\\x00-\x1F\x7F-\xA0\u2028\u2029\uD800-\uDFFF\uFEFF\uFFFE\uFFFF]/gu;
+function escapeCharacter(character) {
+	switch (character) {
+		case "\0": return "\\0";
+		case "\x07": return "\\a";
+		case "\b": return "\\b";
+		case "	": return "\\t";
+		case "\n": return "\\n";
+		case "\v": return "\\v";
+		case "\f": return "\\f";
+		case "\r": return "\\r";
+		case "\x1B": return "\\e";
+		case "\"": return "\\\"";
+		case "\\": return "\\\\";
+		case "": return "\\N";
+		case "\xA0": return "\\_";
+		case "\u2028": return "\\L";
+		case "\u2029": return "\\P";
+	}
+	const code = character.charCodeAt(0);
+	const hex = code.toString(16).toUpperCase();
+	if (code <= 255) return `\\x${"0".repeat(2 - hex.length)}${hex}`;
+	return `\\u${"0".repeat(4 - hex.length)}${hex}`;
+}
+function escapeString(string) {
+	return string.replace(CHARACTERS_TO_ESCAPE, escapeCharacter);
+}
+//#endregion
+//#region src/ast/presenter.ts
+var CHAR_LINE_FEED = 10;
+var DEFAULT_PRESENTER_OPTIONS = {
+	indent: 2,
+	seqNoIndent: false,
+	seqInlineFirst: true,
+	lineWidth: 80,
+	flowBracketPadding: false,
+	flowSkipCommaSpace: false,
+	flowSkipColonSpace: false,
+	quoteFlowKeys: false,
+	quoteStyle: "single",
+	forceQuotes: false,
+	scalarStyleRules: Object.keys(DEFAULT_SCALAR_STYLE_RULES).map((name) => Reflect.get(DEFAULT_SCALAR_STYLE_RULES, name)),
+	tagBeforeAnchor: false
+};
+function nodeTagShort(node) {
+	return node.tagged ? node.tag : tagNameShort(node.tag);
+}
+function createPresenterState(options) {
+	const opts = {
+		...DEFAULT_PRESENTER_OPTIONS,
+		...options
+	};
+	if (opts.flowSkipColonSpace) opts.quoteFlowKeys = true;
+	return {
+		...opts,
+		defaultScalarTagName: opts.schema.defaultScalarTag.tagName,
+		openEnded: false
+	};
+}
+function generateNextLine(state, level) {
+	return `\n${" ".repeat(state.indent * level)}`;
+}
+function scalarLayout(state, node, parent, level, isKey, flowOnly) {
+	return {
+		node,
+		parent,
+		level,
+		isKey,
+		flowOnly,
+		shiftOfParent: level === 0 ? -1 : state.indent * (level - 1),
+		shiftOfContent: state.indent * Math.max(1, level),
+		shiftOfFirstLine: level === 0 ? 0 : state.indent * level,
+		presenterOptions: state,
+		allowedStylesMask: 0,
+		style: node.style
+	};
 }
 function writeFlowSequence(state, level, node) {
 	let result = "";
 	for (let index = 0, length = node.items.length; index < length; index += 1) {
-		const item = writeNode(state, level, node.items[index], {});
-		if (result !== "") result += `,${!state.flowSkipCommaSpace ? " " : ""}`;
+		const item = writeNode(state, level, node.items[index], node, {}).text;
+		if (index > 0) result += `,${!state.flowSkipCommaSpace ? " " : ""}`;
 		result += item;
 	}
-	const pad = state.flowBracketPadding && result !== "" ? " " : "";
+	const pad = state.flowBracketPadding && node.items.length > 0 ? " " : "";
 	return `[${pad}${result}${pad}]`;
 }
 function writeBlockSequence(state, level, node, compact) {
 	let result = "";
 	for (let index = 0, length = node.items.length; index < length; index += 1) {
-		const item = writeNode(state, level + 1, node.items[index], {
+		const item = writeNode(state, level + 1, node.items[index], node, {
 			block: true,
 			compact: state.seqInlineFirst,
 			isblockseq: true
-		});
+		}).text;
 		if (!compact || result !== "") result += generateNextLine(state, level);
 		if (item === "" || CHAR_LINE_FEED === item.charCodeAt(0)) result += "-";
 		else result += "- ";
@@ -375654,70 +375687,51 @@ function writeBlockSequence(state, level, node, compact) {
 }
 function writeFlowMapping(state, level, node) {
 	let result = "";
-	const items = sortMappingItems(state, node.items);
-	for (const { key, value } of items) {
+	for (const { key, value } of node.items) {
 		let pairBuffer = "";
 		if (result !== "") pairBuffer += `,${!state.flowSkipCommaSpace ? " " : ""}`;
-		const keyText = writeNode(state, level, key, { iskey: true });
-		const explicitPair = keyText.length > 1024;
-		if (explicitPair) pairBuffer += "? ";
-		else if (state.quoteFlowKeys) pairBuffer += "\"";
-		const valueText = writeNode(state, level, value, {});
+		const keyRender = writeNode(state, level, key, node, { iskey: true });
+		const keyText = keyRender.text;
+		const valueText = writeNode(state, level, value, node, {}).text;
 		const sep = state.flowSkipColonSpace || valueText === "" ? "" : " ";
-		pairBuffer += `${keyText}${state.quoteFlowKeys && !explicitPair ? "\"" : ""}:${sep}${valueText}`;
+		const keyIsBareProps = key.kind === "scalar" && keyRender.noBody && (key.tagged || key.anchor !== void 0);
+		const keyColonSep = key.kind === "alias" || keyIsBareProps ? " " : "";
+		pairBuffer += `${keyText}${keyColonSep}:${sep}${valueText}`;
 		result += pairBuffer;
 	}
 	const pad = state.flowBracketPadding && result !== "" ? " " : "";
 	return `{${pad}${result}${pad}}`;
 }
-function sortKeyValue(key) {
-	return key.kind === "scalar" ? key.value : key;
-}
-function sortMappingItems(state, items) {
-	if (!state.sortKeys) return items;
-	const copy = items.slice();
-	if (state.sortKeys === true) copy.sort((a, b) => {
-		const x = sortKeyValue(a.key);
-		const y = sortKeyValue(b.key);
-		if (x < y) return -1;
-		if (x > y) return 1;
-		return 0;
-	});
-	else {
-		const fn = state.sortKeys;
-		copy.sort((a, b) => fn(sortKeyValue(a.key), sortKeyValue(b.key)));
-	}
-	return copy;
-}
 function writeBlockMapping(state, level, node, compact) {
 	let result = "";
-	const items = sortMappingItems(state, node.items);
-	for (let index = 0, length = items.length; index < length; index += 1) {
+	for (let index = 0, length = node.items.length; index < length; index += 1) {
 		let pairBuffer = "";
 		if (!compact || result !== "") pairBuffer += generateNextLine(state, level);
-		const { key, value } = items[index];
-		const keyIsBlock = (key.kind === "mapping" || key.kind === "sequence") && !key.style.flow && key.items.length !== 0 || key.kind === "scalar" && (key.style.literal || key.style.folded);
-		const keyText = keyIsBlock ? writeNode(state, level + 1, key, {
+		const { key, value } = node.items[index];
+		const keyIsBlock = (key.kind === "mapping" || key.kind === "sequence") && key.style === COLLECTION_STYLE.BLOCK && key.items.length !== 0 || key.kind === "scalar" && (key.style === SCALAR_STYLE.LITERAL_BLOCK || key.style === SCALAR_STYLE.FOLDED_BLOCK);
+		const keyRender = keyIsBlock ? writeNode(state, level + 1, key, node, {
 			block: true,
 			compact: true,
 			isblockseq: !cannotBeCompact(state, key, level + 1)
-		}) : writeNode(state, level + 1, key, {
+		}) : writeNode(state, level + 1, key, node, {
 			block: true,
 			compact: true,
 			iskey: true
 		});
+		const keyText = keyRender.text;
 		const keyHasLineBreak = key.kind === "scalar" && key.value.indexOf("\n") !== -1;
-		const explicitPair = keyIsBlock || keyHasLineBreak || keyText.length > 1024;
+		const keyIsTooLong = keyText.length > 1024 && /^[\s\S]{1025}/u.test(keyText);
+		const explicitPair = keyIsBlock || keyHasLineBreak || keyIsTooLong;
 		if (explicitPair) if (keyText && CHAR_LINE_FEED === keyText.charCodeAt(0)) pairBuffer += "?";
 		else pairBuffer += "? ";
 		pairBuffer += keyText;
 		if (explicitPair) pairBuffer += generateNextLine(state, level);
-		const valueText = writeNode(state, level + 1, value, {
+		const valueText = writeNode(state, level + 1, value, node, {
 			block: true,
 			compact: explicitPair,
 			isblockseq: explicitPair && !cannotBeCompact(state, value, level + 1)
-		});
-		const keyIsBareProps = key.kind === "scalar" && key.value === "" && keyText !== "" && keyText.charCodeAt(keyText.length - 1) !== CHAR_SINGLE_QUOTE && keyText.charCodeAt(keyText.length - 1) !== CHAR_DOUBLE_QUOTE;
+		}).text;
+		const keyIsBareProps = key.kind === "scalar" && keyRender.noBody && (key.tagged || key.anchor !== void 0);
 		const keyColonSep = !explicitPair && (key.kind === "alias" || keyIsBareProps) ? " " : "";
 		if (valueText === "" || CHAR_LINE_FEED === valueText.charCodeAt(0)) pairBuffer += `${keyColonSep}:`;
 		else pairBuffer += `${keyColonSep}: `;
@@ -375727,29 +375741,41 @@ function writeBlockMapping(state, level, node, compact) {
 	return result;
 }
 function cannotBeCompact(state, node, level) {
-	return node.style.tagged || node.anchor !== void 0 || state.indent < 2 && level > 0;
+	if (node.kind === "alias") return true;
+	return node.tagged || node.anchor !== void 0 || state.indent < 2 && level > 0;
 }
-function writeNode(state, level, node, ctx) {
-	if (node.kind === "alias") return `*${node.anchor}`;
+function writeNode(state, level, node, parent, ctx) {
+	if (node.kind === "alias") {
+		state.openEnded = false;
+		return {
+			text: `*${node.anchor}`,
+			noBody: false
+		};
+	}
 	const { block = false, iskey = false, isblockseq = false } = ctx;
 	let compact = ctx.compact ?? false;
 	const hasAnchor = node.anchor !== void 0;
 	if (cannotBeCompact(state, node, level)) compact = false;
 	let body;
-	let shouldPrintTag = node.style.tagged;
-	const useBlockCollection = block && (node.kind === "mapping" || node.kind === "sequence") && !node.style.flow && node.items.length !== 0;
+	let shouldPrintTag = node.tagged;
+	const useBlockCollection = block && (node.kind === "mapping" || node.kind === "sequence") && node.style === COLLECTION_STYLE.BLOCK && node.items.length !== 0;
 	if (node.kind === "mapping") if (useBlockCollection) body = writeBlockMapping(state, level, node, compact);
 	else body = writeFlowMapping(state, level, node);
 	else if (node.kind === "sequence") if (useBlockCollection) if (state.seqNoIndent && !isblockseq && level > 0) body = writeBlockSequence(state, level - 1, node, compact);
 	else body = writeBlockSequence(state, level, node, compact);
 	else body = writeFlowSequence(state, level, node);
 	else {
-		const layout = scalarLayout(state, level);
-		const style = resolveScalarStyle(state, node, layout, iskey, block);
-		body = renderScalarStyle(node.value, style, layout);
-		shouldPrintTag = node.style.tagged || style !== STYLE_PLAIN && node.tag !== state.defaultScalarTagName;
+		const layout = scalarLayout(state, node, parent, level, iskey, !block);
+		detectAllowedStyles(layout);
+		for (const rule of state.scalarStyleRules) rule(layout);
+		body = renderScalar(layout);
+		state.openEnded = (layout.style === SCALAR_STYLE.LITERAL_BLOCK || layout.style === SCALAR_STYLE.FOLDED_BLOCK) && (node.value === "\n" || node.value.endsWith("\n\n"));
+		shouldPrintTag = node.tagged || body === "" && layout.flowOnly && parent?.kind === "sequence" && !hasAnchor || layout.style !== SCALAR_STYLE.PLAIN && node.tag !== state.defaultScalarTagName;
 	}
+	if ((node.kind === "mapping" || node.kind === "sequence") && !useBlockCollection) state.openEnded = false;
 	if (useBlockCollection && compact && level > 0 && state.indent > 2) body = `${" ".repeat(state.indent - 2)}${body}`;
+	const noBody = body === "";
+	let text = body;
 	if (shouldPrintTag || hasAnchor) {
 		const props = [];
 		const tag = shouldPrintTag ? nodeTagShort(node) : null;
@@ -375762,19 +375788,15 @@ function writeNode(state, level, node, ctx) {
 			if (tag !== null) props.push(tag);
 		}
 		const sep = body === "" || body.charCodeAt(0) === CHAR_LINE_FEED ? "" : " ";
-		body = `${props.join(" ")}${sep}${body}`;
+		text = `${props.join(" ")}${sep}${body}`;
 	}
-	return body;
+	return {
+		text,
+		noBody
+	};
 }
 function rootStartsOwnLine(node) {
-	return (node.kind === "sequence" || node.kind === "mapping") && !node.style.flow && node.items.length !== 0 && !node.style.tagged && node.anchor === void 0;
-}
-function isOpenEnded(node) {
-	let leaf = node;
-	while ((leaf.kind === "sequence" || leaf.kind === "mapping") && !leaf.style.flow && leaf.items.length !== 0) leaf = leaf.kind === "sequence" ? leaf.items[leaf.items.length - 1] : leaf.items[leaf.items.length - 1].value;
-	if (leaf.kind !== "scalar" || !(leaf.style.literal || leaf.style.folded)) return false;
-	const { value } = leaf;
-	return value.endsWith("\n\n") || value === "\n";
+	return (node.kind === "sequence" || node.kind === "mapping") && node.style === COLLECTION_STYLE.BLOCK && node.items.length !== 0 && !node.tagged && node.anchor === void 0;
 }
 function writeDocumentDirectives(doc) {
 	let result = "";
@@ -375799,6 +375821,7 @@ function present(documents, options) {
 	let previousEnded = false;
 	for (let index = 0; index < documents.length; index += 1) {
 		const doc = documents[index];
+		state.openEnded = false;
 		const directives = writeDocumentDirectives(doc);
 		const hasDirectives = directives !== "";
 		const marker = doc.explicitStart || hasDirectives || index > 0 && !previousEnded;
@@ -375806,17 +375829,17 @@ function present(documents, options) {
 		if (doc.contents === null) {
 			if (marker) result += "---\n";
 		} else if (marker) {
-			const body = writeNode(state, 0, doc.contents, {
+			const body = writeNode(state, 0, doc.contents, null, {
 				block: true,
 				compact: true
-			});
+			}).text;
 			const sep = body === "" ? "" : hasDirectives || rootStartsOwnLine(doc.contents) ? "\n" : " ";
 			result += `---${sep}${body}\n`;
-		} else result += writeNode(state, 0, doc.contents, {
+		} else result += writeNode(state, 0, doc.contents, null, {
 			block: true,
 			compact: true
-		}) + "\n";
-		previousEnded = doc.explicitEnd || doc.contents !== null && isOpenEnded(doc.contents);
+		}).text + "\n";
+		previousEnded = doc.explicitEnd || state.openEnded;
 		if (previousEnded) result += "...\n";
 	}
 	return result;
@@ -375829,8 +375852,16 @@ var DEFAULT_DUMP_OPTIONS = {
 	skipInvalid: false,
 	noRefs: false,
 	flowLevel: -1,
+	sortKeys: false,
 	transform: () => {}
 };
+function defaultCompareFn(a, b) {
+	const x = String(a);
+	const y = String(b);
+	if (x < y) return -1;
+	if (x > y) return 1;
+	return 0;
+}
 /**
 * Serializes JS object as a YAML document. By default it can dump every
 * supported YAML type, so it throws an exception if you try to dump regexps or
@@ -375850,9 +375881,16 @@ function dump(input, options = {}) {
 	});
 	if (opts.flowLevel >= 0) visit(documents, (node, ctx) => {
 		if (ctx.depth < opts.flowLevel) return;
-		node.style.flow = true;
+		if (node.kind === "sequence" || node.kind === "mapping") node.style = COLLECTION_STYLE.FLOW;
 		return VISIT_SKIP;
 	});
+	if (opts.sortKeys) {
+		const compareFn = opts.sortKeys === true ? defaultCompareFn : opts.sortKeys;
+		visit(documents, (node) => {
+			if (node.kind !== "mapping") return;
+			node.items.sort((a, b) => compareFn(a.key.kind === "scalar" ? a.key.value : "", b.key.kind === "scalar" ? b.key.value : ""));
+		});
+	}
 	opts.transform(documents);
 	return present(documents, {
 		...pick(opts, Object.keys(DEFAULT_PRESENTER_OPTIONS)),
@@ -375878,48 +375916,35 @@ function anchorName(state, event) {
 function buildScalar(state, event) {
 	const value = getScalarValue(state.source, event);
 	const raw = rawTag(state, event);
-	const style = new Style();
-	switch (event.style) {
-		case SCALAR_STYLE.SINGLE_QUOTED:
-			style.singleQuoted = true;
-			break;
-		case SCALAR_STYLE.DOUBLE_QUOTED:
-			style.doubleQuoted = true;
-			break;
-		case SCALAR_STYLE.LITERAL_BLOCK:
-			style.literal = true;
-			break;
-		case SCALAR_STYLE.FOLDED_BLOCK:
-			style.folded = true;
-			break;
-	}
 	let tag;
+	let tagged = false;
 	if (raw !== "") {
-		style.tagged = true;
+		tagged = true;
 		tag = raw;
 	} else if (event.style === SCALAR_STYLE.PLAIN) tag = state.schema.resolveImplicitScalarTag(value).tag.tagName;
 	else tag = state.schema.defaultScalarTag.tagName;
 	return {
 		kind: "scalar",
 		tag,
-		style,
+		tagged,
+		style: event.style,
 		anchor: anchorName(state, event),
 		value
 	};
 }
 function buildCollection(state, event, defaultTagName) {
 	const raw = rawTag(state, event);
-	const style = new Style();
-	if (event.style === COLLECTION_STYLE.FLOW) style.flow = true;
 	let tag;
+	let tagged = false;
 	if (raw === "") tag = defaultTagName;
 	else {
 		tag = raw;
-		style.tagged = true;
+		tagged = true;
 	}
 	return {
 		tag,
-		style,
+		tagged,
+		style: event.style,
 		anchor: anchorName(state, event)
 	};
 }
@@ -375970,10 +375995,11 @@ function eventsToAst(events, options) {
 				addNode(state, buildScalar(state, event));
 				break;
 			case EVENT_ID.SEQUENCE: {
-				const { tag, style, anchor } = buildCollection(state, event, "tag:yaml.org,2002:seq");
+				const { tag, tagged, style, anchor } = buildCollection(state, event, "tag:yaml.org,2002:seq");
 				const node = {
 					kind: "sequence",
 					tag,
+					tagged,
 					style,
 					anchor,
 					items: []
@@ -375985,10 +376011,11 @@ function eventsToAst(events, options) {
 				break;
 			}
 			case EVENT_ID.MAPPING: {
-				const { tag, style, anchor } = buildCollection(state, event, "tag:yaml.org,2002:map");
+				const { tag, tagged, style, anchor } = buildCollection(state, event, "tag:yaml.org,2002:map");
 				const node = {
 					kind: "mapping",
 					tag,
+					tagged,
 					style,
 					anchor,
 					items: []
@@ -376000,16 +376027,12 @@ function eventsToAst(events, options) {
 				});
 				break;
 			}
-			case EVENT_ID.ALIAS: {
-				const name = state.source.slice(event.anchorStart, event.anchorEnd);
+			case EVENT_ID.ALIAS:
 				addNode(state, {
 					kind: "alias",
-					tag: "",
-					style: new Style(),
-					anchor: name
+					anchor: state.source.slice(event.anchorStart, event.anchorEnd)
 				});
 				break;
-			}
 			case EVENT_ID.POP: {
 				const frame = state.frames.pop();
 				if (frame.kind === "mapping" && frame.key) throw new Error("incomplete mapping pair in event stream");
