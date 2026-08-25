@@ -56,7 +56,7 @@
     "semver": "^7.6.1",
     "ts-invariant": "^0.10.3",
     "tslib": "^2.8.1",
-    "js-yaml": "^5.3.0"
+    "js-yaml": "^5.4.0"
   },
   "resolutions": {
     "@npmcli/run-script": "^11.0.0"
