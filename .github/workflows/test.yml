@@ -147,10 +147,11 @@ jobs:
       # We use the last merged PR to guarantee we are not trying to access an artifact that has been deleted.
       # GitHub automatically deletes workflow artifacts after a retention period, so using a recent merged PR
       # ensures the PR build artifacts are still available for testing.
+      # Fork (community) PRs are excluded: their CI runs don't upload CLI artifacts.
       - name: Get last merged PR number
         id: get-pr
         run: |
-          PR_NUMBER=$(gh pr list --repo pulumi/pulumi --state merged --limit 1 --json number --jq '.[0].number')
+          PR_NUMBER=$(gh pr list --repo pulumi/pulumi --state merged --limit 20 --json number,isCrossRepository --jq '[.[] | select(.isCrossRepository | not)][0].number')
           echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
           echo "Using PR #$PR_NUMBER"
         env:
