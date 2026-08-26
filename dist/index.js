@@ -50660,7 +50660,7 @@ async function exec(command, args, cwd, additionalEnv, onOutput, onError, signal
     const unknownErrCode = -2;
     const env = additionalEnv ? { ...additionalEnv } : undefined;
     try {
-        const proc = execa_1.default(command, args, { env, cwd });
+        const proc = execa_1.default(command, args, { env, cwd, maxBuffer: Infinity });
         if (onError && proc.stderr) {
             proc.stderr.on("data", (data) => {
                 if (data?.toString) {
@@ -254152,7 +254152,7 @@ if ( true && module.exports) {
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.version = "3.257.0";
+exports.version = "3.259.0";
 //# sourceMappingURL=version.js.map
 
 /***/ }),
