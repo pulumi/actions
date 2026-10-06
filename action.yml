@@ -136,6 +136,9 @@ inputs:
     description: 'Print detailed debugging output during resource operations'
     required: false
     default: 'false'
+  run-program:
+    description: 'Run the Pulumi program before refreshing or destroying resources. Only valid for refresh, destroy, preview (with refresh), and up/update (with refresh) commands. If unset, the flag is not passed to the Pulumi CLI'
+    required: false
 outputs:
   output:
     description: Output from running command

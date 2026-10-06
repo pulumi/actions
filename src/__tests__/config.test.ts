@@ -74,6 +74,7 @@ describe('config.ts', () => {
           "policyPacks": [],
           "refresh": false,
           "replace": [],
+          "runProgram": undefined,
           "suppressOutputs": false,
           "suppressProgress": false,
           "target": [],
@@ -88,6 +89,24 @@ describe('config.ts', () => {
         "workDir": "./",
       }
     `);
+  });
+  it('should not set runProgram if run-program is not provided', async () => {
+    setupMockedConfig(defaultConfig);
+    delete process.env['INPUT_RUN-PROGRAM'];
+    const c = makeConfig();
+    expect(c.options.runProgram).toBeUndefined();
+  });
+  it.each([
+    ['true', true],
+    ['false', false],
+  ])('should set runProgram if run-program is %s', async (value, expected) => {
+    setupMockedConfig({ ...defaultConfig, 'run-program': value });
+    try {
+      const c = makeConfig();
+      expect(c.options.runProgram).toBe(expected);
+    } finally {
+      delete process.env['INPUT_RUN-PROGRAM'];
+    }
   });
   it('should fail if configuration are invalid', async () => {
     setupMockedConfig({
