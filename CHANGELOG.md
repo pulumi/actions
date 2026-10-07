@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- feat: add `run-program` flag support.
+  ([#1386](https://github.com/pulumi/actions/issues/1386))
 
 ---
 

@@ -120,6 +120,9 @@ export function makeConfig() {
       logFlow: getBooleanInput('log-flow'),
       logToStdErr: !!getInput('log-verbosity'),  // logToStdErr is true if logVerbosity has a truthy value
       debug: getBooleanInput('debug'),
+      runProgram: getInput('run-program')
+        ? getBooleanInput('run-program')
+        : undefined,
     },
   };
 }
