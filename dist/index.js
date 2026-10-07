@@ -376844,6 +376844,9 @@ function makeConfig() {
             logFlow: inputs_getBooleanInput('log-flow'),
             logToStdErr: !!inputs_getInput('log-verbosity'), // logToStdErr is true if logVerbosity has a truthy value
             debug: inputs_getBooleanInput('debug'),
+            runProgram: inputs_getInput('run-program')
+                ? inputs_getBooleanInput('run-program')
+                : undefined,
         },
     };
 }
