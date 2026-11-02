@@ -302522,8 +302522,9 @@ function indexesOf(array, item) {
     return indexes;
 }
 function uniqs() {
-    var list = Array.prototype.concat.apply([], arguments);
-    return list.filter(function (item, i) { return i === list.indexOf(item); });
+    // A Set keeps the first-occurrence order the previous filter/indexOf pass
+    // produced, without its quadratic cost on long index lists.
+    return Array.from(new Set(Array.prototype.concat.apply([], arguments)));
 }
 var Parser = /** @class */ (function () {
     function Parser(rule, options) {
@@ -302559,6 +302560,23 @@ var Parser = /** @class */ (function () {
             return _this.rule.error(message, errorOptions);
         };
     };
+    Parser.prototype.namespaceSeparatorFollows = function (attr, pos) {
+        var next = pos;
+        while (attr[next] && attr[next][tokenize_1.FIELDS.TYPE] === tokens.space) {
+            next++;
+        }
+        if (!attr[next] || this.content(attr[next]) !== "|") {
+            return false;
+        }
+        next++;
+        if (attr[next] && attr[next][tokenize_1.FIELDS.TYPE] === tokens.equals) {
+            return false;
+        }
+        while (attr[next] && attr[next][tokenize_1.FIELDS.TYPE] === tokens.space) {
+            next++;
+        }
+        return Boolean(attr[next]);
+    };
     Parser.prototype.attribute = function () {
         var attr = [];
         var startingToken = this.currToken;
@@ -302567,6 +302585,11 @@ var Parser = /** @class */ (function () {
             this.currToken[tokenize_1.FIELDS.TYPE] !== tokens.closeSquare) {
             attr.push(this.currToken);
             this.position++;
+        }
+        if (!this.currToken) {
+            // Ran off the end of the token stream: the attribute was never closed.
+            // Point at the opening bracket, which is where the author needs to look.
+            return this.expected("closing square bracket", startingToken[tokenize_1.FIELDS.START_POS]);
         }
         if (this.currToken[tokenize_1.FIELDS.TYPE] !== tokens.closeSquare) {
             return this.expected("closing square bracket", this.currToken[tokenize_1.FIELDS.START_POS]);
@@ -302584,6 +302607,7 @@ var Parser = /** @class */ (function () {
         var commentBefore = "";
         var lastAdded = null;
         var spaceAfterMeaningfulToken = false;
+        var namespaceSpaces = null;
         while (pos < len) {
             var token = attr[pos];
             var content = this.content(token);
@@ -302598,6 +302622,15 @@ var Parser = /** @class */ (function () {
                     // }
                     spaceAfterMeaningfulToken = true;
                     if (this.options.lossy) {
+                        break;
+                    }
+                    if (namespaceSpaces !== null) {
+                        namespaceSpaces += content;
+                        break;
+                    }
+                    if (lastAdded === "namespace") {
+                        (0, util_1.ensureObject)(node, "raws");
+                        node.raws.namespace = (node.raws.namespace || node.namespace) + content;
                         break;
                     }
                     if (lastAdded) {
@@ -302621,6 +302654,11 @@ var Parser = /** @class */ (function () {
                     }
                     else if ((!node.namespace || (lastAdded === "namespace" && !spaceAfterMeaningfulToken)) &&
                         next) {
+                        node.namespace = (node.namespace || "") + content;
+                        var rawValue = (0, util_1.getProp)(node, "raws", "namespace") || null;
+                        if (rawValue) {
+                            node.raws.namespace += content;
+                        }
                         if (spaceBefore) {
                             (0, util_1.ensureObject)(node, "spaces", "attribute");
                             node.spaces.attribute.before = spaceBefore;
@@ -302628,13 +302666,8 @@ var Parser = /** @class */ (function () {
                         }
                         if (commentBefore) {
                             (0, util_1.ensureObject)(node, "raws", "spaces", "attribute");
-                            node.raws.spaces.attribute.before = spaceBefore;
+                            node.raws.spaces.attribute.before = commentBefore;
                             commentBefore = "";
-                        }
-                        node.namespace = (node.namespace || "") + content;
-                        var rawValue = (0, util_1.getProp)(node, "raws", "namespace") || null;
-                        if (rawValue) {
-                            node.raws.namespace += content;
                         }
                         lastAdded = "namespace";
                     }
@@ -302670,18 +302703,16 @@ var Parser = /** @class */ (function () {
                         node.operator = content;
                         lastAdded = "operator";
                     }
-                    else if (!node.namespace && !node.attribute) {
-                        node.namespace = true;
+                    else if (!node.operator) {
+                        if (!node.namespace && !node.attribute) {
+                            node.namespace = true;
+                        }
+                        namespaceSpaces = "";
                     }
                     spaceAfterMeaningfulToken = false;
                     break;
                 case tokens.word:
-                    if (next &&
-                        this.content(next) === "|" &&
-                        attr[pos + 2] &&
-                        attr[pos + 2][tokenize_1.FIELDS.TYPE] !== tokens.equals && // this look-ahead probably fails with comment nodes involved.
-                        !node.operator &&
-                        !node.namespace) {
+                    if (this.namespaceSeparatorFollows(attr, pos + 1) && !node.operator && !node.namespace) {
                         node.namespace = content;
                         lastAdded = "namespace";
                     }
@@ -302696,6 +302727,11 @@ var Parser = /** @class */ (function () {
                             node.raws.spaces.attribute.before = commentBefore;
                             commentBefore = "";
                         }
+                        if (namespaceSpaces) {
+                            (0, util_1.ensureObject)(node, "raws");
+                            node.raws.attribute = namespaceSpaces + (node.raws.attribute || node.attribute || "");
+                        }
+                        namespaceSpaces = null;
                         node.attribute = (node.attribute || "") + content;
                         var rawValue = (0, util_1.getProp)(node, "raws", "attribute") || null;
                         if (rawValue) {
@@ -303007,7 +303043,34 @@ var Parser = /** @class */ (function () {
         }
         return this.newNode(node);
     };
+    // Whitespace is only ever stored on a node, as `spaces.before` or
+    // `spaces.after`. `space()` parks leading whitespace on `this.spaces` for the
+    // next node to claim, so a selector that ends before any node is created --
+    // `:not(a, )`, `:not( )`, a trailing `a, ` -- drops it. Park it on an empty
+    // string node instead, which is what `parseWhitespaceEquivalentTokens`
+    // already does for the comment-adjacent case.
+    Parser.prototype.flushPendingSpaces = function () {
+        if (!this.spaces) {
+            return;
+        }
+        var last = this.current.last;
+        if (last) {
+            // `space()` routes trailing whitespace to `this.spaces` whenever the
+            // selector so far holds nothing but comments, so `:not( /*c*/ )` lands
+            // here rather than on the `spaces.after` path.
+            last.spaces.after += this.spaces;
+            this.spaces = "";
+            return;
+        }
+        var token = this.currToken || this.prevToken;
+        this.newNode(new string_1.default({
+            value: "",
+            source: token ? getTokenSource(token) : undefined,
+            sourceIndex: token ? token[tokenize_1.FIELDS.START_POS] : 0,
+        }));
+    };
     Parser.prototype.comma = function () {
+        this.flushPendingSpaces();
         if (this.position === this.tokens.length - 1) {
             this.root.trailingComma = true;
             this.position++;
@@ -303054,7 +303117,21 @@ var Parser = /** @class */ (function () {
         return this.error("Unexpected '|'.", this.currToken[tokenize_1.FIELDS.START_POS]);
     };
     Parser.prototype.namespace = function () {
-        var before = (this.prevToken && this.content(this.prevToken)) || true;
+        var prev = this.prevToken;
+        // Only treat the previous token as a namespace prefix when it can actually
+        // be one (a type/word or the universal `*`). A comment, comma, combinator
+        // or whitespace before `|` means an empty namespace, not a prefix.
+        var before = prev &&
+            (prev[tokenize_1.FIELDS.TYPE] === tokens.word ||
+                prev[tokenize_1.FIELDS.TYPE] === tokens.asterisk ||
+                prev[tokenize_1.FIELDS.TYPE] === tokens.ampersand)
+            ? this.content(prev)
+            : true;
+        if (!this.nextToken) {
+            // A trailing `|` with nothing after it. `unexpectedPipe` reports against
+            // `currToken`, which is the pipe itself and always present here.
+            return this.unexpectedPipe();
+        }
         if (this.nextToken[tokenize_1.FIELDS.TYPE] === tokens.word) {
             this.position++;
             return this.word(before);
@@ -303084,6 +303161,7 @@ var Parser = /** @class */ (function () {
     Parser.prototype.parentheses = function () {
         var last = this.current.last;
         var unbalanced = 1;
+        var openingToken = this.currToken;
         this.position++;
         if (last && last.type === types.PSEUDO) {
             var selector = new selector_1.default({
@@ -303113,6 +303191,7 @@ var Parser = /** @class */ (function () {
                         this.parse();
                     }
                     else {
+                        this.flushPendingSpaces();
                         this.current.source.end = tokenEnd(this.currToken);
                         this.current.parent.source.end = tokenEnd(this.currToken);
                         this.position++;
@@ -303153,7 +303232,9 @@ var Parser = /** @class */ (function () {
             }
         }
         if (unbalanced) {
-            return this.expected("closing parenthesis", this.currToken[tokenize_1.FIELDS.START_POS]);
+            // `currToken` is undefined when the token stream ran out before the
+            // parenthesis was closed; fall back to the opening one.
+            return this.expected("closing parenthesis", (this.currToken || openingToken)[tokenize_1.FIELDS.START_POS]);
         }
     };
     Parser.prototype.pseudo = function () {
@@ -303258,8 +303339,14 @@ var Parser = /** @class */ (function () {
         // Eliminate Sass interpolations from the list of id indexes
         var interpolations = indexesOf(word, "#{");
         if (interpolations.length) {
-            hasId = hasId.filter(function (hashIndex) { return !~interpolations.indexOf(hashIndex); });
+            var interpolationIndexes_1 = new Set(interpolations);
+            hasId = hasId.filter(function (hashIndex) { return !interpolationIndexes_1.has(hashIndex); });
         }
+        // Membership tests are built once. Scanning the arrays per index would make
+        // a flat selector such as `.a.a.a...` quadratic in its number of class/id
+        // indexes, which is enough to pin a CPU core on attacker-supplied input.
+        var classIndexes = new Set(hasClass);
+        var idIndexes = new Set(hasId);
         var indices = (0, sortAscending_1.default)(uniqs(__spreadArray(__spreadArray([0], __read(hasClass), false), __read(hasId), false)));
         indices.forEach(function (ind, i) {
             var index = indices[i + 1] || word.length;
@@ -303271,7 +303358,7 @@ var Parser = /** @class */ (function () {
             var current = _this.currToken;
             var sourceIndex = current[tokenize_1.FIELDS.START_POS] + indices[i];
             var source = getSource(current[1], current[2] + ind, current[3], current[2] + (index - 1));
-            if (~hasClass.indexOf(ind)) {
+            if (classIndexes.has(ind)) {
                 var classNameOpts = {
                     value: value.slice(1),
                     source: source,
@@ -303279,7 +303366,7 @@ var Parser = /** @class */ (function () {
                 };
                 node = new className_1.default(unescapeProp(classNameOpts, "value"));
             }
-            else if (~hasId.indexOf(ind)) {
+            else if (idIndexes.has(ind)) {
                 var idOpts = {
                     value: value.slice(1),
                     source: source,
@@ -303314,6 +303401,7 @@ var Parser = /** @class */ (function () {
         while (this.position < this.tokens.length) {
             this.parse(true);
         }
+        this.flushPendingSpaces();
         this.current._inferEndPosition();
         return this.root;
     };
@@ -304178,8 +304266,22 @@ var Combinator = /** @class */ (function (_super) {
     function Combinator(opts) {
         var _this = _super.call(this, opts) || this;
         _this.type = types_1.COMBINATOR;
+        _this._constructed = true;
         return _this;
     }
+    Object.defineProperty(Combinator.prototype, "value", {
+        get: function () {
+            return this._value;
+        },
+        set: function (value) {
+            if (this._constructed && this.raws) {
+                delete this.raws.value;
+            }
+            this._value = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
     return Combinator;
 }(node_1.default));
 exports["default"] = Combinator;
@@ -304465,6 +304567,7 @@ var Container = /** @class */ (function (_super) {
         var oldIndex = this.index(oldNode);
         var resetNode = [];
         for (var i = 2; i < arguments.length; i++) {
+            arguments[i].parent = this;
             resetNode.push(arguments[i]);
         }
         (_a = this.nodes).splice.apply(_a, __spreadArray([oldIndex + 1, 0, newNode], __read(resetNode), false));
@@ -304484,6 +304587,7 @@ var Container = /** @class */ (function (_super) {
         var oldIndex = this.index(oldNode);
         var resetNode = [];
         for (var i = 2; i < arguments.length; i++) {
+            arguments[i].parent = this;
             resetNode.push(arguments[i]);
         }
         (_a = this.nodes).splice.apply(_a, __spreadArray([oldIndex, 0, newNode], __read(resetNode), false));
@@ -306016,13 +306120,11 @@ exports["default"] = unesc;
 function gobbleHex(str) {
     var lower = str.toLowerCase();
     var hex = "";
-    var spaceTerminated = false;
     for (var i = 0; i < 6 && lower[i] !== undefined; i++) {
         var code = lower.charCodeAt(i);
         // check to see if we are dealing with a valid hex char [a-f|0-9]
         var valid = (code >= 97 && code <= 102) || (code >= 48 && code <= 57);
         // https://drafts.csswg.org/css-syntax/#consume-escaped-code-point
-        spaceTerminated = code === 32;
         if (!valid) {
             break;
         }
@@ -306031,15 +306133,21 @@ function gobbleHex(str) {
     if (hex.length === 0) {
         return undefined;
     }
+    var consumed = hex.length;
+    var next = str[consumed];
+    if (next === " " || next === "\t" || next === "\n" || next === "\r" || next === "\f") {
+        // CSS preprocessing treats CRLF as a single newline.
+        consumed += next === "\r" && str[consumed + 1] === "\n" ? 2 : 1;
+    }
     var codePoint = parseInt(hex, 16);
     var isSurrogate = codePoint >= 0xd800 && codePoint <= 0xdfff;
     // Add special case for
     // "If this number is zero, or is for a surrogate, or is greater than the maximum allowed code point"
     // https://drafts.csswg.org/css-syntax/#maximum-allowed-code-point
     if (isSurrogate || codePoint === 0x0000 || codePoint > 0x10ffff) {
-        return ["\uFFFD", hex.length + (spaceTerminated ? 1 : 0)];
+        return ["\uFFFD", consumed];
     }
-    return [String.fromCodePoint(codePoint), hex.length + (spaceTerminated ? 1 : 0)];
+    return [String.fromCodePoint(codePoint), consumed];
 }
 var CONTAINS_ESCAPE = /\\/;
 function unesc(str) {
@@ -306050,7 +306158,7 @@ function unesc(str) {
     var ret = "";
     for (var i = 0; i < str.length; i++) {
         if (str[i] === "\\") {
-            var gobbled = gobbleHex(str.slice(i + 1, i + 7));
+            var gobbled = gobbleHex(str.slice(i + 1, i + 9));
             if (gobbled !== undefined) {
                 ret += gobbled[0];
                 i += gobbled[1];
