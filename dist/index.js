@@ -51012,6 +51012,119 @@ class API {
     __run(options, args) {
         return this._command.run(args, options.cwd ?? process.cwd(), options.additionalEnv ?? {}, options.onOutput, options.onError, options.signal);
     }
+    aboutEnv(options) {
+        const __final = [];
+        __final.push("about");
+        __final.push("env");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.transitive) {
+            __flags.push("--transitive");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    about(options) {
+        const __final = [];
+        __final.push("about");
+        const __flags = [];
+        if (options.color == null) {
+            __flags.push("--color", "" + "never");
+        }
+        __flags.push("--output", "" + "json");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.transitive) {
+            __flags.push("--transitive");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
     cancel(options, stackName) {
         const __final = [];
         __final.push("cancel");
@@ -51058,6 +51171,4410 @@ class API {
         if (stackName != null) {
             __arguments.push("" + stackName);
         }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configCopy(options, key) {
+        const __final = [];
+        __final.push("config");
+        __final.push("copy");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.dest != null) {
+            __flags.push("--dest", "" + options.dest);
+        }
+        if (options.path) {
+            __flags.push("--path");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (key != null) {
+            __arguments.push("" + key);
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configEnvAdd(options, ...environmentName) {
+        const __final = [];
+        __final.push("config");
+        __final.push("env");
+        __final.push("add");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        for (const __item of environmentName ?? []) {
+            __arguments.push("" + __item);
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configEnvInit(options) {
+        const __final = [];
+        __final.push("config");
+        __final.push("env");
+        __final.push("init");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.keepConfig) {
+            __flags.push("--keep-config");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configEnvList(options) {
+        const __final = [];
+        __final.push("config");
+        __final.push("env");
+        __final.push("list");
+        const __flags = [];
+        __flags.push("--output", "" + "json");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configEnvRemove(options, environmentName) {
+        const __final = [];
+        __final.push("config");
+        __final.push("env");
+        __final.push("remove");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        __arguments.push("" + environmentName);
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configGet(options, key) {
+        const __final = [];
+        __final.push("config");
+        __final.push("get");
+        const __flags = [];
+        __flags.push("--json");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.path) {
+            __flags.push("--path");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        __arguments.push("" + key);
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configRefresh(options) {
+        const __final = [];
+        __final.push("config");
+        __final.push("refresh");
+        const __flags = [];
+        __flags.push("--force");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configRemove(options, key) {
+        const __final = [];
+        __final.push("config");
+        __final.push("remove");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.path) {
+            __flags.push("--path");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        __arguments.push("" + key);
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configRemoveAll(options, ...key) {
+        const __final = [];
+        __final.push("config");
+        __final.push("remove-all");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.path) {
+            __flags.push("--path");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        for (const __item of key ?? []) {
+            __arguments.push("" + __item);
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configSet(options, key, value) {
+        const __final = [];
+        __final.push("config");
+        __final.push("set");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.path) {
+            __flags.push("--path");
+        }
+        if (options.plaintext) {
+            __flags.push("--plaintext");
+        }
+        if (options.raw) {
+            __flags.push("--raw");
+        }
+        if (options.secret) {
+            __flags.push("--secret");
+        }
+        if (options.type != null) {
+            __flags.push("--type", "" + options.type);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        __arguments.push("" + key);
+        if (value != null) {
+            __arguments.push("" + value);
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    configSetAll(options) {
+        const __final = [];
+        __final.push("config");
+        __final.push("set-all");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.json != null) {
+            __flags.push("--json", "" + options.json);
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.path) {
+            __flags.push("--path");
+        }
+        for (const __item of options.plaintext ?? []) {
+            if (__item != null) {
+                __flags.push("--plaintext", "" + __item);
+            }
+        }
+        for (const __item of options.secret ?? []) {
+            if (__item != null) {
+                __flags.push("--secret", "" + __item);
+            }
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    config(options) {
+        const __final = [];
+        __final.push("config");
+        const __flags = [];
+        __flags.push("--json");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.open) {
+            __flags.push("--open");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    convert(options, ...arg) {
+        const __final = [];
+        __final.push("convert");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.from != null) {
+            __flags.push("--from", "" + options.from);
+        }
+        if (options.generateOnly) {
+            __flags.push("--generate-only");
+        }
+        __flags.push("--language", "" + options.language);
+        for (const __item of options.mappings ?? []) {
+            if (__item != null) {
+                __flags.push("--mappings", "" + __item);
+            }
+        }
+        if (options.name != null) {
+            __flags.push("--name", "" + options.name);
+        }
+        if (options.out != null) {
+            __flags.push("--out", "" + options.out);
+        }
+        if (options.strict) {
+            __flags.push("--strict");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (arg != null) {
+            for (const __item of arg ?? []) {
+                __arguments.push("" + __item);
+            }
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestApply(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("apply");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.dryRun) {
+            __flags.push("--dry-run");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestApprove(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("approve");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.dryRun) {
+            __flags.push("--dry-run");
+        }
+        if (options.message != null) {
+            __flags.push("--message", "" + options.message);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestClose(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("close");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.message != null) {
+            __flags.push("--message", "" + options.message);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestComment(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("comment");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        __flags.push("--message", "" + options.message);
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestDiff(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("diff");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestGet(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("get");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestList(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("list");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.status != null) {
+            __flags.push("--status", "" + options.status);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestLog(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("log");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestRebase(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("rebase");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envChangeRequestUnapprove(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("change-request");
+        __final.push("unapprove");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envClone(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("clone");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.preserveAccess) {
+            __flags.push("--preserve-access");
+        }
+        if (options.preserveEnvTags) {
+            __flags.push("--preserve-env-tags");
+        }
+        if (options.preserveHistory) {
+            __flags.push("--preserve-history");
+        }
+        if (options.preserveRevTags) {
+            __flags.push("--preserve-rev-tags");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envDiff(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("diff");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.format != null) {
+            __flags.push("--format", "" + options.format);
+        }
+        if (options.path != null) {
+            __flags.push("--path", "" + options.path);
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envEdit(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("edit");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.editor != null) {
+            __flags.push("--editor", "" + options.editor);
+        }
+        if (options.file != null) {
+            __flags.push("--file", "" + options.file);
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envGet(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("get");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.definition) {
+            __flags.push("--definition");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.value != null) {
+            __flags.push("--value", "" + options.value);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envInit(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("init");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.file != null) {
+            __flags.push("--file", "" + options.file);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envList(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("list");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.project != null) {
+            __flags.push("--project", "" + options.project);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envOpen(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("open");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.format != null) {
+            __flags.push("--format", "" + options.format);
+        }
+        if (options.lifetime != null) {
+            __flags.push("--lifetime", "" + options.lifetime);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envOpenRequest(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("open-request");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.accessDurationSeconds != null) {
+            __flags.push("--access-duration-seconds", "" + options.accessDurationSeconds);
+        }
+        if (options.grantExpirationSeconds != null) {
+            __flags.push("--grant-expiration-seconds", "" + options.grantExpirationSeconds);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envProviderAwsLoginOidc(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("provider");
+        __final.push("aws-login");
+        __final.push("oidc");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.create) {
+            __flags.push("--create");
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.duration != null) {
+            __flags.push("--duration", "" + options.duration);
+        }
+        if (options.exportEnvVars) {
+            __flags.push("--export-env-vars");
+        }
+        if (options.path != null) {
+            __flags.push("--path", "" + options.path);
+        }
+        for (const __item of options.policyArn ?? []) {
+            if (__item != null) {
+                __flags.push("--policy-arn", "" + __item);
+            }
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        for (const __item of options.subjectAttribute ?? []) {
+            if (__item != null) {
+                __flags.push("--subject-attribute", "" + __item);
+            }
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envProviderAwsLoginStatic(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("provider");
+        __final.push("aws-login");
+        __final.push("static");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.create) {
+            __flags.push("--create");
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.exportEnvVars) {
+            __flags.push("--export-env-vars");
+        }
+        if (options.path != null) {
+            __flags.push("--path", "" + options.path);
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        if (options.sessionToken != null) {
+            __flags.push("--session-token", "" + options.sessionToken);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envProviderAzureLoginOidc(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("provider");
+        __final.push("azure-login");
+        __final.push("oidc");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.create) {
+            __flags.push("--create");
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.exportEnvVars) {
+            __flags.push("--export-env-vars");
+        }
+        if (options.path != null) {
+            __flags.push("--path", "" + options.path);
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        for (const __item of options.subjectAttribute ?? []) {
+            if (__item != null) {
+                __flags.push("--subject-attribute", "" + __item);
+            }
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envProviderAzureLoginStatic(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("provider");
+        __final.push("azure-login");
+        __final.push("static");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.create) {
+            __flags.push("--create");
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.exportEnvVars) {
+            __flags.push("--export-env-vars");
+        }
+        if (options.path != null) {
+            __flags.push("--path", "" + options.path);
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envProviderGcpLoginOidc(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("provider");
+        __final.push("gcp-login");
+        __final.push("oidc");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.create) {
+            __flags.push("--create");
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.exportEnvVars) {
+            __flags.push("--export-env-vars");
+        }
+        if (options.path != null) {
+            __flags.push("--path", "" + options.path);
+        }
+        __flags.push("--provider-id", "" + options.providerId);
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        if (options.region != null) {
+            __flags.push("--region", "" + options.region);
+        }
+        __flags.push("--service-account", "" + options.serviceAccount);
+        for (const __item of options.subjectAttribute ?? []) {
+            if (__item != null) {
+                __flags.push("--subject-attribute", "" + __item);
+            }
+        }
+        if (options.tokenLifetime != null) {
+            __flags.push("--token-lifetime", "" + options.tokenLifetime);
+        }
+        __flags.push("--workload-pool-id", "" + options.workloadPoolId);
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envProviderGcpLoginStatic(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("provider");
+        __final.push("gcp-login");
+        __final.push("static");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.create) {
+            __flags.push("--create");
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.exportEnvVars) {
+            __flags.push("--export-env-vars");
+        }
+        if (options.path != null) {
+            __flags.push("--path", "" + options.path);
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        if (options.serviceAccount != null) {
+            __flags.push("--service-account", "" + options.serviceAccount);
+        }
+        if (options.tokenLifetime != null) {
+            __flags.push("--token-lifetime", "" + options.tokenLifetime);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envReferrerList(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("referrer");
+        __final.push("list");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.all) {
+            __flags.push("--all");
+        }
+        if (options.allRevisions) {
+            __flags.push("--all-revisions");
+        }
+        if (options.count != null) {
+            __flags.push("--count", "" + options.count);
+        }
+        if (options.latestStackVersionOnly) {
+            __flags.push("--latest-stack-version-only");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envRemove(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("remove");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envRotate(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("rotate");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envRun(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("run");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.interactive) {
+            __flags.push("--interactive");
+        }
+        if (options.lifetime != null) {
+            __flags.push("--lifetime", "" + options.lifetime);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envScheduleEdit(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("schedule");
+        __final.push("edit");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.cron != null) {
+            __flags.push("--cron", "" + options.cron);
+        }
+        if (options.once != null) {
+            __flags.push("--once", "" + options.once);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envScheduleGet(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("schedule");
+        __final.push("get");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envScheduleHistory(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("schedule");
+        __final.push("history");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.count != null) {
+            __flags.push("--count", "" + options.count);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envScheduleList(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("schedule");
+        __final.push("list");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.count != null) {
+            __flags.push("--count", "" + options.count);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envScheduleNew(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("schedule");
+        __final.push("new");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.cron != null) {
+            __flags.push("--cron", "" + options.cron);
+        }
+        if (options.once != null) {
+            __flags.push("--once", "" + options.once);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envScheduleRemove(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("schedule");
+        __final.push("remove");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envSet(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("set");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.file != null) {
+            __flags.push("--file", "" + options.file);
+        }
+        if (options.plaintext) {
+            __flags.push("--plaintext");
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        if (options.secret) {
+            __flags.push("--secret");
+        }
+        if (options.string_) {
+            __flags.push("--string");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envSettingsGet(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("settings");
+        __final.push("get");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envSettingsSet(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("settings");
+        __final.push("set");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envSetupAws(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("setup");
+        __final.push("aws");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        for (const __item of options.account ?? []) {
+            if (__item != null) {
+                __flags.push("--account", "" + __item);
+            }
+        }
+        if (options.duration != null) {
+            __flags.push("--duration", "" + options.duration);
+        }
+        if (options.org != null) {
+            __flags.push("--org", "" + options.org);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.policy != null) {
+            __flags.push("--policy", "" + options.policy);
+        }
+        if (options.project != null) {
+            __flags.push("--project", "" + options.project);
+        }
+        if (options.sessionName != null) {
+            __flags.push("--session-name", "" + options.sessionName);
+        }
+        if (options.sso) {
+            __flags.push("--sso");
+        }
+        if (options.ssoRegion != null) {
+            __flags.push("--sso-region", "" + options.ssoRegion);
+        }
+        if (options.ssoRole != null) {
+            __flags.push("--sso-role", "" + options.ssoRole);
+        }
+        if (options.ssoStartUrl != null) {
+            __flags.push("--sso-start-url", "" + options.ssoStartUrl);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envSetupAzure(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("setup");
+        __final.push("azure");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.browser) {
+            __flags.push("--browser");
+        }
+        if (options.org != null) {
+            __flags.push("--org", "" + options.org);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.policy != null) {
+            __flags.push("--policy", "" + options.policy);
+        }
+        if (options.project != null) {
+            __flags.push("--project", "" + options.project);
+        }
+        for (const __item of options.subscription ?? []) {
+            if (__item != null) {
+                __flags.push("--subscription", "" + __item);
+            }
+        }
+        if (options.tenant != null) {
+            __flags.push("--tenant", "" + options.tenant);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envSetupGcp(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("setup");
+        __final.push("gcp");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.org != null) {
+            __flags.push("--org", "" + options.org);
+        }
+        if (options.organization != null) {
+            __flags.push("--organization", "" + options.organization);
+        }
+        if (options.policy != null) {
+            __flags.push("--policy", "" + options.policy);
+        }
+        if (options.project != null) {
+            __flags.push("--project", "" + options.project);
+        }
+        for (const __item of options.projectId ?? []) {
+            if (__item != null) {
+                __flags.push("--project-id", "" + __item);
+            }
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envTagGet(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("tag");
+        __final.push("get");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envTagList(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("tag");
+        __final.push("list");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.pager != null) {
+            __flags.push("--pager", "" + options.pager);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envTagMove(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("tag");
+        __final.push("move");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envTagRemove(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("tag");
+        __final.push("remove");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envTag(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("tag");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envVersionHistory(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("version");
+        __final.push("history");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.pager != null) {
+            __flags.push("--pager", "" + options.pager);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envVersionRetract(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("version");
+        __final.push("retract");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        if (options.replaceWith != null) {
+            __flags.push("--replace-with", "" + options.replaceWith);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envVersionRollback(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("version");
+        __final.push("rollback");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        if (options.draft != null) {
+            __flags.push("--draft", "" + options.draft);
+        }
+        if (options.reason != null) {
+            __flags.push("--reason", "" + options.reason);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envVersionTagList(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("version");
+        __final.push("tag");
+        __final.push("list");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.pager != null) {
+            __flags.push("--pager", "" + options.pager);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envVersionTagRemove(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("version");
+        __final.push("tag");
+        __final.push("remove");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envVersionTag(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("version");
+        __final.push("tag");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envVersion(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("version");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envWebhookDeliveryList(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("webhook");
+        __final.push("delivery");
+        __final.push("list");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.count != null) {
+            __flags.push("--count", "" + options.count);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.utc) {
+            __flags.push("--utc");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envWebhookEdit(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("webhook");
+        __final.push("edit");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.active) {
+            __flags.push("--active");
+        }
+        for (const __item of options.addEvent ?? []) {
+            if (__item != null) {
+                __flags.push("--add-event", "" + __item);
+            }
+        }
+        for (const __item of options.addGroup ?? []) {
+            if (__item != null) {
+                __flags.push("--add-group", "" + __item);
+            }
+        }
+        if (options.displayName != null) {
+            __flags.push("--display-name", "" + options.displayName);
+        }
+        for (const __item of options.event ?? []) {
+            if (__item != null) {
+                __flags.push("--event", "" + __item);
+            }
+        }
+        if (options.format != null) {
+            __flags.push("--format", "" + options.format);
+        }
+        for (const __item of options.group ?? []) {
+            if (__item != null) {
+                __flags.push("--group", "" + __item);
+            }
+        }
+        for (const __item of options.removeEvent ?? []) {
+            if (__item != null) {
+                __flags.push("--remove-event", "" + __item);
+            }
+        }
+        for (const __item of options.removeGroup ?? []) {
+            if (__item != null) {
+                __flags.push("--remove-group", "" + __item);
+            }
+        }
+        if (options.removeSecret) {
+            __flags.push("--remove-secret");
+        }
+        if (options.secret != null) {
+            __flags.push("--secret", "" + options.secret);
+        }
+        if (options.url != null) {
+            __flags.push("--url", "" + options.url);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envWebhookGet(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("webhook");
+        __final.push("get");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envWebhookList(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("webhook");
+        __final.push("list");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.count != null) {
+            __flags.push("--count", "" + options.count);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envWebhookNew(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("webhook");
+        __final.push("new");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        if (options.active) {
+            __flags.push("--active");
+        }
+        for (const __item of options.event ?? []) {
+            if (__item != null) {
+                __flags.push("--event", "" + __item);
+            }
+        }
+        if (options.format != null) {
+            __flags.push("--format", "" + options.format);
+        }
+        for (const __item of options.group ?? []) {
+            if (__item != null) {
+                __flags.push("--group", "" + __item);
+            }
+        }
+        if (options.secret != null) {
+            __flags.push("--secret", "" + options.secret);
+        }
+        if (options.url != null) {
+            __flags.push("--url", "" + options.url);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envWebhookPing(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("webhook");
+        __final.push("ping");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    envWebhookRemove(options) {
+        const __final = [];
+        __final.push("env");
+        __final.push("webhook");
+        __final.push("remove");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.env != null) {
+            __flags.push("--env", "" + options.env);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
         if (__arguments.length > 0) {
             __final.push("--");
             __final.push(...__arguments);
@@ -51186,6 +55703,284 @@ class API {
             for (const __item of arg ?? []) {
                 __arguments.push("" + __item);
             }
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    install(options) {
+        const __final = [];
+        __final.push("install");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.noDependencies) {
+            __flags.push("--no-dependencies");
+        }
+        if (options.noPlugins) {
+            __flags.push("--no-plugins");
+        }
+        if (options.parallel != null) {
+            __flags.push("--parallel", "" + options.parallel);
+        }
+        if (options.reinstall) {
+            __flags.push("--reinstall");
+        }
+        if (options.useLanguageVersionTools) {
+            __flags.push("--use-language-version-tools");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    logsDecrypt(options) {
+        const __final = [];
+        __final.push("logs");
+        __final.push("decrypt");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.latest) {
+            __flags.push("--latest");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    logsList(options) {
+        const __final = [];
+        __final.push("logs");
+        __final.push("list");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    logsRemove(options) {
+        const __final = [];
+        __final.push("logs");
+        __final.push("remove");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.all) {
+            __flags.push("--all");
+        }
+        if (options.before != null) {
+            __flags.push("--before", "" + options.before);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    logsShare(options, filename) {
+        const __final = [];
+        __final.push("logs");
+        __final.push("share");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.includeSecrets) {
+            __flags.push("--include-secrets");
+        }
+        if (options.latest) {
+            __flags.push("--latest");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (filename != null) {
+            __arguments.push("" + filename);
         }
         if (__arguments.length > 0) {
             __final.push("--");
@@ -51548,6 +56343,1134 @@ class API {
         }
         if (options.verbose != null) {
             __flags.push("--verbose", "" + options.verbose);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    refresh(options) {
+        const __final = [];
+        __final.push("refresh");
+        const __flags = [];
+        __flags.push("--skip-preview");
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.clearPendingCreates) {
+            __flags.push("--clear-pending-creates");
+        }
+        if (options.client != null) {
+            __flags.push("--client", "" + options.client);
+        }
+        for (const __item of options.config ?? []) {
+            if (__item != null) {
+                __flags.push("--config", "" + __item);
+            }
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.configPath) {
+            __flags.push("--config-path");
+        }
+        if (options.copilot) {
+            __flags.push("--copilot");
+        }
+        if (options.debug) {
+            __flags.push("--debug");
+        }
+        if (options.diff) {
+            __flags.push("--diff");
+        }
+        for (const __item of options.exclude ?? []) {
+            if (__item != null) {
+                __flags.push("--exclude", "" + __item);
+            }
+        }
+        if (options.excludeDependents) {
+            __flags.push("--exclude-dependents");
+        }
+        if (options.execAgent != null) {
+            __flags.push("--exec-agent", "" + options.execAgent);
+        }
+        if (options.execKind != null) {
+            __flags.push("--exec-kind", "" + options.execKind);
+        }
+        if (options.expectNoChanges) {
+            __flags.push("--expect-no-changes");
+        }
+        for (const __item of options.importPendingCreates ?? []) {
+            if (__item != null) {
+                __flags.push("--import-pending-creates", "" + __item);
+            }
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.message != null) {
+            __flags.push("--message", "" + options.message);
+        }
+        if (options.neo) {
+            __flags.push("--neo");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        for (const __item of options.overrideEnv ?? []) {
+            if (__item != null) {
+                __flags.push("--override-env", "" + __item);
+            }
+        }
+        if (options.parallel != null) {
+            __flags.push("--parallel", "" + options.parallel);
+        }
+        if (options.previewOnly) {
+            __flags.push("--preview-only");
+        }
+        if (options.runProgram) {
+            __flags.push("--run-program");
+        }
+        if (options.showReplacementSteps) {
+            __flags.push("--show-replacement-steps");
+        }
+        if (options.showSames) {
+            __flags.push("--show-sames");
+        }
+        if (options.skipConfigValidation) {
+            __flags.push("--skip-config-validation");
+        }
+        if (options.skipPendingCreates) {
+            __flags.push("--skip-pending-creates");
+        }
+        if (options.skipPluginPreInstall) {
+            __flags.push("--skip-plugin-pre-install");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.suppressOutputs) {
+            __flags.push("--suppress-outputs");
+        }
+        if (options.suppressPermalink != null) {
+            __flags.push("--suppress-permalink", "" + options.suppressPermalink);
+        }
+        if (options.suppressProgress) {
+            __flags.push("--suppress-progress");
+        }
+        for (const __item of options.target ?? []) {
+            if (__item != null) {
+                __flags.push("--target", "" + __item);
+            }
+        }
+        if (options.targetDependents) {
+            __flags.push("--target-dependents");
+        }
+        if (options.urns) {
+            __flags.push("--urns");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateEdit(options) {
+        const __final = [];
+        __final.push("state");
+        __final.push("edit");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateGet(options, resource) {
+        const __final = [];
+        __final.push("state");
+        __final.push("get");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (resource != null) {
+            __arguments.push("" + resource);
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateMove(options, ...urn) {
+        const __final = [];
+        __final.push("state");
+        __final.push("move");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.dest != null) {
+            __flags.push("--dest", "" + options.dest);
+        }
+        if (options.includeParents) {
+            __flags.push("--include-parents");
+        }
+        if (options.source != null) {
+            __flags.push("--source", "" + options.source);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        for (const __item of urn ?? []) {
+            __arguments.push("" + __item);
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    statePromote(options, snippetName) {
+        const __final = [];
+        __final.push("state");
+        __final.push("promote");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        __arguments.push("" + snippetName);
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateProtect(options, ...resourceUrn) {
+        const __final = [];
+        __final.push("state");
+        __final.push("protect");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.all) {
+            __flags.push("--all");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (resourceUrn != null) {
+            for (const __item of resourceUrn ?? []) {
+                __arguments.push("" + __item);
+            }
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateRemove(options, ...resourceUrn) {
+        const __final = [];
+        __final.push("state");
+        __final.push("remove");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.all) {
+            __flags.push("--all");
+        }
+        if (options.force) {
+            __flags.push("--force");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.targetDependents) {
+            __flags.push("--target-dependents");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (resourceUrn != null) {
+            for (const __item of resourceUrn ?? []) {
+                __arguments.push("" + __item);
+            }
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateRename(options, resourceUrn, newName) {
+        const __final = [];
+        __final.push("state");
+        __final.push("rename");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (resourceUrn != null) {
+            __arguments.push("" + resourceUrn);
+        }
+        if (newName != null) {
+            __arguments.push("" + newName);
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateRepair(options) {
+        const __final = [];
+        __final.push("state");
+        __final.push("repair");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateTaint(options, ...resourceUrn) {
+        const __final = [];
+        __final.push("state");
+        __final.push("taint");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (resourceUrn != null) {
+            for (const __item of resourceUrn ?? []) {
+                __arguments.push("" + __item);
+            }
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateUnprotect(options, ...resourceUrn) {
+        const __final = [];
+        __final.push("state");
+        __final.push("unprotect");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.all) {
+            __flags.push("--all");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (resourceUrn != null) {
+            for (const __item of resourceUrn ?? []) {
+                __arguments.push("" + __item);
+            }
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateUntaint(options, ...resourceUrn) {
+        const __final = [];
+        __final.push("state");
+        __final.push("untaint");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        if (options.all) {
+            __flags.push("--all");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (resourceUrn != null) {
+            for (const __item of resourceUrn ?? []) {
+                __arguments.push("" + __item);
+            }
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    stateUpgrade(options) {
+        const __final = [];
+        __final.push("state");
+        __final.push("upgrade");
+        const __flags = [];
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    up(options, templateOrUrl) {
+        const __final = [];
+        __final.push("up");
+        const __flags = [];
+        __flags.push("--skip-preview");
+        __flags.push("--yes");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        for (const __item of options.attachDebugger ?? []) {
+            if (__item != null) {
+                __flags.push("--attach-debugger", "" + __item);
+            }
+        }
+        if (options.client != null) {
+            __flags.push("--client", "" + options.client);
+        }
+        for (const __item of options.config ?? []) {
+            if (__item != null) {
+                __flags.push("--config", "" + __item);
+            }
+        }
+        if (options.configFile != null) {
+            __flags.push("--config-file", "" + options.configFile);
+        }
+        if (options.configPath) {
+            __flags.push("--config-path");
+        }
+        if (options.continueOnError) {
+            __flags.push("--continue-on-error");
+        }
+        if (options.copilot) {
+            __flags.push("--copilot");
+        }
+        if (options.debug) {
+            __flags.push("--debug");
+        }
+        if (options.diff) {
+            __flags.push("--diff");
+        }
+        for (const __item of options.exclude ?? []) {
+            if (__item != null) {
+                __flags.push("--exclude", "" + __item);
+            }
+        }
+        if (options.excludeDependents) {
+            __flags.push("--exclude-dependents");
+        }
+        if (options.execAgent != null) {
+            __flags.push("--exec-agent", "" + options.execAgent);
+        }
+        if (options.execKind != null) {
+            __flags.push("--exec-kind", "" + options.execKind);
+        }
+        if (options.expectNoChanges) {
+            __flags.push("--expect-no-changes");
+        }
+        if (options.ignoreProtect) {
+            __flags.push("--ignore-protect");
+        }
+        if (options.json) {
+            __flags.push("--json");
+        }
+        if (options.message != null) {
+            __flags.push("--message", "" + options.message);
+        }
+        if (options.neo) {
+            __flags.push("--neo");
+        }
+        if (options.neoTaskOnFailure) {
+            __flags.push("--neo-task-on-failure");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
+        }
+        for (const __item of options.overrideEnv ?? []) {
+            if (__item != null) {
+                __flags.push("--override-env", "" + __item);
+            }
+        }
+        if (options.parallel != null) {
+            __flags.push("--parallel", "" + options.parallel);
+        }
+        if (options.plan != null) {
+            __flags.push("--plan", "" + options.plan);
+        }
+        for (const __item of options.policyPack ?? []) {
+            if (__item != null) {
+                __flags.push("--policy-pack", "" + __item);
+            }
+        }
+        for (const __item of options.policyPackConfig ?? []) {
+            if (__item != null) {
+                __flags.push("--policy-pack-config", "" + __item);
+            }
+        }
+        if (options.refresh != null) {
+            __flags.push("--refresh", "" + options.refresh);
+        }
+        for (const __item of options.replace ?? []) {
+            if (__item != null) {
+                __flags.push("--replace", "" + __item);
+            }
+        }
+        if (options.runProgram) {
+            __flags.push("--run-program");
+        }
+        if (options.secretsProvider != null) {
+            __flags.push("--secrets-provider", "" + options.secretsProvider);
+        }
+        if (options.showConfig) {
+            __flags.push("--show-config");
+        }
+        if (options.showFullOutput) {
+            __flags.push("--show-full-output");
+        }
+        if (options.showPolicyExceptions) {
+            __flags.push("--show-policy-exceptions");
+        }
+        if (options.showPolicyRemediations) {
+            __flags.push("--show-policy-remediations");
+        }
+        if (options.showReads) {
+            __flags.push("--show-reads");
+        }
+        if (options.showReplacementSteps) {
+            __flags.push("--show-replacement-steps");
+        }
+        if (options.showSames) {
+            __flags.push("--show-sames");
+        }
+        if (options.showSecrets) {
+            __flags.push("--show-secrets");
+        }
+        if (options.skipConfigValidation) {
+            __flags.push("--skip-config-validation");
+        }
+        if (options.skipPluginPreInstall) {
+            __flags.push("--skip-plugin-pre-install");
+        }
+        if (options.stack != null) {
+            __flags.push("--stack", "" + options.stack);
+        }
+        if (options.strict) {
+            __flags.push("--strict");
+        }
+        if (options.suppressOutputs) {
+            __flags.push("--suppress-outputs");
+        }
+        if (options.suppressPermalink != null) {
+            __flags.push("--suppress-permalink", "" + options.suppressPermalink);
+        }
+        if (options.suppressProgress) {
+            __flags.push("--suppress-progress");
+        }
+        for (const __item of options.target ?? []) {
+            if (__item != null) {
+                __flags.push("--target", "" + __item);
+            }
+        }
+        if (options.targetDependents) {
+            __flags.push("--target-dependents");
+        }
+        for (const __item of options.targetReplace ?? []) {
+            if (__item != null) {
+                __flags.push("--target-replace", "" + __item);
+            }
+        }
+        if (options.urns) {
+            __flags.push("--urns");
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (templateOrUrl != null) {
+            __arguments.push("" + templateOrUrl);
+        }
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    version(options) {
+        const __final = [];
+        __final.push("version");
+        const __flags = [];
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose != null) {
+            __flags.push("--verbose", "" + options.verbose);
+        }
+        __final.push(...__flags);
+        const __arguments = [];
+        if (__arguments.length > 0) {
+            __final.push("--");
+            __final.push(...__arguments);
+        }
+        return this.__run(options, __final);
+    }
+    whoami(options) {
+        const __final = [];
+        __final.push("whoami");
+        const __flags = [];
+        __flags.push("--json");
+        if (options.color != null) {
+            __flags.push("--color", "" + options.color);
+        }
+        if (options.disableIntegrityChecking) {
+            __flags.push("--disable-integrity-checking");
+        }
+        if (options.fullyQualifyStackNames) {
+            __flags.push("--fully-qualify-stack-names");
+        }
+        if (options.logflow) {
+            __flags.push("--logflow");
+        }
+        if (options.logtostderr) {
+            __flags.push("--logtostderr");
+        }
+        if (options.memprofilerate != null) {
+            __flags.push("--memprofilerate", "" + options.memprofilerate);
+        }
+        if (options.otelTraces != null) {
+            __flags.push("--otel-traces", "" + options.otelTraces);
+        }
+        if (options.profiling != null) {
+            __flags.push("--profiling", "" + options.profiling);
+        }
+        if (options.tracing != null) {
+            __flags.push("--tracing", "" + options.tracing);
+        }
+        if (options.tracingHeader != null) {
+            __flags.push("--tracing-header", "" + options.tracingHeader);
+        }
+        if (options.verbose) {
+            __flags.push("--verbose");
+        }
+        if (options.output != null) {
+            __flags.push("--output", "" + options.output);
         }
         __final.push(...__flags);
         const __arguments = [];
@@ -55191,6 +61114,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 // Export top-level elements.
 __export(__nccwpck_require__(59147));
 __export(__nccwpck_require__(31118));
+__export(__nccwpck_require__(37501));
 __export(__nccwpck_require__(95988));
 __export(__nccwpck_require__(43016));
 __export(__nccwpck_require__(96005));
@@ -55220,6 +61144,58 @@ exports.utils = utils;
 /** @internal */
 exports.deploymentOnlyModule = true;
 //# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 37501:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright 2016, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+/**
+ * Creates an {@link InvokeOptions} from the given {@link ResourceOptions},
+ * copying the `parent`, `provider`, `version` and `pluginDownloadURL` options.
+ * All other resource options, including `dependsOn`, have no equivalent for
+ * plain invokes and are dropped; use
+ * {@link invokeOutputOptionsFromResourceOptions} to preserve `dependsOn`.
+ */
+function invokeOptionsFromResourceOptions(opts) {
+    return {
+        parent: opts.parent,
+        provider: opts.provider,
+        version: opts.version,
+        pluginDownloadURL: opts.pluginDownloadURL,
+    };
+}
+exports.invokeOptionsFromResourceOptions = invokeOptionsFromResourceOptions;
+/**
+ * Creates an {@link InvokeOutputOptions} from the given {@link ResourceOptions},
+ * copying the `parent`, `provider`, `version`, `pluginDownloadURL` and
+ * `dependsOn` options. All other resource options have no invoke equivalent and
+ * are dropped.
+ */
+function invokeOutputOptionsFromResourceOptions(opts) {
+    return {
+        ...invokeOptionsFromResourceOptions(opts),
+        dependsOn: opts.dependsOn,
+    };
+}
+exports.invokeOutputOptionsFromResourceOptions = invokeOutputOptionsFromResourceOptions;
+//# sourceMappingURL=invoke.js.map
 
 /***/ }),
 
@@ -71509,7 +77485,8 @@ proto.pulumirpc.GenerateProgramRequest.toObject = function(includeInstance, msg)
   var f, obj = {
 sourceMap: (f = msg.getSourceMap()) ? f.toObject(includeInstance, undefined) : [],
 loaderTarget: jspb.Message.getFieldWithDefault(msg, 2, ""),
-strict: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
+strict: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
+mapperTarget: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -71560,6 +77537,10 @@ proto.pulumirpc.GenerateProgramRequest.deserializeBinaryFromReader = function(ms
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setStrict(value);
       break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setMapperTarget(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -71604,6 +77585,13 @@ proto.pulumirpc.GenerateProgramRequest.serializeBinaryToWriter = function(messag
   if (f) {
     writer.writeBool(
       3,
+      f
+    );
+  }
+  f = message.getMapperTarget();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
       f
     );
   }
@@ -71666,6 +77654,24 @@ proto.pulumirpc.GenerateProgramRequest.prototype.getStrict = function() {
  */
 proto.pulumirpc.GenerateProgramRequest.prototype.setStrict = function(value) {
   return jspb.Message.setProto3BooleanField(this, 3, value);
+};
+
+
+/**
+ * optional string mapper_target = 4;
+ * @return {string}
+ */
+proto.pulumirpc.GenerateProgramRequest.prototype.getMapperTarget = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.GenerateProgramRequest} returns this
+ */
+proto.pulumirpc.GenerateProgramRequest.prototype.setMapperTarget = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -71900,7 +77906,8 @@ targetDirectory: jspb.Message.getFieldWithDefault(msg, 2, ""),
 project: jspb.Message.getFieldWithDefault(msg, 3, ""),
 strict: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
 loaderTarget: jspb.Message.getFieldWithDefault(msg, 5, ""),
-localDependenciesMap: (f = msg.getLocalDependenciesMap()) ? f.toObject(includeInstance, undefined) : []
+localDependenciesMap: (f = msg.getLocalDependenciesMap()) ? f.toObject(includeInstance, undefined) : [],
+mapperTarget: jspb.Message.getFieldWithDefault(msg, 7, "")
   };
 
   if (includeInstance) {
@@ -71962,6 +77969,10 @@ proto.pulumirpc.GenerateProjectRequest.deserializeBinaryFromReader = function(ms
       reader.readMessage(value, function(message, reader) {
         jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "", "");
          });
+      break;
+    case 7:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setMapperTarget(value);
       break;
     default:
       reader.skipField();
@@ -72030,6 +78041,13 @@ proto.pulumirpc.GenerateProjectRequest.serializeBinaryToWriter = function(messag
   f = message.getLocalDependenciesMap(true);
   if (f && f.getLength() > 0) {
     f.serializeBinary(6, writer, jspb.BinaryWriter.prototype.writeString, jspb.BinaryWriter.prototype.writeString);
+  }
+  f = message.getMapperTarget();
+  if (f.length > 0) {
+    writer.writeString(
+      7,
+      f
+    );
   }
 };
 
@@ -72144,6 +78162,24 @@ proto.pulumirpc.GenerateProjectRequest.prototype.getLocalDependenciesMap = funct
 proto.pulumirpc.GenerateProjectRequest.prototype.clearLocalDependenciesMap = function() {
   this.getLocalDependenciesMap().clear();
   return this;
+};
+
+
+/**
+ * optional string mapper_target = 7;
+ * @return {string}
+ */
+proto.pulumirpc.GenerateProjectRequest.prototype.getMapperTarget = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.GenerateProjectRequest} returns this
+ */
+proto.pulumirpc.GenerateProjectRequest.prototype.setMapperTarget = function(value) {
+  return jspb.Message.setProto3StringField(this, 7, value);
 };
 
 
@@ -76324,6 +82360,7 @@ goog.exportSymbol('proto.pulumirpc.DeleteRequest', null, global);
 goog.exportSymbol('proto.pulumirpc.DiffRequest', null, global);
 goog.exportSymbol('proto.pulumirpc.DiffResponse', null, global);
 goog.exportSymbol('proto.pulumirpc.DiffResponse.DiffChanges', null, global);
+goog.exportSymbol('proto.pulumirpc.ErrorResourceAwaitFailed', null, global);
 goog.exportSymbol('proto.pulumirpc.ErrorResourceInitFailed', null, global);
 goog.exportSymbol('proto.pulumirpc.GetMappingRequest', null, global);
 goog.exportSymbol('proto.pulumirpc.GetMappingResponse', null, global);
@@ -77287,6 +83324,27 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.pulumirpc.ErrorResourceAwaitFailed = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.pulumirpc.ErrorResourceAwaitFailed, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.pulumirpc.ErrorResourceAwaitFailed.displayName = 'proto.pulumirpc.ErrorResourceAwaitFailed';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.pulumirpc.GetMappingRequest = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
@@ -77425,7 +83483,10 @@ mapperTarget: (f = jspb.Message.getField(msg, 8)) == null ? undefined : f,
 loaderTarget: (f = jspb.Message.getField(msg, 9)) == null ? undefined : f,
 resolverTarget: (f = jspb.Message.getField(msg, 10)) == null ? undefined : f,
 acceptsByteString: jspb.Message.getBooleanFieldWithDefault(msg, 11, false),
-sendsOldOutputsToCheck: jspb.Message.getBooleanFieldWithDefault(msg, 12, false)
+sendsOldOutputsToCheck: jspb.Message.getBooleanFieldWithDefault(msg, 12, false),
+acceptsOutputsInInvoke: jspb.Message.getBooleanFieldWithDefault(msg, 13, false),
+acceptsOutputsInCall: jspb.Message.getBooleanFieldWithDefault(msg, 14, false),
+acceptsOutputsInCheck: jspb.Message.getBooleanFieldWithDefault(msg, 15, false)
   };
 
   if (includeInstance) {
@@ -77509,6 +83570,18 @@ proto.pulumirpc.ProviderHandshakeRequest.deserializeBinaryFromReader = function(
     case 12:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setSendsOldOutputsToCheck(value);
+      break;
+    case 13:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setAcceptsOutputsInInvoke(value);
+      break;
+    case 14:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setAcceptsOutputsInCall(value);
+      break;
+    case 15:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setAcceptsOutputsInCheck(value);
       break;
     default:
       reader.skipField();
@@ -77620,6 +83693,27 @@ proto.pulumirpc.ProviderHandshakeRequest.serializeBinaryToWriter = function(mess
   if (f) {
     writer.writeBool(
       12,
+      f
+    );
+  }
+  f = message.getAcceptsOutputsInInvoke();
+  if (f) {
+    writer.writeBool(
+      13,
+      f
+    );
+  }
+  f = message.getAcceptsOutputsInCall();
+  if (f) {
+    writer.writeBool(
+      14,
+      f
+    );
+  }
+  f = message.getAcceptsOutputsInCheck();
+  if (f) {
+    writer.writeBool(
+      15,
       f
     );
   }
@@ -77932,6 +84026,60 @@ proto.pulumirpc.ProviderHandshakeRequest.prototype.setSendsOldOutputsToCheck = f
 };
 
 
+/**
+ * optional bool accepts_outputs_in_invoke = 13;
+ * @return {boolean}
+ */
+proto.pulumirpc.ProviderHandshakeRequest.prototype.getAcceptsOutputsInInvoke = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 13, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ProviderHandshakeRequest} returns this
+ */
+proto.pulumirpc.ProviderHandshakeRequest.prototype.setAcceptsOutputsInInvoke = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 13, value);
+};
+
+
+/**
+ * optional bool accepts_outputs_in_call = 14;
+ * @return {boolean}
+ */
+proto.pulumirpc.ProviderHandshakeRequest.prototype.getAcceptsOutputsInCall = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 14, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ProviderHandshakeRequest} returns this
+ */
+proto.pulumirpc.ProviderHandshakeRequest.prototype.setAcceptsOutputsInCall = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 14, value);
+};
+
+
+/**
+ * optional bool accepts_outputs_in_check = 15;
+ * @return {boolean}
+ */
+proto.pulumirpc.ProviderHandshakeRequest.prototype.getAcceptsOutputsInCheck = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 15, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ProviderHandshakeRequest} returns this
+ */
+proto.pulumirpc.ProviderHandshakeRequest.prototype.setAcceptsOutputsInCheck = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 15, value);
+};
+
+
 
 
 
@@ -77968,7 +84116,10 @@ acceptSecrets: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
 acceptResources: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
 acceptOutputs: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
 supportsAutonamingConfiguration: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-acceptsByteString: jspb.Message.getBooleanFieldWithDefault(msg, 6, false)
+acceptsByteString: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
+acceptsOutputsInInvoke: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
+acceptsOutputsInCall: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
+acceptsOutputsInCheck: jspb.Message.getBooleanFieldWithDefault(msg, 9, false)
   };
 
   if (includeInstance) {
@@ -78024,6 +84175,18 @@ proto.pulumirpc.ProviderHandshakeResponse.deserializeBinaryFromReader = function
     case 6:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setAcceptsByteString(value);
+      break;
+    case 7:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setAcceptsOutputsInInvoke(value);
+      break;
+    case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setAcceptsOutputsInCall(value);
+      break;
+    case 9:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setAcceptsOutputsInCheck(value);
       break;
     default:
       reader.skipField();
@@ -78086,6 +84249,27 @@ proto.pulumirpc.ProviderHandshakeResponse.serializeBinaryToWriter = function(mes
   if (f) {
     writer.writeBool(
       6,
+      f
+    );
+  }
+  f = message.getAcceptsOutputsInInvoke();
+  if (f) {
+    writer.writeBool(
+      7,
+      f
+    );
+  }
+  f = message.getAcceptsOutputsInCall();
+  if (f) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
+  f = message.getAcceptsOutputsInCheck();
+  if (f) {
+    writer.writeBool(
+      9,
       f
     );
   }
@@ -78179,6 +84363,60 @@ proto.pulumirpc.ProviderHandshakeResponse.prototype.getAcceptsByteString = funct
  */
 proto.pulumirpc.ProviderHandshakeResponse.prototype.setAcceptsByteString = function(value) {
   return jspb.Message.setProto3BooleanField(this, 6, value);
+};
+
+
+/**
+ * optional bool accepts_outputs_in_invoke = 7;
+ * @return {boolean}
+ */
+proto.pulumirpc.ProviderHandshakeResponse.prototype.getAcceptsOutputsInInvoke = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ProviderHandshakeResponse} returns this
+ */
+proto.pulumirpc.ProviderHandshakeResponse.prototype.setAcceptsOutputsInInvoke = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 7, value);
+};
+
+
+/**
+ * optional bool accepts_outputs_in_call = 8;
+ * @return {boolean}
+ */
+proto.pulumirpc.ProviderHandshakeResponse.prototype.getAcceptsOutputsInCall = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 8, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ProviderHandshakeResponse} returns this
+ */
+proto.pulumirpc.ProviderHandshakeResponse.prototype.setAcceptsOutputsInCall = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 8, value);
+};
+
+
+/**
+ * optional bool accepts_outputs_in_check = 9;
+ * @return {boolean}
+ */
+proto.pulumirpc.ProviderHandshakeResponse.prototype.getAcceptsOutputsInCheck = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 9, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ProviderHandshakeResponse} returns this
+ */
+proto.pulumirpc.ProviderHandshakeResponse.prototype.setAcceptsOutputsInCheck = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 9, value);
 };
 
 
@@ -90125,6 +96363,107 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
+proto.pulumirpc.ErrorResourceAwaitFailed.prototype.toObject = function(opt_includeInstance) {
+  return proto.pulumirpc.ErrorResourceAwaitFailed.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.pulumirpc.ErrorResourceAwaitFailed} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.ErrorResourceAwaitFailed.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.pulumirpc.ErrorResourceAwaitFailed}
+ */
+proto.pulumirpc.ErrorResourceAwaitFailed.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.pulumirpc.ErrorResourceAwaitFailed;
+  return proto.pulumirpc.ErrorResourceAwaitFailed.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.pulumirpc.ErrorResourceAwaitFailed} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.pulumirpc.ErrorResourceAwaitFailed}
+ */
+proto.pulumirpc.ErrorResourceAwaitFailed.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.pulumirpc.ErrorResourceAwaitFailed.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.pulumirpc.ErrorResourceAwaitFailed.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.pulumirpc.ErrorResourceAwaitFailed} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.ErrorResourceAwaitFailed.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
 proto.pulumirpc.GetMappingRequest.prototype.toObject = function(opt_includeInstance) {
   return proto.pulumirpc.GetMappingRequest.toObject(opt_includeInstance, this);
 };
@@ -91141,6 +97480,28 @@ function deserialize_pulumirpc_DeploymentInfo(buffer_arg) {
   return pulumi_resource_pb.DeploymentInfo.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_pulumirpc_ExistsResourceRequest(arg) {
+  if (!(arg instanceof pulumi_resource_pb.ExistsResourceRequest)) {
+    throw new Error('Expected argument of type pulumirpc.ExistsResourceRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_pulumirpc_ExistsResourceRequest(buffer_arg) {
+  return pulumi_resource_pb.ExistsResourceRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_pulumirpc_ExistsResourceResponse(arg) {
+  if (!(arg instanceof pulumi_resource_pb.ExistsResourceResponse)) {
+    throw new Error('Expected argument of type pulumirpc.ExistsResourceResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_pulumirpc_ExistsResourceResponse(buffer_arg) {
+  return pulumi_resource_pb.ExistsResourceResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_pulumirpc_ReadResourceRequest(arg) {
   if (!(arg instanceof pulumi_resource_pb.ReadResourceRequest)) {
     throw new Error('Expected argument of type pulumirpc.ReadResourceRequest');
@@ -91362,6 +97723,17 @@ getDeploymentInfo: {
     responseSerialize: serialize_pulumirpc_ReadResourceResponse,
     responseDeserialize: deserialize_pulumirpc_ReadResourceResponse,
   },
+  existsResource: {
+    path: '/pulumirpc.ResourceMonitor/ExistsResource',
+    requestStream: false,
+    responseStream: false,
+    requestType: pulumi_resource_pb.ExistsResourceRequest,
+    responseType: pulumi_resource_pb.ExistsResourceResponse,
+    requestSerialize: serialize_pulumirpc_ExistsResourceRequest,
+    requestDeserialize: deserialize_pulumirpc_ExistsResourceRequest,
+    responseSerialize: serialize_pulumirpc_ExistsResourceResponse,
+    responseDeserialize: deserialize_pulumirpc_ExistsResourceResponse,
+  },
   registerResource: {
     path: '/pulumirpc.ResourceMonitor/RegisterResource',
     requestStream: false,
@@ -91507,6 +97879,8 @@ goog.object.extend(proto, pulumi_callback_pb);
 goog.exportSymbol('proto.pulumirpc.DeploymentInfo', null, global);
 goog.exportSymbol('proto.pulumirpc.ErrorHookRequest', null, global);
 goog.exportSymbol('proto.pulumirpc.ErrorHookResponse', null, global);
+goog.exportSymbol('proto.pulumirpc.ExistsResourceRequest', null, global);
+goog.exportSymbol('proto.pulumirpc.ExistsResourceResponse', null, global);
 goog.exportSymbol('proto.pulumirpc.Parameterization', null, global);
 goog.exportSymbol('proto.pulumirpc.ReadResourceRequest', null, global);
 goog.exportSymbol('proto.pulumirpc.ReadResourceResponse', null, global);
@@ -91644,6 +98018,48 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.pulumirpc.ReadResourceResponse.displayName = 'proto.pulumirpc.ReadResourceResponse';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.pulumirpc.ExistsResourceRequest = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.pulumirpc.ExistsResourceRequest, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.pulumirpc.ExistsResourceRequest.displayName = 'proto.pulumirpc.ExistsResourceRequest';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.pulumirpc.ExistsResourceResponse = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.pulumirpc.ExistsResourceResponse, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.pulumirpc.ExistsResourceResponse.displayName = 'proto.pulumirpc.ExistsResourceResponse';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -93690,7 +100106,10 @@ proto.pulumirpc.ReadResourceResponse.prototype.toObject = function(opt_includeIn
 proto.pulumirpc.ReadResourceResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
 urn: jspb.Message.getFieldWithDefault(msg, 1, ""),
-properties: (f = msg.getProperties()) && google_protobuf_struct_pb.Struct.toObject(includeInstance, f)
+properties: (f = msg.getProperties()) && google_protobuf_struct_pb.Struct.toObject(includeInstance, f),
+result: jspb.Message.getFieldWithDefault(msg, 3, 0),
+unknown: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
+id: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -93736,6 +100155,18 @@ proto.pulumirpc.ReadResourceResponse.deserializeBinaryFromReader = function(msg,
       reader.readMessage(value,google_protobuf_struct_pb.Struct.deserializeBinaryFromReader);
       msg.setProperties(value);
       break;
+    case 3:
+      var value = /** @type {!proto.pulumirpc.Result} */ (reader.readEnum());
+      msg.setResult(value);
+      break;
+    case 4:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setUnknown(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -93778,6 +100209,27 @@ proto.pulumirpc.ReadResourceResponse.serializeBinaryToWriter = function(message,
       2,
       f,
       google_protobuf_struct_pb.Struct.serializeBinaryToWriter
+    );
+  }
+  f = message.getResult();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      3,
+      f
+    );
+  }
+  f = message.getUnknown();
+  if (f) {
+    writer.writeBool(
+      4,
+      f
+    );
+  }
+  f = message.getId();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
     );
   }
 };
@@ -93835,6 +100287,615 @@ proto.pulumirpc.ReadResourceResponse.prototype.clearProperties = function() {
  */
 proto.pulumirpc.ReadResourceResponse.prototype.hasProperties = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional Result result = 3;
+ * @return {!proto.pulumirpc.Result}
+ */
+proto.pulumirpc.ReadResourceResponse.prototype.getResult = function() {
+  return /** @type {!proto.pulumirpc.Result} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {!proto.pulumirpc.Result} value
+ * @return {!proto.pulumirpc.ReadResourceResponse} returns this
+ */
+proto.pulumirpc.ReadResourceResponse.prototype.setResult = function(value) {
+  return jspb.Message.setProto3EnumField(this, 3, value);
+};
+
+
+/**
+ * optional bool unknown = 4;
+ * @return {boolean}
+ */
+proto.pulumirpc.ReadResourceResponse.prototype.getUnknown = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ReadResourceResponse} returns this
+ */
+proto.pulumirpc.ReadResourceResponse.prototype.setUnknown = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 4, value);
+};
+
+
+/**
+ * optional string id = 5;
+ * @return {string}
+ */
+proto.pulumirpc.ReadResourceResponse.prototype.getId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.ReadResourceResponse} returns this
+ */
+proto.pulumirpc.ReadResourceResponse.prototype.setId = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.pulumirpc.ExistsResourceRequest.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.pulumirpc.ExistsResourceRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.ExistsResourceRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+type: jspb.Message.getFieldWithDefault(msg, 1, ""),
+id: jspb.Message.getFieldWithDefault(msg, 2, ""),
+parent: jspb.Message.getFieldWithDefault(msg, 3, ""),
+properties: (f = msg.getProperties()) && google_protobuf_struct_pb.Struct.toObject(includeInstance, f),
+provider: jspb.Message.getFieldWithDefault(msg, 5, ""),
+version: jspb.Message.getFieldWithDefault(msg, 6, ""),
+plugindownloadurl: jspb.Message.getFieldWithDefault(msg, 7, ""),
+pluginchecksumsMap: (f = msg.getPluginchecksumsMap()) ? f.toObject(includeInstance, undefined) : [],
+packageref: jspb.Message.getFieldWithDefault(msg, 9, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.pulumirpc.ExistsResourceRequest}
+ */
+proto.pulumirpc.ExistsResourceRequest.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.pulumirpc.ExistsResourceRequest;
+  return proto.pulumirpc.ExistsResourceRequest.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.pulumirpc.ExistsResourceRequest} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.pulumirpc.ExistsResourceRequest}
+ */
+proto.pulumirpc.ExistsResourceRequest.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setType(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setId(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setParent(value);
+      break;
+    case 4:
+      var value = new google_protobuf_struct_pb.Struct;
+      reader.readMessage(value,google_protobuf_struct_pb.Struct.deserializeBinaryFromReader);
+      msg.setProperties(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setProvider(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setVersion(value);
+      break;
+    case 7:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPlugindownloadurl(value);
+      break;
+    case 8:
+      var value = msg.getPluginchecksumsMap();
+      reader.readMessage(value, function(message, reader) {
+        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readBytes, null, "", "");
+         });
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPackageref(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.pulumirpc.ExistsResourceRequest.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.pulumirpc.ExistsResourceRequest} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.ExistsResourceRequest.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getType();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getId();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = message.getParent();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = message.getProperties();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      google_protobuf_struct_pb.Struct.serializeBinaryToWriter
+    );
+  }
+  f = message.getProvider();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+  f = message.getVersion();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
+      f
+    );
+  }
+  f = message.getPlugindownloadurl();
+  if (f.length > 0) {
+    writer.writeString(
+      7,
+      f
+    );
+  }
+  f = message.getPluginchecksumsMap(true);
+  if (f && f.getLength() > 0) {
+    f.serializeBinary(8, writer, jspb.BinaryWriter.prototype.writeString, jspb.BinaryWriter.prototype.writeBytes);
+  }
+  f = message.getPackageref();
+  if (f.length > 0) {
+    writer.writeString(
+      9,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string type = 1;
+ * @return {string}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.getType = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.setType = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string id = 2;
+ * @return {string}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.getId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.setId = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string parent = 3;
+ * @return {string}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.getParent = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.setParent = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional google.protobuf.Struct properties = 4;
+ * @return {?proto.google.protobuf.Struct}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.getProperties = function() {
+  return /** @type{?proto.google.protobuf.Struct} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_struct_pb.Struct, 4));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Struct|undefined} value
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+*/
+proto.pulumirpc.ExistsResourceRequest.prototype.setProperties = function(value) {
+  return jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.clearProperties = function() {
+  return this.setProperties(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.hasProperties = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional string provider = 5;
+ * @return {string}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.getProvider = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.setProvider = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+/**
+ * optional string version = 6;
+ * @return {string}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.getVersion = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.setVersion = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
+};
+
+
+/**
+ * optional string pluginDownloadURL = 7;
+ * @return {string}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.getPlugindownloadurl = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.setPlugindownloadurl = function(value) {
+  return jspb.Message.setProto3StringField(this, 7, value);
+};
+
+
+/**
+ * map<string, bytes> pluginChecksums = 8;
+ * @param {boolean=} opt_noLazyCreate Do not create the map if
+ * empty, instead returning `undefined`
+ * @return {!jspb.Map<string,!(string|Uint8Array)>}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.getPluginchecksumsMap = function(opt_noLazyCreate) {
+  return /** @type {!jspb.Map<string,!(string|Uint8Array)>} */ (
+      jspb.Message.getMapField(this, 8, opt_noLazyCreate,
+      null));
+};
+
+
+/**
+ * Clears values from the map. The map will be non-null.
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.clearPluginchecksumsMap = function() {
+  this.getPluginchecksumsMap().clear();
+  return this;
+};
+
+
+/**
+ * optional string packageRef = 9;
+ * @return {string}
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.getPackageref = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.pulumirpc.ExistsResourceRequest} returns this
+ */
+proto.pulumirpc.ExistsResourceRequest.prototype.setPackageref = function(value) {
+  return jspb.Message.setProto3StringField(this, 9, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.pulumirpc.ExistsResourceResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.pulumirpc.ExistsResourceResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.pulumirpc.ExistsResourceResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.ExistsResourceResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+exists: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+unknown: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.pulumirpc.ExistsResourceResponse}
+ */
+proto.pulumirpc.ExistsResourceResponse.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.pulumirpc.ExistsResourceResponse;
+  return proto.pulumirpc.ExistsResourceResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.pulumirpc.ExistsResourceResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.pulumirpc.ExistsResourceResponse}
+ */
+proto.pulumirpc.ExistsResourceResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setExists(value);
+      break;
+    case 2:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setUnknown(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.pulumirpc.ExistsResourceResponse.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.pulumirpc.ExistsResourceResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.pulumirpc.ExistsResourceResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.pulumirpc.ExistsResourceResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getExists();
+  if (f) {
+    writer.writeBool(
+      1,
+      f
+    );
+  }
+  f = message.getUnknown();
+  if (f) {
+    writer.writeBool(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional bool exists = 1;
+ * @return {boolean}
+ */
+proto.pulumirpc.ExistsResourceResponse.prototype.getExists = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ExistsResourceResponse} returns this
+ */
+proto.pulumirpc.ExistsResourceResponse.prototype.setExists = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 1, value);
+};
+
+
+/**
+ * optional bool unknown = 2;
+ * @return {boolean}
+ */
+proto.pulumirpc.ExistsResourceResponse.prototype.getUnknown = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ExistsResourceResponse} returns this
+ */
+proto.pulumirpc.ExistsResourceResponse.prototype.setUnknown = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 2, value);
 };
 
 
@@ -97221,7 +104282,8 @@ parentstacktracehandle: jspb.Message.getFieldWithDefault(msg, 11, ""),
 packageref: jspb.Message.getFieldWithDefault(msg, 9, ""),
 acceptsByteString: jspb.Message.getBooleanFieldWithDefault(msg, 12, false),
 dependsonList: (f = jspb.Message.getRepeatedField(msg, 13)) == null ? undefined : f,
-parent: jspb.Message.getFieldWithDefault(msg, 15, "")
+parent: jspb.Message.getFieldWithDefault(msg, 15, ""),
+acceptOutputValues: jspb.Message.getBooleanFieldWithDefault(msg, 16, false)
   };
 
   if (includeInstance) {
@@ -97318,6 +104380,10 @@ proto.pulumirpc.ResourceInvokeRequest.deserializeBinaryFromReader = function(msg
     case 15:
       var value = /** @type {string} */ (reader.readString());
       msg.setParent(value);
+      break;
+    case 16:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setAcceptOutputValues(value);
       break;
     default:
       reader.skipField();
@@ -97443,6 +104509,13 @@ proto.pulumirpc.ResourceInvokeRequest.serializeBinaryToWriter = function(message
   if (f.length > 0) {
     writer.writeString(
       15,
+      f
+    );
+  }
+  f = message.getAcceptOutputValues();
+  if (f) {
+    writer.writeBool(
+      16,
       f
     );
   }
@@ -97782,6 +104855,24 @@ proto.pulumirpc.ResourceInvokeRequest.prototype.setParent = function(value) {
 };
 
 
+/**
+ * optional bool accept_output_values = 16;
+ * @return {boolean}
+ */
+proto.pulumirpc.ResourceInvokeRequest.prototype.getAcceptOutputValues = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 16, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ResourceInvokeRequest} returns this
+ */
+proto.pulumirpc.ResourceInvokeRequest.prototype.setAcceptOutputValues = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 16, value);
+};
+
+
 
 /**
  * List of repeated fields within this message type.
@@ -98066,7 +105157,8 @@ sourceposition: (f = msg.getSourceposition()) && pulumi_source_pb.SourcePosition
 stacktrace: (f = msg.getStacktrace()) && pulumi_source_pb.StackTrace.toObject(includeInstance, f),
 parentstacktracehandle: jspb.Message.getFieldWithDefault(msg, 19, ""),
 packageref: jspb.Message.getFieldWithDefault(msg, 17, ""),
-acceptsByteString: jspb.Message.getBooleanFieldWithDefault(msg, 20, false)
+acceptsByteString: jspb.Message.getBooleanFieldWithDefault(msg, 20, false),
+acceptOutputValues: jspb.Message.getBooleanFieldWithDefault(msg, 21, false)
   };
 
   if (includeInstance) {
@@ -98157,6 +105249,10 @@ proto.pulumirpc.ResourceCallRequest.deserializeBinaryFromReader = function(msg, 
     case 20:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setAcceptsByteString(value);
+      break;
+    case 21:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setAcceptOutputValues(value);
       break;
     default:
       reader.skipField();
@@ -98265,6 +105361,13 @@ proto.pulumirpc.ResourceCallRequest.serializeBinaryToWriter = function(message, 
   if (f) {
     writer.writeBool(
       20,
+      f
+    );
+  }
+  f = message.getAcceptOutputValues();
+  if (f) {
+    writer.writeBool(
+      21,
       f
     );
   }
@@ -98707,6 +105810,24 @@ proto.pulumirpc.ResourceCallRequest.prototype.getAcceptsByteString = function() 
  */
 proto.pulumirpc.ResourceCallRequest.prototype.setAcceptsByteString = function(value) {
   return jspb.Message.setProto3BooleanField(this, 20, value);
+};
+
+
+/**
+ * optional bool accept_output_values = 21;
+ * @return {boolean}
+ */
+proto.pulumirpc.ResourceCallRequest.prototype.getAcceptOutputValues = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 21, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pulumirpc.ResourceCallRequest} returns this
+ */
+proto.pulumirpc.ResourceCallRequest.prototype.setAcceptOutputValues = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 21, value);
 };
 
 
@@ -104721,7 +111842,9 @@ proto.pulumirpc.ResourceMonitorFeature = {
   RESOURCE_MONITOR_FEATURE_BYTE_STRING: 13,
   RESOURCE_MONITOR_FEATURE_INVOKE_DEPENDS_ON: 14,
   RESOURCE_MONITOR_FEATURE_INVOKE_PARENT: 15,
-  RESOURCE_MONITOR_FEATURE_STATE_MIGRATIONS: 16
+  RESOURCE_MONITOR_FEATURE_STATE_MIGRATIONS: 16,
+  RESOURCE_MONITOR_FEATURE_INVOKE_OUTPUT_VALUES: 17,
+  RESOURCE_MONITOR_FEATURE_CALL_OUTPUT_VALUES: 18
 };
 
 /**
@@ -104729,8 +111852,7 @@ proto.pulumirpc.ResourceMonitorFeature = {
  */
 proto.pulumirpc.Result = {
   SUCCESS: 0,
-  FAIL: 1,
-  SKIP: 2
+  FAIL: 1
 };
 
 goog.object.extend(exports, proto.pulumirpc);
@@ -106453,6 +113575,7 @@ const output_1 = __nccwpck_require__(43016);
 const resource_1 = __nccwpck_require__(10776);
 const rpc_1 = __nccwpck_require__(85397);
 const settings_1 = __nccwpck_require__(94213);
+const stateMigration_1 = __nccwpck_require__(65555);
 const state_1 = __nccwpck_require__(39623);
 const utils = __importStar(__nccwpck_require__(67812));
 /**
@@ -106596,6 +113719,7 @@ class Resource {
             this.__providers = {};
             return;
         }
+        stateMigration_1.ensureNotInStateMigration("resource construction");
         if (opts.parent && !Resource.isInstance(opts.parent)) {
             throw new Error(`Resource parent is not a valid Resource: ${opts.parent}`);
         }
@@ -107347,6 +114471,7 @@ const resource_2 = __nccwpck_require__(10776);
 const rpc_1 = __nccwpck_require__(85397);
 const debuggable_1 = __nccwpck_require__(20500);
 const settings_1 = __nccwpck_require__(94213);
+const stateMigration_1 = __nccwpck_require__(65555);
 class CallbackServer {
     constructor(monitor) {
         this._callbacks = new Map();
@@ -107697,6 +114822,32 @@ class CallbackServer {
         req.setToken(uuid);
         req.setTarget(await this._target);
         return req;
+    }
+    async registerStateMigration(migration) {
+        const cb = async (bytes) => {
+            const request = resproto.StateMigrationRequest.deserializeBinary(bytes);
+            const oldState = JSON.parse(Buffer.from(request.getOldState_asU8()).toString("utf8"));
+            const result = await stateMigration_1.runStateMigration(request.getUrn(), () => migration({
+                urn: request.getUrn(),
+                oldState,
+            }));
+            const response = new resproto.StateMigrationResponse();
+            if (result === undefined) {
+                return response;
+            }
+            response.setNewState(Buffer.from(JSON.stringify(result.newState), "utf8"));
+            const successors = response.getSuccessorsMap();
+            for (const [oldUrn, newUrn] of Object.entries(result.successors ?? {})) {
+                successors.set(oldUrn, newUrn);
+            }
+            return response;
+        };
+        const token = crypto_1.randomUUID();
+        this._callbacks.set(token, cb);
+        const callback = new callback_pb_1.Callback();
+        callback.setToken(token);
+        callback.setTarget(await this._target);
+        return callback;
     }
     registerStackTransform(transform) {
         this._pendingRegistrations++;
@@ -109451,20 +116602,15 @@ function isImportStarResult(obj) {
  * be `/`).
  */
 async function findNormalizedModuleNameAsync(obj) {
-    // First, check the built-in modules
-    const modules = await getBuiltInModules();
-    const key = modules.get(obj);
-    if (key) {
-        return key;
-    }
     // When TypeScript compiles `import * as foo from "foo"` with `module: "nodenext"`, it emits
     // `__importStar(require("foo"))`. This creates a wrapper object with a `default` property that holds the original
     // module.
-    if (isImportStarResult(obj)) {
-        const unwrappedKey = modules.get(obj.default);
-        if (unwrappedKey) {
-            return unwrappedKey;
-        }
+    const target = isImportStarResult(obj) ? obj.default : obj;
+    // First, check the built-in modules
+    const modules = await getBuiltInModules();
+    const key = modules.get(target);
+    if (key) {
+        return key;
     }
     // Next, check the Node module require cache, which will store cached values
     // of all non-built-in Node modules loaded by the program so far. _Note_: We
@@ -109472,7 +116618,7 @@ async function findNormalizedModuleNameAsync(obj) {
     // dynamically during execution.
     for (const path of Object.keys(require.cache)) {
         const c = require.cache[path];
-        if (c !== undefined && c.exports === obj) {
+        if (c !== undefined && c.exports === target) {
             // Rewrite the path to be a local module reference relative to the current working
             // directory.
             const modPath = upath.relative(process.cwd(), path);
@@ -112330,6 +119476,7 @@ const debuggable_1 = __nccwpck_require__(20500);
 const rpc_1 = __nccwpck_require__(85397);
 const settings_1 = __nccwpck_require__(94213);
 const state_1 = __nccwpck_require__(39623);
+const stateMigration_1 = __nccwpck_require__(65555);
 const resource_1 = __nccwpck_require__(96005);
 const utils = __importStar(__nccwpck_require__(67812));
 const dependsOn_1 = __nccwpck_require__(19052);
@@ -112374,6 +119521,7 @@ const resourceproto = __importStar(__nccwpck_require__(86831));
  * to operate synchronously.
  */
 function invoke(tok, props, opts = {}, packageRef) {
+    stateMigration_1.ensureNotInStateMigration("invoke");
     const optsCopy = { ...opts };
     if ("dependsOn" in optsCopy) {
         // DependsOn is only allowed for invokeOutput.
@@ -112392,6 +119540,7 @@ exports.invoke = invoke;
  * secrets of the response, if any.
  */
 function invokeOutput(tok, props, opts = {}, packageRef) {
+    stateMigration_1.ensureNotInStateMigration("invoke");
     const [output, resolve] = createOutput(`invoke(${tok})`);
     invokeAsync(tok, props, opts, packageRef, true /* checkDependencies */)
         .then((response) => {
@@ -112419,6 +119568,7 @@ function extractSingleValue(result) {
  * an object with a single key.
  */
 function invokeSingle(tok, props, opts = {}, packageRef) {
+    stateMigration_1.ensureNotInStateMigration("invoke");
     return invokeAsync(tok, props, opts, packageRef).then((response) => {
         // ignore secrets for plain invoke
         const { result } = response;
@@ -112431,6 +119581,7 @@ exports.invokeSingle = invokeSingle;
  * secrets of the response, if any.
  */
 function invokeSingleOutput(tok, props, opts = {}, packageRef) {
+    stateMigration_1.ensureNotInStateMigration("invoke");
     const [output, resolve] = createOutput(`invokeSingleOutput(${tok})`);
     invokeAsync(tok, props, opts, packageRef, true /* checkDependencies */)
         .then((response) => {
@@ -112737,6 +119888,7 @@ function callAsync(tok, props, res, packageRef) {
  * Calls a method `tok` offered by a provider plugin resource.
  */
 function call(tok, props, res, packageRef) {
+    stateMigration_1.ensureNotInStateMigration("call");
     const [output, resolve] = createOutput(`call(${tok})`);
     callAsync(tok, props, res, packageRef)
         .then((response) => {
@@ -112759,6 +119911,7 @@ exports.call = call;
  * which it unwraps.
  */
 function callSingle(tok, props, res, packageRef) {
+    stateMigration_1.ensureNotInStateMigration("call");
     const [output, resolve] = createOutput(`callSingle(${tok})`);
     callAsync(tok, props, res, packageRef)
         .then((response) => {
@@ -112945,6 +120098,13 @@ class MockMonitor {
             callback(err, undefined);
         }
     }
+    existsResource(req, callback) {
+        const prefix = "urn:pulumi:" + [settings_1.getStack(), settings_1.getProject()].join("::") + "::";
+        const exists = [...this.resources.values()].some((r) => r.id === req.getId() && r.urn.slice(prefix.length).split("::")[0].split("$").pop() === req.getType());
+        const response = new resproto.ExistsResourceResponse();
+        response.setExists(exists);
+        callback(null, response);
+    }
     async registerResource(req, callback) {
         try {
             const transforms = req
@@ -113028,6 +120188,7 @@ class MockMonitor {
             resproto.ResourceMonitorFeature.RESOURCE_MONITOR_FEATURE_PARAMETERIZATION,
             resproto.ResourceMonitorFeature.RESOURCE_MONITOR_FEATURE_RESOURCE_HOOKS,
             resproto.ResourceMonitorFeature.RESOURCE_MONITOR_FEATURE_ERROR_HOOKS,
+            resproto.ResourceMonitorFeature.RESOURCE_MONITOR_FEATURE_STATE_MIGRATIONS,
         ]);
         callback(null, resp);
     }
@@ -113110,6 +120271,7 @@ const resource_1 = __nccwpck_require__(96005);
 const debuggable_1 = __nccwpck_require__(20500);
 const dependsOn_1 = __nccwpck_require__(19052);
 const state_1 = __nccwpck_require__(39623);
+const stateMigration_1 = __nccwpck_require__(65555);
 const errors_1 = __nccwpck_require__(31118);
 const rpc_1 = __nccwpck_require__(85397);
 const settings_1 = __nccwpck_require__(94213);
@@ -113315,6 +120477,8 @@ function readResource(res, parent, t, name, props, opts, sourcePosition, stackTr
                     resp = {
                         getUrn: () => mockurn,
                         getProperties: () => req.getProperties(),
+                        getResult: () => 0,
+                        getUnknown: () => false,
                     };
                 }
             }
@@ -113323,12 +120487,33 @@ function readResource(res, parent, t, name, props, opts, sourcePosition, stackTr
                 resp = {
                     getUrn: () => "",
                     getProperties: () => undefined,
+                    getResult: () => 0,
+                    getUnknown: () => false,
                 };
             }
-            // Now resolve everything: the URN, the ID (supplied as input), and the output properties.
+            // Now resolve everything: the URN, the ID, and the output properties.
             resop.resolveURN(resp.getUrn(), err);
-            resop.resolveID(resolvedID, resolvedID !== undefined, err);
-            await resolveOutputs(res, t, name, props, resp.getProperties(), {}, resop.resolvers, err);
+            // Prefer the id returned by the provider's Read, which may differ from the id
+            // supplied on the request (e.g. a provider that normalizes it to a canonical
+            // form). An empty response id during preview means "unknown"; during update it
+            // indicates an older engine that did not populate the field, in which case we
+            // fall back to the request id for back-compat.
+            const respID = resp.getId?.() || "";
+            if (respID !== "") {
+                resop.resolveID(respID, true, err);
+            }
+            else if (settings_1.isDryRun()) {
+                resop.resolveID(undefined, false, err);
+            }
+            else {
+                resop.resolveID(resolvedID, resolvedID !== undefined, err);
+            }
+            // A skipped read reports Unknown=true and a failed read reports a non-success result;
+            // resolve outputs as unknown in both cases so dependents propagate unknowns instead of
+            // seeing empty values as real.
+            const resultFailed = resp.getResult() !== resproto.Result.SUCCESS;
+            const unknown = !settings_1.isDryRun() && resp.getUnknown();
+            await resolveOutputs(res, t, name, resultFailed ? {} : props, resultFailed ? undefined : resp.getProperties(), {}, resop.resolvers, err, resultFailed || unknown);
             done();
         });
     })
@@ -113339,6 +120524,79 @@ function readResource(res, parent, t, name, props, opts, sourcePosition, stackTr
     }), label);
 }
 exports.readResource = readResource;
+/**
+ * Checks whether a resource exists in the provider without actually reading or importing it.
+ */
+function existsResource(type, id, props, opts, packageRef) {
+    opts = opts || {};
+    const label = `existsResource[${type}]`;
+    log.debug(`Checking resource existence: t=${type}`);
+    const idPromise = output_1.output(id).promise(true);
+    const resultPromise = debuggable_1.debuggablePromise((async () => {
+        const monitor = settings_1.getMonitor();
+        const resolvedID = await rpc_1.serializeProperty(label, await idPromise, new Set(), {
+            keepOutputValues: false,
+        });
+        // During previews, if the ID is unknown, we can't check existence, so the result is unknown.
+        if (resolvedID === undefined) {
+            return { exists: false, known: false };
+        }
+        // Serialize properties if provided.
+        const serializedProps = props ? await rpc_1.serializeProperties(label, props, { keepOutputValues: false }) : {};
+        // Resolve provider reference.
+        let providerRef;
+        if (opts.provider) {
+            const providerURN = await opts.provider.urn.promise();
+            const providerID = (await opts.provider.id.promise()) || "";
+            providerRef = `${providerURN}::${providerID}`;
+        }
+        // Resolve parent URN.
+        let parentURN = "";
+        if (opts.parent) {
+            const parentOutput = getParentURN(opts.parent);
+            parentURN = (await parentOutput.promise()) || "";
+        }
+        // Resolve package ref if available.
+        let packageRefStr;
+        if (packageRef !== undefined) {
+            packageRefStr = await packageRef;
+            if (packageRefStr !== undefined) {
+                // If we have a package reference we don't need to pass the version or plugin download URL.
+                opts.version = "";
+                opts.pluginDownloadURL = "";
+            }
+        }
+        const req = new resproto.ExistsResourceRequest();
+        req.setType(type);
+        req.setId(resolvedID);
+        req.setParent(parentURN);
+        req.setProperties(gstruct.Struct.fromJavaScript(serializedProps));
+        req.setProvider(providerRef || "");
+        req.setVersion(opts.version || "");
+        req.setPlugindownloadurl(opts.pluginDownloadURL || "");
+        req.setPackageref(packageRefStr || "");
+        if (!monitor) {
+            // In test mode without a monitor, report a known existing resource.
+            return { exists: true, known: true };
+        }
+        const resp = await new Promise((resolve, reject) => {
+            monitor.existsResource(req, (rpcError, innerResponse) => {
+                if (rpcError) {
+                    reject(new Error(`failed to check existence of resource [${type}]: ${rpcError.message}`));
+                }
+                else {
+                    resolve(innerResponse);
+                }
+            });
+        });
+        return { exists: resp.getExists(), known: !resp.getUnknown() };
+    })(), label);
+    return new output_1.Output([], resultPromise.then((r) => r.exists), 
+    /*isKnown*/ resultPromise.then((r) => r.known), 
+    /*isSecret*/ Promise.resolve(false), 
+    /*allResources*/ Promise.resolve(new Set()));
+}
+exports.existsResource = existsResource;
 function getParentURN(parent) {
     if (resource_1.Resource.isInstance(parent)) {
         return parent.urn;
@@ -113402,6 +120660,9 @@ exports.mapAliasesForRequest = mapAliasesForRequest;
 function registerResource(res, parent, t, name, custom, remote, newDependency, props, opts, sourcePosition, stackTrace, packageRef) {
     const label = `resource:${name}[${t}]`;
     log.debug(`Registering resource: t=${t}, name=${name}, custom=${custom}, remote=${remote}`);
+    if (opts.stateMigrations !== undefined && opts.stateMigrations.length > 0 && !state_1.getStore().supportsStateMigrations) {
+        throw new Error("The Pulumi CLI does not support state migrations. Please update the Pulumi CLI");
+    }
     // Wait for all values to be available, and then perform the RPC.
     const done = settings_1.rpcKeepAlive();
     const monitor = settings_1.getMonitor();
@@ -113427,6 +120688,16 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
             }
             for (const transform of opts.transforms) {
                 callbacks.push(await callbackServer.registerTransform(transform));
+            }
+        }
+        const stateMigrations = [];
+        if (opts.stateMigrations !== undefined && opts.stateMigrations.length > 0) {
+            const callbackServer = settings_1.getCallbacks();
+            if (callbackServer === undefined) {
+                throw new Error("Callback server could not initialize");
+            }
+            for (const migration of opts.stateMigrations) {
+                stateMigrations.push(await callbackServer.registerStateMigration(migration));
             }
         }
         // If we have a package reference, we need to wait for it to resolve.
@@ -113515,6 +120786,7 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
         req.setSourceposition(marshalSourcePosition(sourcePosition));
         req.setStacktrace(marshalStackTrace(stackTrace));
         req.setTransformsList(callbacks);
+        req.setStateMigrationsList(stateMigrations);
         req.setSupportsresultreporting(true);
         req.setHooks(hooks);
         if (opts.envVarMappings !== undefined) {
@@ -113599,20 +120871,15 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
                     getUnknown: () => false,
                 };
             }
-            // If the engine reported that the resource failed or was skipped, synthesize
-            // an error so downstream outputs reject. This allows `pulumi.recover` to
-            // intercept the failure.
+            // If the engine reported that the resource failed, resolve all of its outputs as
+            // unknown so the rest of the program can continue.
             const resultFailed = resp.getResult() !== resproto.Result.SUCCESS;
-            let effectiveErr = err;
-            if (!effectiveErr && resultFailed) {
-                effectiveErr = new Error(`resource ${name} [${t}] failed to register`);
-            }
-            resop.resolveURN(resp.getUrn(), effectiveErr);
+            resop.resolveURN(resp.getUrn(), err);
             // Note: 'id || undefined' is intentional.  We intentionally collapse falsy values to
             // undefined so that later parts of our system don't have to deal with values like 'null'.
             if (resop.resolveID) {
                 const id = resp.getId() || undefined;
-                resop.resolveID(id, id !== undefined, effectiveErr);
+                resop.resolveID(id, id !== undefined, err);
             }
             const deps = {};
             const rpcDeps = resp.getPropertydependenciesMap();
@@ -113624,7 +120891,7 @@ function registerResource(res, parent, t, name, custom, remote, newDependency, p
             }
             const unknown = custom && !resultFailed && !settings_1.isDryRun() && resp.getUnknown();
             // Now resolve the output properties.
-            await resolveOutputs(res, t, name, props, resp.getObject(), deps, resop.resolvers, effectiveErr, resultFailed || unknown);
+            await resolveOutputs(res, t, name, resultFailed ? {} : props, resultFailed ? undefined : resp.getObject(), deps, resop.resolvers, err, resultFailed || unknown);
             done();
         });
     })
@@ -113997,7 +121264,9 @@ async function resolveOutputs(res, t, name, props, outputs, deps, resolvers, err
     // outputs.  If the same property exists in the inputs and outputs states, the output wins.
     const allProps = {};
     if (outputs) {
-        Object.assign(allProps, rpc_1.deserializeProperties(outputs, keepUnknowns));
+        // Unknown outputs from the engine are always unknown, even during an update: a resource's outputs may
+        // depend on resources that failed or are awaiting.
+        Object.assign(allProps, rpc_1.deserializeProperties(outputs, true));
     }
     const label = `resource:${name}[${t}]#...`;
     if (!settings_1.isDryRun() || settings_1.isLegacyApplyEnabled()) {
@@ -114021,6 +121290,7 @@ async function resolveOutputs(res, t, name, props, outputs, deps, resolvers, err
  * outputs.
  */
 function registerResourceOutputs(res, outputs) {
+    stateMigration_1.ensureNotInStateMigration("register resource outputs");
     // Now run the operation. Note that we explicitly do not serialize output registration with
     // respect to other resource operations, as outputs may depend on properties of other resources
     // that will not resolve until later turns. This would create a circular promise chain that can
@@ -114109,6 +121379,7 @@ function runAsyncResourceOp(label, callback, serial) {
     }
 }
 async function registerResourceHook(hook) {
+    stateMigration_1.ensureNotInStateMigration("register resource hook");
     if (!state_1.getStore().supportsResourceHooks) {
         throw new Error("The Pulumi CLI does not support resource hooks. Please update the Pulumi CLI");
     }
@@ -114120,6 +121391,7 @@ async function registerResourceHook(hook) {
 }
 exports.registerResourceHook = registerResourceHook;
 async function registerErrorHook(hook) {
+    stateMigration_1.ensureNotInStateMigration("register error hook");
     if (!state_1.getStore().supportsErrorHooks) {
         throw new Error("The Pulumi CLI does not support error hooks. Please update the Pulumi CLI");
     }
@@ -115069,6 +122341,7 @@ const path = __importStar(__nccwpck_require__(16928));
 const callbacks_1 = __nccwpck_require__(27882);
 const debuggable_1 = __nccwpck_require__(20500);
 const state_1 = __nccwpck_require__(39623);
+const stateMigration_1 = __nccwpck_require__(65555);
 const engrpc = __importStar(__nccwpck_require__(26604));
 const engproto = __importStar(__nccwpck_require__(23509));
 const resrpc = __importStar(__nccwpck_require__(34482));
@@ -115302,6 +122575,7 @@ async function awaitFeatureSupport() {
     store.supportsResourceHooks = features.includes(resproto.ResourceMonitorFeature.RESOURCE_MONITOR_FEATURE_RESOURCE_HOOKS);
     store.supportsErrorHooks = features.includes(resproto.ResourceMonitorFeature.RESOURCE_MONITOR_FEATURE_ERROR_HOOKS);
     store.supportsInvokeDependsOn = features.includes(resproto.ResourceMonitorFeature.RESOURCE_MONITOR_FEATURE_INVOKE_DEPENDS_ON);
+    store.supportsStateMigrations = features.includes(resproto.ResourceMonitorFeature.RESOURCE_MONITOR_FEATURE_STATE_MIGRATIONS);
 }
 exports.awaitFeatureSupport = awaitFeatureSupport;
 /**
@@ -115712,6 +122986,7 @@ exports.supportsParameterization = supportsParameterization;
  * receive distinct refs.
  */
 function registerPackage(args) {
+    stateMigration_1.ensureNotInStateMigration("register package");
     const key = [
         args.baseProviderName,
         args.baseProviderVersion,
@@ -115829,6 +123104,7 @@ const output_1 = __nccwpck_require__(43016);
 const resource_1 = __nccwpck_require__(96005);
 const settings_1 = __nccwpck_require__(94213);
 const state_1 = __nccwpck_require__(39623);
+const stateMigration_1 = __nccwpck_require__(65555);
 /**
  * The type name that should be used to construct the root component in the tree
  * of Pulumi resources allocated by a deployment. This must be kept up to date
@@ -115981,6 +123257,7 @@ async function massageComplex(prop, objectStack) {
  * stack.
  */
 function registerStackTransformation(t) {
+    stateMigration_1.ensureNotInStateMigration("register stack transformation");
     const stackResource = getStackResource();
     if (!stackResource) {
         throw new Error("The root stack resource was referenced before it was initialized.");
@@ -115993,6 +123270,7 @@ exports.registerStackTransformation = registerStackTransformation;
  * stack.
  */
 function registerResourceTransform(t) {
+    stateMigration_1.ensureNotInStateMigration("register resource transform");
     if (!state_1.getStore().supportsTransforms) {
         throw new Error("The Pulumi CLI does not support transforms. Please update the Pulumi CLI");
     }
@@ -116018,6 +123296,7 @@ exports.registerStackTransform = registerStackTransform;
  * Add a transformation to all future invoke calls in this Pulumi stack.
  */
 function registerInvokeTransform(t) {
+    stateMigration_1.ensureNotInStateMigration("register invoke transform");
     if (!state_1.getStore().supportsInvokeTransforms) {
         throw new Error("The Pulumi CLI does not support transforms. Please update the Pulumi CLI");
     }
@@ -116162,6 +123441,7 @@ class LocalStore {
         this.supportsResourceHooks = false;
         this.supportsErrorHooks = false;
         this.supportsInvokeDependsOn = false;
+        this.supportsStateMigrations = false;
         this.resourcePackages = new Map();
         this.resourceModules = new Map();
         this.packageRefs = new Map();
@@ -116295,6 +123575,46 @@ exports.getGlobalStore = () => {
     return global.globalStore;
 };
 //# sourceMappingURL=state.js.map
+
+/***/ }),
+
+/***/ 65555:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+// Copyright 2026, Pulumi Corporation.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const async_hooks_1 = __nccwpck_require__(90290);
+const activeStateMigration = new async_hooks_1.AsyncLocalStorage();
+/** @internal */
+function runStateMigration(urn, callback) {
+    return activeStateMigration.run(urn, callback);
+}
+exports.runStateMigration = runStateMigration;
+/** @internal */
+function ensureNotInStateMigration(operation) {
+    const urn = activeStateMigration.getStore();
+    if (urn === undefined) {
+        return;
+    }
+    throw new Error(`Pulumi runtime operation '${operation}' is not allowed inside the state migration callback for '${urn}'. ` +
+        "State migration callbacks must only transform the supplied state.");
+}
+exports.ensureNotInStateMigration = ensureNotInStateMigration;
+//# sourceMappingURL=stateMigration.js.map
 
 /***/ }),
 
@@ -254754,7 +262074,7 @@ if ( true && module.exports) {
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.version = "3.261.0";
+exports.version = "3.273.0";
 //# sourceMappingURL=version.js.map
 
 /***/ }),
@@ -269848,614 +277168,6 @@ formatters.O = function (v) {
 	return util.inspect(v, this.inspectOpts);
 };
 
-
-/***/ }),
-
-/***/ 51869:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getSanitizedEnv = exports.formatSpecDescription = exports.testOnlySymbol = void 0;
-var errors_1 = __nccwpck_require__(41285);
-var reporter_1 = __nccwpck_require__(88523);
-exports.testOnlySymbol = Symbol('envalid - test only');
-/**
- * Validate a single env var, given a spec object
- *
- * @throws EnvError - If validation is unsuccessful
- * @return - The cleaned value
- */
-function validateVar(_a) {
-    var spec = _a.spec, name = _a.name, rawValue = _a.rawValue;
-    if (typeof spec._parse !== 'function') {
-        throw new errors_1.EnvError("Invalid spec for \"".concat(name, "\""));
-    }
-    var value = spec._parse(rawValue);
-    if (spec.choices) {
-        if (!Array.isArray(spec.choices)) {
-            throw new TypeError("\"choices\" must be an array (in spec for \"".concat(name, "\")"));
-        }
-        else if (!spec.choices.includes(value)) {
-            throw new errors_1.EnvError("Value \"".concat(value, "\" not in choices [").concat(spec.choices, "]"));
-        }
-    }
-    if (value == null)
-        throw new errors_1.EnvError("Invalid value for env var \"".concat(name, "\""));
-    return value;
-}
-// Format a string error message for when a required env var is missing
-function formatSpecDescription(spec) {
-    var egText = spec.example ? " (eg. \"".concat(spec.example, "\")") : '';
-    var docsText = spec.docs ? ". See ".concat(spec.docs) : '';
-    return "".concat(spec.desc).concat(egText).concat(docsText);
-}
-exports.formatSpecDescription = formatSpecDescription;
-var readRawEnvValue = function (env, k) {
-    return env[k];
-};
-var isTestOnlySymbol = function (value) { return value === exports.testOnlySymbol; };
-/**
- * Perform the central validation/sanitization logic on the full environment object
- */
-function getSanitizedEnv(environment, specs, options) {
-    if (options === void 0) { options = {}; }
-    var cleanedEnv = {};
-    var castedSpecs = specs;
-    var errors = {};
-    var varKeys = Object.keys(castedSpecs);
-    var rawNodeEnv = readRawEnvValue(environment, 'NODE_ENV');
-    for (var _i = 0, varKeys_1 = varKeys; _i < varKeys_1.length; _i++) {
-        var k = varKeys_1[_i];
-        var spec = castedSpecs[k];
-        var rawValue = readRawEnvValue(environment, k);
-        try {
-            // If no value was given and default/devDefault/testDefault were provided, return the
-            // appropriate default value without passing it through validation
-            if (rawValue === undefined) {
-                // Use testDefault only when NODE_ENV is 'test'. Takes priority over devDefault and default.
-                if (rawNodeEnv === 'test' && Object.hasOwn(spec, 'testDefault')) {
-                    cleanedEnv[k] = spec.testDefault;
-                    continue;
-                }
-                // Use devDefault values only if NODE_ENV was explicitly set, and isn't 'production'
-                var usingDevDefault = rawNodeEnv && rawNodeEnv !== 'production' && Object.hasOwn(spec, 'devDefault');
-                if (usingDevDefault) {
-                    cleanedEnv[k] = spec.devDefault;
-                    if (isTestOnlySymbol(spec.devDefault) && rawNodeEnv != 'test') {
-                        throw new errors_1.EnvMissingError(formatSpecDescription(spec));
-                    }
-                    continue;
-                }
-                if ('default' in spec) {
-                    cleanedEnv[k] = spec.default;
-                    continue;
-                }
-                // Throw error when no default value is provided
-                cleanedEnv[k] = undefined;
-                throw new errors_1.EnvMissingError(formatSpecDescription(spec));
-            }
-            cleanedEnv[k] = validateVar({ name: k, spec: spec, rawValue: rawValue });
-        }
-        catch (err) {
-            if ((options === null || options === void 0 ? void 0 : options.reporter) === null)
-                throw err;
-            if (err instanceof Error)
-                errors[k] = err;
-        }
-    }
-    // This block is for supporting requiredWhen. If that field was provided for a var's spec and 
-    // its condition evaluates to a truthy value, ensure that env var is present.
-    for (var _a = 0, varKeys_2 = varKeys; _a < varKeys_2.length; _a++) {
-        var k = varKeys_2[_a];
-        if (errors[k] == undefined) {
-            var spec = castedSpecs[k];
-            if (cleanedEnv[k] == undefined &&
-                spec.requiredWhen !== undefined &&
-                spec.requiredWhen(cleanedEnv)) {
-                errors[k] = new errors_1.EnvMissingError(formatSpecDescription(spec));
-            }
-        }
-    }
-    var reporter = (options === null || options === void 0 ? void 0 : options.reporter) || reporter_1.defaultReporter;
-    reporter({ errors: errors, env: cleanedEnv });
-    return cleanedEnv;
-}
-exports.getSanitizedEnv = getSanitizedEnv;
-//# sourceMappingURL=core.js.map
-
-/***/ }),
-
-/***/ 45351:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.testOnly = exports.customCleanEnv = exports.cleanEnv = void 0;
-var core_1 = __nccwpck_require__(51869);
-var middleware_1 = __nccwpck_require__(68810);
-/**
- * Returns a sanitized, immutable environment object. _Only_ the env vars
- * specified in the `validators` parameter will be accessible on the returned
- * object.
- * @param environment An object containing your env vars (eg. process.env).
- * @param specs An object that specifies the format of required vars.
- * @param options An object that specifies options for cleanEnv.
- */
-function cleanEnv(environment, specs, options) {
-    if (options === void 0) { options = {}; }
-    var cleaned = (0, core_1.getSanitizedEnv)(environment, specs, options);
-    return Object.freeze((0, middleware_1.applyDefaultMiddleware)(cleaned, environment));
-}
-exports.cleanEnv = cleanEnv;
-/**
- * Returns a sanitized, immutable environment object, and passes it through a custom
- * applyMiddleware function before being frozen. Most users won't need the flexibility of custom
- * middleware; prefer cleanEnv() unless you're sure you need it
- *
- * @param environment An object containing your env vars (eg. process.env).
- * @param specs An object that specifies the format of required vars.
- * @param applyMiddleware A function that applies transformations to the cleaned env object
- * @param options An object that specifies options for cleanEnv.
- */
-function customCleanEnv(environment, specs, applyMiddleware, options) {
-    if (options === void 0) { options = {}; }
-    var cleaned = (0, core_1.getSanitizedEnv)(environment, specs, options);
-    return Object.freeze(applyMiddleware(cleaned, environment));
-}
-exports.customCleanEnv = customCleanEnv;
-/**
- * Utility function for providing default values only when NODE_ENV=test
- *
- * For more context, see https://github.com/af/envalid/issues/32
- */
-var testOnly = function (defaultValueForTests) {
-    return process.env.NODE_ENV === 'test' ? defaultValueForTests : core_1.testOnlySymbol; // T is not strictly correct, but prevents type errors during usage
-};
-exports.testOnly = testOnly;
-//# sourceMappingURL=envalid.js.map
-
-/***/ }),
-
-/***/ 41285:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-// Surprisingly involved error subclassing
-// See https://stackoverflow.com/questions/41102060/typescript-extending-error-class
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EnvMissingError = exports.EnvError = void 0;
-var tslib_1 = __nccwpck_require__(61860);
-var EnvError = /** @class */ (function (_super) {
-    tslib_1.__extends(EnvError, _super);
-    function EnvError(message) {
-        var _newTarget = this.constructor;
-        var _this = _super.call(this, message) || this;
-        Object.setPrototypeOf(_this, _newTarget.prototype);
-        Error.captureStackTrace(_this, EnvError);
-        _this.name = _this.constructor.name;
-        return _this;
-    }
-    return EnvError;
-}(TypeError));
-exports.EnvError = EnvError;
-var EnvMissingError = /** @class */ (function (_super) {
-    tslib_1.__extends(EnvMissingError, _super);
-    function EnvMissingError(message) {
-        var _newTarget = this.constructor;
-        var _this = _super.call(this, message) || this;
-        Object.setPrototypeOf(_this, _newTarget.prototype);
-        Error.captureStackTrace(_this, EnvMissingError);
-        _this.name = _this.constructor.name;
-        return _this;
-    }
-    return EnvMissingError;
-}(ReferenceError));
-exports.EnvMissingError = EnvMissingError;
-//# sourceMappingURL=errors.js.map
-
-/***/ }),
-
-/***/ 11236:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.makeValidator = exports.makeExactValidator = void 0;
-var tslib_1 = __nccwpck_require__(61860);
-tslib_1.__exportStar(__nccwpck_require__(45351), exports);
-tslib_1.__exportStar(__nccwpck_require__(41285), exports);
-tslib_1.__exportStar(__nccwpck_require__(68810), exports);
-tslib_1.__exportStar(__nccwpck_require__(9857), exports);
-tslib_1.__exportStar(__nccwpck_require__(31877), exports);
-tslib_1.__exportStar(__nccwpck_require__(88523), exports);
-var makers_1 = __nccwpck_require__(67175);
-Object.defineProperty(exports, "makeExactValidator", ({ enumerable: true, get: function () { return makers_1.makeExactValidator; } }));
-Object.defineProperty(exports, "makeValidator", ({ enumerable: true, get: function () { return makers_1.makeValidator; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 67175:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.makeStructuredValidator = exports.makeExactValidator = exports.makeValidator = void 0;
-var tslib_1 = __nccwpck_require__(61860);
-var internalMakeValidator = function (parseFn) {
-    return function (spec) { return (tslib_1.__assign(tslib_1.__assign({}, spec), { _parse: parseFn })); };
-};
-/**
- * Creates a validator which can output subtypes of `BaseT`. E.g.:
- *
- * ```ts
- * const int = makeValidator<number>((input: string) => {
- *   // Implementation details
- * })
- * const MAX_RETRIES = int({ choices: [1, 2, 3, 4] })
- * // Narrows down output type to 1 | 2 | 3 | 4
- * ```
- *
- * @param parseFn - A function to parse and validate input.
- * @returns A validator which output type is narrowed-down to a subtype of `BaseT`
- */
-var makeValidator = function (parseFn) {
-    return internalMakeValidator(parseFn);
-};
-exports.makeValidator = makeValidator;
-/**
- * Creates a validator which output type is exactly T:
- *
- * ```ts
- * const int = makeExactValidator<number>((input: string) => {
- *   // Implementation details
- * })
- * const MAX_RETRIES = int({ choices: [1, 2, 3, 4] })
- * // Output type 'number'
- * ```
- *
- * @param parseFn - A function to parse and validate input.
- * @returns A validator which output type is exactly `T`
- */
-var makeExactValidator = function (parseFn) {
-    return internalMakeValidator(parseFn);
-};
-exports.makeExactValidator = makeExactValidator;
-/**
- * This validator is meant for inputs which can produce arbitrary output types (e.g. json).
- * The typing logic behaves differently from other makers:
- *
- * - makeStructuredValidator has no type parameter.
- * - When no types can be inferred from context, output type defaults to any.
- * - Otherwise, infers type from `default` or `devDefault`.
- * - Also generated validators have an output type parameter.
- * - Finally, the generated validators disallow `choices` parameter.
- *
- * Below is an example of a validator for query parameters (e.g. `option1=foo&option2=bar`):
- *
- * ```ts
- * const queryParams = makeStructuredValidator((input: string) => {
- *   const params = new URLSearchParams(input)
- *   return Object.fromEntries(params.entries())
- * })
- * const OPTIONS1 = queryParams()
- * // Output type 'any'
- * const OPTIONS2 = queryParams({ default: { option1: 'foo', option2: 'bar' } })
- * // Output type '{ option1: string, option2: string }'
- * const OPTIONS3 = queryParams<{ option1?: string; option2?: string }>({
- *   default: { option1: 'foo', option2: 'bar' },
- * })
- * // Output type '{ option1?: string, option2?: string }'
- * ```
- *
- * @param parseFn - A function to parse and validate input.
- * @returns A validator which output type is exactly `T`
- */
-var makeStructuredValidator = function (parseFn) {
-    return internalMakeValidator(parseFn);
-};
-exports.makeStructuredValidator = makeStructuredValidator;
-//# sourceMappingURL=makers.js.map
-
-/***/ }),
-
-/***/ 68810:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.applyDefaultMiddleware = exports.accessorMiddleware = exports.strictProxyMiddleware = void 0;
-var strictProxyMiddleware = function (envObj, rawEnv, options) {
-    if (options === void 0) { options = {}; }
-    var _a = options.extraInspectables, extraInspectables = _a === void 0 ? [] : _a;
-    var inspectables = [
-        'length',
-        'inspect',
-        'hasOwnProperty',
-        'toJSON',
-        Symbol.toStringTag,
-        Symbol.iterator,
-        // For jest
-        'asymmetricMatch',
-        'nodeType',
-        // For react-refresh, see #150
-        '$$typeof',
-        // For libs that use `then` checks to see if objects are Promises (see #74):
-        'then',
-        // For usage with TypeScript esModuleInterop flag
-        '__esModule',
-    ];
-    var inspectSymbolStrings = ['Symbol(util.inspect.custom)', 'Symbol(nodejs.util.inspect.custom)'];
-    return new Proxy(envObj, {
-        get: function (target, name) {
-            var _a;
-            // These checks are needed because calling console.log on a
-            // proxy that throws crashes the entire process. This permits access on
-            // the necessary properties for `console.log(envObj)`, `envObj.length`,
-            // `envObj.hasOwnProperty('string')` to work.
-            if (inspectables.includes(name) ||
-                inspectSymbolStrings.includes(name.toString()) ||
-                extraInspectables.includes(name)) {
-                // @ts-expect-error TS doesn't like symbol types as indexers
-                return target[name];
-            }
-            var varExists = Object.hasOwn(target, name);
-            if (!varExists) {
-                if (typeof rawEnv === 'object' && ((_a = rawEnv === null || rawEnv === void 0 ? void 0 : rawEnv.hasOwnProperty) === null || _a === void 0 ? void 0 : _a.call(rawEnv, name))) {
-                    throw new ReferenceError("[envalid] Env var ".concat(name, " was accessed but not validated. This var is set in the environment; please add an envalid validator for it."));
-                }
-                throw new ReferenceError("[envalid] Env var not found: ".concat(name));
-            }
-            return target[name];
-        },
-        set: function (_target, name) {
-            throw new TypeError("[envalid] Attempt to mutate environment value: ".concat(name));
-        },
-    });
-};
-exports.strictProxyMiddleware = strictProxyMiddleware;
-var accessorMiddleware = function (envObj, rawEnv) {
-    // Attach is{Prod/Dev/Test} properties for more readable NODE_ENV checks
-    // Note that isDev and isProd are just aliases to isDevelopment and isProduction
-    // @ts-ignore attempt to read NODE_ENV even if it's not in the spec
-    var computedNodeEnv = envObj.NODE_ENV || rawEnv.NODE_ENV;
-    // If NODE_ENV is not set, assume production
-    var isProd = !computedNodeEnv || computedNodeEnv === 'production';
-    Object.defineProperties(envObj, {
-        isDevelopment: { value: computedNodeEnv === 'development' },
-        isDev: { value: computedNodeEnv === 'development' },
-        isProduction: { value: isProd },
-        isProd: { value: isProd },
-        isTest: { value: computedNodeEnv === 'test' },
-    });
-    return envObj;
-};
-exports.accessorMiddleware = accessorMiddleware;
-var applyDefaultMiddleware = function (cleanedEnv, rawEnv) {
-    // Note: Ideally we would declare the default middlewares in an array and apply them in series with
-    // a generic pipe() function. However, a generically typed variadic pipe() appears to not be possible
-    // in TypeScript as of 4.x, so we just manually apply them below. See
-    // https://github.com/microsoft/TypeScript/pull/39094#issuecomment-647042984
-    return (0, exports.strictProxyMiddleware)((0, exports.accessorMiddleware)(cleanedEnv, rawEnv), rawEnv);
-};
-exports.applyDefaultMiddleware = applyDefaultMiddleware;
-//# sourceMappingURL=middleware.js.map
-
-/***/ }),
-
-/***/ 88523:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.defaultReporter = exports.envalidErrorFormatter = void 0;
-var errors_1 = __nccwpck_require__(41285);
-var defaultLogger = console.error.bind(console);
-// Apply ANSI colors to the reporter output only if we detect that we're running in Node
-var isNode = !!(typeof process === 'object' && ((_a = process === null || process === void 0 ? void 0 : process.versions) === null || _a === void 0 ? void 0 : _a.node));
-var colorWith = function (colorCode) { return function (str) {
-    return isNode ? "\u001B[".concat(colorCode, "m").concat(str, "\u001B[0m") : str;
-}; };
-var colors = {
-    blue: colorWith('34'),
-    white: colorWith('37'),
-    yellow: colorWith('33'),
-};
-var RULE = colors.white('================================');
-// Takes the provided errors, formats them all to an output string, and passes that string output to the
-// provided "logger" function.
-//
-// This is exposed in the public API so third-party reporters can leverage this logic if desired
-var envalidErrorFormatter = function (errors, logger) {
-    if (logger === void 0) { logger = defaultLogger; }
-    var missingVarsOutput = [];
-    var invalidVarsOutput = [];
-    for (var _i = 0, _a = Object.entries(errors); _i < _a.length; _i++) {
-        var _b = _a[_i], k = _b[0], err = _b[1];
-        if (err instanceof errors_1.EnvMissingError) {
-            missingVarsOutput.push("    ".concat(colors.blue(k), ": ").concat(err.message || '(required)'));
-        }
-        else
-            invalidVarsOutput.push("    ".concat(colors.blue(k), ": ").concat((err === null || err === void 0 ? void 0 : err.message) || '(invalid format)'));
-    }
-    // Prepend "header" output for each section of the output:
-    if (invalidVarsOutput.length) {
-        invalidVarsOutput.unshift(" ".concat(colors.yellow('Invalid'), " environment variables:"));
-    }
-    if (missingVarsOutput.length) {
-        missingVarsOutput.unshift(" ".concat(colors.yellow('Missing'), " environment variables:"));
-    }
-    var output = [
-        RULE,
-        invalidVarsOutput.sort().join('\n'),
-        missingVarsOutput.sort().join('\n'),
-        RULE,
-    ]
-        .filter(function (x) { return !!x; })
-        .join('\n');
-    logger(output);
-};
-exports.envalidErrorFormatter = envalidErrorFormatter;
-var defaultReporter = function (_a, _b) {
-    var _c = _a.errors, errors = _c === void 0 ? {} : _c;
-    var _d = _b === void 0 ? { logger: defaultLogger } : _b, onError = _d.onError, logger = _d.logger;
-    if (!Object.keys(errors).length)
-        return;
-    (0, exports.envalidErrorFormatter)(errors, logger);
-    if (onError) {
-        onError(errors);
-    }
-    else if (isNode) {
-        logger(colors.yellow('\n Exiting with error code 1'));
-        process.exit(1);
-    }
-    else {
-        throw new TypeError('Environment validation failed');
-    }
-};
-exports.defaultReporter = defaultReporter;
-//# sourceMappingURL=reporter.js.map
-
-/***/ }),
-
-/***/ 9857:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-//# sourceMappingURL=types.js.map
-
-/***/ }),
-
-/***/ 31877:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.json = exports.url = exports.port = exports.host = exports.email = exports.str = exports.num = exports.bool = void 0;
-var errors_1 = __nccwpck_require__(41285);
-var makers_1 = __nccwpck_require__(67175);
-// Simplified adaptation of https://github.com/validatorjs/validator.js/blob/master/src/lib/isFQDN.js
-var isFQDN = function (input) {
-    if (!input.length)
-        return false;
-    var parts = input.split('.');
-    for (var part = void 0, i = 0; i < parts.length; i++) {
-        part = parts[i];
-        if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part))
-            return false;
-        if (/[\uff01-\uff5e]/.test(part))
-            return false; // disallow full-width chars
-        if (part[0] === '-' || part[part.length - 1] === '-')
-            return false;
-    }
-    return true;
-};
-// "best effort" regex-based IP address check
-// If you want a more exhaustive check, create your own custom validator
-var ipv4Regex = /^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])){3}$/;
-var ipv6Regex = /^(([0-9a-f]{1,4}:){7}[0-9a-f]{1,4}|([0-9a-f]{1,4}:)+:([0-9a-f]{1,4}:)*[0-9a-f]{1,4}|([0-9a-f]{1,4}:)*::([0-9a-f]{1,4}:)*[0-9a-f]{0,4}|::|(([0-9a-f]{1,4}:){1,6}|:):((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9]))(%[0-9a-z.\-:]+)?$/i;
-var isIP = function (input) {
-    if (!input.length)
-        return false;
-    return ipv4Regex.test(input) || ipv6Regex.test(input);
-};
-var EMAIL_REGEX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/; // intentionally non-exhaustive
-// We use exact validator here because narrowing down to either 'true' or 'false'
-// makes no sense.
-exports.bool = (0, makers_1.makeExactValidator)(function (input) {
-    switch (input) {
-        case true:
-        case 'true':
-        case 't':
-        case 'yes':
-        case 'on':
-        case '1':
-            return true;
-        case false:
-        case 'false':
-        case 'f':
-        case 'no':
-        case 'off':
-        case '0':
-            return false;
-        default:
-            throw new errors_1.EnvError("Invalid bool input: \"".concat(input, "\""));
-    }
-});
-exports.num = (0, makers_1.makeValidator)(function (input) {
-    var coerced = parseFloat(input);
-    if (Number.isNaN(coerced))
-        throw new errors_1.EnvError("Invalid number input: \"".concat(input, "\""));
-    return coerced;
-});
-exports.str = (0, makers_1.makeValidator)(function (input) {
-    if (typeof input === 'string')
-        return input;
-    throw new errors_1.EnvError("Not a string: \"".concat(input, "\""));
-});
-exports.email = (0, makers_1.makeValidator)(function (x) {
-    if (EMAIL_REGEX.test(x))
-        return x;
-    throw new errors_1.EnvError("Invalid email address: \"".concat(x, "\""));
-});
-exports.host = (0, makers_1.makeValidator)(function (input) {
-    if (!isFQDN(input) && !isIP(input)) {
-        throw new errors_1.EnvError("Invalid host (domain or ip): \"".concat(input, "\""));
-    }
-    return input;
-});
-exports.port = (0, makers_1.makeValidator)(function (input) {
-    var coerced = +input;
-    if (Number.isNaN(coerced) ||
-        "".concat(coerced) !== "".concat(input) ||
-        coerced % 1 !== 0 ||
-        coerced < 1 ||
-        coerced > 65535) {
-        throw new errors_1.EnvError("Invalid port input: \"".concat(input, "\""));
-    }
-    return coerced;
-});
-exports.url = (0, makers_1.makeValidator)(function (x) {
-    try {
-        new URL(x);
-        return x;
-    }
-    catch (e) {
-        throw new errors_1.EnvError("Invalid url: \"".concat(x, "\""));
-    }
-});
-/**
- * Unless passing a default property, it's recommended that you provide an explicit type parameter
- * for json validation if you're using TypeScript. Otherwise the output will be typed as `any`.
- * For example:
- *
- * ```ts
- * cleanEnv({
- *   MY_VAR: json<{ foo: number }>(),
- * })
- * ```
- */
-exports.json = (0, makers_1.makeStructuredValidator)(function (x) {
-    try {
-        return JSON.parse(x);
-    }
-    catch (e) {
-        throw new errors_1.EnvError("Invalid json: \"".concat(x, "\""));
-    }
-});
-//# sourceMappingURL=validators.js.map
 
 /***/ }),
 
@@ -377548,12 +384260,484 @@ function makeConfig() {
     };
 }
 
-// EXTERNAL MODULE: ./node_modules/envalid/dist/index.js
-var envalid_dist = __nccwpck_require__(11236);
+;// CONCATENATED MODULE: ./node_modules/envalid/dist/errors.js
+// Surprisingly involved error subclassing
+// See https://stackoverflow.com/questions/41102060/typescript-extending-error-class
+class EnvError extends TypeError {
+    constructor(message) {
+        super(message);
+        Object.setPrototypeOf(this, new.target.prototype);
+        // Optional; not on all engines (e.g. QuickJS) — see MDN Error.captureStackTrace
+        if (typeof Error.captureStackTrace === 'function') {
+            Error.captureStackTrace(this, EnvError);
+        }
+        this.name = this.constructor.name;
+    }
+}
+class EnvMissingError extends ReferenceError {
+    constructor(message) {
+        super(message);
+        Object.setPrototypeOf(this, new.target.prototype);
+        if (typeof Error.captureStackTrace === 'function') {
+            Error.captureStackTrace(this, EnvMissingError);
+        }
+        this.name = this.constructor.name;
+    }
+}
+//# sourceMappingURL=errors.js.map
+;// CONCATENATED MODULE: ./node_modules/envalid/dist/reporter.js
+
+// Lazy: importing envalid must not require console.error
+const defaultLogger = (data, ...args) => {
+    console.error(data, ...args);
+};
+// Apply ANSI colors to the reporter output only if we detect that we're running in Node
+const isNode = !!(typeof process === 'object' && process?.versions?.node);
+const colorWith = (colorCode) => (str) => isNode ? `\x1b[${colorCode}m${str}\x1b[0m` : str;
+const colors = {
+    blue: colorWith('34'),
+    white: colorWith('37'),
+    yellow: colorWith('33'),
+};
+const RULE = colors.white('================================');
+// Takes the provided errors, formats them all to an output string, and passes that string output to the
+// provided "logger" function.
+//
+// This is exposed in the public API so third-party reporters can leverage this logic if desired
+const envalidErrorFormatter = (errors, logger = defaultLogger) => {
+    const missingVarsOutput = [];
+    const invalidVarsOutput = [];
+    for (const [k, err] of Object.entries(errors)) {
+        if (err instanceof EnvMissingError) {
+            missingVarsOutput.push(`    ${colors.blue(k)}: ${err.message || '(required)'}`);
+        }
+        else
+            invalidVarsOutput.push(`    ${colors.blue(k)}: ${err?.message || '(invalid format)'}`);
+    }
+    // Prepend "header" output for each section of the output:
+    if (invalidVarsOutput.length) {
+        invalidVarsOutput.unshift(` ${colors.yellow('Invalid')} environment variables:`);
+    }
+    if (missingVarsOutput.length) {
+        missingVarsOutput.unshift(` ${colors.yellow('Missing')} environment variables:`);
+    }
+    const output = [
+        RULE,
+        invalidVarsOutput.sort().join('\n'),
+        missingVarsOutput.sort().join('\n'),
+        RULE,
+    ]
+        .filter((x) => !!x)
+        .join('\n');
+    logger(output);
+};
+const defaultReporter = ({ errors = {} }, { onError, logger } = { logger: defaultLogger }) => {
+    if (!Object.keys(errors).length)
+        return;
+    envalidErrorFormatter(errors, logger);
+    if (onError) {
+        onError(errors);
+    }
+    else if (isNode) {
+        logger(colors.yellow('\n Exiting with error code 1'));
+        process.exit(1);
+    }
+    else {
+        throw new TypeError('Environment validation failed');
+    }
+};
+//# sourceMappingURL=reporter.js.map
+;// CONCATENATED MODULE: ./node_modules/envalid/dist/core.js
+
+
+/**
+ * Validate a single env var, given a spec object
+ *
+ * @throws EnvError - If validation is unsuccessful
+ * @return - The cleaned value
+ */
+function validateVar({ spec, name, rawValue, }) {
+    if (typeof spec._parse !== 'function') {
+        throw new EnvError(`Invalid spec for "${name}"`);
+    }
+    const value = spec._parse(rawValue);
+    if (spec.choices) {
+        if (!Array.isArray(spec.choices)) {
+            throw new TypeError(`"choices" must be an array (in spec for "${name}")`);
+        }
+        else if (!spec.choices.includes(value)) {
+            throw new EnvError(`Value "${value}" not in choices [${spec.choices}]`);
+        }
+    }
+    if (value == null)
+        throw new EnvError(`Invalid value for env var "${name}"`);
+    return value;
+}
+// Format a string error message for when a required env var is missing
+function formatSpecDescription(spec) {
+    const egText = spec.example ? ` (eg. "${spec.example}")` : '';
+    const docsText = spec.docs ? `. See ${spec.docs}` : '';
+    return `${spec.desc}${egText}${docsText}`;
+}
+const readRawEnvValue = (env, k) => {
+    const result = env[k];
+    if (typeof result == 'string' && !result.trim()) {
+        return undefined;
+    }
+    return result;
+};
+/**
+ * Perform the central validation/sanitization logic on the full environment object
+ */
+function core_getSanitizedEnv(environment, specs, options = {}) {
+    const cleanedEnv = {};
+    const castedSpecs = specs;
+    const errors = {};
+    const varKeys = Object.keys(castedSpecs);
+    const rawNodeEnv = readRawEnvValue(environment, 'NODE_ENV');
+    for (const k of varKeys) {
+        const spec = castedSpecs[k];
+        const rawValue = readRawEnvValue(environment, k);
+        try {
+            // If no value was given and default/devDefault/testDefault were provided, return the
+            // appropriate default value without passing it through validation
+            if (rawValue === undefined) {
+                // Use testDefault only when NODE_ENV is 'test'. Takes priority over devDefault and default.
+                if (rawNodeEnv === 'test' && Object.hasOwn(spec, 'testDefault')) {
+                    cleanedEnv[k] = spec.testDefault;
+                    continue;
+                }
+                // Use devDefault values only if NODE_ENV was explicitly set, and isn't 'production'
+                const usingDevDefault = rawNodeEnv && rawNodeEnv !== 'production' && Object.hasOwn(spec, 'devDefault');
+                if (usingDevDefault) {
+                    cleanedEnv[k] = spec.devDefault;
+                    continue;
+                }
+                if ('default' in spec) {
+                    cleanedEnv[k] = spec.default;
+                    continue;
+                }
+                // Throw error when no default value is provided
+                cleanedEnv[k] = undefined;
+                throw new EnvMissingError(formatSpecDescription(spec));
+            }
+            cleanedEnv[k] = validateVar({ name: k, spec, rawValue });
+        }
+        catch (err) {
+            if (options?.reporter === null)
+                throw err;
+            if (err instanceof Error)
+                errors[k] = err;
+        }
+    }
+    // This block is for supporting requiredWhen. If that field was provided for a var's spec and
+    // its condition evaluates to a truthy value, ensure that env var is present.
+    for (const k of varKeys) {
+        if (errors[k] == undefined) {
+            const spec = castedSpecs[k];
+            if (cleanedEnv[k] == undefined &&
+                spec.requiredWhen !== undefined &&
+                spec.requiredWhen(cleanedEnv)) {
+                errors[k] = new EnvMissingError(formatSpecDescription(spec));
+            }
+        }
+    }
+    const reporter = options?.reporter || defaultReporter;
+    reporter({ errors, env: cleanedEnv });
+    return cleanedEnv;
+}
+//# sourceMappingURL=core.js.map
+;// CONCATENATED MODULE: ./node_modules/envalid/dist/middleware.js
+const strictProxyMiddleware = (envObj, rawEnv, options = {}) => {
+    const { extraInspectables = [] } = options;
+    const inspectables = [
+        'length',
+        'inspect',
+        'hasOwnProperty',
+        'toJSON', // Allow JSON.stringify() on output. See #157
+        Symbol.toStringTag,
+        Symbol.iterator,
+        // For jest
+        'asymmetricMatch',
+        'nodeType',
+        // For react-refresh, see #150
+        '$$typeof',
+        // For libs that use `then` checks to see if objects are Promises (see #74):
+        'then',
+        // For usage with TypeScript esModuleInterop flag
+        '__esModule',
+    ];
+    const inspectSymbolStrings = ['Symbol(util.inspect.custom)', 'Symbol(nodejs.util.inspect.custom)'];
+    return new Proxy(envObj, {
+        get(target, name) {
+            // These checks are needed because calling console.log on a
+            // proxy that throws crashes the entire process. This permits access on
+            // the necessary properties for `console.log(envObj)`, `envObj.length`,
+            // `envObj.hasOwnProperty('string')` to work.
+            if (inspectables.includes(name) ||
+                inspectSymbolStrings.includes(name.toString()) ||
+                extraInspectables.includes(name)) {
+                // @ts-expect-error TS doesn't like symbol types as indexers
+                return target[name];
+            }
+            const varExists = Object.hasOwn(target, name);
+            if (!varExists) {
+                if (typeof rawEnv === 'object' && rawEnv?.hasOwnProperty?.(name)) {
+                    throw new ReferenceError(`[envalid] Env var ${name} was accessed but not validated. This var is set in the environment; please add an envalid validator for it.`);
+                }
+                throw new ReferenceError(`[envalid] Env var not found: ${name}`);
+            }
+            return target[name];
+        },
+        set(_target, name) {
+            throw new TypeError(`[envalid] Attempt to mutate environment value: ${name}`);
+        },
+    });
+};
+const accessorMiddleware = (envObj, rawEnv) => {
+    // Attach is{Prod/Dev/Test} properties for more readable NODE_ENV checks
+    // Note that isDev and isProd are just aliases to isDevelopment and isProduction
+    // @ts-ignore attempt to read NODE_ENV even if it's not in the spec
+    const computedNodeEnv = envObj.NODE_ENV || rawEnv.NODE_ENV;
+    // If NODE_ENV is not set, assume production
+    const isProd = !computedNodeEnv || computedNodeEnv === 'production';
+    Object.defineProperties(envObj, {
+        isDevelopment: { value: computedNodeEnv === 'development' },
+        isDev: { value: computedNodeEnv === 'development' },
+        isProduction: { value: isProd },
+        isProd: { value: isProd },
+        isTest: { value: computedNodeEnv === 'test' },
+    });
+    return envObj;
+};
+const applyDefaultMiddleware = (cleanedEnv, rawEnv) => {
+    // Note: Ideally we would declare the default middlewares in an array and apply them in series with
+    // a generic pipe() function. However, a generically typed variadic pipe() appears to not be possible
+    // in TypeScript as of 4.x, so we just manually apply them below. See
+    // https://github.com/microsoft/TypeScript/pull/39094#issuecomment-647042984
+    return strictProxyMiddleware(accessorMiddleware(cleanedEnv, rawEnv), rawEnv);
+};
+//# sourceMappingURL=middleware.js.map
+;// CONCATENATED MODULE: ./node_modules/envalid/dist/envalid.js
+
+
+/**
+ * Returns a sanitized, immutable environment object. _Only_ the env vars
+ * specified in the `validators` parameter will be accessible on the returned
+ * object.
+ * @param environment An object containing your env vars (eg. process.env).
+ * @param specs An object that specifies the format of required vars.
+ * @param options An object that specifies options for cleanEnv.
+ */
+function cleanEnv(environment, specs, options = {}) {
+    const cleaned = core_getSanitizedEnv(environment, specs, options);
+    return Object.freeze(applyDefaultMiddleware(cleaned, environment));
+}
+/**
+ * Returns a sanitized, immutable environment object, and passes it through a custom
+ * applyMiddleware function before being frozen. Most users won't need the flexibility of custom
+ * middleware; prefer cleanEnv() unless you're sure you need it
+ *
+ * @param environment An object containing your env vars (eg. process.env).
+ * @param specs An object that specifies the format of required vars.
+ * @param applyMiddleware A function that applies transformations to the cleaned env object
+ * @param options An object that specifies options for cleanEnv.
+ */
+function customCleanEnv(environment, specs, applyMiddleware, options = {}) {
+    const cleaned = getSanitizedEnv(environment, specs, options);
+    return Object.freeze(applyMiddleware(cleaned, environment));
+}
+//# sourceMappingURL=envalid.js.map
+;// CONCATENATED MODULE: ./node_modules/envalid/dist/makers.js
+const internalMakeValidator = (parseFn) => {
+    return (spec) => ({ ...spec, _parse: parseFn });
+};
+/**
+ * Creates a validator which can output subtypes of `BaseT`. E.g.:
+ *
+ * ```ts
+ * const int = makeValidator<number>((input: string) => {
+ *   // Implementation details
+ * })
+ * const MAX_RETRIES = int({ choices: [1, 2, 3, 4] })
+ * // Narrows down output type to 1 | 2 | 3 | 4
+ * ```
+ *
+ * @param parseFn - A function to parse and validate input.
+ * @returns A validator which output type is narrowed-down to a subtype of `BaseT`
+ */
+const makeValidator = (parseFn) => {
+    return internalMakeValidator(parseFn);
+};
+/**
+ * Creates a validator which output type is exactly T:
+ *
+ * ```ts
+ * const int = makeExactValidator<number>((input: string) => {
+ *   // Implementation details
+ * })
+ * const MAX_RETRIES = int({ choices: [1, 2, 3, 4] })
+ * // Output type 'number'
+ * ```
+ *
+ * @param parseFn - A function to parse and validate input.
+ * @returns A validator which output type is exactly `T`
+ */
+const makeExactValidator = (parseFn) => {
+    return internalMakeValidator(parseFn);
+};
+/**
+ * This validator is meant for inputs which can produce arbitrary output types (e.g. json).
+ * The typing logic behaves differently from other makers:
+ *
+ * - makeStructuredValidator has no type parameter.
+ * - When no types can be inferred from context, output type defaults to any.
+ * - Otherwise, infers type from `default` or `devDefault`.
+ * - Also generated validators have an output type parameter.
+ * - Finally, the generated validators disallow `choices` parameter.
+ *
+ * Below is an example of a validator for query parameters (e.g. `option1=foo&option2=bar`):
+ *
+ * ```ts
+ * const queryParams = makeStructuredValidator((input: string) => {
+ *   const params = new URLSearchParams(input)
+ *   return Object.fromEntries(params.entries())
+ * })
+ * const OPTIONS1 = queryParams()
+ * // Output type 'any'
+ * const OPTIONS2 = queryParams({ default: { option1: 'foo', option2: 'bar' } })
+ * // Output type '{ option1: string, option2: string }'
+ * const OPTIONS3 = queryParams<{ option1?: string; option2?: string }>({
+ *   default: { option1: 'foo', option2: 'bar' },
+ * })
+ * // Output type '{ option1?: string, option2?: string }'
+ * ```
+ *
+ * @param parseFn - A function to parse and validate input.
+ * @returns A validator which output type is exactly `T`
+ */
+const makeStructuredValidator = (parseFn) => {
+    return internalMakeValidator(parseFn);
+};
+//# sourceMappingURL=makers.js.map
+;// CONCATENATED MODULE: ./node_modules/envalid/dist/validators.js
+
+
+// Simplified adaptation of https://github.com/validatorjs/validator.js/blob/master/src/lib/isFQDN.js
+const isFQDN = (input) => {
+    if (!input.length)
+        return false;
+    const parts = input.split('.');
+    for (let part, i = 0; i < parts.length; i++) {
+        part = parts[i];
+        if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part))
+            return false;
+        if (/[\uff01-\uff5e]/.test(part))
+            return false; // disallow full-width chars
+        if (part[0] === '-' || part[part.length - 1] === '-')
+            return false;
+    }
+    return true;
+};
+// "best effort" regex-based IP address check
+// If you want a more exhaustive check, create your own custom validator
+const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])){3}$/;
+const ipv6Regex = /^(([0-9a-f]{1,4}:){7}[0-9a-f]{1,4}|([0-9a-f]{1,4}:)+:([0-9a-f]{1,4}:)*[0-9a-f]{1,4}|([0-9a-f]{1,4}:)*::([0-9a-f]{1,4}:)*[0-9a-f]{0,4}|::|(([0-9a-f]{1,4}:){1,6}|:):((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9]))(%[0-9a-z.\-:]+)?$/i;
+const isIP = (input) => {
+    if (!input.length)
+        return false;
+    return ipv4Regex.test(input) || ipv6Regex.test(input);
+};
+const EMAIL_REGEX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/; // intentionally non-exhaustive
+// We use exact validator here because narrowing down to either 'true' or 'false'
+// makes no sense.
+const bool = makeExactValidator((input) => {
+    switch (input) {
+        case true:
+        case 'true':
+        case 't':
+        case 'yes':
+        case 'on':
+        case '1':
+            return true;
+        case false:
+        case 'false':
+        case 'f':
+        case 'no':
+        case 'off':
+        case '0':
+            return false;
+        default:
+            throw new EnvError(`Invalid bool input: "${input}"`);
+    }
+});
+const num = makeValidator((input) => {
+    const coerced = parseFloat(input);
+    if (Number.isNaN(coerced))
+        throw new EnvError(`Invalid number input: "${input}"`);
+    return coerced;
+});
+const str = makeValidator((input) => {
+    if (typeof input === 'string')
+        return input;
+    throw new EnvError(`Not a string: "${input}"`);
+});
+const email = makeValidator((x) => {
+    if (EMAIL_REGEX.test(x))
+        return x;
+    throw new EnvError(`Invalid email address: "${x}"`);
+});
+const host = makeValidator((input) => {
+    if (!isFQDN(input) && !isIP(input)) {
+        throw new EnvError(`Invalid host (domain or ip): "${input}"`);
+    }
+    return input;
+});
+const port = makeValidator((input) => {
+    const coerced = +input;
+    if (Number.isNaN(coerced) ||
+        `${coerced}` !== `${input}` ||
+        coerced % 1 !== 0 ||
+        coerced < 1 ||
+        coerced > 65535) {
+        throw new EnvError(`Invalid port input: "${input}"`);
+    }
+    return coerced;
+});
+const url = makeValidator((x) => {
+    try {
+        new URL(x);
+        return x;
+    }
+    catch {
+        // Not logging the url value as it could contain sensitive data
+        throw new EnvError(`Invalid url`);
+    }
+});
+/**
+ * Unless passing a default property, it's recommended that you provide an explicit type parameter
+ * for json validation if you're using TypeScript. Otherwise the output will be typed as `any`.
+ * For example:
+ *
+ * ```ts
+ * cleanEnv({
+ *   MY_VAR: json<{ foo: number }>(),
+ * })
+ * ```
+ */
+const json = makeStructuredValidator((x) => {
+    try {
+        return JSON.parse(x);
+    }
+    catch (e) {
+        throw new EnvError(`Invalid json: "${x}"`);
+    }
+});
+//# sourceMappingURL=validators.js.map
 ;// CONCATENATED MODULE: ./src/libs/envs.ts
 
-const environmentVariables = envalid_dist.cleanEnv(process.env, {
-    GITHUB_WORKSPACE: envalid_dist.str(),
+const environmentVariables = cleanEnv(process.env, {
+    GITHUB_WORKSPACE: str(),
 });
 
 ;// CONCATENATED MODULE: ./node_modules/dedent/dist/dedent.mjs
