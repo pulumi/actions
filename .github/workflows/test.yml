@@ -19,10 +19,10 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24.x
-          cache: yarn
-      - run: yarn install
-      - run: yarn build
-      - run: yarn test
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
   test-output: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
@@ -39,9 +39,9 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24.x
-          cache: yarn
-      - run: yarn install
-      - run: yarn build
+          cache: npm
+      - run: npm ci
+      - run: npm run build
       - name: Run Pulumi Up
         uses: ./
         if: always()
@@ -96,9 +96,9 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24.x
-          cache: yarn
-      - run: yarn install
-      - run: yarn build
+          cache: npm
+      - run: npm ci
+      - run: npm run build
       - name: Generate Update Plan via Pulumi Preview
         uses: ./
         if: always()
@@ -141,9 +141,9 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24.x
-          cache: yarn
-      - run: yarn install
-      - run: yarn build
+          cache: npm
+      - run: npm ci
+      - run: npm run build
       # We use the last merged PR to guarantee we are not trying to access an artifact that has been deleted.
       # GitHub automatically deletes workflow artifacts after a retention period, so using a recent merged PR
       # ensures the PR build artifacts are still available for testing.

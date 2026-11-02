@@ -18,10 +18,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: lts/*
-          cache: yarn
+          cache: npm
 
       - name: Installing dependencies 📦️
-        run: yarn install
+        run: npm install
 
       - name: Authenticate with Google 🔑
         uses: google-github-actions/auth@v0

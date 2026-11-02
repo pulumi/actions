@@ -24,9 +24,9 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24.x
-          cache: yarn
-      - run: yarn install
-      - run: yarn build
+          cache: npm
+      - run: npm ci
+      - run: npm run build
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: dist/**
