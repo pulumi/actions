@@ -2,6 +2,8 @@
 
 ## HEAD (Unreleased)
 
+- chore: update Undici, js-yaml, brace-expansion, and Handlebars to address security vulnerabilities.
+  ([#1574](https://github.com/pulumi/actions/pull/1574))
 - feat: add `run-program` flag support.
   ([#1386](https://github.com/pulumi/actions/issues/1386))
 
