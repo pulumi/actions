@@ -30,6 +30,17 @@ jobs:
 
 This will check out the existing directory and run `pulumi preview`.
 
+## Installation Only
+
+If you want to only install the Pulumi CLI, omit the `command` field of the
+action.
+
+```yaml
+- uses: pulumi/actions@v7
+```
+
+This will install Pulumi and exit without performing any other operations.
+
 ## Configuration
 
 The action can be configured with the following arguments:
@@ -175,17 +186,6 @@ By default, this action will try to authenticate Pulumi with
 [Pulumi Cloud](https://app.pulumi.com/). If you have not specified a
 `PULUMI_ACCESS_TOKEN` then you will need to specify an alternative backend via
 the `cloud-url` argument.
-
-### Installation Only
-
-If you want to only install the Pulumi CLI, omit the `command` field of the
-action.
-
-```yaml
-- uses: pulumi/actions@v7
-```
-
-This will install Pulumi and exit without performing any other operations.
 
 ### Stack Outputs
 
