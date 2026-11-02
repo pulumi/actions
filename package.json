@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "clean": "rimraf coverage build tmp dist",
-    "prebuild": "yarn run clean",
+    "prebuild": "npm run clean",
     "build": "ncc build src/main.ts -e typescript -o dist --source-map",
     "postbuild": "node scripts/replace-ts.js",
     "lint": "eslint . --ext .ts,.tsx",
@@ -58,7 +58,7 @@
     "tslib": "^2.8.1",
     "js-yaml": "^5.4.1"
   },
-  "resolutions": {
+  "overrides": {
     "@npmcli/run-script": "^11.0.0"
   }
 }

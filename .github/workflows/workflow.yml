@@ -19,11 +19,11 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24.x
-          cache: yarn
+          cache: npm
 
-      - run: yarn install
+      - run: npm ci
 
-      - run: yarn build
+      - run: npm run build
 
       - uses: dorny/paths-filter@v4
         id: changes
