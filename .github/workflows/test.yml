@@ -30,6 +30,8 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version: oldstable
+      - name: Install Pulumi CLI
+        uses: ./
       - run: |
           pulumi login --local
           pulumi stack init dev
@@ -87,6 +89,8 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version: oldstable
+      - name: Install Pulumi CLI
+        uses: ./
       - run: |
           pulumi login --local
           pulumi stack init dev
