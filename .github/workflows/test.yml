@@ -148,16 +148,34 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      # We use the last merged PR to guarantee we are not trying to access an artifact that has been deleted.
-      # GitHub automatically deletes workflow artifacts after a retention period, so using a recent merged PR
-      # ensures the PR build artifacts are still available for testing.
-      # Fork (community) PRs are excluded: their CI runs don't upload CLI artifacts.
-      - name: Get last merged PR number
+      # Match the installer's CI run selection and require a live artifact.
+      - name: Find a merged PR with a CLI artifact
         id: get-pr
         run: |
-          PR_NUMBER=$(gh pr list --repo pulumi/pulumi --state merged --limit 20 --json number,isCrossRepository --jq '[.[] | select(.isCrossRepository | not)][0].number')
-          echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          echo "Using PR #$PR_NUMBER"
+          set -euo pipefail
+          candidates=$(gh pr list --repo pulumi/pulumi --state merged --limit 50 \
+            --json number,headRefOid,isCrossRepository \
+            --jq '.[] | select(.isCrossRepository | not) | [.number, .headRefOid] | @tsv')
+          while IFS=$'\t' read -r pr sha; do
+            [[ -n "$pr" ]] || continue
+            run_id=$(gh api "repos/pulumi/pulumi/actions/runs?head_sha=$sha" --jq '
+              [.workflow_runs[] | select(any(.referenced_workflows[]?; .path | contains("ci.yml")))]
+              | sort_by(.run_started_at // "") | reverse | .[0].id // empty')
+            if [[ -z "$run_id" ]]; then
+              echo "Skipping PR #$pr: no CI run"
+              continue
+            fi
+            available=$(gh api "repos/pulumi/pulumi/actions/runs/$run_id/artifacts?name=artifacts-cli-linux-amd64" \
+              --jq 'any(.artifacts[]; .expired == false)')
+            if [[ "$available" == "true" ]]; then
+              echo "pr-number=$pr" >> "$GITHUB_OUTPUT"
+              echo "Using PR #$pr (CI run $run_id)"
+              exit 0
+            fi
+            echo "Skipping PR #$pr: no unexpired Linux CLI artifact in CI run $run_id"
+          done <<< "$candidates"
+          echo "::error::No usable CLI artifact found among the 50 most recent merged PRs"
+          exit 1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Install Pulumi from PR
