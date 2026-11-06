@@ -31,7 +31,7 @@
     "eslint-config-prettier": "~10.1.8",
     "eslint-plugin-import-x": "~4.17.1",
     "eslint-plugin-jest": "~29.17.0",
-    "globals": "~17.13.0",
+    "globals": "~17.14.0",
     "husky": "^9.1.7",
     "jest": "~30.5.2",
     "jest-playback": "^4.1.0",
@@ -53,7 +53,7 @@
     "dedent": "^1.7.2",
     "envalid": "^9.0.0",
     "runtypes": "^7.0.5",
-    "semver": "^7.6.1",
+    "semver": "^7.8.6",
     "ts-invariant": "^0.10.3",
     "tslib": "^2.9.1",
     "js-yaml": "^5.4.1"
