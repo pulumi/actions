@@ -309528,22 +309528,26 @@ async function httpGet(url) {
     }
     return response;
 }
-async function getVersionObject(range) {
-    if (range == 'dev') {
-        const result = await httpGet('https://www.pulumi.com/latest-dev-version');
-        const version = 'v' + (await result.text()).trim();
-        const date = new Date().toISOString();
-        const downloads = {
+function createDirectVersion(version) {
+    return {
+        version,
+        date: new Date().toISOString(),
+        downloads: {
             'linux-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-linux-x64.tar.gz`,
             'linux-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-linux-arm64.tar.gz`,
             'darwin-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-x64.tar.gz`,
             'darwin-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-arm64.tar.gz`,
             'windows-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-windows-x64.zip`,
             'windows-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-windows-arm64.zip`,
-        };
-        const checksums = 'https://get.pulumi.com/releases/sdk/pulumi-${version}-checksums.txt';
-        const latest = false;
-        return { version, date, downloads, checksums, latest };
+        },
+        checksums: `https://get.pulumi.com/releases/sdk/pulumi-${version}-checksums.txt`,
+        latest: false,
+    };
+}
+async function getVersionObject(range) {
+    if (range == 'dev') {
+        const result = await httpGet('https://www.pulumi.com/latest-dev-version');
+        return createDirectVersion('v' + (await result.text()).trim());
     }
     if (range.toLowerCase().startsWith('pr#')) {
         const prNumber = range.substring(3);
@@ -309553,6 +309557,10 @@ async function getVersionObject(range) {
         }
         const artifactUrl = await getPrArtifactUrl(prNumber, platform);
         return createPrVersion(range, artifactUrl);
+    }
+    const pinned = (0,node_modules_semver.valid)(range);
+    if (pinned !== null && (0,node_modules_semver.prerelease)(range) !== null) {
+        return createDirectVersion('v' + pinned);
     }
     const versions = await fetchVersions();
     return resolveVersion(versions, range);
