@@ -2,7 +2,7 @@ import * as core from "@actions/core";
 import { getOctokit } from '@actions/github';
 import type { RestEndpointMethodTypes } from '@octokit/plugin-rest-endpoint-methods';
 import * as rt from 'runtypes';
-import { maxSatisfying } from 'semver';
+import { maxSatisfying, prerelease, valid } from 'semver';
 import { invariant } from 'ts-invariant';
 import { getPlatform } from '../pulumi-cli';
 
@@ -127,22 +127,27 @@ async function httpGet(url: string): Promise<Response> {
   return response;
 }
 
-export async function getVersionObject(range: string): Promise<Version> {
-  if (range == 'dev') {
-    const result = await httpGet('https://www.pulumi.com/latest-dev-version');
-    const version = 'v' + (await result.text()).trim();
-    const date = new Date().toISOString();
-    const downloads = {
+function createDirectVersion(version: string): Version {
+  return {
+    version,
+    date: new Date().toISOString(),
+    downloads: {
       'linux-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-linux-x64.tar.gz`,
       'linux-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-linux-arm64.tar.gz`,
       'darwin-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-x64.tar.gz`,
       'darwin-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-darwin-arm64.tar.gz`,
       'windows-x64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-windows-x64.zip`,
       'windows-arm64': `https://get.pulumi.com/releases/sdk/pulumi-${version}-windows-arm64.zip`,
-    };
-    const checksums = 'https://get.pulumi.com/releases/sdk/pulumi-${version}-checksums.txt';
-    const latest = false;
-    return { version, date, downloads, checksums, latest };
+    },
+    checksums: `https://get.pulumi.com/releases/sdk/pulumi-${version}-checksums.txt`,
+    latest: false,
+  };
+}
+
+export async function getVersionObject(range: string): Promise<Version> {
+  if (range == 'dev') {
+    const result = await httpGet('https://www.pulumi.com/latest-dev-version');
+    return createDirectVersion('v' + (await result.text()).trim());
   }
   if (range.toLowerCase().startsWith('pr#')) {
     const prNumber = range.substring(3);
@@ -154,6 +159,11 @@ export async function getVersionObject(range: string): Promise<Version> {
     }
     const artifactUrl = await getPrArtifactUrl(prNumber, platform);
     return createPrVersion(range, artifactUrl);
+  }
+
+  const pinned = valid(range);
+  if (pinned !== null && prerelease(range) !== null) {
+    return createDirectVersion('v' + pinned);
   }
 
   const versions = await fetchVersions();
