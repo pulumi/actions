@@ -6,6 +6,11 @@
 
 ---
 
+## 7.2.0 (2026-11-25)
+
+- feat: allow specifying pre-release versions for pulumi.
+  ([#1606](https://github.com/pulumi/actions/pull/1606))
+
 ## 7.1.0 (2026-11-03)
 
 - chore: update Undici, js-yaml, brace-expansion, and Handlebars to address
@@ -13,8 +18,6 @@
   ([#1574](https://github.com/pulumi/actions/pull/1574))
 - feat: add `run-program` flag support.
   ([#1386](https://github.com/pulumi/actions/issues/1386))
-
----
 
 ## 7.0.0 (2026-05-01)
 
